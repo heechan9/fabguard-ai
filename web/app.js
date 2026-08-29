@@ -25,7 +25,7 @@ const selectedTest = () => state.summary.test.find(row => row.candidate === stat
 const top10 = () => state.summary.top_k.find(row => Math.abs(row.k_fraction - 0.1) < 0.001);
 
 function waferVisual() {
-  return `<div class="wafer-stage" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="wafer"><div class="wafer-grid"></div><div class="wafer-core"><span>590</span><small>ANONYMOUS<br>VARIABLES</small></div></div><span class="signal signal-a">INGEST_01</span><span class="signal signal-b">RISK_SCORE</span><span class="signal signal-c">QUEUE_READY</span></div>`;
+  return `<div class="wafer-stage" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit orbit-c"></div><div class="wafer"><div class="wafer-grid"></div><div class="wafer-scan"></div><i class="wafer-node node-a"></i><i class="wafer-node node-b"></i><i class="wafer-node node-c"></i><div class="wafer-core"><span>590</span><small>ANONYMOUS<br>VARIABLES</small></div></div><span class="signal signal-a">INGEST_01</span><span class="signal signal-b">RISK_SCORE</span><span class="signal signal-c">QUEUE_READY</span></div>`;
 }
 
 function summaryView() {
