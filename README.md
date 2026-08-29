@@ -6,6 +6,9 @@
 
 보존된 테스트 데이터에서 생산 건별 위험순위, 예측 위험도, 우선 확인 변수와 전체 평가 결과를 3분 안에 보여줍니다.
 
+- **Live demo:** https://fabguard-ai.vercel.app
+- **Repository:** https://github.com/heechan9/fabguard-ai
+
 ## V1 실제 결과
 
 상태: **Provisional** - 개발 스모크 과정의 holdout 노출은 [docs/TEST_EXPOSURE.md](docs/TEST_EXPOSURE.md)에 기록했습니다.
@@ -46,7 +49,7 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 python -m http.server 8000 -d web
 ```
 
-Vercel에서는 이 저장소를 Import하면 루트의 `vercel.json`이 정적 데모 경로를 설정합니다.
+Vercel에서는 이 저장소를 Import하면 루트의 `vercel.json`이 Python 실험 코드와 분리된 `web/` 정적 출력 디렉터리를 설정합니다.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fheechan9%2Ffabguard-ai)
 
