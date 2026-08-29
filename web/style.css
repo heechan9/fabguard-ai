@@ -22,3 +22,21 @@ main{width:min(1240px,92vw);margin:0 auto;position:relative}.hero{min-height:cal
   .timestamp-full{display:none}
   .timestamp-short{display:inline;white-space:nowrap}
 }
+
+.validation-grid{margin-bottom:80px}
+.research-note{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;padding:10px 0 90px}
+.research-note h2{font-size:clamp(30px,4vw,48px);margin:12px 0}
+.research-note>div:last-child{border-left:1px solid var(--line);padding-left:45px}
+.research-note>div:last-child p{color:#8295ab;font-size:12px;line-height:1.9;margin:0 0 16px}
+.research-note .text-link{display:inline-block;margin-top:8px}
+
+@media(max-width:900px){
+  .research-note{grid-template-columns:1fr;gap:28px}
+  .research-note>div:last-child{padding-left:28px}
+}
+
+@media(max-width:620px){
+  .validation-grid{margin-bottom:60px}
+  .research-note{padding:0 0 70px}
+  .research-note>div:last-child{padding-left:18px}
+}
