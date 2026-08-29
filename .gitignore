@@ -6,3 +6,5 @@ results/*
 !results/.gitkeep
 !results/v1/
 !results/v1/**
+.vercel
+.env*
