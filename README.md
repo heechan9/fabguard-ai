@@ -37,14 +37,18 @@
 - 중요변수 안정성 분석
 - 5~8페이지 결과 보고서와 3분 데모
 
-## 현재 실행 가능한 스켈레톤
+## 실행과 데모
 
-아직 모델을 학습하지 않는 최소 수직 슬라이스입니다. 고정된 예제 한 건을 priority table CSV로 저장하고 다시 읽어 계약을 확인합니다.
+V1 전체 실험 산출물과 정적 결과 데모가 포함돼 있습니다. 로컬 데모는 아래 명령으로 실행한 뒤 `http://localhost:8000`에서 확인합니다.
 
 ```bash
-PYTHONPATH=src python -m fabguard.skeleton --output results/skeleton_priority.csv
 PYTHONPATH=src python -m unittest discover -s tests -v
+python -m http.server 8000 -d web
 ```
+
+Vercel에서는 이 저장소를 Import하면 루트의 `vercel.json`이 정적 데모 경로를 설정합니다.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fheechan9%2Ffabguard-ai)
 
 ## 전체 재현
 
@@ -68,3 +72,4 @@ python -m http.server 8000 -d web
 - [DATASET_CARD.md](DATASET_CARD.md): 데이터 사용 범위와 한계
 - [REPRODUCIBILITY.md](REPRODUCIBILITY.md): 재현 명령과 산출물 계약
 - [results/v1/RESULTS_SUMMARY.md](results/v1/RESULTS_SUMMARY.md): 실제 결과 요약
+- [AI_USAGE.md](AI_USAGE.md): 사용자·Codex 기여와 검증 원칙
