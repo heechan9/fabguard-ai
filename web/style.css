@@ -25,6 +25,8 @@ main{width:min(1240px,92vw);margin:0 auto;position:relative}.hero{min-height:cal
 
 .validation-grid{margin-bottom:80px}
 .research-note{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;padding:10px 0 90px}
+.research-note-heading{position:relative;padding-top:34px}
+.sequence-number{position:absolute;top:0;right:0;color:#31465d;font-size:72px;line-height:.8;letter-spacing:-.08em;font-weight:700;opacity:.72}
 .research-note h2{font-size:clamp(30px,4vw,48px);margin:12px 0}
 .research-note>div:last-child{border-left:1px solid var(--line);padding-left:45px}
 .research-note>div:last-child p{color:#8295ab;font-size:12px;line-height:1.9;margin:0 0 16px}
@@ -38,5 +40,9 @@ main{width:min(1240px,92vw);margin:0 auto;position:relative}.hero{min-height:cal
 @media(max-width:620px){
   .validation-grid{margin-bottom:60px}
   .research-note{padding:0 0 70px}
+  .research-note-heading{padding-top:22px;padding-right:58px}
+  .sequence-number{font-size:52px}
+  .research-note h2{font-size:30px;line-height:1.25}
   .research-note>div:last-child{padding-left:18px}
+  .research-note>div:last-child p{font-size:11px;line-height:1.85}
 }
