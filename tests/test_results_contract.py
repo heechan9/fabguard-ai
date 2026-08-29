@@ -1,0 +1,34 @@
+from pathlib import Path
+import json
+import unittest
+
+import pandas as pd
+
+
+RESULT_DIR = Path("results/v1")
+
+
+@unittest.skipUnless((RESULT_DIR / "manifest.json").exists(), "V1 results not generated")
+class ResultsContractTest(unittest.TestCase):
+    def test_priority_table_matches_temporal_test(self) -> None:
+        priorities = pd.read_csv(RESULT_DIR / "priority_table.csv")
+        split = pd.read_csv(RESULT_DIR / "test_split.csv")
+        self.assertEqual(len(priorities), 392)
+        self.assertEqual(priorities["rank"].tolist(), list(range(1, 393)))
+        self.assertEqual(set(priorities["sample_id"]), set(split["sample_id"]))
+        self.assertTrue(priorities["risk_score"].is_monotonic_decreasing)
+
+    def test_top10_contract(self) -> None:
+        topk = pd.read_csv(RESULT_DIR / "top_k_test.csv")
+        row = topk.loc[(topk["k_fraction"] - 0.10).abs().idxmin()]
+        self.assertEqual(int(row["inspection_count"]), 40)
+        self.assertEqual(int(row["total_fail"]), 24)
+
+    def test_manifest_keeps_provisional_status(self) -> None:
+        manifest = json.loads((RESULT_DIR / "manifest.json").read_text(encoding="utf-8"))
+        self.assertIn("provisional", manifest["evaluation_status"])
+        self.assertEqual(manifest["test_exposure_log"], "docs/TEST_EXPOSURE.md")
+
+
+if __name__ == "__main__":
+    unittest.main()

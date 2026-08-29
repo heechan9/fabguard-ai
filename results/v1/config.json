@@ -1,0 +1,33 @@
+{
+  "data_dir": "data/raw",
+  "output_dir": "results/v1",
+  "random_seed": 20260822,
+  "train_size": 1175,
+  "test_size": 392,
+  "missing_threshold": 0.5,
+  "cv_splits": 5,
+  "cv_repeats": 5,
+  "top_k_fractions": [
+    0.05,
+    0.1,
+    0.2
+  ],
+  "logistic_c_values": [
+    0.01,
+    0.1,
+    1.0
+  ],
+  "rf_candidates": [
+    [
+      8,
+      4,
+      "sqrt"
+    ],
+    [
+      null,
+      8,
+      "sqrt"
+    ]
+  ],
+  "rf_estimators": 120
+}

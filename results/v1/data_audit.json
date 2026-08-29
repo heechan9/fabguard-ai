@@ -1,0 +1,27 @@
+{
+  "samples": 1567,
+  "measurement_features": 590,
+  "pass_count": 1463,
+  "fail_count": 104,
+  "fail_rate": 0.06636885768985322,
+  "timestamp_parse_failures": 0,
+  "timestamp_min": "2008-07-19T11:55:00",
+  "timestamp_max": "2008-10-17T06:07:00",
+  "unique_timestamps": 1534,
+  "duplicate_timestamp_rows_after_first": 33,
+  "time_reversal_transitions": 0,
+  "duplicate_measurement_rows": 0,
+  "total_cells": 924530,
+  "missing_cells": 41951,
+  "missing_rate": 0.04537548808583821,
+  "features_with_missing": 538,
+  "features_missing_gt_50pct": 28,
+  "uninformative_features": 116,
+  "all_missing_features": 0,
+  "duplicate_features_after_first": 104,
+  "hashes": {
+    "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+    "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+    "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+  }
+}

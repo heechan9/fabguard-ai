@@ -1,0 +1,51 @@
+{
+  "project": "FabGuard AI V1",
+  "selected_candidate_from_train_cv": "random_forest_depth_none_leaf_8",
+  "selection_metric": "mean train repeated-CV average precision",
+  "evaluation_status": "provisional_due_to_prior_engineering_smoke_test_exposure",
+  "test_exposure_log": "docs/TEST_EXPOSURE.md",
+  "threshold": 0.5,
+  "config": {
+    "data_dir": "data/raw",
+    "output_dir": "results/v1",
+    "random_seed": 20260822,
+    "train_size": 1175,
+    "test_size": 392,
+    "missing_threshold": 0.5,
+    "cv_splits": 5,
+    "cv_repeats": 5,
+    "top_k_fractions": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "logistic_c_values": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "rf_candidates": [
+      [
+        8,
+        4,
+        "sqrt"
+      ],
+      [
+        null,
+        8,
+        "sqrt"
+      ]
+    ],
+    "rf_estimators": 120
+  },
+  "raw_hashes": {
+    "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+    "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+    "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+  },
+  "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "scikit_learn": "1.8.0"
+}
