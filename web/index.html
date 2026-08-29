@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#030711">
   <meta name="description" content="반도체 제조 데이터 기반 위험 생산 건 우선점검 의사결정 지원 프로젝트">
-  <title>FabGuard AI</title>
+  <title>FabGuard AI — Manufacturing Risk Intelligence</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+  <div class="ambient" aria-hidden="true"></div>
   <header class="topbar">
-    <a class="brand" href="#summary">FabGuard <span>AI</span></a>
-    <nav aria-label="주요 화면">
-      <a href="#summary">평가 요약</a>
-      <a href="#risks">우선점검 목록</a>
-      <a href="#limitations">실험·한계</a>
-    </nav>
+    <a class="brand" href="#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <nav aria-label="주요 화면"><a href="#summary">OVERVIEW</a><a href="#risks">PRIORITY QUEUE</a><a href="#limitations">VALIDATION</a></nav>
+    <span class="system-state"><i></i> V2 ONLINE</span>
   </header>
-  <main id="app" aria-live="polite">
-    <section class="state"><div class="loader"></div><p>검증 결과를 불러오는 중입니다.</p></section>
-  </main>
-  <footer>FabGuard AI V1 · UCI SECOM 기반 실험 · 익명 변수는 불량 원인이 아닌 우선점검 후보입니다.</footer>
+  <main id="app" aria-live="polite"><section class="state"><div class="loader"></div><p>FABGUARD SYSTEM INITIALIZING</p></section></main>
+  <footer><span>FABGUARD AI V2</span><span>UCI SECOM · RESEARCH PROTOTYPE</span><span>익명 변수는 불량 원인이 아닌 우선점검 후보입니다.</span></footer>
   <script type="module" src="/app.js"></script>
 </body>
 </html>
