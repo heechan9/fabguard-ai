@@ -21,6 +21,12 @@
 
 결론은 고정 임계값 Fail 분류가 운영에 충분하지 않았지만 제한된 점검 예산의 위험순위화에는 약한 신호가 남았다는 것입니다. 수율 개선이나 실제 원인 규명은 주장하지 않습니다.
 
+## Industrial AI 운영 설계
+
+FabGuard는 확률모델을 자동 품질판정기로 사용하지 않습니다. 모델은 연속 위험점수와 우선순위를 제시하고, 점검예산 5%·10%·20%를 결정론적 가드레일로 적용하며, 최종 판단과 조치는 공정 엔지니어가 수행하는 구조입니다.
+
+우선순위 큐에서 제시하는 익명 측정변수는 원인이 아니라 후속 점검 후보입니다. 실제 적용 시에는 변수의 센서·공정 매핑을 확인한 뒤 4M, 변동점 기록, 품질 이력과 대조해야 합니다. 이 운영 설계에 영향을 준 강의자료와 적용·비적용 범위는 [docs/INDUSTRIAL_AI_DESIGN.md](docs/INDUSTRIAL_AI_DESIGN.md)에 구분해 기록했습니다.
+
 ## 외부 비교와 방법론적 근거
 
 SECOM 데이터셋에 대한 FabGuard의 실험에서, 선택된 Random Forest 모델은 0.5 고정 임계값 기준 시간순 홀드아웃(마지막 25%, 392건)에서 Fail recall 0(24건 중 0건 포착)을 기록했습니다. 이 결과와 관련해 참고할 수 있는 외부 자료로, 2026년 공개된 독립 벤치마크 연구 [Patel, _Lightweight Transformer Models for On-Device Fault Detection_](https://arxiv.org/abs/2606.24173)가 있습니다. 해당 연구는 SECOM(1,567건, 562변수, 결측 50% 초과 컬럼 제거 기준)에 무작위 층화 80/20 분할을 적용해 전통적 ML(Random Forest, XGBoost, SVM, 로지스틱 회귀)과 경량 트랜스포머를 비교했으며, Random Forest(RF-200)의 SECOM F1을 0.0%로 보고했습니다.
@@ -81,6 +87,7 @@ python -m http.server 8000 -d web
 - [PLAN.md](PLAN.md): 14일 수직 슬라이스
 - [docs/FLOW.md](docs/FLOW.md): 데이터와 실패 경로
 - [docs/SCREENS.md](docs/SCREENS.md): 화면·상태 명세
+- [docs/INDUSTRIAL_AI_DESIGN.md](docs/INDUSTRIAL_AI_DESIGN.md): 확률모델·가드레일·인간 검토 운영 설계
 - [evals/cases.md](evals/cases.md): 완료 판정 기준
 - [DATASET_CARD.md](DATASET_CARD.md): 데이터 사용 범위와 한계
 - [REPRODUCIBILITY.md](REPRODUCIBILITY.md): 재현 명령과 산출물 계약
