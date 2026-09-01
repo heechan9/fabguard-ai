@@ -46,3 +46,44 @@ main{width:min(1240px,92vw);margin:0 auto;position:relative}.hero{min-height:cal
   .research-note>div:last-child{padding-left:18px}
   .research-note>div:last-child p{font-size:12px;line-height:1.9}
 }
+
+.integration-section{margin-bottom:170px}
+.integration-flow{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);background:rgba(8,16,29,.55)}
+.integration-flow article{position:relative;min-width:0;padding:25px 20px 28px;border-right:1px solid var(--line)}
+.integration-flow article:last-child{border-right:0}
+.integration-flow article:not(:last-child):after{content:"→";position:absolute;right:-8px;top:50%;z-index:2;color:var(--cyan);background:var(--bg)}
+.integration-flow article.active{background:linear-gradient(145deg,rgba(44,230,208,.09),rgba(54,135,255,.07));box-shadow:inset 0 0 0 1px rgba(44,230,208,.2)}
+.integration-flow span,.evidence-levels span{color:#6f849c;font-size:8px;font-weight:800;letter-spacing:.13em}
+.integration-flow .active span,.evidence-levels .measured span{color:var(--cyan)}
+.integration-flow h3,.evidence-levels h3{font-size:16px;margin:17px 0 10px}
+.integration-flow p,.evidence-levels p{color:#6f8299;font-size:10px;line-height:1.7;margin:0}
+.implementation-note{display:grid;grid-template-columns:180px 1fr;gap:22px;padding:20px 24px;border:1px solid rgba(44,230,208,.18);border-top:0;background:rgba(44,230,208,.035)}
+.implementation-note b{color:var(--cyan);font-size:8px;letter-spacing:.15em}
+.implementation-note p{color:#7890a5;font-size:11px;line-height:1.8;margin:0}
+.evidence-ladder{display:grid;grid-template-columns:.7fr 1.3fr;gap:70px;padding:10px 0 110px}
+.evidence-ladder h2{font-size:clamp(32px,4vw,52px);line-height:1.15;margin:0 0 22px}
+.evidence-ladder>div:first-child>p:last-child{color:#71869e;font-size:12px;line-height:1.9}
+.evidence-levels{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
+.evidence-levels article{padding:25px 20px;border-right:1px solid var(--line)}
+.evidence-levels article:last-child{border-right:0}
+.evidence-levels article.measured{background:linear-gradient(145deg,rgba(44,230,208,.08),rgba(54,135,255,.05))}
+.evidence-ladder>.implementation-note{grid-column:1/-1}
+
+@media(max-width:900px){
+  .integration-flow{grid-template-columns:1fr 1fr}
+  .integration-flow article{border-bottom:1px solid var(--line)}
+  .integration-flow article:nth-child(2n){border-right:0}
+  .integration-flow article:last-child{border-bottom:0}
+  .integration-flow article:not(:last-child):after{display:none}
+  .evidence-ladder{grid-template-columns:1fr;gap:30px}
+  .evidence-ladder>.implementation-note{grid-column:auto}
+}
+
+@media(max-width:620px){
+  .integration-section{margin-bottom:110px}
+  .integration-flow,.evidence-levels{grid-template-columns:1fr}
+  .integration-flow article,.integration-flow article:nth-child(2n),.evidence-levels article{border-right:0;border-bottom:1px solid var(--line)}
+  .integration-flow article:last-child,.evidence-levels article:last-child{border-bottom:0}
+  .implementation-note{grid-template-columns:1fr;gap:8px}
+  .evidence-ladder{padding-bottom:80px}
+}
