@@ -9,12 +9,23 @@ const shortTimestamp = value => {
   return match ? `${match[1]} ${match[2]}` : String(value ?? "");
 };
 
+function validateSummaryDataset(ds) {
+  if (!ds || typeof ds !== "object") throw new Error("데이터셋 메타데이터(summary.dataset)가 존재하지 않습니다.");
+  const { samples, measurement_features, pass_count, fail_count } = ds;
+  if (!Number.isFinite(samples) || samples <= 0) throw new Error("dataset.samples 데이터 계약이 올바르지 않습니다.");
+  if (!Number.isFinite(measurement_features) || measurement_features <= 0) throw new Error("dataset.measurement_features 데이터 계약이 올바르지 않습니다.");
+  if (!Number.isFinite(pass_count) || pass_count < 0) throw new Error("dataset.pass_count 데이터 계약이 올바르지 않습니다.");
+  if (!Number.isFinite(fail_count) || fail_count < 0) throw new Error("dataset.fail_count 데이터 계약이 올바르지 않습니다.");
+  if (pass_count + fail_count !== samples) throw new Error("pass_count + fail_count !== samples 데이터 계약 불일치입니다.");
+}
+
 async function load() {
   try {
     const [summaryResponse, riskResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json")]);
     if (!summaryResponse.ok || !riskResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
     state.summary = await summaryResponse.json();
     state.risks = await riskResponse.json();
+    validateSummaryDataset(state.summary?.dataset);
     route();
   } catch (error) {
     app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" onclick="location.reload()">다시 시도</button></section>`;
@@ -32,11 +43,11 @@ function summaryView() {
   const test = selectedTest();
   const ten = top10();
   const baseline = state.summary.test.find(row => row.family === "dummy");
-  const ds = state.summary.dataset || { samples: 1567, measurement_features: 590, test_fail: 24 };
-  const queueSize = state.risks ? state.risks.length : 50;
+  const ds = state.summary.dataset;
+  const queueSize = state.risks.length;
   app.innerHTML = `
     <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> MANUFACTURING RISK INTELLIGENCE · WEB V2</div><p class="kicker">SEMICONDUCTOR DECISION SUPPORT</p><h1>See the risk.<br><span>Before the line does.</span></h1><p class="hero-ko">한정된 점검 자원을<br><strong>위험도가 높은 생산 건부터.</strong></p><p class="lead">UCI SECOM의 ${ds.measurement_features}개 익명 측정변수를 누출 방지 파이프라인으로 분석해 엔지니어의 우선점검 순서를 제시합니다.</p><div class="hero-actions"><a class="button" href="#risks">우선점검 큐 열기 <span>↗</span></a><a class="text-link" href="#limitations">검증 범위 확인 →</a></div></div>${waferVisual(ds.measurement_features)}</section>
-    <section class="data-strip" aria-label="프로젝트 데이터 요약"><div><span>01</span><strong>${ds.samples.toLocaleString()}</strong><small>PRODUCTION RUNS</small></div><div><span>02</span><strong>${ds.measurement_features}</strong><small>ANONYMOUS VARIABLES</small></div><div><span>03</span><strong>${ds.test_fail ?? ten.total_fail}</strong><small>FAILS IN HOLDOUT</small></div><div><span>04</span><strong>${queueSize}</strong><small>PRIORITY QUEUE</small></div></section>
+    <section class="data-strip" aria-label="프로젝트 데이터 요약"><div><span>01</span><strong>${ds.samples.toLocaleString()}</strong><small>PRODUCTION RUNS</small></div><div><span>02</span><strong>${ds.measurement_features}</strong><small>ANONYMOUS VARIABLES</small></div><div><span>03</span><strong>${ten.total_fail}</strong><small>FAILS IN HOLDOUT</small></div><div><span>04</span><strong>${queueSize}</strong><small>PRIORITY QUEUE</small></div></section>
     <section class="story-section"><div class="section-intro"><p class="kicker">MISSION / 01</p><h2>모든 생산 건을<br>동시에 볼 수 없다면.</h2><p>FabGuard는 자동 판정을 주장하지 않습니다. 제한된 엔지니어링 시간을 어디에 먼저 배치할지 제안합니다.</p></div><div class="command-panel"><div class="panel-head"><span>LIVE EVALUATION</span><span class="live"><i></i> PROVISIONAL</span></div><div class="metrics-grid"><article><span>시간순 홀드아웃 PR-AUC</span><strong>${num(test.pr_auc_average_precision)}</strong><small>Dummy 기준 ${num(baseline.pr_auc_average_precision)} 대비</small></article><article><span>상위 10% Fail 포착</span><strong>${ten.captured_fail}<em> / ${ten.total_fail}</em></strong><small>${ten.inspection_count}건 점검 · ${pct(ten.fail_capture_rate)} 포착</small></article><article><span>무작위 대비 점검 효율</span><strong>${num(ten.lift, 2)}<em>×</em></strong><small>상위 10% 기준 Lift</small></article></div><div class="caution"><span>RESULT BOUNDARY</span><p>시간순 홀드아웃에서 성능이 낮아졌습니다. 운영 성과가 아닌 의사결정 지원 가능성을 확인한 잠정 결과입니다.</p></div></div></section>
     <section class="pipeline-section"><div class="section-heading"><div><p class="kicker">SYSTEM / 02</p><h2>누출을 막고, 위험을 정렬하다.</h2></div><p>모든 전처리는 학습 폴드에만 적합하고 마지막 25% 구간은 시간순 홀드아웃으로 분리했습니다.</p></div><div class="pipeline"><article><span>01</span><i>DATA</i><h3>SECOM 입력</h3><p>${ds.samples.toLocaleString()}건 · ${ds.measurement_features}변수</p></article><article><span>02</span><i>GUARD</i><h3>누출 방지 전처리</h3><p>학습 폴드 내부 적합</p></article><article><span>03</span><i>MODEL</i><h3>위험도 산출</h3><p>비교·선택·홀드아웃</p></article><article><span>04</span><i>ACTION</i><h3>우선점검 큐</h3><p>Top-k 의사결정 지원</p></article></div></section>
     <section class="budget-section"><div class="section-heading"><div><p class="kicker">EVIDENCE / 03</p><h2>점검 범위별 Fail 포착률</h2></div><p>위험도가 높은 생산 건부터 확인했을 때의 시간순 홀드아웃 결과입니다.</p></div><div class="budget-grid">${state.summary.top_k.map((row, index) => `<article><div class="budget-top"><span>TOP ${pct(row.k_fraction)}</span><b>0${index + 1}</b></div><strong>${pct(row.fail_capture_rate)}</strong><div class="bar"><i style="width:${row.fail_capture_rate * 100}%"></i></div><p>${row.inspection_count}건 점검 <span>·</span> Fail ${row.captured_fail}건 포착</p></article>`).join("")}</div></section>

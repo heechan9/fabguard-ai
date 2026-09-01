@@ -44,10 +44,12 @@ class ResultsContractTest(unittest.TestCase):
         self.assertEqual(len(web_summary["top_k"]), len(topk_csv))
 
         self.assertIn("dataset", web_summary)
-        self.assertEqual(web_summary["dataset"]["samples"], audit_data["samples"])
-        self.assertEqual(web_summary["dataset"]["measurement_features"], audit_data["measurement_features"])
-        self.assertEqual(web_summary["dataset"]["pass_count"], audit_data["pass_count"])
-        self.assertEqual(web_summary["dataset"]["fail_count"], audit_data["fail_count"])
+        ds = web_summary["dataset"]
+        self.assertEqual(ds["samples"], audit_data["samples"])
+        self.assertEqual(ds["measurement_features"], audit_data["measurement_features"])
+        self.assertEqual(ds["pass_count"], audit_data["pass_count"])
+        self.assertEqual(ds["fail_count"], audit_data["fail_count"])
+        self.assertEqual(ds["pass_count"] + ds["fail_count"], ds["samples"])
 
         web_top50 = json.loads((web_dir / "priority_top50.json").read_text(encoding="utf-8"))
         self.assertEqual(len(web_top50), 50)

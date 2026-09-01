@@ -54,6 +54,14 @@ class ReportingTest(unittest.TestCase):
             }])
             prio_df.to_csv(res_dir / "priority_table.csv", index=False)
 
+            audit_content = {
+                "samples": 100,
+                "measurement_features": 10,
+                "pass_count": 90,
+                "fail_count": 10
+            }
+            (res_dir / "data_audit.json").write_text(json.dumps(audit_content), encoding="utf-8")
+
             write_summary(res_dir)
             write_web_data(res_dir, web_dir)
 
@@ -66,6 +74,13 @@ class ReportingTest(unittest.TestCase):
 
             web_summary = json.loads((web_dir / "summary.json").read_text(encoding="utf-8"))
             self.assertEqual(web_summary["selected_model"], "dummy_candidate")
+            self.assertIn("dataset", web_summary)
+            self.assertEqual(web_summary["dataset"]["samples"], 100)
+
+    def test_app_js_contains_no_numeric_fallbacks(self) -> None:
+        app_js = Path("web/app.js").read_text(encoding="utf-8")
+        self.assertNotIn("1567", app_js)
+        self.assertNotIn("590", app_js)
 
 
 if __name__ == "__main__":

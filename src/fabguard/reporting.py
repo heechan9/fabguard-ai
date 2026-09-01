@@ -122,26 +122,16 @@ def write_web_data(result_dir: Path, web_data_dir: Path) -> None:
     audit_file = result_dir / "data_audit.json"
     if audit_file.exists():
         audit_data = json.loads(audit_file.read_text(encoding="utf-8"))
+        split = audit_data.get("split", {})
         dataset_info = {
-            "samples": audit_data.get("samples", 1567),
-            "measurement_features": audit_data.get("measurement_features", 590),
-            "pass_count": audit_data.get("pass_count", 1463),
-            "fail_count": audit_data.get("fail_count", 104),
-            "train_samples": audit_data.get("split", {}).get("train_samples", 1175),
-            "train_fail": audit_data.get("split", {}).get("train_fail", 80),
-            "test_samples": audit_data.get("split", {}).get("test_samples", 392),
-            "test_fail": audit_data.get("split", {}).get("test_fail", 24),
-        }
-    else:
-        dataset_info = {
-            "samples": 1567,
-            "measurement_features": 590,
-            "pass_count": 1463,
-            "fail_count": 104,
-            "train_samples": 1175,
-            "train_fail": 80,
-            "test_samples": 392,
-            "test_fail": 24,
+            "samples": audit_data.get("samples"),
+            "measurement_features": audit_data.get("measurement_features"),
+            "pass_count": audit_data.get("pass_count"),
+            "fail_count": audit_data.get("fail_count"),
+            "train_samples": split.get("train_samples"),
+            "train_fail": split.get("train_fail"),
+            "test_samples": split.get("test_samples"),
+            "test_fail": split.get("test_fail"),
         }
 
     payload = {

@@ -6,10 +6,10 @@
     "measurement_features": 590,
     "pass_count": 1463,
     "fail_count": 104,
-    "train_samples": 1175,
-    "train_fail": 80,
-    "test_samples": 392,
-    "test_fail": 24
+    "train_samples": null,
+    "train_fail": null,
+    "test_samples": null,
+    "test_fail": null
   },
   "cv": [
     {
