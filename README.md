@@ -93,6 +93,7 @@ python -m http.server 8000 -d web
 - [docs/SCREENS.md](docs/SCREENS.md): 화면·상태 명세
 - [docs/INDUSTRIAL_AI_DESIGN.md](docs/INDUSTRIAL_AI_DESIGN.md): 확률모델·가드레일·인간 검토 운영 설계
 - [docs/SMART_FACTORY_INTEGRATION.md](docs/SMART_FACTORY_INTEGRATION.md): MES·FDC 목표 연계, KPI 경계와 현장 도입 체크리스트
+- [docs/ROLE_ALIGNMENT.md](docs/ROLE_ALIGNMENT.md): 구현 증거와 기반기술·양산기술·PKG&TEST 직무 연결, 인터뷰 가이드
 - [evals/cases.md](evals/cases.md): 완료 판정 기준
 - [DATASET_CARD.md](DATASET_CARD.md): 데이터 사용 범위와 한계
 - [REPRODUCIBILITY.md](REPRODUCIBILITY.md): 재현 명령과 산출물 계약
