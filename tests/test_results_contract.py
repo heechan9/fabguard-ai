@@ -36,11 +36,18 @@ class ResultsContractTest(unittest.TestCase):
 
         web_summary = json.loads((web_dir / "summary.json").read_text(encoding="utf-8"))
         manifest = json.loads((RESULT_DIR / "manifest.json").read_text(encoding="utf-8"))
+        audit_data = json.loads((RESULT_DIR / "data_audit.json").read_text(encoding="utf-8"))
         topk_csv = pd.read_csv(RESULT_DIR / "top_k_test.csv")
         priority_csv = pd.read_csv(RESULT_DIR / "priority_table.csv")
 
         self.assertEqual(web_summary["selected_model"], manifest["selected_candidate_from_train_cv"])
         self.assertEqual(len(web_summary["top_k"]), len(topk_csv))
+
+        self.assertIn("dataset", web_summary)
+        self.assertEqual(web_summary["dataset"]["samples"], audit_data["samples"])
+        self.assertEqual(web_summary["dataset"]["measurement_features"], audit_data["measurement_features"])
+        self.assertEqual(web_summary["dataset"]["pass_count"], audit_data["pass_count"])
+        self.assertEqual(web_summary["dataset"]["fail_count"], audit_data["fail_count"])
 
         web_top50 = json.loads((web_dir / "priority_top50.json").read_text(encoding="utf-8"))
         self.assertEqual(len(web_top50), 50)
