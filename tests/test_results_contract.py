@@ -29,6 +29,33 @@ class ResultsContractTest(unittest.TestCase):
         self.assertIn("provisional", manifest["evaluation_status"])
         self.assertEqual(manifest["test_exposure_log"], "docs/TEST_EXPOSURE.md")
 
+    def test_web_data_contract(self) -> None:
+        web_dir = Path("web/data")
+        self.assertTrue((web_dir / "summary.json").exists())
+        self.assertTrue((web_dir / "priority_top50.json").exists())
+
+        web_summary = json.loads((web_dir / "summary.json").read_text(encoding="utf-8"))
+        manifest = json.loads((RESULT_DIR / "manifest.json").read_text(encoding="utf-8"))
+        audit_data = json.loads((RESULT_DIR / "data_audit.json").read_text(encoding="utf-8"))
+        topk_csv = pd.read_csv(RESULT_DIR / "top_k_test.csv")
+        priority_csv = pd.read_csv(RESULT_DIR / "priority_table.csv")
+
+        self.assertEqual(web_summary["selected_model"], manifest["selected_candidate_from_train_cv"])
+        self.assertEqual(len(web_summary["top_k"]), len(topk_csv))
+
+        self.assertIn("dataset", web_summary)
+        ds = web_summary["dataset"]
+        self.assertEqual(ds["samples"], audit_data["samples"])
+        self.assertEqual(ds["measurement_features"], audit_data["measurement_features"])
+        self.assertEqual(ds["pass_count"], audit_data["pass_count"])
+        self.assertEqual(ds["fail_count"], audit_data["fail_count"])
+        self.assertEqual(ds["pass_count"] + ds["fail_count"], ds["samples"])
+
+        web_top50 = json.loads((web_dir / "priority_top50.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(web_top50), 50)
+        self.assertEqual(web_top50[0]["sample_id"], priority_csv.iloc[0]["sample_id"])
+        self.assertEqual(int(web_top50[0]["rank"]), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

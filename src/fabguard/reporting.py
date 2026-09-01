@@ -117,9 +117,27 @@ def write_web_data(result_dir: Path, web_data_dir: Path) -> None:
     topk = pd.read_csv(result_dir / "top_k_test.csv")
     priorities = pd.read_csv(result_dir / "priority_table.csv").head(50)
     manifest = json.loads((result_dir / "manifest.json").read_text(encoding="utf-8"))
+
+    dataset_info = {}
+    audit_file = result_dir / "data_audit.json"
+    if audit_file.exists():
+        audit_data = json.loads(audit_file.read_text(encoding="utf-8"))
+        split = audit_data.get("split", {})
+        dataset_info = {
+            "samples": audit_data.get("samples"),
+            "measurement_features": audit_data.get("measurement_features"),
+            "pass_count": audit_data.get("pass_count"),
+            "fail_count": audit_data.get("fail_count"),
+            "train_samples": split.get("train_samples"),
+            "train_fail": split.get("train_fail"),
+            "test_samples": split.get("test_samples"),
+            "test_fail": split.get("test_fail"),
+        }
+
     payload = {
         "status": "provisional",
         "selected_model": manifest["selected_candidate_from_train_cv"],
+        "dataset": dataset_info,
         "cv": cv.where(pd.notna(cv), None).to_dict(orient="records"),
         "test": test.where(pd.notna(test), None).to_dict(orient="records"),
         "top_k": topk.where(pd.notna(topk), None).to_dict(orient="records"),

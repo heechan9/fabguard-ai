@@ -1,6 +1,16 @@
 {
   "status": "provisional",
   "selected_model": "random_forest_depth_none_leaf_8",
+  "dataset": {
+    "samples": 1567,
+    "measurement_features": 590,
+    "pass_count": 1463,
+    "fail_count": 104,
+    "train_samples": null,
+    "train_fail": null,
+    "test_samples": null,
+    "test_fail": null
+  },
   "cv": [
     {
       "candidate": "random_forest_depth_none_leaf_8",
