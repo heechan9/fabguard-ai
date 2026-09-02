@@ -5,7 +5,7 @@ FabGuard AI는 최희찬의 개인 포트폴리오 프로젝트이며, 문제 �
 ## 초기 킥오프
 
 - 사용자: UCI SECOM 기반 반도체 제조 고위험 생산 건 우선점검 문제 선정, 기존 실험계약과 포트폴리오 목표 제공
-- Codex: 렛유인 강의자료를 바탕으로 초기 PRD·PLAN·FLOW·평가 케이스·화면 명세 및 최소 priority-table 스켈레톤 초안 작성
+- Codex: 프로젝트 요구사항을 바탕으로 초기 PRD·PLAN·FLOW·평가 케이스·화면 명세 및 최소 priority-table 스켈레톤 초안 작성
 - 검증: 스켈레톤 CSV round-trip 단위 테스트 통과
 
 ## V1 구현 및 실행
