@@ -89,6 +89,7 @@ python -m http.server 8000 -d web
 
 ## 문서
 
+- [CONTRIBUTIONS.md](CONTRIBUTIONS.md): 프로젝트 소유자와 AI 보조 작업의 기여 구분
 - [PRD.md](PRD.md): 문제, 사용자, 범위
 - [PLAN.md](PLAN.md): 14일 수직 슬라이스
 - [docs/FLOW.md](docs/FLOW.md): 데이터와 실패 경로
