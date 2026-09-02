@@ -31,6 +31,8 @@ FabGuard는 확률모델을 자동 품질판정기로 사용하지 않습니다.
 
 목표 현장 구조에서는 MES·FDC·검사시스템의 추적 가능한 생산 데이터를 FabGuard가 위험점수와 Top-K 점검 큐로 변환하고, 엔지니어의 판단과 후속 결과를 다시 기록합니다. 현재 V1은 이 중 오프라인 위험순위화만 구현했습니다. 모델·운영·제조·사업 KPI의 증거 경계와 도입 준비사항은 [docs/SMART_FACTORY_INTEGRATION.md](docs/SMART_FACTORY_INTEGRATION.md)에 정리했습니다.
 
+실제 도입 효과는 단순 전후 비교만으로 주장하지 않습니다. 무작위 또는 단계적 현장시험을 우선 검토하고, 불가능한 경우 자연실험·이중차분과 평행추세 및 동시개입 점검을 적용하는 계획을 [docs/CAUSAL_FIELD_VALIDATION.md](docs/CAUSAL_FIELD_VALIDATION.md)에 명시했습니다. 이는 향후 검증 설계이며 완료된 현장 성과가 아닙니다.
+
 ## 외부 비교와 방법론적 근거
 
 SECOM 데이터셋에 대한 FabGuard의 실험에서, 선택된 Random Forest 모델은 0.5 고정 임계값 기준 시간순 홀드아웃(마지막 25%, 392건)에서 Fail recall 0(24건 중 0건 포착)을 기록했습니다. 이 결과와 관련해 참고할 수 있는 외부 자료로, 2026년 공개된 독립 벤치마크 연구 [Patel, _Lightweight Transformer Models for On-Device Fault Detection_](https://arxiv.org/abs/2606.24173)가 있습니다. 해당 연구는 SECOM(1,567건, 562변수, 결측 50% 초과 컬럼 제거 기준)에 무작위 층화 80/20 분할을 적용해 전통적 ML(Random Forest, XGBoost, SVM, 로지스틱 회귀)과 경량 트랜스포머를 비교했으며, Random Forest(RF-200)의 SECOM F1을 0.0%로 보고했습니다.
@@ -93,6 +95,7 @@ python -m http.server 8000 -d web
 - [docs/SCREENS.md](docs/SCREENS.md): 화면·상태 명세
 - [docs/INDUSTRIAL_AI_DESIGN.md](docs/INDUSTRIAL_AI_DESIGN.md): 확률모델·가드레일·인간 검토 운영 설계
 - [docs/SMART_FACTORY_INTEGRATION.md](docs/SMART_FACTORY_INTEGRATION.md): MES·FDC 목표 연계, KPI 경계와 현장 도입 체크리스트
+- [docs/CAUSAL_FIELD_VALIDATION.md](docs/CAUSAL_FIELD_VALIDATION.md): RCT·단계적 도입·이중차분 기반 현장 인과효과 검증 계획
 - [docs/ROLE_ALIGNMENT.md](docs/ROLE_ALIGNMENT.md): 구현 증거와 기반기술·양산기술·PKG&TEST 직무 연결, 인터뷰 가이드
 - [evals/cases.md](evals/cases.md): 완료 판정 기준
 - [DATASET_CARD.md](DATASET_CARD.md): 데이터 사용 범위와 한계
