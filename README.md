@@ -31,7 +31,7 @@ FabGuard는 확률모델을 자동 품질판정기로 사용하지 않습니다.
 
 목표 현장 구조에서는 MES·FDC·검사시스템의 추적 가능한 생산 데이터를 FabGuard가 위험점수와 Top-K 점검 큐로 변환하고, 엔지니어의 판단과 후속 결과를 다시 기록합니다. 현재 V1은 이 중 오프라인 위험순위화만 구현했습니다. 모델·운영·제조·사업 KPI의 증거 경계와 도입 준비사항은 [docs/SMART_FACTORY_INTEGRATION.md](docs/SMART_FACTORY_INTEGRATION.md)에 정리했습니다.
 
-실제 도입 효과는 단순 전후 비교만으로 주장하지 않습니다. 무작위 또는 단계적 현장시험을 우선 검토하고, 불가능한 경우 자연실험·이중차분과 평행추세 및 동시개입 점검을 적용하는 계획을 [docs/CAUSAL_FIELD_VALIDATION.md](docs/CAUSAL_FIELD_VALIDATION.md)에 명시했습니다. 이는 향후 검증 설계이며 완료된 현장 성과가 아닙니다.
+실제 도입 효과는 단순 전후 비교만으로 주장하지 않습니다. 무작위 또는 단계적 현장시험을 우선 검토하고, 불가능한 경우 자연실험·이중차분 또는 조건을 충족한 cutoff 기반 불연속회귀를 검토하는 계획을 [docs/CAUSAL_FIELD_VALIDATION.md](docs/CAUSAL_FIELD_VALIDATION.md)에 명시했습니다. 이는 향후 검증 설계이며 완료된 현장 성과가 아닙니다.
 
 ## 외부 비교와 방법론적 근거
 
@@ -95,7 +95,7 @@ python -m http.server 8000 -d web
 - [docs/SCREENS.md](docs/SCREENS.md): 화면·상태 명세
 - [docs/INDUSTRIAL_AI_DESIGN.md](docs/INDUSTRIAL_AI_DESIGN.md): 확률모델·가드레일·인간 검토 운영 설계
 - [docs/SMART_FACTORY_INTEGRATION.md](docs/SMART_FACTORY_INTEGRATION.md): MES·FDC 목표 연계, KPI 경계와 현장 도입 체크리스트
-- [docs/CAUSAL_FIELD_VALIDATION.md](docs/CAUSAL_FIELD_VALIDATION.md): RCT·단계적 도입·이중차분 기반 현장 인과효과 검증 계획
+- [docs/CAUSAL_FIELD_VALIDATION.md](docs/CAUSAL_FIELD_VALIDATION.md): RCT·단계적 도입·이중차분·불연속회귀 기반 현장 인과효과 검증 계획
 - [docs/ROLE_ALIGNMENT.md](docs/ROLE_ALIGNMENT.md): 구현 증거와 기반기술·양산기술·PKG&TEST 직무 연결, 인터뷰 가이드
 - [evals/cases.md](evals/cases.md): 완료 판정 기준
 - [DATASET_CARD.md](DATASET_CARD.md): 데이터 사용 범위와 한계
