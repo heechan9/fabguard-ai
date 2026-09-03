@@ -175,6 +175,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
+| [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
 | [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
 | [AI 활용·기여](AI_USAGE.md) | 사람·AI 협업과 검증 원칙 |
 | [기여 구분](CONTRIBUTIONS.md) | 프로젝트 소유자와 Codex 역할 |
