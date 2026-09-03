@@ -4,7 +4,9 @@
 
 ### 반도체 생산 데이터에서 먼저 확인할 공정 기록을 찾는 AI 의사결정 지원 프로젝트
 
-<img src="docs/assets/fabguard-readme-hero.jpg" alt="반도체 클린룸에서 웨이퍼 품질을 분석하는 FabGuard AI 콘셉트 이미지" width="900">
+**Leakage-aware risk prioritization for reproducible semiconductor manufacturing AI**
+
+<img src="docs/assets/fabguard-industrial-collaboration-hero-v2.png" alt="FabGuard 산업 AI 협업과 반도체 공정 위험 탐지를 표현한 독자 제작 콘셉트 이미지" width="960">
 
 <br>
 
@@ -17,12 +19,12 @@
 590개 익명 측정값을 분석해 위험도가 높은 생산 건을 앞에 배치하고,  
 엔지니어가 제한된 점검 시간을 어디에 먼저 사용할지 돕습니다.
 
-[웹 데모](https://fabguard-ai.vercel.app) · [핵심 결과](#핵심-결과) · [재현 방법](#빠른-시작) · [검증과 한계](#검증과-주장-경계) · [기술문서](#문서-안내)
+[Live demo](https://fabguard-ai.vercel.app) · [Evidence](#핵심-결과) · [Reproduce](#빠른-시작) · [Validation](#검증과-주장-경계) · [Collaborate](#open-engineering--collaboration)
 
 </div>
 
 > **이미지 안내**  
-> 위 이미지는 FabGuard의 목표 운영상을 표현한 독자 제작 콘셉트입니다. 실제 반도체 공장, 구현 화면 또는 현장 배포 성과를 나타내지 않습니다.
+> 위 이미지는 FabGuard의 목표 운영상과 협업 방식을 표현한 독자 제작 콘셉트입니다. 실제 반도체 공장, 제휴 조직, 구현 화면 또는 현장 배포 성과를 나타내지 않습니다.
 
 ---
 
@@ -45,6 +47,20 @@
 | 공개데이터 결과를 현장 성과로 과장할 위험을 통제 | 구현 범위와 미검증 범위를 분리하고 단계적 현장 검증안을 문서화 | 데이터셋 카드, 테스트 노출 기록, 현장 검증 계획 | 재현성·문서화·검증 중심의 프로젝트 운영 |
 
 > **역할:** 최희찬이 문제 정의, 요구사항·평가지표·공개데이터 및 활용 시나리오 선정, 결과 검토와 저장소 운영을 담당했습니다. 코드 작성과 검증의 세부 주체는 [기여 구분](CONTRIBUTIONS.md)에 기록합니다.
+
+## Open engineering & collaboration
+
+FabGuard is structured as a reviewable industrial-AI prototype rather than a black-box demo. Engineers can inspect the data boundary, reproduce the experiment, challenge the metrics, and propose improvements without relying on private fab data.
+
+| Engineering signal | Where to review it |
+|---|---|
+| Leakage-aware preprocessing and temporal holdout | [Experiment contract](EXPERIMENT_CONTRACT.md) |
+| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](REPRODUCIBILITY.md) |
+| Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
+| Explicit boundary between prototype evidence and factory claims | [Dataset card](DATASET_CARD.md) and [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
+| Staged path from FabGuard to external industrial open source | [Roadmap](ROADMAP.md) |
+
+Technical discussion is welcome through focused issues and reviewable pull requests. Useful contributions include validation design, data-contract tests, drift diagnostics, calibration, documentation, and adapters that preserve the existing experiment contract.
 
 ## 작동 방식
 
@@ -88,6 +104,20 @@ flowchart LR
 
 > **결과를 이렇게 읽어야 합니다**  
 > 고정 기준으로 불량을 자동 판정할 성능은 확보하지 못했습니다. 다만 점검할 수 있는 수가 제한된 상황에서 위험도가 높은 생산 건을 먼저 보는 약한 순위 신호를 확인했습니다. 이는 실제 수율 개선이나 불량 원인 규명의 증거가 아닙니다.
+
+### Phase 1 고급 검증 결과
+
+동일한 후기 홀드아웃을 유지한 추가 검증의 **잠정 결과**입니다. 비용 단위는 실제 원화가 아니라 운영 시나리오 비교용 가정입니다.
+
+| 검증 항목 | 결과 | 해석 경계 |
+|---|---:|---|
+| Brier score | 0.0654 → 0.0599 | 학습기간 말단 보정 구간에서 확률오차 개선 |
+| Expected calibration error | 0.0922 → 0.0401 | 10개 구간 중 실제 표본이 존재한 구간은 4개 |
+| 상위 10% 불량 포착률 | 평균 20.1%, 95% CI 6.2–36.8% | bootstrap 2,000회, 불확실성 큼 |
+| 상위 20% 시나리오 비용 | 399 | 무점검 480 대비 81 감소; 점검 1·미탐 20 가정 |
+| Walk-forward PR-AUC | 0.054–0.280 | 시간구간별 변동이 커 지속 모니터링 필요 |
+
+희소 불량 구간에서는 최소 클래스 표본이 5-fold보다 적다는 경고가 발생했습니다. 실행 실패는 아니지만, 이 결과를 확정 성능이나 현장 효과로 해석하지 않는 근거입니다.
 
 ## 왜 자동 판정이 아닌가요?
 

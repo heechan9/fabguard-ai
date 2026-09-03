@@ -17,6 +17,8 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - 코드·데이터 형식·정적 웹 동작 검증 보조
 - Phase 1 비용 기반 Top-K·bootstrap·드리프트·walk-forward·확률 보정 코드와 테스트 구현
 - Fledge·Solar Data Tools 단계적 연계를 위한 구조 검토와 로드맵 문서 작성
+- 산업 AI 협업 콘셉트의 독자 제작 대표 이미지 생성과 글로벌 기술 검토 중심 README 정보구조 개선
+- 사용자 실행 결과를 바탕으로 Phase 1 확률 보정·비용 시나리오·bootstrap·walk-forward 결과 해석 및 문서화
 
 ## PR별 구현 기록
 
@@ -25,5 +27,10 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **Codex (OpenAI)**: 비용 기반 Top-K, bootstrap 신뢰구간, PSI 드리프트, walk-forward 평가, 확률 보정 코드와 단위·회귀 테스트 및 실험계약 문서를 직접 구현
 - **최희찬 (`heechan9`)**: 연구 문제와 우선순위 설정, 활용 범위·수용 기준 결정, 결과 검토 및 병합·공개 여부 최종 승인
 - GitHub Contents API를 통한 업로드 특성상 커밋 업로더 계정과 실제 파일 작성 주체가 다를 수 있으므로 이 기록과 PR 설명을 기여 근거로 사용합니다.
+
+### Global collaboration README and Phase 1 result interpretation
+
+- **Codex (OpenAI)**: FabGuard 전용 산업 AI 협업 대표 이미지 생성, 해외 기술 검토자가 실험계약·재현성·검증 경계를 빠르게 확인하도록 README를 재구성하고 Phase 1 실행 결과를 과장 없이 문서화
+- **최희찬 (`heechan9`)**: 글로벌 협업 지향 디자인 요구사항 설정, 로컬 공식 데이터 실험 실행 및 결과 제공, 최종 표현·공개·병합 승인
 
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.

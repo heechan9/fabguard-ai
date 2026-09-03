@@ -1,0 +1,3 @@
+variant,brier_score,expected_calibration_error,bins,populated_bins
+uncalibrated,0.06538524664995653,0.09224754564246852,10,4
+sigmoid_train_tail,0.0599372131252791,0.04006066230577359,10,4
