@@ -16,6 +16,7 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - 반도체 클린룸 콘셉트의 웹 UI 구현 및 반응형 스타일링
 - 코드·데이터 형식·정적 웹 동작 검증 보조
 - Phase 1 비용 기반 Top-K·bootstrap·드리프트·walk-forward·확률 보정 코드와 테스트 구현
+- Fledge·Solar Data Tools 단계적 연계를 위한 구조 검토와 로드맵 문서 작성
 
 ## PR별 구현 기록
 
