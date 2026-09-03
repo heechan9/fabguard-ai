@@ -11,6 +11,11 @@ import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import average_precision_score
 
+try:
+    from sklearn.frozen import FrozenEstimator
+except ImportError:  # scikit-learn < 1.6
+    FrozenEstimator = None
+
 from .advanced_evaluation import (bootstrap_top_k_interval, calibration_metrics, drift_table,
                                   inspection_cost_table, walk_forward_slices)
 from .config import ExperimentConfig
@@ -26,6 +31,13 @@ def selected_candidate(train: pd.DataFrame, config: ExperimentConfig):
     return next(candidate for candidate in selected.values() if candidate.name == name)
 
 
+def prefit_calibrator(estimator: object) -> CalibratedClassifierCV:
+    """Build a calibrator compatible with both old and current scikit-learn."""
+    if FrozenEstimator is not None:
+        return CalibratedClassifierCV(FrozenEstimator(estimator), method="sigmoid")
+    return CalibratedClassifierCV(estimator, method="sigmoid", cv="prefit")
+
+
 def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, bootstrap_replicates: int = 2000,
                             inspection_cost: float = 1.0, missed_fail_cost: float = 20.0) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -38,7 +50,7 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
     fit, calibration = train.iloc[:calibration_start], train.iloc[calibration_start:]
     base = build_pipeline(candidate, config)
     base.fit(fit[features], fit["label"])
-    calibrated = CalibratedClassifierCV(base, method="sigmoid", cv="prefit")
+    calibrated = prefit_calibrator(base)
     calibrated.fit(calibration[features], calibration["label"])
     raw_probability = base.predict_proba(test[features])[:, 1]
     probability = calibrated.predict_proba(test[features])[:, 1]
