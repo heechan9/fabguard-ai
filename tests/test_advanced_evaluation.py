@@ -2,10 +2,12 @@ import unittest
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
 
 from fabguard.advanced_evaluation import (bootstrap_top_k_interval, calibration_metrics, drift_table,
                                           inspection_cost_table, population_stability_index,
                                           walk_forward_slices)
+from fabguard.advanced_experiment import prefit_calibrator
 
 
 class AdvancedEvaluationTest(unittest.TestCase):
@@ -40,6 +42,19 @@ class AdvancedEvaluationTest(unittest.TestCase):
         for train, validation in walk_forward_slices(timestamps, folds=3):
             self.assertLess(train.max(), validation.min())
             self.assertFalse(set(train) & set(validation))
+
+    def test_prefit_calibrator_supports_installed_sklearn(self) -> None:
+        fit_x = np.array([[0.0], [0.2], [0.8], [1.0]])
+        fit_y = np.array([0, 0, 1, 1])
+        calibration_x = np.linspace(0.05, 0.95, 20).reshape(-1, 1)
+        calibration_y = (calibration_x[:, 0] >= 0.5).astype(int)
+        estimator = LogisticRegression().fit(fit_x, fit_y)
+
+        calibrator = prefit_calibrator(estimator)
+        calibrator.fit(calibration_x, calibration_y)
+        probability = calibrator.predict_proba(calibration_x)[:, 1]
+
+        self.assertTrue(np.all((0 <= probability) & (probability <= 1)))
 
 
 if __name__ == "__main__":
