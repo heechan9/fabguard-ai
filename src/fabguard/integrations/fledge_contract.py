@@ -24,14 +24,15 @@ def normalize_fledge_readings(
     """Normalize candidate Fledge readings without adding a Fledge dependency.
 
     Expected envelope fields are ``asset_code``, ``reading`` and either
-    ``user_ts`` or ``ts``. Measurement values must be numeric or null. Missing
+    ``user_ts`` or ``ts``. Timestamps must be ISO 8601 strings; numeric epoch
+    values are deliberately rejected because their unit is ambiguous. Measurement values must be numeric or null. Missing
     required measurements fail closed so malformed edge data cannot silently
     enter an experiment or inference path.
     """
 
     required = tuple(dict.fromkeys(required_measurements))
     rows: list[dict[str, object]] = []
-    feature_order: list[str] = []
+    feature_order = [f"measurement__{name}" for name in required]
 
     for index, item in enumerate(readings):
         if not isinstance(item, Mapping):
@@ -46,6 +47,10 @@ def normalize_fledge_readings(
             raise FledgeContractError(f"reading[{index}].reading must be an object")
         if timestamp_value is None:
             raise FledgeContractError(f"reading[{index}] requires user_ts or ts")
+        if not isinstance(timestamp_value, str):
+            raise FledgeContractError(
+                f"reading[{index}] timestamp must be an ISO 8601 string; numeric epoch units are ambiguous"
+            )
 
         timestamp = pd.to_datetime(timestamp_value, utc=True, errors="coerce")
         if pd.isna(timestamp):
