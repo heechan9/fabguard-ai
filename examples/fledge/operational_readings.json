@@ -1,0 +1,17 @@
+[
+  {
+    "asset_code": "etch-01",
+    "user_ts": "2026-09-04T01:00:00Z",
+    "reading": {"pressure": 1.2, "temperature": 22.4}
+  },
+  {
+    "asset_code": "etch-01",
+    "user_ts": "2026-09-04T00:30:00Z",
+    "reading": {"pressure": 1.1, "temperature": 22.0}
+  },
+  {
+    "asset_code": "etch-02",
+    "user_ts": "2026-09-04T01:00:30Z",
+    "reading": {"pressure": "invalid", "temperature": 21.9}
+  }
+]
