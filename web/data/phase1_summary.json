@@ -1,0 +1,28 @@
+{
+  "status": "scenario_and_provisional_validation",
+  "test_split_changed": false,
+  "ece": {
+    "before": 0.09224754564246852,
+    "after": 0.04006066230577359
+  },
+  "best_cost": {
+    "k_fraction": 0.2,
+    "total_cost": 399,
+    "no_review_cost": 480,
+    "reduction": 81,
+    "inspection_cost": 1,
+    "missed_fail_cost": 20
+  },
+  "top10_capture": {
+    "mean": 0.20069690914829644,
+    "low": 0.0624526515151516,
+    "high": 0.36846978557504845,
+    "confidence": 0.95,
+    "bootstrap_replicates": 2000
+  },
+  "walk_forward": {
+    "min": 0.054172660492530667,
+    "max": 0.2798973362930078,
+    "folds": 4
+  }
+}
