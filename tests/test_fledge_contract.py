@@ -42,6 +42,10 @@ class FledgeContractTest(unittest.TestCase):
             ({"asset_code": "etch-01", "reading": {}}, "user_ts or ts"),
             ({"asset_code": "etch-01", "user_ts": "bad", "reading": {}}, "invalid timestamp"),
             (
+                {"asset_code": "etch-01", "user_ts": 1_700_000_000, "reading": {}},
+                "ISO 8601 string",
+            ),
+            (
                 {
                     "asset_code": "etch-01",
                     "user_ts": "2026-09-04T01:00:00Z",
@@ -65,6 +69,22 @@ class FledgeContractTest(unittest.TestCase):
             normalize_fledge_readings([valid], required_measurements=["temperature"])
         with self.assertRaisesRegex(FledgeContractError, "duplicate"):
             normalize_fledge_readings([valid, valid])
+
+    def test_empty_batch_preserves_required_measurement_schema(self) -> None:
+        frame = normalize_fledge_readings(
+            [], required_measurements=["pressure", "temperature", "pressure"]
+        )
+
+        self.assertEqual(
+            list(frame.columns),
+            [
+                "sample_id",
+                "asset_code",
+                "event_time",
+                "measurement__pressure",
+                "measurement__temperature",
+            ],
+        )
 
 
 if __name__ == "__main__":
