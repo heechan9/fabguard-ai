@@ -47,6 +47,10 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 3. 익명 SECOM 변수와 실제 설비 tag의 매핑은 별도 현장 스키마로 분리한다.
 4. 정상·결측·지연·중복·비수치 payload fixture로 계약 테스트를 확장한다.
 
+공식 커뮤니티에 문의하거나 upstream 코드를 시작하기 전에는
+[`FLEDGE_UPSTREAM_READINESS.md`](FLEDGE_UPSTREAM_READINESS.md)의 기여 절차, 후보 범위,
+DCO 및 검증 게이트를 따른다.
+
 ## 로컬 smoke 실행
 
 이 저장소가 제공하는 예시 입력만으로 계약 경계를 재현할 수 있다.
