@@ -33,6 +33,7 @@ class ResultsContractTest(unittest.TestCase):
         web_dir = Path("web/data")
         self.assertTrue((web_dir / "summary.json").exists())
         self.assertTrue((web_dir / "priority_top50.json").exists())
+        self.assertTrue((web_dir / "phase1_summary.json").exists())
 
         web_summary = json.loads((web_dir / "summary.json").read_text(encoding="utf-8"))
         manifest = json.loads((RESULT_DIR / "manifest.json").read_text(encoding="utf-8"))
@@ -55,6 +56,13 @@ class ResultsContractTest(unittest.TestCase):
         self.assertEqual(len(web_top50), 50)
         self.assertEqual(web_top50[0]["sample_id"], priority_csv.iloc[0]["sample_id"])
         self.assertEqual(int(web_top50[0]["rank"]), 1)
+
+        phase1 = json.loads((web_dir / "phase1_summary.json").read_text(encoding="utf-8"))
+        self.assertEqual(phase1["status"], "scenario_and_provisional_validation")
+        self.assertFalse(phase1["test_split_changed"])
+        self.assertLess(phase1["ece"]["after"], phase1["ece"]["before"])
+        self.assertEqual(phase1["best_cost"]["inspection_cost"], 1)
+        self.assertEqual(phase1["best_cost"]["missed_fail_cost"], 20)
 
 
 if __name__ == "__main__":
