@@ -15,6 +15,7 @@ fabguard-audit = "fabguard.data:main"
 fabguard-run = "fabguard.experiment:main"
 fabguard-report = "fabguard.reporting:main"
 fabguard-advanced = "fabguard.advanced_experiment:main"
+fabguard-fledge-smoke = "fabguard.integrations.fledge_smoke:main"
 
 
 [tool.pytest.ini_options]
