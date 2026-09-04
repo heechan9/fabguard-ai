@@ -37,7 +37,7 @@ const selectedTest = () => state.summary.test.find(row => row.candidate === stat
 const top10 = () => state.summary.top_k.find(row => Math.abs(row.k_fraction - 0.1) < 0.001);
 
 function waferVisual(featCount) {
-  return `<figure class="hero-visual"><img src="/assets/fabguard-industrial-collaboration-hero-v2.png" alt="반도체 제조 현장에서 데이터 기반 위험점검을 협의하는 엔지니어를 표현한 FabGuard 콘셉트 이미지"><div class="visual-shade"></div><figcaption>독자 제작 콘셉트 이미지 · 실제 공장 또는 현장 배포 사진이 아닙니다.</figcaption><div class="visual-stat"><span>분석 입력</span><strong>${featCount}</strong><small>익명 측정변수</small></div><div class="visual-status"><i></i> HUMAN REVIEW REQUIRED</div></figure>`;
+  return `<figure class="hero-visual"><img src="/assets/fabguard-dusk-hero-v3.jpg" alt="노을에서 야간으로 이어지는 대형 반도체 팹과 엔지니어의 데이터 기반 위험 검토를 표현한 FabGuard 콘셉트 이미지"><div class="visual-shade"></div><figcaption>독자 제작 콘셉트 이미지 · 실제 공장 또는 현장 배포 사진이 아닙니다.</figcaption><div class="visual-stat"><span>분석 입력</span><strong>${featCount}</strong><small>익명 측정변수</small></div><div class="visual-status"><i></i> HUMAN REVIEW REQUIRED</div></figure>`;
 }
 
 function summaryView() {
@@ -47,7 +47,8 @@ function summaryView() {
   const ds = state.summary.dataset;
   const queueSize = state.risks.length;
   app.innerHTML = `
-    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>불량을 확정하기 전에,<br><span>점검 순서부터.</span></h1><p class="hero-ko">위험도가 높은 생산 건을 먼저 찾아<br><strong>엔지니어의 점검 시간을 집중합니다.</strong></p><p class="lead">FabGuard는 ${ds.measurement_features}개 측정값을 분석해 검토 순서를 제안합니다. AI가 합격·불합격을 결정하거나 공정을 제어하지 않으며, 최종 판단은 엔지니어가 합니다.</p><div class="hero-actions"><a class="button" href="#risks">실제 점검 목록 보기 <span>→</span></a><a class="text-link" href="#limitations">검증 범위 먼저 확인하기</a></div></div>${waferVisual(ds.measurement_features)}</section>
+    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p><div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#result">현재 결과 30초 확인</a></div></div>${waferVisual(ds.measurement_features)}</section>
+    <section class="answer-strip" aria-label="FabGuard 핵심 요약"><article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로<br>점검 대상을 추천</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article></section>
     <section class="plain-guide" aria-label="FabGuard 작동 방식"><div><span>01 · 데이터 입력</span><strong>생산 과정의 측정값</strong><p>공개 데이터에 포함된 ${ds.samples.toLocaleString()}건의 생산 기록과 ${ds.measurement_features}개 익명 변수를 사용합니다.</p></div><div><span>02 · AI 분석</span><strong>위험도가 높은 순서로 정렬</strong><p>모든 생산 건을 판정하지 않고, 제한된 점검 시간을 어디에 먼저 쓸지 제안합니다.</p></div><div><span>03 · 사람의 판단</span><strong>엔지니어가 확인하고 결정</strong><p>실제 센서·설비·공정 이력을 대조한 뒤 재검사와 설비점검 여부를 결정합니다.</p></div></section>
     <section class="data-strip" aria-label="프로젝트 데이터 요약"><div><span>01</span><strong>${ds.samples.toLocaleString()}</strong><small>분석한 생산 기록</small></div><div><span>02</span><strong>${ds.measurement_features}</strong><small>익명 측정변수</small></div><div><span>03</span><strong>${ten.total_fail}</strong><small>검증구간 실제 불량</small></div><div><span>04</span><strong>${queueSize}</strong><small>우선점검 생산 건</small></div></section>
     <section class="story-section"><div class="section-intro"><p class="kicker">현재 결과</p><h2>40건을 먼저 봤을 때<br>불량 5건을 찾았습니다.</h2><p>전체 검증구간을 무작정 확인하는 대신 AI 위험도가 높은 상위 10%를 먼저 살펴본 결과입니다. 아직 독립 현장 데이터에서 다시 검증해야 하는 잠정 결과입니다.</p></div><div class="command-panel"><div class="panel-head"><span>검증 결과 요약</span><span class="live"><i></i> 잠정 결과</span></div><div class="metrics-grid"><article><span>위험순위 품질 지표</span><strong>${num(test.pr_auc_average_precision)}</strong><small>PR-AUC · 높을수록 불량 순위화가 좋음</small></article><article><span>먼저 찾은 불량</span><strong>${ten.captured_fail}<em> / ${ten.total_fail}</em></strong><small>40건 점검으로 전체 불량의 ${pct(ten.fail_capture_rate)} 포착</small></article><article><span>무작위 점검 대비 효율</span><strong>${num(ten.lift, 2)}<em>배</em></strong><small>같은 수를 무작위로 점검했을 때와 비교</small></article></div><div class="caution"><span>꼭 확인하세요</span><p>실제 공장 성과나 불량 원인을 입증한 결과가 아닙니다. 공개 데이터에서 우선점검 방식의 가능성을 시험한 결과입니다.</p></div></div></section>
@@ -84,8 +85,9 @@ function limitationsView() {
 function route() {
   if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
-  if (hash === "summary") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") limitationsView(); else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
-  window.scrollTo({ top: 0, behavior: "instant" });
+  if (hash === "summary") summaryView(); else if (hash === "result") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") limitationsView(); else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  if (hash === "result") document.querySelector(".story-section")?.scrollIntoView({ behavior: "smooth" });
+  else window.scrollTo({ top: 0, behavior: "instant" });
 }
 
 window.addEventListener("hashchange", route);
