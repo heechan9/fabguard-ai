@@ -70,7 +70,9 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 
 현재 준비 상태: **외부 종속성 없는 reading 정규화 계약과 단위 테스트 구현 완료. 실제 Fledge
 플러그인·런타임 연동은 아직 시작하지 않음.** 자세한 경계는
-[`docs/FLEDGE_ADAPTER_CONTRACT.md`](docs/FLEDGE_ADAPTER_CONTRACT.md)에 기록한다.
+[`docs/FLEDGE_ADAPTER_CONTRACT.md`](docs/FLEDGE_ADAPTER_CONTRACT.md)에 기록한다. 공식 커뮤니티
+접촉 전 후보 범위와 기여 절차는
+[`docs/FLEDGE_UPSTREAM_READINESS.md`](docs/FLEDGE_UPSTREAM_READINESS.md)를 따른다.
 
 ### 확정사항
 

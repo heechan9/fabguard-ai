@@ -9,6 +9,7 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 
 - 비어 있지 않은 `asset_code`
 - `user_ts` 또는 `ts`의 UTC 파싱
+- 단위가 모호한 숫자형 epoch timestamp 차단(현재 로컬 계약은 ISO 8601 문자열만 허용)
 - `reading` 내부 측정값의 숫자/null 제한
 - 필수 측정값 누락 시 fail-closed 처리
 - `asset_code + timestamp` 중복 차단
@@ -40,12 +41,21 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 실제 플러그인은 해양 프로젝트 종료, FabGuard 출력계약 동결, upstream 이슈 논의 후 별도 PR로
 진행한다. 이 모듈의 존재만으로 실시간 현장 연동이나 Fledge 호환을 주장하지 않는다.
 
+현재 계약 검사는 배치 내 위반 하나에도 전체 호출을 중단하는 strict fail-closed 방식이다. 이는
+오프라인 검증 단계의 의도된 동작이다. 실시간 수집 단계에서는 전체 스트림을 중단시키지 않도록
+오류 reading 격리, dead-letter queue 또는 명시적 skip 정책을 upstream과 합의한 뒤 별도로
+설계한다. 지금 구현은 해당 운영 동작을 주장하지 않는다.
+
 ## 다음 검토 게이트
 
 1. Fledge maintainer에게 가장 작은 기여 후보와 reading schema 범위를 확인한다.
 2. 공식 플러그인 예제의 수명주기와 오류 처리 규약을 조사한다.
 3. 익명 SECOM 변수와 실제 설비 tag의 매핑은 별도 현장 스키마로 분리한다.
 4. 정상·결측·지연·중복·비수치 payload fixture로 계약 테스트를 확장한다.
+
+공식 커뮤니티에 문의하거나 upstream 코드를 시작하기 전에는
+[`FLEDGE_UPSTREAM_READINESS.md`](FLEDGE_UPSTREAM_READINESS.md)의 기여 절차, 후보 범위,
+DCO 및 검증 게이트를 따른다.
 
 ## 로컬 smoke 실행
 
