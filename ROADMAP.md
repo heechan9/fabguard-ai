@@ -68,6 +68,10 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 
 ## 1차 연계 — Fledge
 
+현재 준비 상태: **외부 종속성 없는 reading 정규화 계약과 단위 테스트 구현 완료. 실제 Fledge
+플러그인·런타임 연동은 아직 시작하지 않음.** 자세한 경계는
+[`docs/FLEDGE_ADAPTER_CONTRACT.md`](docs/FLEDGE_ADAPTER_CONTRACT.md)에 기록한다.
+
 ### 확정사항
 
 - 현재 진행 중인 해양 프로젝트 2개를 마무리한 뒤 착수한다.
@@ -83,6 +87,14 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 - 수집 단계의 변환인지, 송신 단계의 축약·보강인지에 따라 ingress/egress 위치를 결정한다.
 - 상태를 가진 드리프트 감지가 Fledge의 배치·재시작·설정 변경 수명주기에서 안전한지 검증한다.
 - Python 플러그인 관례, 테스트 방식, 라이선스와 maintainer가 선호하는 기여 단위를 먼저 확인한다.
+
+### 현재 확보한 최소 구조
+
+- `src/fabguard/integrations/fledge_contract.py`에 외부 패키지를 import하지 않는 입력 정규화 경계를 둔다.
+- malformed timestamp, 비수치 측정값, 필수 tag 누락과 중복 identity를 fail-closed로 차단한다.
+- 결과 열을 `sample_id`, `asset_code`, `event_time`, `measurement__*`로 고정해 향후 추론·정책
+  계층과 Fledge 수명주기를 분리한다.
+- 이 코드는 연계 가능성을 검증하는 독자 구현이며 Fledge 호환 또는 현장 배포 완료를 뜻하지 않는다.
 
 ### 진입 조건
 

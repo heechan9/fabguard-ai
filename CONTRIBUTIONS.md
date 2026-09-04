@@ -20,6 +20,7 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - 산업 AI 협업 콘셉트의 독자 제작 대표 이미지 생성과 글로벌 기술 검토 중심 README 정보구조 개선
 - 사용자 실행 결과를 바탕으로 Phase 1 확률 보정·비용 시나리오·bootstrap·walk-forward 결과 해석 및 문서화
 - 신규 산업 AI 대표 이미지 기반 웹데모 재설계, 일반 사용자용 설명·가독성·모바일 반응형 개선 및 Phase 1 결과 데이터 계약 추가
+- Fledge 사전 연계를 위한 dependency-free reading 정규화 계약, fail-closed 검증, 테스트와 설계 경계 구현
 
 ## PR별 구현 기록
 
@@ -43,5 +44,10 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 - **Codex (OpenAI)**: 노을·야간 반도체 팹을 주제로 한 독자 제작 대표 이미지 생성, README 첫 화면의 문제·결과·검증 경계 재배치, 웹 첫 방문용 4단 요약과 결과 바로가기 구현
 - **최희찬 (`heechan9`)**: 대표 이미지의 분위기와 일반 사용자 중심 정보구조 요구사항 설정, 시안 선택 및 공개·병합 승인
+
+### Fledge adapter contract preparation
+
+- **Codex (OpenAI)**: Fledge 코드를 복제하거나 런타임 종속성을 추가하지 않고 reading envelope를 안정적인 FabGuard 입력 표로 변환하는 독자 구현, 오류·중복 차단 테스트와 연계 경계 문서 작성
+- **최희찬 (`heechan9`)**: FabGuard → Fledge 단계적 확장 방향 결정, Anaconda 기반 로컬 재현 실행과 결과 검토, 실제 upstream 참여·병합 범위 최종 승인
 
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
