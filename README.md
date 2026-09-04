@@ -6,7 +6,15 @@
 
 **Leakage-aware risk prioritization for reproducible semiconductor manufacturing AI**
 
-<img src="docs/assets/fabguard-industrial-collaboration-hero-v2.png" alt="FabGuard 산업 AI 협업과 반도체 공정 위험 탐지를 표현한 독자 제작 콘셉트 이미지" width="960">
+<p><strong>공개 반도체 데이터 1,567건 → 위험도 순 정렬 → 엔지니어 우선점검</strong></p>
+
+<p>
+  <a href="https://fabguard-ai.vercel.app"><strong>웹 데모 바로 보기 →</strong></a>
+  · <a href="#3줄로-보는-현재-상태">현재 결과</a>
+  · <a href="#빠른-시작">직접 실행</a>
+</p>
+
+<img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="노을에서 야간으로 이어지는 대형 반도체 팹과 엔지니어의 데이터 기반 위험 검토를 표현한 독자 제작 콘셉트 이미지" width="820">
 
 <br>
 
@@ -19,7 +27,7 @@
 590개 익명 측정값을 분석해 위험도가 높은 생산 건을 앞에 배치하고,  
 엔지니어가 제한된 점검 시간을 어디에 먼저 사용할지 돕습니다.
 
-[Live demo](https://fabguard-ai.vercel.app) · [Evidence](#핵심-결과) · [Reproduce](#빠른-시작) · [Validation](#검증과-주장-경계) · [Collaborate](#open-engineering--collaboration)
+[Evidence](#핵심-결과) · [Validation](#검증과-주장-경계) · [Contributions](CONTRIBUTIONS.md)
 
 </div>
 
@@ -27,6 +35,14 @@
 > 위 이미지는 FabGuard의 목표 운영상과 협업 방식을 표현한 독자 제작 콘셉트입니다. 실제 반도체 공장, 제휴 조직, 구현 화면 또는 현장 배포 성과를 나타내지 않습니다.
 
 ---
+
+## 3줄로 보는 현재 상태
+
+| 해결하는 문제 | 지금 확인된 결과 | 아직 주장하지 않는 것 |
+|---|---|---|
+| 모든 생산 건을 다 볼 수 없을 때 **어디부터 점검할지** 정합니다. | 후기 검증구간 상위 10%인 **40건을 점검해 불량 5/24건을 포착**했습니다. | 실제 공장 배포, 수율 개선, 비용 절감, 불량 원인 규명은 아직 검증하지 않았습니다. |
+
+> 한 문장으로: **FabGuard는 불량 판정기가 아니라, 제한된 점검 시간을 위험도가 높은 생산 건에 먼저 쓰도록 돕는 의사결정 지원 도구입니다.**
 
 ## 30초 요약
 
@@ -54,20 +70,6 @@
 | 공개데이터 결과를 현장 성과로 과장할 위험을 통제 | 구현 범위와 미검증 범위를 분리하고 단계적 현장 검증안을 문서화 | 데이터셋 카드, 테스트 노출 기록, 현장 검증 계획 | 재현성·문서화·검증 중심의 프로젝트 운영 |
 
 > **역할:** 최희찬이 문제 정의, 요구사항·평가지표·공개데이터 및 활용 시나리오 선정, 결과 검토와 저장소 운영을 담당했습니다. 코드 작성과 검증의 세부 주체는 [기여 구분](CONTRIBUTIONS.md)에 기록합니다.
-
-## Open engineering & collaboration
-
-FabGuard is structured as a reviewable industrial-AI prototype rather than a black-box demo. Engineers can inspect the data boundary, reproduce the experiment, challenge the metrics, and propose improvements without relying on private fab data.
-
-| Engineering signal | Where to review it |
-|---|---|
-| Leakage-aware preprocessing and temporal holdout | [Experiment contract](EXPERIMENT_CONTRACT.md) |
-| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](REPRODUCIBILITY.md) |
-| Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
-| Explicit boundary between prototype evidence and factory claims | [Dataset card](DATASET_CARD.md) and [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
-| Staged path from FabGuard to external industrial open source | [Roadmap](ROADMAP.md) |
-
-Technical discussion is welcome through focused issues and reviewable pull requests. Useful contributions include validation design, data-contract tests, drift diagnostics, calibration, documentation, and adapters that preserve the existing experiment contract.
 
 ## 작동 방식
 
@@ -167,6 +169,23 @@ flowchart LR
 - 현장 효과는 단순 전후 비교로 주장하지 않고, 무작위·단계적 도입 또는 조건에 맞는 준실험 설계를 검토합니다.
 
 자세한 실험 조건은 [실험계약](EXPERIMENT_CONTRACT.md), 현장 검증 계획은 [인과효과 검증 계획](docs/CAUSAL_FIELD_VALIDATION.md)에서 확인할 수 있습니다.
+
+<details>
+<summary><strong>Open engineering & collaboration</strong> — 재현·검토·기여 경로 보기</summary>
+
+FabGuard is a reviewable industrial-AI prototype rather than a black-box demo. Engineers can inspect the data boundary, reproduce the experiment, challenge the metrics, and propose improvements without private fab data.
+
+| Engineering signal | Where to review it |
+|---|---|
+| Leakage-aware preprocessing and temporal holdout | [Experiment contract](EXPERIMENT_CONTRACT.md) |
+| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](REPRODUCIBILITY.md) |
+| Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
+| Boundary between prototype evidence and factory claims | [Dataset card](DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
+| Staged path to external industrial open source | [Roadmap](ROADMAP.md) |
+
+Focused issues and reviewable pull requests are welcome, especially for validation design, data-contract tests, drift diagnostics, calibration, documentation, and contract-preserving adapters.
+
+</details>
 
 ## 빠른 시작
 
