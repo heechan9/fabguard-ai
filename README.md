@@ -244,6 +244,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
+| [도메인 전문가 검토](docs/DOMAIN_EXPERT_REVIEW.md) | Top-K 큐 인수인계, 엔지니어 체크리스트, 기록·권한·에스컬레이션 초안 |
 | [실패 대응·책임·롤백](docs/FAILURE_GOVERNANCE.md) | 미탐·오경보·데이터/모델 장애 시 기본 동작, 역할과 재개 조건 |
 | [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
 
