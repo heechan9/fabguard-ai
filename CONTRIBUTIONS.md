@@ -61,4 +61,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **Codex (OpenAI)**: 외부 제조 CSV의 SHA-256 출처, 식별자·시간·라벨·수치형 변수 계약과 결측·상수 품질을 fail-closed로 검사하는 어댑터, JSON·Markdown 자동 보고서 및 회귀 테스트 구현
 - **최희찬 (`heechan9`)**: 독립 데이터 검증 우선순위와 기존 SECOM 실험 불변조건 결정, 공개·병합 범위 최종 승인
 
+### Locked independent-evaluation readiness gate
+
+- **Codex (OpenAI)**: 데이터·특징 순서·모델 파일·모델 매니페스트·평가 승인서의 SHA-256 결합, 경로 격리, 무역직렬화 readiness 검사와 회귀 테스트 구현
+- **최희찬 (`heechan9`)**: 잠금 평가 단계의 범위와 기존 V1 결과 불변조건 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
