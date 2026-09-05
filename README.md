@@ -18,6 +18,7 @@
 
 <br>
 
+[![CI](https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-ML_Pipeline-F7931E?logo=scikitlearn&logoColor=white)
 ![Data](https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8)
