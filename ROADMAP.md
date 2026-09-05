@@ -71,6 +71,14 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 - Fledge 또는 Solar Data Tools 종속성 추가
 - 변수 의미·단위·공정 맥락이 다른 외부 데이터에 SECOM V1 모델을 임의 적용
 
+### 잠금 모델 평가 수직 슬라이스
+
+- **완료:** 독립 제조 CSV 계약 검사, 잠금 평가 readiness gate, 기존 Train-CV 선정 결과를
+  재검증해 Train에만 fit하는 원자적 잠금 모델 export 구현.
+- **다음:** 승인된 readiness 입력만 받으며 재학습·튜닝하지 않는 독립 scoring runner.
+- 공식 UCI 원본으로 생성한 모델 번들은 로컬 재현 후 별도로 검토하며 저장소의 canonical
+  `results/v1` 결과를 덮어쓰지 않는다.
+
 ## 1차 연계 — Fledge
 
 현재 준비 상태: **외부 종속성 없는 reading 정규화 계약과 단위 테스트 구현 완료. 실제 Fledge
