@@ -97,6 +97,8 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 - 결과 열을 `sample_id`, `asset_code`, `event_time`, `measurement__*`로 고정해 향후 추론·정책
   계층과 Fledge 수명주기를 분리한다.
 - 이 코드는 연계 가능성을 검증하는 독자 구현이며 Fledge 호환 또는 현장 배포 완료를 뜻하지 않는다.
+- 로컬 운영 검증 하니스의 오류 격리, 재시작 상태, 지연·단절, 부하 측정, 드리프트·알림 계약은
+  [`docs/FLEDGE_OPERATIONAL_VALIDATION.md`](docs/FLEDGE_OPERATIONAL_VALIDATION.md)에 기록한다.
 
 ### 진입 조건
 

@@ -230,6 +230,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [실험계약](EXPERIMENT_CONTRACT.md) | 분할·전처리·평가 불변조건 |
 | [재현성 가이드](REPRODUCIBILITY.md) | 환경·명령·산출물 재현 절차 |
 | [프로젝트 로드맵](ROADMAP.md) | FabGuard → Fledge → Solar Data Tools 단계적 확장과 진입 조건 |
+| [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 오류 격리·재시작·부하·드리프트 로컬 검증과 실제 Fledge 미검증 경계 |
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
