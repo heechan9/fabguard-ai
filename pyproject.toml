@@ -19,6 +19,7 @@ fabguard-fledge-smoke = "fabguard.integrations.fledge_smoke:main"
 fabguard-fledge-operations = "fabguard.integrations.fledge_operations_cli:main"
 fabguard-fledge-benchmark = "fabguard.integrations.fledge_benchmark:main"
 fabguard-independent-validate = "fabguard.independent_validation:main"
+fabguard-locked-evaluation-check = "fabguard.locked_evaluation:main"
 
 
 [tool.pytest.ini_options]
