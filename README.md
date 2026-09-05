@@ -151,6 +151,7 @@ flowchart LR
 - PR-AUC·Fail Recall·Top-K 포착률·Lift 산출
 - 생산 건별 우선점검 목록과 정적 웹 데모
 - 실험계약·결과 파일·재현 절차 문서화
+- 고정 Train-CV 선정 결과를 재검증해 Train에만 적합하는 잠금 모델 번들 exporter
 
 ### 아직 구현하거나 검증하지 않음
 
@@ -182,6 +183,7 @@ FabGuard is a reviewable industrial-AI prototype rather than a black-box demo. E
 | Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
 | Boundary between prototype evidence and factory claims | [Dataset card](DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
 | Staged path to external industrial open source | [Roadmap](ROADMAP.md) |
+| Frozen Train-only model artifact and trust boundary | [Locked model export](docs/LOCKED_MODEL_EXPORT.md) |
 
 Focused issues and reviewable pull requests are welcome, especially for validation design, data-contract tests, drift diagnostics, calibration, documentation, and contract-preserving adapters.
 
