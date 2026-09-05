@@ -10,7 +10,7 @@
 
 <p>
   <a href="https://fabguard-ai.vercel.app"><strong>웹 데모 바로 보기 →</strong></a>
-  · <a href="#3줄로-보는-현재-상태">현재 결과</a>
+  · <a href="#한눈에-보기">현재 결과</a>
   · <a href="#빠른-시작">직접 실행</a>
 </p>
 
@@ -36,30 +36,19 @@
 
 ---
 
-## 3줄로 보는 현재 상태
+## 한눈에 보기
 
-| 해결하는 문제 | 지금 확인된 결과 | 아직 주장하지 않는 것 |
+| 문제 | 검증된 결과 | 현재 경계 |
 |---|---|---|
-| 모든 생산 건을 다 볼 수 없을 때 **어디부터 점검할지** 정합니다. | 후기 검증구간 상위 10%인 **40건을 점검해 불량 5/24건을 포착**했습니다. | 실제 공장 배포, 수율 개선, 비용 절감, 불량 원인 규명은 아직 검증하지 않았습니다. |
+| 모든 생산 건을 정밀 점검하기 어려울 때 **어디부터 볼지** 정합니다. | 후기 검증구간 상위 10%인 **40건에서 불량 5/24건 포착** · Test PR-AUC **0.0935** · walk-forward **0.054–0.280** | 공개데이터 기반 오프라인 실험입니다. 실제 공장 배포·수율·비용·원인 규명 효과는 검증하지 않았습니다. |
 
-> 한 문장으로: **FabGuard는 불량 판정기가 아니라, 제한된 점검 시간을 위험도가 높은 생산 건에 먼저 쓰도록 돕는 의사결정 지원 도구입니다.**
+**FabGuard는 불량 판정기가 아닙니다.** 생산 건별 위험순위를 제시하고, 실제 확인과 조치는 엔지니어가 결정합니다.
 
-## 30초 요약
-
-| 질문 | 답변 |
+| 바로 보고 싶은 내용 | 추천 경로 |
 |---|---|
-| 어떤 문제를 해결하나요? | 모든 생산 건을 동시에 정밀 점검하기 어려울 때, 먼저 볼 대상을 정합니다. |
-| AI는 무엇을 하나요? | 공개 생산 데이터를 분석해 생산 건별 위험점수와 우선순위를 제시합니다. |
-| AI가 불량을 확정하나요? | 아니요. 실제 확인과 조치 결정은 엔지니어가 합니다. |
-| 현재 어디까지 구현됐나요? | 공개 UCI SECOM 데이터의 오프라인 실험, Top-K 우선점검 목록과 웹 데모까지 구현했습니다. |
-| 실제 공장 효과가 검증됐나요? | 아직 아닙니다. 수율 개선·비용 절감·실시간 공장 연동은 주장하지 않습니다. |
-
-### 목적에 따라 바로 보기
-
-| 처음 방문한 분 | 제조·데이터 엔지니어 | 기술 검토·협업 |
-|---|---|---|
-| [웹 데모에서 작동 방식 확인](https://fabguard-ai.vercel.app) | [실험계약](EXPERIMENT_CONTRACT.md) · [정본 결과](results/v1/RESULTS_SUMMARY.md) | [재현성 가이드](REPRODUCIBILITY.md) · [기여 구분](CONTRIBUTIONS.md) |
-| 문제 → 위험순위 → 사람의 판단을 한 화면에서 봅니다. | 데이터 분할·누출 방지·평가지표를 확인합니다. | 테스트·검증 설계·외부 연계 로드맵을 검토합니다. |
+| 문제와 화면을 빠르게 이해하기 | [웹 데모](https://fabguard-ai.vercel.app) → [핵심 결과](#핵심-결과) |
+| 데이터·모델·평가를 검토하기 | [실험계약](EXPERIMENT_CONTRACT.md) → [정본 결과](results/v1/RESULTS_SUMMARY.md) |
+| 재현하거나 협업하기 | [재현성 가이드](REPRODUCIBILITY.md) → [기여 구분](CONTRIBUTIONS.md) |
 
 ## 프로젝트에서 증명한 역량
 
@@ -226,25 +215,36 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 
 ## 문서 안내
 
+### 먼저 읽기
+
 | 문서 | 내용 |
 |---|---|
 | [결과 요약](results/v1/RESULTS_SUMMARY.md) | 모델별 성능과 Top-K 결과 |
 | [데이터셋 카드](DATASET_CARD.md) | 데이터 출처·구성·사용 한계 |
 | [실험계약](EXPERIMENT_CONTRACT.md) | 분할·전처리·평가 불변조건 |
+
+### 재현·기술 검토
+
+| 문서 | 내용 |
+|---|---|
 | [재현성 가이드](REPRODUCIBILITY.md) | 환경·명령·산출물 재현 절차 |
+| [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
+| [잠금 평가 준비 계약](docs/LOCKED_EVALUATION_CONTRACT.md) | 외부 데이터·잠금 모델·사전 승인 SHA-256 결합과 무실행 검증 게이트 |
+| [잠금 독립 평가 계약](docs/LOCKED_SCORING_CONTRACT.md) | 승인된 데이터·모델 바이트의 재검증, 무재학습 scoring과 통계 산출물 |
+| [AI 활용·기여](AI_USAGE.md) · [기여 구분](CONTRIBUTIONS.md) | 사람·AI 협업 원칙과 작업 주체 |
+
+### 현장·확장 설계
+
+| 문서 | 내용 |
+|---|---|
 | [프로젝트 로드맵](ROADMAP.md) | FabGuard → Fledge → Solar Data Tools 단계적 확장과 진입 조건 |
 | [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 오류 격리·재시작·부하·드리프트 로컬 검증과 실제 Fledge 미검증 경계 |
 | [독립 데이터 검증](docs/INDEPENDENT_DATA_VALIDATION.md) | 외부 제조 CSV의 출처·스키마·라벨·시간·품질 검사와 모델 성능 미검증 경계 |
-| [잠금 평가 준비 계약](docs/LOCKED_EVALUATION_CONTRACT.md) | 외부 데이터·잠금 모델·사전 승인 SHA-256 결합과 무실행 검증 게이트 |
-| [잠금 독립 평가 계약](docs/LOCKED_SCORING_CONTRACT.md) | 승인된 데이터·모델 바이트의 재검증, 무재학습 scoring과 통계 산출물 |
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
-| [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
 | [실패 대응·책임·롤백](docs/FAILURE_GOVERNANCE.md) | 미탐·오경보·데이터/모델 장애 시 기본 동작, 역할과 재개 조건 |
 | [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
-| [AI 활용·기여](AI_USAGE.md) | 사람·AI 협업과 검증 원칙 |
-| [기여 구분](CONTRIBUTIONS.md) | 프로젝트 소유자와 Codex 역할 |
 
 ## 기술 구성
 
