@@ -152,6 +152,7 @@ flowchart LR
 - 생산 건별 우선점검 목록과 정적 웹 데모
 - 실험계약·결과 파일·재현 절차 문서화
 - 고정 Train-CV 선정 결과를 재검증해 Train에만 적합하는 잠금 모델 번들 exporter
+- 사전 승인·SHA-256에 결합된 독립 데이터에 재학습 없이 점수를 내는 잠금 평가 runner
 
 ### 아직 구현하거나 검증하지 않음
 
@@ -235,6 +236,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 오류 격리·재시작·부하·드리프트 로컬 검증과 실제 Fledge 미검증 경계 |
 | [독립 데이터 검증](docs/INDEPENDENT_DATA_VALIDATION.md) | 외부 제조 CSV의 출처·스키마·라벨·시간·품질 검사와 모델 성능 미검증 경계 |
 | [잠금 평가 준비 계약](docs/LOCKED_EVALUATION_CONTRACT.md) | 외부 데이터·잠금 모델·사전 승인 SHA-256 결합과 무실행 검증 게이트 |
+| [잠금 독립 평가 계약](docs/LOCKED_SCORING_CONTRACT.md) | 승인된 데이터·모델 바이트의 재검증, 무재학습 scoring과 통계 산출물 |
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
