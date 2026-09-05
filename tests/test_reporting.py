@@ -102,6 +102,20 @@ class ReportingTest(unittest.TestCase):
                 {"fold": 0, "average_precision": .07},
                 {"fold": 1, "average_precision": .21},
             ]).to_csv(phase1_dir / "walk_forward_metrics.csv", index=False)
+            pd.DataFrame([{
+                "metric": "pr_auc_average_precision",
+                "reference_candidate": "logistic",
+                "challenger_candidate": "random_forest",
+                "pairing_unit": "repeat_mean_of_shared_5_folds",
+                "paired_repeats": 5,
+                "reference_mean": .17,
+                "challenger_mean": .21,
+                "mean_difference": .04,
+                "median_difference": .03,
+                "challenger_repeat_wins": 5,
+                "two_sided_exact_sign_flip_p": .0625,
+                "interpretation": "exploratory",
+            }]).to_csv(phase1_dir / "model_pairwise_comparison.csv", index=False)
 
             write_phase1_web_data(phase1_dir, web_dir)
             payload = json.loads((web_dir / "phase1_summary.json").read_text(encoding="utf-8"))
@@ -110,6 +124,10 @@ class ReportingTest(unittest.TestCase):
             self.assertEqual(payload["best_cost"]["k_fraction"], .2)
             self.assertEqual(payload["top10_capture"]["bootstrap_replicates"], 500)
             self.assertEqual(payload["walk_forward"], {"min": .07, "max": .21, "folds": 2})
+            self.assertEqual(payload["paired_model_comparison"]["paired_repeats"], 5)
+            self.assertEqual(payload["paired_model_comparison"]["challenger_repeat_wins"], 5)
+            self.assertEqual(payload["paired_model_comparison"]["two_sided_exact_sign_flip_p"], .0625)
+            self.assertFalse(payload["paired_model_comparison"]["statistically_significant_at_0_05"])
 
 
 if __name__ == "__main__":
