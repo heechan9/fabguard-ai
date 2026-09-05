@@ -58,11 +58,24 @@ class ResultsContractTest(unittest.TestCase):
         self.assertEqual(int(web_top50[0]["rank"]), 1)
 
         phase1 = json.loads((web_dir / "phase1_summary.json").read_text(encoding="utf-8"))
+        calibration = pd.read_csv(Path("results/phase1/calibration_metrics.csv"))
+        costs = pd.read_csv(Path("results/phase1/inspection_cost_scenarios.csv"))
+        bootstrap = pd.read_csv(Path("results/phase1/top_k_bootstrap.csv"))
+        walk_forward = pd.read_csv(Path("results/phase1/walk_forward_metrics.csv"))
         self.assertEqual(phase1["status"], "scenario_and_provisional_validation")
         self.assertFalse(phase1["test_split_changed"])
-        self.assertLess(phase1["ece"]["after"], phase1["ece"]["before"])
+        self.assertEqual(phase1["ece"]["before"], calibration.loc[calibration["variant"] == "uncalibrated", "expected_calibration_error"].iloc[0])
+        self.assertEqual(phase1["ece"]["after"], calibration.loc[calibration["variant"] == "sigmoid_train_tail", "expected_calibration_error"].iloc[0])
+        self.assertEqual(phase1["ece"]["populated_bins"], int(calibration.loc[calibration["variant"] == "sigmoid_train_tail", "populated_bins"].iloc[0]))
+        best_cost = costs.loc[costs["scenario_total_cost"].idxmin()]
+        self.assertEqual(phase1["best_cost"]["k_fraction"], best_cost["k_fraction"])
         self.assertEqual(phase1["best_cost"]["inspection_cost"], 1)
         self.assertEqual(phase1["best_cost"]["missed_fail_cost"], 20)
+        top10_bootstrap = bootstrap.loc[(bootstrap["k_fraction"] - .1).abs().idxmin()]
+        self.assertEqual(phase1["top10_capture"]["low"], top10_bootstrap["fail_capture_low"])
+        self.assertEqual(phase1["top10_capture"]["high"], top10_bootstrap["fail_capture_high"])
+        self.assertEqual(phase1["walk_forward"]["min"], walk_forward["average_precision"].min())
+        self.assertEqual(phase1["walk_forward"]["max"], walk_forward["average_precision"].max())
 
 
 if __name__ == "__main__":
