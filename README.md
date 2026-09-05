@@ -109,7 +109,7 @@ flowchart LR
 | 상위 10% 점검 | 40건 | 위험도가 높은 40건을 먼저 확인 |
 | 먼저 찾은 불량 | 5 / 24건 | 전체 불량의 20.8% 포착 |
 | 무작위 점검 대비 효율 | 2.04배 | 같은 수를 무작위로 봤을 때보다 높은 포착 밀도 |
-| Test PR-AUC | 0.0935 | 불균형 데이터에서 위험순위 품질을 보는 지표 |
+| Test PR-AUC | 0.0935 | 단일 후기 holdout 값; walk-forward 4구간은 0.054–0.280으로 변동 |
 | 고정 임계값 Fail recall | 0 | 0.5 기준 자동 불량 판정에는 실패 |
 
 > **결과를 이렇게 읽어야 합니다**  
@@ -241,6 +241,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
 | [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
+| [실패 대응·책임·롤백](docs/FAILURE_GOVERNANCE.md) | 미탐·오경보·데이터/모델 장애 시 기본 동작, 역할과 재개 조건 |
 | [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
 | [AI 활용·기여](AI_USAGE.md) | 사람·AI 협업과 검증 원칙 |
 | [기여 구분](CONTRIBUTIONS.md) | 프로젝트 소유자와 Codex 역할 |
