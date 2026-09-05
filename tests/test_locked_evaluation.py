@@ -74,6 +74,7 @@ class LockedEvaluationTest(unittest.TestCase):
             self.assertEqual(report["status"], "ready_for_separate_locked_scoring")
             self.assertFalse(report["model_deserialized"])
             self.assertFalse(report["model_scoring_performed"])
+            self.assertFalse(report["approval_identity_authenticated"])
             output = root / "readiness"
             write_readiness_report(report, output)
             self.assertTrue((output / "evaluation_readiness.json").is_file())
