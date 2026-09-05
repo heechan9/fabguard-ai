@@ -88,4 +88,12 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
   동적 증거값으로 교체하고 Phase 1 오류를 fail-closed로 표시하도록 검증 강화
 - **최희찬 (`heechan9`)**: 고급 검증 결과를 일반 사용자에게 노출하는 방향과 주장 경계 승인
 
+### Failure governance and rollback design
+
+- **Codex (OpenAI)**: 입력·모델·큐·드리프트·미탐·오경보 실패 모드, 역할 분리,
+  fail-closed 기본 동작, 사고 조사와 롤백·재개 조건의 현장 도입 전 초안 작성;
+  V1 단일 holdout 수치 옆에 Phase 1 walk-forward 변동성 병기
+- **최희찬 (`heechan9`)**: 현업 도입 논의를 위한 실패 책임·롤백 문서화 우선순위와
+  공개 범위 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
