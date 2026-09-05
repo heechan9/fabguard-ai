@@ -47,6 +47,8 @@ FabGuard V1의 실험 결과는 UCI SECOM 데이터와 저장소의 실험계약
 FabGuard V1은 위 조건의 필요성을 설계 문서에 명시하지만, 공개 SECOM 데이터에서 오프라인 위험순위화를 재현한 단계에 한정된다. 보안·접근통제, 온라인 모니터링, 자동 재학습, MES·FDC·APC·SPC 연동은 구현하거나 검증하지 않았다.
 
 목표 정보 흐름, KPI의 증거 수준과 현장 도입 체크리스트는 [SMART_FACTORY_INTEGRATION.md](SMART_FACTORY_INTEGRATION.md)에 별도로 정리한다.
+장애·미탐·오경보 발생 시의 역할, 안전한 기본 동작과 롤백 기준은
+[FAILURE_GOVERNANCE.md](FAILURE_GOVERNANCE.md)에 현장 도입 전 초안으로 분리한다.
 
 ## 반도체 공정 맥락
 
