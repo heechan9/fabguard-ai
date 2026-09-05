@@ -27,5 +27,15 @@
     "min": 0.0541726604925306,
     "max": 0.2798973362930078,
     "folds": 4
+  },
+  "paired_model_comparison": {
+    "reference_candidate": "l1_logistic_c_0.01",
+    "challenger_candidate": "random_forest_depth_none_leaf_8",
+    "pairing_unit": "repeat_mean_of_shared_5_folds",
+    "paired_repeats": 5,
+    "mean_difference": 0.0381645909677117,
+    "challenger_repeat_wins": 5,
+    "two_sided_exact_sign_flip_p": 0.0625,
+    "statistically_significant_at_0_05": false
   }
 }

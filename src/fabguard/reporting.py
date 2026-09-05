@@ -153,11 +153,13 @@ def write_phase1_web_data(phase1_dir: Path, web_data_dir: Path) -> None:
     costs = pd.read_csv(phase1_dir / "inspection_cost_scenarios.csv")
     bootstrap = pd.read_csv(phase1_dir / "top_k_bootstrap.csv")
     walk_forward = pd.read_csv(phase1_dir / "walk_forward_metrics.csv")
+    paired = pd.read_csv(phase1_dir / "model_pairwise_comparison.csv")
 
     uncalibrated = calibration.loc[calibration["variant"] == "uncalibrated"].iloc[0]
     calibrated = calibration.loc[calibration["variant"] == "sigmoid_train_tail"].iloc[0]
     best_cost = costs.loc[costs["scenario_total_cost"].idxmin()]
     top10 = bootstrap.loc[(bootstrap["k_fraction"] - 0.10).abs().idxmin()]
+    paired_ap = paired.loc[paired["metric"] == "pr_auc_average_precision"].iloc[0]
 
     payload = {
         "status": "scenario_and_provisional_validation",
@@ -188,6 +190,18 @@ def write_phase1_web_data(phase1_dir: Path, web_data_dir: Path) -> None:
             "min": float(walk_forward["average_precision"].min()),
             "max": float(walk_forward["average_precision"].max()),
             "folds": int(len(walk_forward)),
+        },
+        "paired_model_comparison": {
+            "reference_candidate": str(paired_ap["reference_candidate"]),
+            "challenger_candidate": str(paired_ap["challenger_candidate"]),
+            "pairing_unit": str(paired_ap["pairing_unit"]),
+            "paired_repeats": int(paired_ap["paired_repeats"]),
+            "mean_difference": float(paired_ap["mean_difference"]),
+            "challenger_repeat_wins": int(paired_ap["challenger_repeat_wins"]),
+            "two_sided_exact_sign_flip_p": float(paired_ap["two_sided_exact_sign_flip_p"]),
+            "statistically_significant_at_0_05": bool(
+                paired_ap["two_sided_exact_sign_flip_p"] < 0.05
+            ),
         },
     }
     web_data_dir.mkdir(parents=True, exist_ok=True)
