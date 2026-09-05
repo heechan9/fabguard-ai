@@ -30,6 +30,8 @@
 
 [Evidence](#핵심-결과) · [Validation](#검증과-주장-경계) · [Contributions](CONTRIBUTIONS.md)
 
+**International reviewers:** [English project and collaboration brief](docs/MELBOURNE_COLLABORATION.md)
+
 </div>
 
 > **이미지 안내**  
@@ -224,6 +226,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [결과 요약](results/v1/RESULTS_SUMMARY.md) | 모델별 성능과 Top-K 결과 |
 | [데이터셋 카드](DATASET_CARD.md) | 데이터 출처·구성·사용 한계 |
 | [실험계약](EXPERIMENT_CONTRACT.md) | 분할·전처리·평가 불변조건 |
+| [International collaboration brief](docs/MELBOURNE_COLLABORATION.md) | English overview, evidence boundary, reproducibility and focused review requests |
 
 ### 재현·기술 검토
 
