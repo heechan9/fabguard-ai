@@ -150,6 +150,7 @@ def verify_locked_evaluation_bundle(
         "model_id": model["model_id"],
         "approved_by": approval["approved_by"],
         "approved_at": approved_at,
+        "approval_identity_authenticated": False,
         "bindings": bindings,
         "model_deserialized": False,
         "model_scoring_performed": False,
@@ -170,6 +171,7 @@ def write_readiness_report(report: dict[str, Any], output_dir: Path) -> None:
         f"Status: **{report['status']}**  \n"
         f"Model: `{report['model_id']}`  \n"
         f"Approved by: {report['approved_by']} at {report['approved_at']}  \n"
+        f"Approval identity authenticated: {report['approval_identity_authenticated']}  \n"
         f"Model deserialized: {report['model_deserialized']}  \n"
         f"Model scoring performed: {report['model_scoring_performed']}\n\n"
         "## Claim boundary\n\n"
