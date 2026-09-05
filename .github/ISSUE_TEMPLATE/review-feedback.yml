@@ -1,0 +1,66 @@
+name: Focused review feedback
+description: Report one bounded review finding about FabGuard AI.
+title: "[Review]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reviewing FabGuard AI. Please keep this issue focused on one finding and cite the relevant file, test, artifact, or operational assumption.
+
+        This is a public repository. Do not include private production data, credentials, personal information, or confidential site details.
+
+  - type: dropdown
+    id: review-area
+    attributes:
+      label: Review area
+      description: Select the category that best matches this finding.
+      options:
+        - Manufacturing workflow fit
+        - Evaluation design
+        - Data contracts
+        - Human factors
+        - Reproducibility
+    validations:
+      required: true
+
+  - type: input
+    id: evidence-reference
+    attributes:
+      label: Evidence reference
+      description: Link to or name the relevant file, test, artifact, section, or operational assumption.
+      placeholder: "Example: docs/MINIMUM_PILOT.md — rollback criteria"
+    validations:
+      required: true
+
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding
+      description: What did you observe, and what did you expect instead?
+      placeholder: Describe one concrete and reproducible finding.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Why it matters
+      description: Explain the technical, operational, safety, or interpretation impact.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-next-step
+    attributes:
+      label: Suggested next step
+      description: If possible, propose a bounded verification or improvement. A patch is not required.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: public-data-confirmation
+    attributes:
+      label: Public information confirmation
+      options:
+        - label: I have not included private production data, credentials, personal information, or confidential site details.
+          required: true
