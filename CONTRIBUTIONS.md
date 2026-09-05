@@ -81,4 +81,11 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **최희찬 (`heechan9`)**: 석사·기업 연구직 수준 목표, 출국 전 태양광 시계열 이전과 멜버른
   대학 연계 방향 승인
 
+### Phase 1 web evidence provenance
+
+- **Codex (OpenAI)**: calibration, 비용 시나리오, Top-K bootstrap, walk-forward CSV에서
+  웹 요약 JSON을 자동 생성하는 reporting 계약과 회귀 테스트 구현; 화면의 고정 결과 문구를
+  동적 증거값으로 교체하고 Phase 1 오류를 fail-closed로 표시하도록 검증 강화
+- **최희찬 (`heechan9`)**: 고급 검증 결과를 일반 사용자에게 노출하는 방향과 주장 경계 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
