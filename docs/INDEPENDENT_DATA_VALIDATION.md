@@ -13,7 +13,9 @@ least one numeric measurement column. The default column names are `sample_id`, 
 
 The report records the source SHA-256, row and feature counts, label balance, time range and reversal
 count, missing cells, and constant or all-missing features. Duplicate IDs, invalid timestamps,
-non-numeric measurements, incomplete labels and non-binary labels fail closed.
+non-numeric or infinite measurements, unit-ambiguous numeric epoch timestamps, incomplete labels and
+non-binary labels fail closed. Numeric epoch input requires a future explicit unit contract rather
+than guessing seconds, milliseconds or nanoseconds.
 
 ## Compatibility boundary
 
