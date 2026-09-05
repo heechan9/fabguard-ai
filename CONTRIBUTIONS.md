@@ -73,4 +73,12 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
   신뢰된 joblib 사용 경계 문서 구현
 - **최희찬 (`heechan9`)**: 잠금 모델 export 우선순위와 canonical 결과 불변조건 승인
 
+### Locked independent scoring runner and pre-departure solar roadmap
+
+- **Codex (OpenAI)**: 승인된 바이트 재해시, 명시적 pickle 신뢰 확인, 환경 버전 잠금,
+  무재학습 확률 scoring, 고정 지표·Top-K·calibration·bootstrap 산출물과 회귀 테스트 구현;
+  출국 전 Solar Data Tools 재현 패키지와 멜버른 연구 피드백 단계를 로드맵에 구분해 기록
+- **최희찬 (`heechan9`)**: 석사·기업 연구직 수준 목표, 출국 전 태양광 시계열 이전과 멜버른
+  대학 연계 방향 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
