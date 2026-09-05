@@ -13,6 +13,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Iterable
 
+import numpy as np
 import pandas as pd
 
 from .data import sha256_file
@@ -56,7 +57,12 @@ def inspect_external_csv(path: Path, spec: IndependentDataSpec) -> dict[str, obj
     if identifiers.duplicated().any():
         raise IndependentDataContractError("sample identifiers must be unique")
 
-    timestamps = pd.to_datetime(frame[spec.timestamp_column], utc=True, errors="coerce")
+    raw_timestamps = frame[spec.timestamp_column]
+    if pd.api.types.is_numeric_dtype(raw_timestamps):
+        raise IndependentDataContractError(
+            "numeric epoch timestamps require an explicit unit and are not accepted by this contract"
+        )
+    timestamps = pd.to_datetime(raw_timestamps, utc=True, errors="coerce")
     if timestamps.isna().any():
         raise IndependentDataContractError("timestamps must be parseable and UTC-normalizable")
 
@@ -68,6 +74,8 @@ def inspect_external_csv(path: Path, spec: IndependentDataSpec) -> dict[str, obj
     if introduced_missing.any().any():
         bad = sorted(introduced_missing.columns[introduced_missing.any()].tolist())
         raise IndependentDataContractError(f"non-numeric feature values found in: {bad}")
+    if np.isinf(converted.to_numpy(dtype=float)).any():
+        raise IndependentDataContractError("feature values must be finite numbers or missing")
 
     raw_labels = frame[spec.label_column]
     label_values = set(raw_labels.dropna().unique().tolist())
