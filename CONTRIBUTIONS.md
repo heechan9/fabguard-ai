@@ -66,4 +66,11 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **Codex (OpenAI)**: 데이터·특징 순서·모델 파일·모델 매니페스트·평가 승인서의 SHA-256 결합, 경로 격리, 무역직렬화 readiness 검사와 회귀 테스트 구현
 - **최희찬 (`heechan9`)**: 잠금 평가 단계의 범위와 기존 V1 결과 불변조건 승인
 
+### Locked V1 model export
+
+- **Codex (OpenAI)**: 고정 Train-CV 선정 결과·원본 해시·시간순 Train 식별자를 재검증하고
+  Train에만 fit한 pipeline을 해시·환경·입력 계약과 함께 원자적으로 내보내는 CLI, 테스트와
+  신뢰된 joblib 사용 경계 문서 구현
+- **최희찬 (`heechan9`)**: 잠금 모델 export 우선순위와 canonical 결과 불변조건 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.

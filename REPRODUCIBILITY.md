@@ -30,6 +30,16 @@ fabguard-independent-validate \
 
 This command validates provenance and schema only. It does not run or retrain the V1 model.
 
+After canonical V1 selection is complete, export its Train-only fitted pipeline without changing `results/v1`:
+
+```bash
+fabguard-model-export --data-dir data/raw --canonical-result-dir results/v1 \
+  --output-dir results/locked-model-v1
+```
+
+See [`docs/LOCKED_MODEL_EXPORT.md`](docs/LOCKED_MODEL_EXPORT.md). The generated joblib file is a trusted
+artifact only; verify its manifest and SHA-256 before deserialization.
+
 ## 필수 결과
 
 - `data_audit.json`: 데이터 계약과 감사 통계
