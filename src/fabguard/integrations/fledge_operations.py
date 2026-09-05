@@ -46,7 +46,7 @@ class StateStoreError(RuntimeError):
 
 
 class JsonStateStore:
-    """Small atomic state store used to verify restart behavior locally."""
+    """Small single-writer state store used to verify local restart behavior."""
 
     def __init__(self, path: Path):
         self.path = path
