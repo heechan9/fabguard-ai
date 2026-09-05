@@ -40,6 +40,20 @@ fabguard-model-export --data-dir data/raw --canonical-result-dir results/v1 \
 See [`docs/LOCKED_MODEL_EXPORT.md`](docs/LOCKED_MODEL_EXPORT.md). The generated joblib file is a trusted
 artifact only; verify its manifest and SHA-256 before deserialization.
 
+After an independent reviewer binds the final dataset, validation report, model bundle, and approval, run the
+one-shot scorer in an environment matching the export manifest:
+
+```bash
+fabguard-locked-score --dataset path/to/external.csv \
+  --validation-report path/to/validation_report.json \
+  --model-manifest results/locked-model-v1/model_manifest.json \
+  --approval path/to/evaluation_approval.json \
+  --output-dir results/independent-evaluation-v1 --bootstrap 2000 --trust-model-artifact
+```
+
+This command deserializes a trusted pickle. See
+[`docs/LOCKED_SCORING_CONTRACT.md`](docs/LOCKED_SCORING_CONTRACT.md) before use.
+
 ## 필수 결과
 
 - `data_audit.json`: 데이터 계약과 감사 통계
