@@ -22,6 +22,7 @@ fabguard-fledge-benchmark = "fabguard.integrations.fledge_benchmark:main"
 fabguard-independent-validate = "fabguard.independent_validation:main"
 fabguard-locked-evaluation-check = "fabguard.locked_evaluation:main"
 fabguard-model-export = "fabguard.model_export:main"
+fabguard-locked-score = "fabguard.locked_scoring:main"
 
 
 [tool.pytest.ini_options]
