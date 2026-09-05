@@ -8,6 +8,7 @@ and writes provenance-first validation evidence.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -35,6 +36,13 @@ class IndependentDataSpec:
 
 def _feature_columns(columns: Iterable[str], prefix: str) -> list[str]:
     return sorted(str(column) for column in columns if str(column).startswith(prefix))
+
+
+def feature_names_sha256(features: Iterable[str]) -> str:
+    """Return a stable digest for an ordered feature-name contract."""
+
+    payload = json.dumps(list(features), ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 def inspect_external_csv(path: Path, spec: IndependentDataSpec) -> dict[str, object]:
@@ -94,6 +102,10 @@ def inspect_external_csv(path: Path, spec: IndependentDataSpec) -> dict[str, obj
         "evaluation_mode": compatibility,
         "source": {"filename": path.name, "sha256": sha256_file(path)},
         "contract": asdict(spec),
+        "feature_contract": {
+            "ordered_names_sha256": feature_names_sha256(features),
+            "count": len(features),
+        },
         "dataset": {
             "samples": int(len(frame)),
             "measurement_features": int(len(features)),
