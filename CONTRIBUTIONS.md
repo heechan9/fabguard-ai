@@ -95,5 +95,10 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
   V1 단일 holdout 수치 옆에 Phase 1 walk-forward 변동성 병기
 - **최희찬 (`heechan9`)**: 현업 도입 논의를 위한 실패 책임·롤백 문서화 우선순위와
   공개 범위 승인
+### Paired repeated-CV comparison
+
+- **Codex (OpenAI)**: 동일한 반복 CV 분할에서 각 repeat의 5개 fold를 먼저 평균내고 exact
+  sign-flip 검정을 수행하는 비교 모듈·회귀 테스트·파생 증거 파일과 통계적 한계 문서 구현
+- **최희찬 (`heechan9`)**: 모델 간 비교의 연구 우선순위와 기존 V1 결과 불변조건 승인
 
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.

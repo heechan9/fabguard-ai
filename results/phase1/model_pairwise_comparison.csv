@@ -1,0 +1,2 @@
+metric,reference_candidate,challenger_candidate,pairing_unit,paired_repeats,reference_mean,challenger_mean,mean_difference,median_difference,challenger_repeat_wins,two_sided_exact_sign_flip_p,interpretation
+pr_auc_average_precision,l1_logistic_c_0.01,random_forest_depth_none_leaf_8,repeat_mean_of_shared_5_folds,5,0.17730520331403396,0.2154697942817457,0.03816459096771173,0.03720358316266581,5,0.0625,exploratory; repeated-CV estimates overlap and do not establish deployment superiority

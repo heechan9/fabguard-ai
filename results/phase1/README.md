@@ -21,4 +21,15 @@ The experiment retained the existing `results/v1/manifest.json` split (`test_spl
 - Walk-forward average precision varied from 0.054 to 0.280 across four time windows.
 - scikit-learn warned that one walk-forward fold had only four minority-class samples for five splits. The run completed, but the warning reinforces the uncertainty boundary.
 
+## Exploratory paired model comparison
+
+`model_pairwise_comparison.csv` compares the selected Random Forest with the best
+logistic candidate using the same repeated-CV splits. The five folds within each
+repeat are averaged first, then a two-sided exact sign-flip test is applied to the
+five repeat-level differences. Random Forest won all five repeat averages, with a
+mean Average Precision difference of about 0.0382, but the exact two-sided p-value
+is 0.0625. This is exploratory evidence, not proof of statistical significance or
+deployment superiority. Aggregating by repeat avoids treating all 25 overlapping
+fold estimates as independent observations.
+
 These outputs do not establish yield improvement, causal impact, or production readiness.
