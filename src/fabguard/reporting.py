@@ -147,18 +147,68 @@ def write_web_data(result_dir: Path, web_data_dir: Path) -> None:
     (web_data_dir / "priority_top50.json").write_text(priorities.to_json(orient="records", force_ascii=False, indent=2), encoding="utf-8")
 
 
+def write_phase1_web_data(phase1_dir: Path, web_data_dir: Path) -> None:
+    """Generate the Phase 1 web payload from its canonical CSV evidence."""
+    calibration = pd.read_csv(phase1_dir / "calibration_metrics.csv")
+    costs = pd.read_csv(phase1_dir / "inspection_cost_scenarios.csv")
+    bootstrap = pd.read_csv(phase1_dir / "top_k_bootstrap.csv")
+    walk_forward = pd.read_csv(phase1_dir / "walk_forward_metrics.csv")
+
+    uncalibrated = calibration.loc[calibration["variant"] == "uncalibrated"].iloc[0]
+    calibrated = calibration.loc[calibration["variant"] == "sigmoid_train_tail"].iloc[0]
+    best_cost = costs.loc[costs["scenario_total_cost"].idxmin()]
+    top10 = bootstrap.loc[(bootstrap["k_fraction"] - 0.10).abs().idxmin()]
+
+    payload = {
+        "status": "scenario_and_provisional_validation",
+        "test_split_changed": False,
+        "source": "results/phase1 canonical CSV artifacts",
+        "ece": {
+            "before": float(uncalibrated["expected_calibration_error"]),
+            "after": float(calibrated["expected_calibration_error"]),
+            "bins": int(calibrated["bins"]),
+            "populated_bins": int(calibrated["populated_bins"]),
+        },
+        "best_cost": {
+            "k_fraction": float(best_cost["k_fraction"]),
+            "total_cost": float(best_cost["scenario_total_cost"]),
+            "no_review_cost": float(best_cost["no_review_cost"]),
+            "reduction": float(best_cost["scenario_cost_reduction"]),
+            "inspection_cost": float(best_cost["inspection_cost_units"]),
+            "missed_fail_cost": float(best_cost["missed_fail_cost_units"]),
+        },
+        "top10_capture": {
+            "mean": float(top10["fail_capture_mean"]),
+            "low": float(top10["fail_capture_low"]),
+            "high": float(top10["fail_capture_high"]),
+            "confidence": float(top10["confidence"]),
+            "bootstrap_replicates": int(top10["valid_replicates"]),
+        },
+        "walk_forward": {
+            "min": float(walk_forward["average_precision"].min()),
+            "max": float(walk_forward["average_precision"].max()),
+            "folds": int(len(walk_forward)),
+        },
+    }
+    web_data_dir.mkdir(parents=True, exist_ok=True)
+    (web_data_dir / "phase1_summary.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, default=Path("data/raw"))
     parser.add_argument("--result-dir", type=Path, default=Path("results/v1"))
+    parser.add_argument("--phase1-dir", type=Path, default=Path("results/phase1"))
     parser.add_argument("--web-data-dir", type=Path, default=Path("web/data"))
     args = parser.parse_args()
     save_figures(args.data_dir, args.result_dir)
     write_summary(args.result_dir)
     write_web_data(args.result_dir, args.web_data_dir)
+    write_phase1_web_data(args.phase1_dir, args.web_data_dir)
     print(f"report artifacts written under {args.result_dir} and {args.web_data_dir}")
 
 
 if __name__ == "__main__":
     main()
-
