@@ -56,4 +56,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **Codex (OpenAI)**: 샘플 reading을 계약 검증하고 정규화 CSV와 데이터 품질 JSON을 생성하는 재현 CLI, 독자 제작 fixture와 테스트 구현
 - **최희찬 (`heechan9`)**: Anaconda에서 전체 테스트와 smoke 명령을 재현하고 결과·향후 upstream 공개 범위를 승인
 
+### Independent manufacturing data validation gate
+
+- **Codex (OpenAI)**: 외부 제조 CSV의 SHA-256 출처, 식별자·시간·라벨·수치형 변수 계약과 결측·상수 품질을 fail-closed로 검사하는 어댑터, JSON·Markdown 자동 보고서 및 회귀 테스트 구현
+- **최희찬 (`heechan9`)**: 독립 데이터 검증 우선순위와 기존 SECOM 실험 불변조건 결정, 공개·병합 범위 최종 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
