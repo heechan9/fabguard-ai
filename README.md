@@ -158,7 +158,7 @@ flowchart LR
 - 실시간 센서 수집과 생산 제어
 - 익명 변수의 실제 공정·센서 매핑
 - 현장 수율 개선·비용 절감·고장 예방 효과
-- 독립 공장 데이터와 다중 현장 검증
+- 독립 공장 데이터에서의 모델 성능 및 다중 현장 검증(스키마·출처 검증 어댑터만 구현됨)
 
 ## 검증과 주장 경계
 
@@ -231,6 +231,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [재현성 가이드](REPRODUCIBILITY.md) | 환경·명령·산출물 재현 절차 |
 | [프로젝트 로드맵](ROADMAP.md) | FabGuard → Fledge → Solar Data Tools 단계적 확장과 진입 조건 |
 | [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 오류 격리·재시작·부하·드리프트 로컬 검증과 실제 Fledge 미검증 경계 |
+| [독립 데이터 검증](docs/INDEPENDENT_DATA_VALIDATION.md) | 외부 제조 CSV의 출처·스키마·라벨·시간·품질 검사와 모델 성능 미검증 경계 |
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
 | [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |

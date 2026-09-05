@@ -20,6 +20,16 @@ fabguard-report --data-dir data/raw --result-dir results/v1 --web-data-dir web/d
 python -m unittest discover -s tests -v
 ```
 
+Independent manufacturing data can be checked without touching V1 artifacts:
+
+```bash
+fabguard-independent-validate \
+  --input examples/independent_validation/sample_manufacturing.csv \
+  --output-dir results/independent-validation
+```
+
+This command validates provenance and schema only. It does not run or retrain the V1 model.
+
 ## 필수 결과
 
 - `data_audit.json`: 데이터 계약과 감사 통계
@@ -38,4 +48,3 @@ python -m unittest discover -s tests -v
 - Test 수치로 후보군, 전처리, 분할, ranking 기준을 변경하지 않습니다.
 - 동일 risk score는 sample_id 오름차순으로 순위를 결정합니다.
 - 결과 보고 시 `docs/TEST_EXPOSURE.md`를 함께 제공합니다.
-
