@@ -5,6 +5,8 @@ Status: **implemented integrity and approval gate; model scoring remains unimple
 This gate is the step after independent data schema/provenance validation. It prevents accidental
 scoring, tuning, or result publication until a frozen model bundle and a pre-declared evaluation
 approval are cryptographically bound to the exact external dataset and ordered feature contract.
+The approval records a reviewer name but is not a digital signature or identity-authentication
+system; repository review and access controls remain the human governance boundary.
 
 ## Required inputs
 
@@ -42,7 +44,7 @@ does not mean the model was loaded, run, or independently validated.
 - mutable or incomplete model manifest
 - model artifact, manifest, validation report, dataset, or feature digest mismatch
 - path traversal or an artifact outside the declared bundle
-- absent, malformed, unsigned-by-name, or non-independent evaluation approval
+- absent, malformed, unnamed, or non-independent evaluation approval
 - approval that permits further tuning
 
 ## Deliberately deferred
