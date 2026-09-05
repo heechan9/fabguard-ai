@@ -75,7 +75,10 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 
 - **완료:** 독립 제조 CSV 계약 검사, 잠금 평가 readiness gate, 기존 Train-CV 선정 결과를
   재검증해 Train에만 fit하는 원자적 잠금 모델 export 구현.
-- **다음:** 승인된 readiness 입력만 받으며 재학습·튜닝하지 않는 독립 scoring runner.
+- **완료:** 승인된 readiness 입력만 받으며 재학습·튜닝하지 않고 고정 지표·Top-K·bootstrap을
+  산출하는 독립 scoring runner.
+- **다음:** 공식 원본으로 잠금 모델 번들을 생성하고, 물리적 의미와 수집 조건이 확인된 독립
+  제조 데이터 및 실명 검토자를 확보한 뒤 사전 승인된 1회 평가를 수행한다.
 - 공식 UCI 원본으로 생성한 모델 번들은 로컬 재현 후 별도로 검토하며 저장소의 canonical
   `results/v1` 결과를 덮어쓰지 않는다.
 
@@ -124,12 +127,15 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 
 ### 확정사항
 
-- 참여 목표 시점은 **2027년 여름~초가을**이다.
+- 출국 전인 **2027년 2월까지** 공개 PV 시계열 재현·데이터 계약·결측/드리프트 비교 실험과
+  영문 재현 패키지를 준비한다. 공식 upstream 병합 시점은 maintainer 검토에 따른다.
 - 지금은 Solar Data Tools 코드를 FabGuard에 복사하거나 런타임 종속성으로 추가하지 않는다.
 - FabGuard/Fledge에서 축적한 결측 처리, 데이터 품질검사, 이상탐지, 드리프트 감지,
   테스트·재현성 기술을 태양광 발전 시계열 문제로 이전할 수 있도록 모듈 경계를 유지한다.
-- 2027년 실제 활동, 공개 이슈와 기여 지침을 다시 확인한 뒤 문서·테스트·작은 버그 수정부터
+- 착수 시점의 실제 활동, 공개 이슈와 기여 지침을 다시 확인한 뒤 문서·테스트·작은 버그 수정부터
   시작하고 공식 PR 병합을 목표로 한다.
+- 멜버른 도착 후 University of Melbourne, Monash, RMIT의 에너지·AI 연구자 또는 공개 행사에
+  완성된 저장소와 구체적 평가 질문을 제시해 방법론 피드백과 현지 데이터 확장 가능성을 타진한다.
 
 ### 검토사항
 
@@ -138,6 +144,8 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 - 반도체 생산 건 단위 위험순위와 태양광 시계열 품질분석의 목적·시간축·라벨 차이를 별도
   계약으로 다룬다. 같은 모델이나 지표를 그대로 재사용하지 않는다.
 - 프로젝트 조직, maintainer 활동, 릴리스 상태와 라이선스를 참여 시점에 다시 확인한다.
+- 대학 연구자의 피드백·공동연구·데이터 제공은 확정사항이 아니며 소속, 연구윤리, 데이터 사용
+  조건과 상대 연구자의 수요에 따라 별도로 합의한다.
 
 ### 진입 조건
 
@@ -171,3 +179,6 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 - [Fledge architecture](https://fledge-iot.readthedocs.io/en/latest/fledge_architecture.html)
 - [Solar Data Tools repository](https://github.com/NatLabRockies/solar-data-tools)
 - [Solar Data Tools documentation](https://solar-data-tools.readthedocs.io/)
+- [University of Melbourne technology and data research](https://science.unimelb.edu.au/research/technology-and-data)
+- [Monash AI renewable forecasting research](https://www.monash.edu/it/news/2021/ai-technology-enhances-wind-and-solar-forecasting-methods-to-ease-pressure-on-the-grid)
+- [Energy@RMIT](https://www.rmit.edu.au/research/our-research/enabling-impact-platforms/sustainable-technologies-systems/energy-rmit)
