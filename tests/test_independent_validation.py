@@ -70,6 +70,20 @@ class IndependentValidationTest(unittest.TestCase):
             with self.assertRaises(IndependentDataContractError):
                 inspect_external_csv(path, IndependentDataSpec(feature_prefix="", expected_feature_count=2))
 
+    def test_numeric_epoch_and_infinite_measurements_fail_closed(self) -> None:
+        cases = [
+            VALID_CSV.replace("2026-01-01T00:00:00Z", "1700000000").replace(
+                "2026-01-01T00:01:00Z", "1700000060"
+            ),
+            VALID_CSV.replace("1.5,", "inf,"),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            for index, content in enumerate(cases):
+                path = Path(directory) / f"unsafe-{index}.csv"
+                path.write_text(content, encoding="utf-8")
+                with self.assertRaises(IndependentDataContractError):
+                    inspect_external_csv(path, IndependentDataSpec(expected_feature_count=2))
+
 
 if __name__ == "__main__":
     unittest.main()
