@@ -18,7 +18,10 @@ def main() -> None:
     parser.add_argument("--require", action="append", default=[])
     parser.add_argument("--reference", type=Path, help="JSON measurement-to-values baseline")
     parser.add_argument("--max-lateness-seconds", type=float, default=300.0)
+    parser.add_argument("--max-future-skew-seconds", type=float, default=5.0)
     parser.add_argument("--disconnect-after-seconds", type=float, default=120.0)
+    parser.add_argument("--dedupe-retention-seconds", type=float, default=86_400.0)
+    parser.add_argument("--drift-min-samples", type=int, default=5)
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -26,7 +29,10 @@ def main() -> None:
         OperationsConfig(
             required_measurements=tuple(args.require),
             max_lateness_seconds=args.max_lateness_seconds,
+            max_future_skew_seconds=args.max_future_skew_seconds,
             disconnect_after_seconds=args.disconnect_after_seconds,
+            dedupe_retention_seconds=args.dedupe_retention_seconds,
+            drift_min_samples=args.drift_min_samples,
         ),
         JsonStateStore(args.output_dir / "state.json"),
     )
