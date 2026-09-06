@@ -7,11 +7,25 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlsplit, urlunsplit
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 
 class FledgeRestError(RuntimeError):
     """Raised when the remote Fledge response is unsafe or violates its contract."""
+
+
+class _RejectRedirects(HTTPRedirectHandler):
+    """Keep credentials on the configured endpoint by rejecting every redirect."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_NO_REDIRECT_OPENER = build_opener(_RejectRedirects())
+
+
+def _open_without_redirects(request: Request, *, timeout: float):
+    return _NO_REDIRECT_OPENER.open(request, timeout=timeout)
 
 
 @dataclass(frozen=True)
@@ -51,7 +65,7 @@ def fetch_asset_readings(
     asset_code: str,
     *,
     limit: int = 20,
-    opener: Callable[..., object] = urlopen,
+    opener: Callable[..., object] = _open_without_redirects,
 ) -> list[dict[str, object]]:
     """Fetch one asset's latest readings and adapt the official response envelope.
 
