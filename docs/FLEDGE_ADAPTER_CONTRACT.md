@@ -37,6 +37,7 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 생략된 asset code를 URL 값으로 복원하고, 공식 예제의 timezone 없는 저장 timestamp는 이
 어댑터 경계에서 UTC로 명시한다. 인증이 활성화된 인스턴스에서는 토큰을 명령행이 아니라
 `FLEDGE_AUTHTOKEN` 환경변수로 받아 `authtoken` 헤더에만 넣으며 결과 파일에는 기록하지 않는다.
+인증정보가 다른 endpoint로 전달되지 않도록 HTTP redirect는 동일 origin 여부와 관계없이 거부한다.
 
 ```bash
 FLEDGE_AUTHTOKEN="<session-token>" fabguard-fledge-rest \
