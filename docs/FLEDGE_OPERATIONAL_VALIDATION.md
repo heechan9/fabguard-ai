@@ -9,7 +9,7 @@ coupling FabGuard's model experiment to the Fledge lifecycle.
 
 | Target | Current evidence | Remaining external evidence |
 | --- | --- | --- |
-| Reading ingestion | JSON reading batches enter the same normalization boundary intended for an adapter | Run inside a maintainer-approved Fledge plugin repository |
+| Reading ingestion | JSON batches and the official read-only asset REST envelope enter the same normalization boundary | Run against a real Fledge instance and separately assess an in-process plugin |
 | Fault scenarios | Missing/invalid, duplicate, late and disconnected-asset cases have deterministic tests | Sensor/network faults in a Fledge deployment |
 | Isolation | Invalid readings are written to a dead-letter result while valid rows continue | Select upstream DLQ or metadata convention |
 | Restart | Single-writer JSON state uses flush/fsync plus atomic replacement; corrupt state fails closed | Validate Fledge restart/configuration lifecycle and production state backend |
