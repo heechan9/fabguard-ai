@@ -1,6 +1,6 @@
 # Fledge 연계 준비 계약
 
-상태: **사전 검증용 로컬 경계 — Fledge 플러그인 또는 공식 연동 완료가 아님**
+상태: **공식 REST pull 경로 구현 및 로컬 E2E 검증 — 실제 Fledge 인스턴스 검증 대기**
 
 ## 이번 단계에서 구현한 것
 
@@ -30,16 +30,36 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 
 이 예시는 FabGuard가 독자적으로 만든 최소 계약이며 외부 프로젝트의 코드나 문서를 복제하지 않는다.
 
-## 의도적으로 연결하지 않은 것
+## 공식 REST pull 경로
 
-- Fledge 런타임·Python 플러그인 API
+`fabguard-fledge-rest`는 Fledge User API의 읽기 전용
+`GET /fledge/asset/{code}?limit=N` 응답을 가져와 기존 운영 경계로 전달한다. Fledge 응답에
+생략된 asset code를 URL 값으로 복원하고, 공식 예제의 timezone 없는 저장 timestamp는 이
+어댑터 경계에서 UTC로 명시한다. 인증이 활성화된 인스턴스에서는 토큰을 명령행이 아니라
+`FLEDGE_AUTHTOKEN` 환경변수로 받아 `authtoken` 헤더에만 넣으며 결과 파일에는 기록하지 않는다.
+
+```bash
+FLEDGE_AUTHTOKEN="<session-token>" fabguard-fledge-rest \
+  --base-url http://localhost:8081 \
+  --asset etch-01 \
+  --limit 100 \
+  --observed-at 2026-09-06T07:05:00Z \
+  --require pressure \
+  --require temperature \
+  --output-dir results/fledge-live
+```
+
+## 아직 연결하지 않은 것
+
+- Fledge 내부 Python filter-plugin 수명주기
 - north/south service 배치 위치
 - 재시도, 재시작, 상태 저장과 설정 수명주기
 - SECOM V1 모델에 실시간 reading을 바로 넣는 경로
 - Solar Data Tools 종속성
 
-실제 플러그인은 해양 프로젝트 종료, FabGuard 출력계약 동결, upstream 이슈 논의 후 별도 PR로
-진행한다. 이 모듈의 존재만으로 실시간 현장 연동이나 Fledge 호환을 주장하지 않는다.
+현재 테스트는 공식 REST 응답 형식을 제공하는 로컬 HTTP 서버를 통해 URL 인코딩, 인증 헤더,
+응답 크기 제한, 오류 응답 차단과 운영 처리기 진입을 E2E로 확인한다. 실제 Fledge 3.x 인스턴스와
+센서/네트워크 장애 검증은 별도 외부 증거로 남는다.
 
 현재 계약 검사는 배치 내 위반 하나에도 전체 호출을 중단하는 strict fail-closed 방식이다. 이는
 오프라인 검증 단계의 의도된 동작이다. 실시간 수집 단계에서는 전체 스트림을 중단시키지 않도록
