@@ -5,7 +5,7 @@
     "source_id": "dkasc-alice-springs-total-pv-2025",
     "source_type": "observed",
     "input_file": "alice_springs_2025_normalized.csv",
-    "input_sha256": "2cee7c7463dded72d12068bce3e2d63f916e50fe3bf991f89cc0bf1145e572f2",
+    "input_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
     "input_rows": 105120,
     "timezone_declared": "Australia/Darwin",
     "normalized_timezone": "UTC",
