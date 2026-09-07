@@ -21,6 +21,7 @@
 ![Data](https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8)
 ![Status](https://img.shields.io/badge/evidence-provisional-E9A23B)
 ![Decision](https://img.shields.io/badge/final_decision-human-00A7B5)
+![Global data](https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF)
 
 [English overview](docs/MELBOURNE_COLLABORATION.md) · [정본 결과](results/v1/RESULTS_SUMMARY.md) · [재현 방법](REPRODUCIBILITY.md) · [기여 기록](CONTRIBUTIONS.md)
 
@@ -59,6 +60,32 @@ flowchart LR
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
 
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
+
+## Global data roadmap · 국가별 데이터 계획
+
+서로 다른 국가를 단순히 늘리는 것이 아니라, **관측·추정·기준·합성 데이터가 같은 검증 규칙과 감사 기록을 통과하는지** 단계적으로 확인합니다.
+
+| 국가·지역 | 데이터·도구 | 데이터 역할 | 상태 |
+|---|---|---|---|
+| 🇺🇸 미국 | **UCI SECOM** | 반도체 공정 위험순위 연구의 현재 정본 데이터 | ✅ 완료 |
+| 🌐 합성 환경 | **Fledge Sinusoid** | 실시간 수집·REST 연결·중복방지 검증 | 🟠 로컬 검증 중 |
+| 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | 🔵 후속 시스템 데모 |
+| 🇬🇧 영국 | **Sheffield Solar PV_Live** | 지역별 태양광 발전량 추정값 | 🔵 후속 시스템 데모 |
+| 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 시스템 데모 |
+| 🇫🇮 핀란드 | **FMI 고위도 PV 데이터** | 적설·저온 환경 스트레스 테스트 | ⚪ 현재 범위 밖·조건부 후보 |
+| 🇨🇦 캐나다 | **OSOTF** | 적설 환경 실측 후보 | ⚪ 접근경로·라이선스 확인 전 미채택 |
+
+### 도구별 역할
+
+| 계층 | 도구 | 하는 일 |
+|---|---|---|
+| 수집 | **Fledge** | 실시간 센서 reading을 안전하게 수집 |
+| 품질 진단 | **Solar Data Tools** | 결측·시간 이상·설비 시계열 품질을 분석 |
+| 데이터 계약 | **Frictionless Data** | 출처별 형식·단위·필수 필드와 스키마를 검증 |
+| 의사결정·감사 | **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
+| 최종 판단 | **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
+
+> **범위 동결:** 현재 실행 범위는 Fledge Sinusoid와 호주·영국·EU 데이터까지입니다. 핀란드·캐나다는 현재 구현 약속이 아니라, 본 범위가 완료된 뒤 라이선스·접근성·연구가치를 다시 심사할 후속 후보입니다.
 
 ## 핵심 근거
 
