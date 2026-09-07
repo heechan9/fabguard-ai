@@ -33,9 +33,14 @@
 
 </div>
 
-[🌏 English overview](https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md) · [🌍 국가별 데이터](https://github.com/heechan9/fabguard-ai/blob/main/README.md#global-data-roadmap) · [🧰 도구별 역할](https://github.com/heechan9/fabguard-ai/blob/main/README.md#tool-roles) · [👥 기여 기록](https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md)
+<p align="center">
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#global-data-roadmap">🌍 국가별 데이터</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#tool-roles">🧰 도구별 역할</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+</p>
 
-> 위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.
+<p align="center"><sub>위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.</sub></p>
 
 ---
 
