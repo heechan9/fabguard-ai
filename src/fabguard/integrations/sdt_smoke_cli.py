@@ -50,7 +50,7 @@ def main() -> None:
 
     try:
         from solardatatools import DataHandler
-    except ImportError as exc:
+    except ImportError:
         parser.error("Solar Data Tools is not installed; install the optional 'pv' dependency")
 
     frame = pd.read_csv(args.input)
@@ -65,10 +65,18 @@ def main() -> None:
         power_unit=args.power_unit,
     )
 
-    sdt_frame = normalized.set_index("event_time")[["power_kw"]]
-    # SDT treats a timezone-naive index as wall-clock time. The contract first
-    # normalizes to UTC, then removes only the timezone marker for SDT.
-    sdt_frame.index = sdt_frame.index.tz_localize(None)
+    # SDT analyzes solar-day geometry in local wall-clock time. The shared
+    # contract keeps UTC instants, but the SDT view converts back to the
+    # explicitly declared source timezone before dropping the timezone marker.
+    local_index = (
+        normalized["event_time"]
+        .dt.tz_convert(args.timezone)
+        .dt.tz_localize(None)
+    )
+    sdt_frame = pd.DataFrame(
+        {"power_kw": normalized["power_kw"].to_numpy()},
+        index=pd.DatetimeIndex(local_index),
+    )
     handler = DataHandler(sdt_frame)
     handler.run_pipeline(power_col="power_kw", solver=args.solver)
     report = normalize_sdt_report(handler.report(verbose=False, return_values=True))
@@ -89,6 +97,7 @@ def main() -> None:
             "input_rows": int(len(frame)),
             "timezone_declared": args.timezone,
             "normalized_timezone": "UTC",
+            "sdt_analysis_clock": "declared source local wall time",
             "input_power_unit": args.power_unit,
             "normalized_power_unit": "kW",
             "observed_at": args.observed_at,
