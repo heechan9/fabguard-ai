@@ -1,0 +1,22 @@
+{
+  "schema_version": "fabguard-web-dkasc/v1",
+  "status": "observed_e2e_validated",
+  "source_id": "dkasc-alice-springs-total-pv-2025",
+  "source_type": "observed",
+  "country": "Australia",
+  "site": "Alice Springs",
+  "year": 2025,
+  "normalized_rows": 105120,
+  "interval_minutes": 5,
+  "remaining_missing_power": 93,
+  "quality_score": 0.9863013698630136,
+  "sampling_minutes": 5,
+  "frictionless_valid": true,
+  "solar_data_tools_version": "2.1.5",
+  "frictionless_version": "5.19.0",
+  "normalized_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
+  "power_unit_status": "inferred_kW_pending_direct_schema_confirmation",
+  "evidence_report": "../results/dkasc-alice-springs-2025/report.json",
+  "normalization_audit": "../results/dkasc-alice-springs-2025/normalization_audit.json",
+  "claim_boundary": "Data-quality and interoperability evidence only; not PV performance, field validation, production capacity, or SECOM model validation."
+}
