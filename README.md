@@ -2,66 +2,76 @@
 
 # FabGuard AI
 
-### 반도체 생산 데이터에서 먼저 확인할 공정 기록을 찾는 AI 의사결정 지원 프로젝트
+### 반도체 생산 기록 중 무엇을 먼저 점검할지 알려주는 AI
 
-**Leakage-aware risk prioritization for reproducible semiconductor manufacturing AI**
-
-<p><strong>공개 반도체 데이터 1,567건 → 위험도 순 정렬 → 엔지니어 우선점검</strong></p>
+**AI가 위험순위를 제안하고, 최종 판단과 조치는 엔지니어가 합니다.**
 
 <p>
-  <a href="https://fabguard-ai.vercel.app"><strong>웹 데모 바로 보기 →</strong></a>
-  · <a href="#한눈에-보기">현재 결과</a>
+  <a href="https://fabguard-ai.vercel.app"><strong>웹 데모 보기 →</strong></a>
+  · <a href="#30초-요약">30초 요약</a>
   · <a href="#빠른-시작">직접 실행</a>
 </p>
 
-<img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="노을에서 야간으로 이어지는 대형 반도체 팹과 엔지니어의 데이터 기반 위험 검토를 표현한 독자 제작 콘셉트 이미지" width="820">
+<img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="FabGuard의 목표 운영상과 엔지니어 중심 의사결정을 표현한 독자 제작 콘셉트 이미지" width="820">
 
 <br>
 
 [![CI](https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-ML_Pipeline-F7931E?logo=scikitlearn&logoColor=white)
 ![Data](https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8)
-![Validation](https://img.shields.io/badge/status-provisional-E9A23B)
-![Human in the loop](https://img.shields.io/badge/decision-engineer_in_control-00A7B5)
+![Status](https://img.shields.io/badge/evidence-provisional-E9A23B)
+![Decision](https://img.shields.io/badge/final_decision-human-00A7B5)
 
-590개 익명 측정값을 분석해 위험도가 높은 생산 건을 앞에 배치하고,  
-엔지니어가 제한된 점검 시간을 어디에 먼저 사용할지 돕습니다.
-
-[Evidence](#핵심-결과) · [Validation](#검증과-주장-경계) · [Contributions](CONTRIBUTIONS.md)
-
-**International reviewers:** [English project and collaboration brief](docs/MELBOURNE_COLLABORATION.md)
+[English overview](docs/MELBOURNE_COLLABORATION.md) · [정본 결과](results/v1/RESULTS_SUMMARY.md) · [재현 방법](REPRODUCIBILITY.md) · [기여 기록](CONTRIBUTIONS.md)
 
 </div>
 
-> **이미지 안내**  
-> 위 이미지는 FabGuard의 목표 운영상과 협업 방식을 표현한 독자 제작 콘셉트입니다. 실제 반도체 공장, 제휴 조직, 구현 화면 또는 현장 배포 성과를 나타내지 않습니다.
+> 위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.
 
 ---
 
-## 한눈에 보기
+## 30초 요약
 
-| 문제 | 검증된 결과 | 현재 경계 |
-|---|---|---|
-| 모든 생산 건을 정밀 점검하기 어려울 때 **어디부터 볼지** 정합니다. | 후기 검증구간 상위 10%인 **40건에서 불량 5/24건 포착** · Test PR-AUC **0.0935** · walk-forward **0.054–0.280** | 공개데이터 기반 오프라인 실험입니다. 실제 공장 배포·수율·비용·원인 규명 효과는 검증하지 않았습니다. |
-
-**FabGuard는 불량 판정기가 아닙니다.** 생산 건별 위험순위를 제시하고, 실제 확인과 조치는 엔지니어가 결정합니다.
-
-| 바로 보고 싶은 내용 | 추천 경로 |
+| 질문 | 답 |
 |---|---|
-| 문제와 화면을 빠르게 이해하기 | [웹 데모](https://fabguard-ai.vercel.app) → [핵심 결과](#핵심-결과) |
-| 데이터·모델·평가를 검토하기 | [실험계약](EXPERIMENT_CONTRACT.md) → [정본 결과](results/v1/RESULTS_SUMMARY.md) |
-| 재현하거나 협업하기 | [재현성 가이드](REPRODUCIBILITY.md) → [기여 구분](CONTRIBUTIONS.md) |
+| 무엇을 해결하나요? | 모든 생산 건을 정밀 점검하기 어려울 때 **위험도가 높은 기록부터 볼 수 있도록 점검 순서**를 만듭니다. |
+| AI가 불량을 확정하나요? | 아닙니다. AI는 우선순위와 참고 변수를 제시하고 **최종 판단은 엔지니어가 합니다.** |
+| 무엇으로 시험했나요? | 미국 UCI가 공개한 반도체 공정 데이터 **1,567건·익명 측정변수 590개**로 오프라인 시험했습니다. |
+| 현재 결과는 어떤가요? | 후기 검증 392건 중 상위 40건을 먼저 봤을 때 전체 불량 24건 중 **5건을 포착**했습니다. 자동 불량 판정 성능은 확보하지 못했습니다. |
+| 실제 공장에서 검증했나요? | 아직 아닙니다. 수율 개선·비용 절감·고장 예방 효과를 주장하지 않습니다. |
 
-## 프로젝트에서 증명한 역량
+### 이렇게 사용합니다
 
-| 문제와 판단 | 수행 내용 | 확인 가능한 근거 | 실무 연결 |
-|---|---|---|---|
-| 불균형 데이터에서 정확도만으로 모델을 고르기 어렵다고 판단 | PR-AUC·Fail Recall·Top-K 포착률을 함께 정의하고 시간순 홀드아웃으로 평가 | `results/v1/` 정본 결과, 실험계약, 자동 테스트 | 제조 데이터 분석·품질 위험 우선순위화 |
-| 고정 임계값 자동판정이 실패한 결과를 숨기지 않음 | 모델 역할을 “불량 확정”이 아닌 “먼저 확인할 생산 건 추천”으로 재정의 | Fail recall 0, 상위 10%에서 불량 5/24 포착 | 제한된 점검 자원의 의사결정 지원 |
-| 공개데이터 결과를 현장 성과로 과장할 위험을 통제 | 구현 범위와 미검증 범위를 분리하고 단계적 현장 검증안을 문서화 | 데이터셋 카드, 테스트 노출 기록, 현장 검증 계획 | 재현성·문서화·검증 중심의 프로젝트 운영 |
+```mermaid
+flowchart LR
+    A["생산 측정값"] --> B["AI 위험순위"]
+    B --> C["우선점검 목록"]
+    C --> D["엔지니어 확인·조치"]
+```
 
-> **역할:** 최희찬이 문제 정의, 요구사항·평가지표·공개데이터 및 활용 시나리오 선정, 결과 검토와 저장소 운영을 담당했습니다. 코드 작성과 검증의 세부 주체는 [기여 구분](CONTRIBUTIONS.md)에 기록합니다.
+### 프로젝트 상태
+
+| 구분 | 현재 상태 |
+|---|---|
+| **검증 완료** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모 |
+| **별도 검증 중** | Fledge 합성 센서 → REST → FabGuard 연결을 독립 시스템 데모로 시험 |
+| **후속 시스템 데모** | Solar Data Tools와 공통 데이터 계약을 사용해 호주 관측값·영국 추정값·EU 기준값의 호환성을 비교 |
+| **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
+
+> **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
+
+## 핵심 근거
+
+| 항목 | 결과 | 뜻 |
+|---|---:|---|
+| 후기 시간구간 | 392건, 불량 24건 | 과거 데이터로 학습하고 이후 구간에서 평가 |
+| 상위 10% 점검 | 40건 중 불량 5건 | 전체 불량의 20.8% 포착 |
+| 무작위 대비 밀도 | 2.04배 | 같은 수를 무작위로 볼 때보다 높은 포착 밀도 |
+| Test PR-AUC | 0.0935 | 낮고 불확실한 순위 성능 |
+| Walk-forward PR-AUC | 0.054–0.280 | 시간구간에 따라 성능 변동이 큼 |
+| 0.5 임계값 Fail recall | 0 | 자동 Fail/Pass 판정 용도로 사용할 수 없음 |
+
+결론은 단순합니다. **강한 자동 판정기는 만들지 못했지만, 제한된 점검 예산에서 먼저 볼 기록을 정하는 약한 순위 신호를 확인했습니다.** 자세한 수치와 한계는 [정본 결과](results/v1/RESULTS_SUMMARY.md)에서 확인할 수 있습니다.
 
 ## 작동 방식
 
