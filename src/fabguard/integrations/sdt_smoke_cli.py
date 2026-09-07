@@ -15,6 +15,10 @@ from .pv_contract import normalize_pv_frame
 from .sdt_adapter import normalize_sdt_report
 
 
+class FrictionlessValidationError(ValueError):
+    """Raised when a CSV fails the structural gate before SDT execution."""
+
+
 def _aware_iso8601(value: str) -> str:
     parsed = pd.to_datetime(value, utc=False, errors="coerce")
     if pd.isna(parsed) or parsed.tzinfo is None:
@@ -28,6 +32,38 @@ def _sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _validate_frictionless(input_path: Path) -> dict[str, object]:
+    """Validate a local CSV relative to its own approved base directory."""
+    from frictionless import Resource
+
+    resolved = input_path.resolve(strict=True)
+    if not resolved.is_file():
+        raise FrictionlessValidationError("input must be a regular file")
+
+    resource = Resource(path=resolved.name, basepath=str(resolved.parent))
+    report = resource.validate()
+    errors = report.flatten(["type", "message"])
+    if not report.valid:
+        summary = "; ".join(
+            f"{item[0]}: {item[1]}" for item in errors[:5]
+        )
+        raise FrictionlessValidationError(
+            f"Frictionless validation failed: {summary or 'unknown structural error'}"
+        )
+    try:
+        frictionless_version = version("frictionless")
+    except PackageNotFoundError as exc:
+        raise FrictionlessValidationError(
+            "cannot determine Frictionless version"
+        ) from exc
+    return {
+        "valid": True,
+        "version": frictionless_version,
+        "resource_path": resolved.name,
+        "error_count": 0,
+    }
 
 
 def main() -> None:
@@ -53,6 +89,16 @@ def main() -> None:
     except ImportError:
         parser.error("Solar Data Tools is not installed; install the optional 'pv' dependency")
 
+    try:
+        frictionless_validation = _validate_frictionless(args.input)
+    except ImportError:
+        parser.error("Frictionless is not installed; install the optional 'pv' dependency")
+    except (FrictionlessValidationError, OSError) as exc:
+        parser.error(str(exc))
+
+    if args.input.resolve() == args.output.resolve():
+        parser.error("--output must not overwrite --input")
+
     frame = pd.read_csv(args.input)
     timestamp_column = args.timestamp_column or str(frame.columns[0])
     normalized = normalize_pv_frame(
@@ -67,7 +113,8 @@ def main() -> None:
 
     # SDT analyzes solar-day geometry in local wall-clock time. The shared
     # contract keeps UTC instants, but the SDT view converts back to the
-    # explicitly declared source timezone before dropping the timezone marker.\n    # SDT reports capacity in kW from a power series expressed in watts.
+    # explicitly declared source timezone before dropping the timezone marker.
+    # SDT reports capacity in kW from a power series expressed in watts.
     local_index = (
         normalized["event_time"]
         .dt.tz_convert(args.timezone)
@@ -103,8 +150,12 @@ def main() -> None:
             "sdt_input_power_unit": "W",
             "observed_at": args.observed_at,
         },
+        "validation": {
+            "frictionless": frictionless_validation,
+        },
         "runtime": {
             "solar_data_tools_version": sdt_version,
+            "frictionless_version": frictionless_validation["version"],
             "python_version": platform.python_version(),
             "solver": args.solver,
         },
