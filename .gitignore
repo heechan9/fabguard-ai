@@ -10,3 +10,5 @@ results/*
 !results/phase1/**
 .vercel
 .env*
+!results/dkasc-alice-springs-2025/
+!results/dkasc-alice-springs-2025/*.json
