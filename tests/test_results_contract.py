@@ -85,8 +85,11 @@ class DKASCWebEvidenceContractTest(unittest.TestCase):
         audit = json.loads((result_dir / "normalization_audit.json").read_text(encoding="utf-8"))
         web = json.loads(Path("web/data/dkasc_summary.json").read_text(encoding="utf-8"))
 
+        self.assertEqual(web["schema_version"], "fabguard-web-dkasc/v1")
         self.assertEqual(web["status"], "observed_e2e_validated")
         self.assertEqual(web["source_type"], report["source"]["source_type"])
+        self.assertEqual(web["interval_minutes"], audit["interval_minutes"])
+        self.assertEqual(web["sampling_minutes"], report["sdt_report"]["sampling"])
         self.assertEqual(web["normalized_rows"], report["source"]["input_rows"])
         self.assertEqual(web["normalized_rows"], audit["normalized_rows"])
         self.assertEqual(web["normalized_sha256"], report["source"]["input_sha256"])
@@ -97,6 +100,7 @@ class DKASCWebEvidenceContractTest(unittest.TestCase):
         self.assertEqual(web["quality_score"], report["sdt_report"]["quality score"])
         self.assertEqual(web["remaining_missing_power"], audit["remaining_missing_power"])
         self.assertEqual(web["power_unit_status"], audit["power_unit_status"])
+        self.assertEqual(web["claim_boundary"], report["claim_boundary"])
 
 
 if __name__ == "__main__":
