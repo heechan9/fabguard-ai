@@ -143,8 +143,9 @@ function limitationsView() {
 function route() {
   if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
-  if (hash === "summary") summaryView(); else if (hash === "result") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") limitationsView(); else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  if (hash === "summary" || hash === "result" || hash === "global") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") limitationsView(); else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
   if (hash === "result") document.querySelector(".story-section")?.scrollIntoView({ behavior: "smooth" });
+  else if (hash === "global") document.querySelector(".global-section")?.scrollIntoView({ behavior: "smooth" });
   else window.scrollTo({ top: 0, behavior: "instant" });
 }
 
