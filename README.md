@@ -16,12 +16,14 @@
 
 <br>
 
-[![CI](https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
-![Data](https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8)
-![Status](https://img.shields.io/badge/evidence-provisional-E9A23B)
-![Decision](https://img.shields.io/badge/final_decision-human-00A7B5)
-![Global data](https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF)
+<p>
+  <a href="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml"><img src="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md"><img src="https://img.shields.io/badge/evidence-provisional-E9A23B" alt="Provisional evidence"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
+</p>
 
 <p>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌍 English overview</a>
