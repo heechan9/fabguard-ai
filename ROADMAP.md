@@ -84,15 +84,16 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 
 ## 1차 연계 — Fledge
 
-현재 준비 상태: **외부 종속성 없는 reading 정규화 계약과 단위 테스트 구현 완료. 실제 Fledge
-플러그인·런타임 연동은 아직 시작하지 않음.** 자세한 경계는
+현재 준비 상태: **WSL2의 로컬 Fledge v3.1.0에서 인증된 asset REST pull, Sinusoid South
+service, 재시작 후 수집 재개, 중복 격리와 토큰 비기록 검증을 완료했다. 현장·생산 검증과
+in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
 [`docs/FLEDGE_ADAPTER_CONTRACT.md`](docs/FLEDGE_ADAPTER_CONTRACT.md)에 기록한다. 공식 커뮤니티
 접촉 전 후보 범위와 기여 절차는
 [`docs/FLEDGE_UPSTREAM_READINESS.md`](docs/FLEDGE_UPSTREAM_READINESS.md)를 따른다.
 
 ### 확정사항
 
-- 현재 진행 중인 해양 프로젝트 2개를 마무리한 뒤 착수한다.
+- 로컬 Fledge v3.1.0 REST 연동은 완료했으며, 이후 작업은 실제 센서·현장 요구가 생길 때 재개한다.
 - FabGuard 본체는 독립적인 반도체 제조 AI 프로젝트로 유지한다.
 - 개인 포크 구현에 그치지 않고 Fledge 공식 커뮤니티에서 문제와 범위를 먼저 논의한 뒤,
   이슈·PR 제출·리뷰 대응·병합까지 경험하는 것을 목표로 한다.
@@ -129,11 +130,11 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 
 - 출국 전인 **2027년 2월까지** 공개 PV 시계열 재현·데이터 계약·결측/드리프트 비교 실험과
   영문 재현 패키지를 준비한다. 공식 upstream 병합 시점은 maintainer 검토에 따른다.
-- 지금은 Solar Data Tools 코드를 FabGuard에 복사하거나 런타임 종속성으로 추가하지 않는다.
+- Solar Data Tools 2.1.5와 Frictionless 5.19.0은 선택적 `pv` 종속성으로 격리했으며, SECOM V1 코어에는 전이되지 않는다.
 - FabGuard/Fledge에서 축적한 결측 처리, 데이터 품질검사, 이상탐지, 드리프트 감지,
   테스트·재현성 기술을 태양광 발전 시계열 문제로 이전할 수 있도록 모듈 경계를 유지한다.
-- 착수 시점의 실제 활동, 공개 이슈와 기여 지침을 다시 확인한 뒤 문서·테스트·작은 버그 수정부터
-  시작하고 공식 PR 병합을 목표로 한다.
+- 합성 PV 11,520행의 Frictionless→SDT→FabGuard 경로는 완료했다. 이 결과는 도구 연결 검증일 뿐
+  공개 PV 데이터, 물리 센서, 태양광 성능 또는 SECOM 외부검증을 뜻하지 않는다.
 - 멜버른 도착 후 University of Melbourne, Monash, RMIT의 에너지·AI 연구자 또는 공개 행사에
   완성된 저장소와 구체적 평가 질문을 제시해 방법론 피드백과 현지 데이터 확장 가능성을 타진한다.
 
@@ -147,21 +148,33 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 - 대학 연구자의 피드백·공동연구·데이터 제공은 확정사항이 아니며 소속, 연구윤리, 데이터 사용
   조건과 상대 연구자의 수요에 따라 별도로 합의한다.
 
-### 진입 조건
+### 향후 upstream 기여 조건
 
 1. Fledge 또는 동등한 외부 오픈소스에서 리뷰 대응 경험을 확보했다.
 2. 시계열 결측·드리프트 기능이 도메인 독립 테스트로 검증되어 있다.
 3. Solar Data Tools의 최신 로드맵·공개 이슈에서 실제 기여 수요를 확인했다.
 4. 작은 문서·테스트 기여 후 maintainer 피드백을 반영해 코드 PR 범위를 정했다.
 
+## 공개 PV 데이터 실행 게이트
+
+현재 실제 외부 PV 데이터 E2E 통과 건수는 **0건**이다. 합성 검증과 실데이터 검증을 혼동하지 않는다.
+
+1. DKASC를 `observed` 실측의 최초 검증원으로 사용한다.
+2. PV_Live를 `estimated`, JRC PVGIS를 `reference`로 순차 검증한다.
+3. Fledge Sinusoid `synthetic`을 포함한 네 유형의 결과와 라이선스·조회시각·SHA-256을 고정한 뒤 1차 범위를 동결한다.
+4. 프랑스 RTE éCO2mix는 동결 이후 후속 후보 1순위로만 둔다. 잠정·통합·확정 상태는 새 source type이 아니라 `revision_status`라는 직교 필드로 설계한다.
+5. 독일 SMARD와 그 밖의 국가는 프랑스 후보의 접근성·라이선스·독립적 가치가 기각될 때만 재검토한다.
+
+프랑스 후보는 API 호출 예산, 라이선스·재배포 조건, CET/CEST 경계, 잠정값의 확정 종료조건을 모두 확인하기 전에는 구현하거나 확정했다고 표현하지 않는다.
+
 ## 나중으로 미룰 구현
 
 | 항목 | 미루는 이유 | 재검토 시점 |
 |---|---|---|
-| Fledge 전용 저장소·플러그인 패키지 | upstream과 기여 단위 합의가 먼저다 | Fledge 이슈 논의 후 |
-| 실시간 배치·재시도·상태 저장 | 현재 FabGuard는 오프라인 실험이며 요구사항이 없다 | 플러그인 수명주기 확정 후 |
-| 정책/알림 서비스 분리 | 실제 소비자와 SLA가 아직 없다 | Fledge 샘플 흐름 확보 후 |
-| Solar Data Tools import·어댑터 | 2027년 upstream 요구가 미확정이다 | 참여 직전 활동성 점검 후 |
+| Fledge in-process filter plugin | 로컬 REST 연동과 별개의 upstream·수명주기 합의가 필요하다 | Fledge 이슈 논의 후 |
+| production 재시도·상태 backend | 현재 상태 저장은 단일 작성자 검증 구현이며 stale lock·replay horizon 한계가 있다 | 현장 파일럿 전 |
+| 정책/알림 서비스 분리 | 실제 소비자와 SLA가 아직 없다 | 현장 shadow-mode 설계 후 |
+| 공개 PV 소스별 어댑터 | 원본 라이선스·열·단위·시간대 확인 없이 일반화하지 않는다 | 각 소스 사전감사 후 |
 | 공통 산업 AI SDK | 두 도메인에서 검증되기 전에는 과잉 추상화다 | 두 번째 실제 연계 완료 후 |
 
 ## 외부 근거와 저작권 경계
