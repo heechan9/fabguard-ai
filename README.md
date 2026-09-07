@@ -6,11 +6,17 @@
 
 **AI가 위험순위를 제안하고, 최종 판단과 조치는 엔지니어가 합니다.**
 
-<p>
-  <a href="https://fabguard-ai.vercel.app"><strong>웹 데모 보기 →</strong></a>
-  · <a href="#30초-요약">30초 요약</a>
-  · <a href="#빠른-시작">직접 실행</a>
+</div>
+
+<p align="center">
+  <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
 </p>
+
+<div align="center">
 
 <img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="FabGuard의 목표 운영상과 엔지니어 중심 의사결정을 표현한 독자 제작 콘셉트 이미지" width="820">
 
@@ -25,16 +31,16 @@
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
 </p>
 
-<p>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌍 English overview</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
-</p>
-
 </div>
 
-> 위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.
+<p align="center">
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#global-data-roadmap">🌍 국가별 데이터</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#tool-roles">🧰 도구별 역할</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+</p>
+
+<p align="center"><sub>위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.</sub></p>
 
 ---
 
@@ -50,45 +56,51 @@
 
 ### 이렇게 사용합니다
 
-```mermaid
-flowchart LR
-    A["생산 측정값"] --> B["AI 위험순위"]
-    B --> C["우선점검 목록"]
-    C --> D["엔지니어 확인·조치"]
-```
+| 단계 | FabGuard가 하는 일 | 사용자가 보는 결과 |
+|---|---|---|
+| **1 · 데이터 입력** | 생산 건별 측정값을 읽고 결측·상수·중복 열을 학습 경계 안에서 처리합니다. | 분석 가능한 생산 기록 |
+| **2 · 위험도 분석** | 자동 합격·불합격 판정 대신 각 생산 건의 상대적인 위험점수를 계산합니다. | 위험도가 높은 순서 |
+| **3 · 우선점검 목록** | 현장의 점검 여력에 맞춰 상위 5%·10%·20% 등 먼저 볼 범위를 제시합니다. | 생산 건별 점수와 우선 확인 변수 |
+| **4 · 엔지니어 검토** | AI가 원인이나 조치를 확정하지 않고 실제 설비·공정 이력과 대조하도록 넘깁니다. | 재검사·설비점검·기록 여부를 사람이 결정 |
 
 ### 프로젝트 상태
 
 | 구분 | 현재 상태 |
 |---|---|
 | **검증 완료** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모 |
-| **별도 검증 중** | Fledge 합성 센서 → REST → FabGuard 연결을 독립 시스템 데모로 시험 |
-| **후속 시스템 데모** | Solar Data Tools와 공통 데이터 계약을 사용해 호주 관측값·영국 추정값·EU 기준값의 호환성을 비교 |
+| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성 PV 실행 |
+| **다음 시스템 데모** | 확보한 호주 DKASC 관측 파일을 공통 계약과 품질·감사 경로에 통과 |
+| **후속 시스템 데모** | 영국 PV_Live 추정값과 EU PVGIS 기준값의 호환성을 순차 비교 |
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
 
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
-## Global data roadmap · 국가별 데이터 계획
+## Global data roadmap
+
+*국가별 데이터 계획*
 
 서로 다른 국가를 단순히 늘리는 것이 아니라, **관측·추정·기준·합성 데이터가 같은 검증 규칙과 감사 기록을 통과하는지** 단계적으로 확인합니다.
 
 | 국가·지역 | 데이터·도구 | 데이터 역할 | 상태 |
 |---|---|---|---|
 | 🇺🇸 미국 | **UCI SECOM** | 반도체 공정 위험순위 연구의 현재 정본 데이터 | ✅ 완료 |
-| 🌐 합성 환경 | **Fledge Sinusoid** | 실시간 수집·REST 연결·중복방지 검증 | 🟠 로컬 검증 중 |
-| 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | 🔵 후속 시스템 데모 |
-| 🇬🇧 영국 | **Sheffield Solar PV_Live** | 지역별 태양광 발전량 추정값 | 🔵 후속 시스템 데모 |
-| 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 시스템 데모 |
+| 🌐 합성 환경 | **Fledge Sinusoid** | 실시간 수집·REST 연결·중복방지 검증 | ✅ 로컬 실연동 완료 |
+| 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | 🔵 파일 확보·E2E 처리 전 |
+| 🇬🇧 영국 | **Sheffield Solar PV_Live** | 지역별 태양광 발전량 추정값 | 🔵 후속 어댑터 계획 |
+| 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 어댑터 계획 |
+| 🇫🇷 프랑스 | **RTE éCO2mix** | 잠정·통합·확정값의 수정 이력 감사 | 🟡 1차 범위 동결 후 후보 |
 
-### 도구별 역할
+### Tool roles
+
+*도구별 역할*
 
 | 계층 | 도구 | 하는 일 |
 |---|---|---|
-| 수집 | **Fledge** | 실시간 센서 reading을 안전하게 수집 |
-| 품질 진단 | **Solar Data Tools** | 결측·시간 이상·설비 시계열 품질을 분석 |
-| 데이터 계약 | **Frictionless Data** | 출처별 형식·단위·필수 필드와 스키마를 검증 |
-| 의사결정·감사 | **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
-| 최종 판단 | **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
+| 수집 | 🌐 **Fledge** | 실시간 센서 reading을 안전하게 수집 |
+| 품질 진단 | 🇺🇸 **Solar Data Tools** | 결측·시간 이상·설비 시계열 품질을 분석 |
+| 데이터 계약 | 🌐 **Frictionless Data** | 출처별 형식·단위·필수 필드와 스키마를 검증 |
+| 의사결정·감사 | 🇰🇷 **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
+| 최종 판단 | 👷 **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
 
 > **범위 동결:** 현재 실행 범위는 Fledge Sinusoid와 호주·영국·EU 데이터까지입니다. 아래 국가는 현재 구현 약속이 아니며, 본 범위가 완료된 뒤 별도 연구질문과 데이터 자격을 다시 심사합니다.
 
@@ -162,6 +174,7 @@ flowchart LR
 - 사전 승인·SHA-256에 결합된 독립 데이터에 재학습 없이 점수를 내는 잠금 평가 runner
 - Fledge의 읽기 전용 asset REST API에서 데이터를 가져와 오류격리·중복방지·드리프트 경계로 전달하는 연결기
 - WSL2의 실제 Fledge v3.1.0에서 Sinusoid 수집·인증 REST pull·재시작 복구·중복격리를 로컬 검증
+- Frictionless Data v5.19.0 fail-closed 계약과 Solar Data Tools v2.1.5 합성 PV 11,520행 실행 검증
 
 ### 아직 구현하거나 검증하지 않음
 
@@ -259,7 +272,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | 문서 | 내용 |
 |---|---|
 | [프로젝트 로드맵](ROADMAP.md) | FabGuard → Fledge → Solar Data Tools 단계적 확장과 진입 조건 |
-| [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 오류 격리·재시작·부하·드리프트 로컬 검증과 실제 Fledge 미검증 경계 |
+| [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 실제 Fledge v3.1.0 REST·재시작·중복격리 로컬 검증과 현장 미검증 경계 |
 | [독립 데이터 검증](docs/INDEPENDENT_DATA_VALIDATION.md) | 외부 제조 CSV의 출처·스키마·라벨·시간·품질 검사와 모델 성능 미검증 경계 |
 | [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
 | [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
@@ -276,6 +289,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 - **Evaluation:** Repeated Stratified CV, temporal holdout, PR-AUC, Top-K capture
 - **Web:** HTML, CSS, JavaScript, Vercel static deployment
 - **Data:** UCI SECOM, 1,567 production runs, 590 anonymous measurements
+- **Integration:** Fledge v3.1.0, Frictionless Data v5.19.0, Solar Data Tools v2.1.5, WSL2
 
 ## 현재 한계
 
