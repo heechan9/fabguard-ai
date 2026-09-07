@@ -11,6 +11,12 @@ dependencies = [
   "joblib>=1.4",
 ]
 
+[project.optional-dependencies]
+pv = [
+  "solar-data-tools==2.1.5",
+  "frictionless==5.19.0",
+]
+
 [project.scripts]
 fabguard-audit = "fabguard.data:main"
 fabguard-run = "fabguard.experiment:main"
@@ -20,6 +26,7 @@ fabguard-fledge-smoke = "fabguard.integrations.fledge_smoke:main"
 fabguard-fledge-operations = "fabguard.integrations.fledge_operations_cli:main"
 fabguard-fledge-benchmark = "fabguard.integrations.fledge_benchmark:main"
 fabguard-fledge-rest = "fabguard.integrations.fledge_rest_cli:main"
+fabguard-sdt-smoke = "fabguard.integrations.sdt_smoke_cli:main"
 fabguard-independent-validate = "fabguard.independent_validation:main"
 fabguard-locked-evaluation-check = "fabguard.locked_evaluation:main"
 fabguard-model-export = "fabguard.model_export:main"
