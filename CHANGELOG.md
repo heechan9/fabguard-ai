@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-07
+
+- Validated authenticated read-only REST ingestion against a local WSL2 Fledge v3.1.0 instance using the Sinusoid South plugin.
+- Accepted 60/60 initial readings, verified South-service recovery after restart, and isolated 26 replayed readings as duplicates.
+- Corrected the live authentication header from `authtoken` to Fledge-compatible `authorization` and updated its regression test.
+- Confirmed that authentication tokens are not recorded in FabGuard result artifacts; this remains local integration evidence, not field or production validation.
+
 ## 2026-08-29
 
 - Added official SECOM hash verification, parser, audit, and fixed temporal split.

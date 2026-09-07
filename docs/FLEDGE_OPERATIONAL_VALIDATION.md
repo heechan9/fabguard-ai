@@ -1,18 +1,28 @@
 # Fledge operational validation slice
 
-Status: **local runtime-agnostic validation, not execution inside Fledge**
+Status: **live REST validation completed against local Fledge v3.1.0 on WSL2; not field or production validation**
 
 This slice exercises the operational behavior that a future Fledge filter adapter can call without
 coupling FabGuard's model experiment to the Fledge lifecycle.
+
+## Live Fledge v3.1.0 evidence (2026-09-07)
+
+- Runtime pins: Fledge `f90ffc2047ee49a380ada98a59fcc2985bd6a943`; Sinusoid plugin `4ff6eab5f21671fbcfd244e716572e699d0974da`.
+- Authenticated read-only REST pull from `sinusoid` succeeded with 60/60 readings accepted.
+- Restart preserved the `FabGuardSinusoid` South service and collection resumed with health green.
+- A repeated pull accepted 34 new readings and isolated 26 overlaps as `duplicate reading already processed`.
+- Authentication-token scanning returned `TOKEN NOT RECORDED`.
+- Live validation exposed and corrected the HTTP header from `authtoken` to `authorization`.
+- This is local integration evidence, not field validation, production capacity evidence, or SECOM model validation.
 
 ## Implemented evidence
 
 | Target | Current evidence | Remaining external evidence |
 | --- | --- | --- |
-| Reading ingestion | JSON reading batches enter the same normalization boundary intended for an adapter | Run inside a maintainer-approved Fledge plugin repository |
+| Reading ingestion | JSON batches and the official read-only asset REST envelope enter the same normalization boundary | Completed against local Fledge v3.1.0; separately assess an in-process plugin and field sensor |
 | Fault scenarios | Missing/invalid, duplicate, late and disconnected-asset cases have deterministic tests | Sensor/network faults in a Fledge deployment |
 | Isolation | Invalid readings are written to a dead-letter result while valid rows continue | Select upstream DLQ or metadata convention |
-| Restart | Single-writer JSON state uses flush/fsync plus atomic replacement; corrupt state fails closed | Validate Fledge restart/configuration lifecycle and production state backend |
+| Restart | Single-writer JSON state uses flush/fsync plus atomic replacement; corrupt state fails closed | Local Fledge restart verified; validate a production state backend |
 | Capacity | Ordered and deterministic stress-profile local reports record min/mean/max | Measure container/device latency, memory and back-pressure |
 | Drift and alerts | PSI handles minimum evidence and constant baselines; disconnect alerts are one-shot until recovery | Agree thresholds, baseline lifecycle and notification plugin mapping |
 
