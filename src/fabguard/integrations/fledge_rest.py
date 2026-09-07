@@ -88,7 +88,7 @@ def fetch_asset_readings(
     url = f"{base}/fledge/asset/{quote(asset_code.strip(), safe='')}?limit={limit}"
     headers = {"Accept": "application/json"}
     if config.auth_token is not None:
-        headers["authtoken"] = config.auth_token
+        headers["authorization"] = config.auth_token
     request = Request(url, headers=headers, method="GET")
     try:
         with opener(request, timeout=config.timeout_seconds) as response:

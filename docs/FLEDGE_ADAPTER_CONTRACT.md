@@ -1,6 +1,6 @@
 # Fledge 연계 준비 계약
 
-상태: **공식 REST pull 경로 구현 및 로컬 E2E 검증 — 실제 Fledge 인스턴스 검증 대기**
+상태: **공식 REST pull 경로 구현 및 로컬 Fledge v3.1.0 실연동 검증 완료 — 현장·생산 검증은 미수행**
 
 ## 이번 단계에서 구현한 것
 
@@ -36,7 +36,7 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 `GET /fledge/asset/{code}?limit=N` 응답을 가져와 기존 운영 경계로 전달한다. Fledge 응답에
 생략된 asset code를 URL 값으로 복원하고, 공식 예제의 timezone 없는 저장 timestamp는 이
 어댑터 경계에서 UTC로 명시한다. 인증이 활성화된 인스턴스에서는 토큰을 명령행이 아니라
-`FLEDGE_AUTHTOKEN` 환경변수로 받아 `authtoken` 헤더에만 넣으며 결과 파일에는 기록하지 않는다.
+`FLEDGE_AUTHTOKEN` 환경변수로 받아 `authorization` 헤더에만 넣으며 결과 파일에는 기록하지 않는다.
 인증정보가 다른 endpoint로 전달되지 않도록 HTTP redirect는 동일 origin 여부와 관계없이 거부한다.
 
 ```bash
@@ -50,22 +50,22 @@ FLEDGE_AUTHTOKEN="<session-token>" fabguard-fledge-rest \
   --output-dir results/fledge-live
 ```
 
-## 아직 연결하지 않은 것
+## 여전히 연결하지 않았거나 주장하지 않는 것
 
 - Fledge 내부 Python filter-plugin 수명주기
-- north/south service 배치 위치
-- 재시도, 재시작, 상태 저장과 설정 수명주기
+- 실제 현장 센서와 네트워크 장애
+- 다중 호스트·back-pressure·production state backend
 - SECOM V1 모델에 실시간 reading을 바로 넣는 경로
 - Solar Data Tools 종속성
 
-현재 테스트는 공식 REST 응답 형식을 제공하는 로컬 HTTP 서버를 통해 URL 인코딩, 인증 헤더,
-응답 크기 제한, 오류 응답 차단과 운영 처리기 진입을 E2E로 확인한다. 실제 Fledge 3.x 인스턴스와
-센서/네트워크 장애 검증은 별도 외부 증거로 남는다.
+로컬 HTTP fixture 테스트와 별도로 WSL2의 실제 Fledge v3.1.0에서 인증 REST pull, Sinusoid 60건 수용,
+재시작 후 South 서비스 자동 복구, 중복 26건 격리와 토큰 미기록을 확인했다. 실제 현장 센서,
+네트워크 장애, 생산 부하와 다중 호스트 검증은 별도 외부 증거로 남는다.
 
 현재 계약 검사는 배치 내 위반 하나에도 전체 호출을 중단하는 strict fail-closed 방식이다. 이는
-오프라인 검증 단계의 의도된 동작이다. 실시간 수집 단계에서는 전체 스트림을 중단시키지 않도록
-오류 reading 격리, dead-letter queue 또는 명시적 skip 정책을 upstream과 합의한 뒤 별도로
-설계한다. 지금 구현은 해당 운영 동작을 주장하지 않는다.
+오프라인 검증 단계의 의도된 동작이다. REST 운영 경계에서는 전체 스트림을 중단시키지 않도록 오류 reading을 dead-letter 결과로 격리하고
+유효 reading 처리를 계속한다. upstream DLQ·metadata 규약과 production state backend는 여전히
+별도 합의와 현장 검증이 필요하다.
 
 ## 다음 검토 게이트
 

@@ -26,7 +26,7 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         type(self).received_path = self.path
-        type(self).received_token = self.headers.get("authtoken")
+        type(self).received_token = self.headers.get("authorization")
         body = json.dumps(type(self).response_payload).encode("utf-8")
         self.send_response(type(self).response_status)
         if type(self).redirect_location:
