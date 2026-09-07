@@ -6,16 +6,7 @@
 
 **AI가 위험순위를 제안하고, 최종 판단과 조치는 엔지니어가 합니다.**
 
-<p>
-  <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a>
-  · <a href="https://github.com/heechan9/fabguard-ai#global-data-roadmap">🌍 국가별 데이터</a>
-  · <a href="https://github.com/heechan9/fabguard-ai#tool-roles">🧰 도구별 역할</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
-</p>
+[🌐 **웹 데모 보기 →**](https://fabguard-ai.vercel.app/) · [📊 정본 결과](https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md) · [🔬 상세 검증 결과](https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md) · [🧪 재현 방법](https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md) · [🗺️ 로드맵](https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md)
 
 <img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="FabGuard의 목표 운영상과 엔지니어 중심 의사결정을 표현한 독자 제작 콘셉트 이미지" width="820">
 
@@ -29,6 +20,8 @@
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
 </p>
+
+[🌏 English overview](https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md) · [🌍 국가별 데이터](https://github.com/heechan9/fabguard-ai/blob/main/README.md#global-data-roadmap) · [🧰 도구별 역할](https://github.com/heechan9/fabguard-ai/blob/main/README.md#tool-roles) · [👥 기여 기록](https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md)
 
 </div>
 
