@@ -67,18 +67,18 @@ def main() -> None:
 
     # SDT analyzes solar-day geometry in local wall-clock time. The shared
     # contract keeps UTC instants, but the SDT view converts back to the
-    # explicitly declared source timezone before dropping the timezone marker.
+    # explicitly declared source timezone before dropping the timezone marker.\n    # SDT reports capacity in kW from a power series expressed in watts.
     local_index = (
         normalized["event_time"]
         .dt.tz_convert(args.timezone)
         .dt.tz_localize(None)
     )
     sdt_frame = pd.DataFrame(
-        {"power_kw": normalized["power_kw"].to_numpy()},
+        {"power_w": normalized["power_kw"].to_numpy() * 1000.0},
         index=pd.DatetimeIndex(local_index),
     )
     handler = DataHandler(sdt_frame)
-    handler.run_pipeline(power_col="power_kw", solver=args.solver)
+    handler.run_pipeline(power_col="power_w", solver=args.solver)
     report = normalize_sdt_report(handler.report(verbose=False, return_values=True))
 
     try:
@@ -100,6 +100,7 @@ def main() -> None:
             "sdt_analysis_clock": "declared source local wall time",
             "input_power_unit": args.power_unit,
             "normalized_power_unit": "kW",
+            "sdt_input_power_unit": "W",
             "observed_at": args.observed_at,
         },
         "runtime": {
