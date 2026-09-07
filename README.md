@@ -8,7 +8,13 @@
 
 </div>
 
-[🌐 **웹 데모 보기 →**](https://fabguard-ai.vercel.app/) · [📊 정본 결과](https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md) · [🔬 상세 검증 결과](https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md) · [🧪 재현 방법](https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md) · [🗺️ 로드맵](https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md)
+<p align="center">
+  <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
+</p>
 
 <div align="center">
 
