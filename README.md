@@ -23,7 +23,12 @@
 ![Decision](https://img.shields.io/badge/final_decision-human-00A7B5)
 ![Global data](https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF)
 
-[English overview](docs/MELBOURNE_COLLABORATION.md) · [정본 결과](results/v1/RESULTS_SUMMARY.md) · [재현 방법](REPRODUCIBILITY.md) · [기여 기록](CONTRIBUTIONS.md)
+<p>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌍 English overview</a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+</p>
 
 </div>
 
