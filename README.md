@@ -8,7 +8,9 @@
 
 <p>
   <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a>
   · <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a>
   · <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a>
   · <a href="https://github.com/heechan9/fabguard-ai#global-data-roadmap">🌍 국가별 데이터</a>
   · <a href="https://github.com/heechan9/fabguard-ai#tool-roles">🧰 도구별 역할</a>
