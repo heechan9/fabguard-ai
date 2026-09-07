@@ -8,9 +8,12 @@
 
 <p>
   <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a>
   · <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a>
+  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a>
   · <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
+  · <a href="https://github.com/heechan9/fabguard-ai#global-data-roadmap">🌍 국가별 데이터</a>
+  · <a href="https://github.com/heechan9/fabguard-ai#tool-roles">🧰 도구별 역할</a>
   · <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
 </p>
 
@@ -25,13 +28,6 @@
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md"><img src="https://img.shields.io/badge/evidence-provisional-E9A23B" alt="Provisional evidence"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
-</p>
-
-<p>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌍 English overview</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a>
-  · <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
 </p>
 
 </div>
@@ -52,9 +48,12 @@
 
 ### 이렇게 사용합니다
 
-| 1. 데이터 입력 | 2. AI 분석 | 3. 점검 목록 | 4. 사람의 결정 |
-|---|---|---|---|
-| 생산 측정값 | 위험도 순으로 정렬 | 먼저 볼 기록 제안 | 엔지니어 확인·조치 |
+| 단계 | FabGuard가 하는 일 | 사용자가 보는 결과 |
+|---|---|---|
+| **1 · 데이터 입력** | 생산 건별 측정값을 읽고 결측·상수·중복 열을 학습 경계 안에서 처리합니다. | 분석 가능한 생산 기록 |
+| **2 · 위험도 분석** | 자동 합격·불합격 판정 대신 각 생산 건의 상대적인 위험점수를 계산합니다. | 위험도가 높은 순서 |
+| **3 · 우선점검 목록** | 현장의 점검 여력에 맞춰 상위 5%·10%·20% 등 먼저 볼 범위를 제시합니다. | 생산 건별 점수와 우선 확인 변수 |
+| **4 · 엔지니어 검토** | AI가 원인이나 조치를 확정하지 않고 실제 설비·공정 이력과 대조하도록 넘깁니다. | 재검사·설비점검·기록 여부를 사람이 결정 |
 
 ### 프로젝트 상태
 
@@ -68,7 +67,9 @@
 
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
-## Global data roadmap · 국가별 데이터 계획
+## Global data roadmap
+
+*국가별 데이터 계획*
 
 서로 다른 국가를 단순히 늘리는 것이 아니라, **관측·추정·기준·합성 데이터가 같은 검증 규칙과 감사 기록을 통과하는지** 단계적으로 확인합니다.
 
@@ -81,7 +82,9 @@
 | 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 어댑터 계획 |
 | 🇫🇷 프랑스 | **RTE éCO2mix** | 잠정·통합·확정값의 수정 이력 감사 | 🟡 1차 범위 동결 후 후보 |
 
-### 도구별 역할
+### Tool roles
+
+*도구별 역할*
 
 | 계층 | 도구 | 하는 일 |
 |---|---|---|
