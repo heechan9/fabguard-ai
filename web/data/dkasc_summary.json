@@ -16,5 +16,5 @@
   "frictionless_version": "5.19.0",
   "normalized_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
   "power_unit_status": "inferred_kW_pending_direct_schema_confirmation",
-  "claim_boundary": "Data-quality and interoperability evidence only; not PV performance, field validation, production capacity, or SECOM model validation."
+  "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
 }
