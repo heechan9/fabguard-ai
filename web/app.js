@@ -1,5 +1,5 @@
 const app = document.querySelector("#app");
-let state = { summary: null, risks: null, phase1: null };
+let state = { summary: null, risks: null, phase1: null, dkasc: null };
 
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
 const num = (value, digits = 3) => Number(value).toFixed(digits);
@@ -37,15 +37,27 @@ function validatePhase1(phase1) {
   if (paired.statistically_significant_at_0_05 !== (paired.two_sided_exact_sign_flip_p < 0.05)) throw new Error("Phase 1 paired 유의성 해석이 원본 증거와 일치하지 않습니다.");
 }
 
+function validateDKASC(dkasc) {
+  if (!dkasc || dkasc.status !== "observed_e2e_validated" || dkasc.source_type !== "observed") throw new Error("DKASC 검증 상태가 올바르지 않습니다.");
+  const values = [dkasc.normalized_rows, dkasc.interval_minutes, dkasc.remaining_missing_power, dkasc.quality_score];
+  if (!values.every(Number.isFinite)) throw new Error("DKASC 수치 데이터 계약이 올바르지 않습니다.");
+  if (!Number.isInteger(dkasc.normalized_rows) || dkasc.normalized_rows <= 0) throw new Error("DKASC 행 수가 올바르지 않습니다.");
+  if (dkasc.quality_score < 0 || dkasc.quality_score > 1) throw new Error("DKASC 품질점수가 올바르지 않습니다.");
+  if (dkasc.frictionless_valid !== true) throw new Error("DKASC Frictionless 검증이 통과되지 않았습니다.");
+  if (!/^[a-f0-9]{64}$/.test(dkasc.normalized_sha256)) throw new Error("DKASC SHA-256 계약이 올바르지 않습니다.");
+}
+
 async function load() {
   try {
-    const [summaryResponse, riskResponse, phase1Response] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json")]);
-    if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
+    const [summaryResponse, riskResponse, phase1Response, dkascResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json"), fetch("/data/dkasc_summary.json")]);
+    if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok || !dkascResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
     state.summary = await summaryResponse.json();
     state.risks = await riskResponse.json();
     state.phase1 = await phase1Response.json();
+    state.dkasc = await dkascResponse.json();
     validateSummaryDataset(state.summary?.dataset);
     validatePhase1(state.phase1);
+    validateDKASC(state.dkasc);
     route();
   } catch (error) {
     app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" onclick="location.reload()">다시 시도</button></section>`;
@@ -65,6 +77,7 @@ function summaryView() {
   const baseline = state.summary.test.find(row => row.family === "dummy");
   const ds = state.summary.dataset;
   const queueSize = state.risks.length;
+  const dkasc = state.dkasc;
   app.innerHTML = `
     <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p><div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#result">현재 결과 30초 확인</a></div></div>${waferVisual(ds.measurement_features)}</section>
     <section class="answer-strip" aria-label="FabGuard 핵심 요약"><article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로<br>점검 대상을 추천</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article></section>
@@ -76,15 +89,21 @@ function summaryView() {
       <div class="tool-rail" aria-label="데이터 처리 도구">
         <article class="complete"><span>01 · INGEST</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p><b>LOCAL VERIFIED</b></article>
         <article class="complete"><span>02 · STRUCTURE</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Frictionless</strong><p>스키마 오류를 SDT 실행 전에 차단</p><b>VALIDATED</b></article>
-        <article class="complete"><span>03 · PV QUALITY</span><strong><span class="tool-flag" aria-hidden="true">🇺🇸</span> Solar Data Tools</strong><p>11,520행 합성 PV 품질 파이프라인 실행</p><b>VALIDATED</b></article>
+        <article class="complete"><span>03 · PV QUALITY</span><strong><span class="tool-flag" aria-hidden="true">🇺🇸</span> Solar Data Tools</strong><p>합성 데이터와 호주 실제 관측 PV 품질 파이프라인 실행</p><b>OBSERVED VALIDATED</b></article>
         <article class="complete"><span>04 · AUDIT</span><strong><span class="tool-flag" aria-hidden="true">🇰🇷</span> FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
       </div>
       <div class="country-grid" aria-label="국가별 데이터 검증 상태">
         <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇺🇸</span><b>UNITED STATES</b><em>VERIFIED</em></div><h3>UCI SECOM</h3><p>반도체 공정 위험순위 연구의 정본 데이터</p><dl><div><dt>ROLE</dt><dd>Manufacturing evidence</dd></div><div><dt>STATUS</dt><dd>V1 complete</dd></div></dl></article>
-        <article class="country-card next"><div class="country-top"><span class="flag" aria-hidden="true">🇦🇺</span><b>AUSTRALIA</b><em>NEXT</em></div><h3>DKASC</h3><p>태양광 설비의 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>File acquired · not ingested</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇦🇺</span><b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
         <article class="country-card planned"><div class="country-top"><span class="flag" aria-hidden="true">🇬🇧</span><b>UNITED KINGDOM</b><em>PLANNED</em></div><h3>PV_Live</h3><p>영국 지역·국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>Adapter pending</dd></div></dl></article>
         <article class="country-card planned"><div class="country-top"><span class="flag" aria-hidden="true">🇪🇺</span><b>EUROPEAN UNION</b><em>PLANNED</em></div><h3>JRC PVGIS</h3><p>기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>Adapter pending</dd></div></dl></article>
         <article class="country-card candidate"><div class="country-top"><span class="flag" aria-hidden="true">🇫🇷</span><b>FRANCE</b><em>CANDIDATE</em></div><h3>RTE éCO2mix</h3><p>잠정값이 통합·확정값으로 바뀌는 수정 이력</p><dl><div><dt>ROLE</dt><dd>Revision lineage</dd></div><div><dt>STATUS</dt><dd>Post-freeze candidate</dd></div></dl></article>
+      </div>
+      <div class="dkasc-evidence" aria-label="호주 DKASC 관측 데이터 검증 결과">
+        <div><span>🇦🇺 OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
+        <div><span>DATA QUALITY</span><strong>${pct(dkasc.quality_score)}</strong><small>SDT 품질점수</small></div>
+        <div><span>CONTRACT</span><strong>PASS</strong><small>Frictionless ${esc(dkasc.frictionless_version)}</small></div>
+        <div><span>UNIT BOUNDARY</span><strong>kW 추정</strong><small>원본 스키마 직접 확인 대기</small></div>
       </div>
       <div class="global-boundary"><span>CLAIM BOUNDARY</span><p>PV 확장은 데이터 수집·품질·감사 호환성 데모입니다. 태양광 결과를 SECOM 모델의 외부검증이나 패널 고장진단·현장 성과로 주장하지 않습니다.</p></div>
     </section>
