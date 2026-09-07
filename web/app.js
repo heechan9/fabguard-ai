@@ -74,10 +74,10 @@ function summaryView() {
         <div class="global-summary"><strong>4</strong><span>DATA ROLES</span><p>관측 · 추정 · 기준 · 합성을 구분하며, 국가 수보다 출처와 검증 상태를 우선합니다.</p></div>
       </div>
       <div class="tool-rail" aria-label="데이터 처리 도구">
-        <article class="complete"><span>01 · INGEST</span><strong>Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p><b>LOCAL VERIFIED</b></article>
-        <article class="complete"><span>02 · STRUCTURE</span><strong>Frictionless</strong><p>스키마 오류를 SDT 실행 전에 차단</p><b>VALIDATED</b></article>
-        <article class="complete"><span>03 · PV QUALITY</span><strong>Solar Data Tools</strong><p>11,520행 합성 PV 품질 파이프라인 실행</p><b>VALIDATED</b></article>
-        <article class="complete"><span>04 · AUDIT</span><strong>FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
+        <article class="complete"><span>01 · INGEST</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p><b>LOCAL VERIFIED</b></article>
+        <article class="complete"><span>02 · STRUCTURE</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Frictionless</strong><p>스키마 오류를 SDT 실행 전에 차단</p><b>VALIDATED</b></article>
+        <article class="complete"><span>03 · PV QUALITY</span><strong><span class="tool-flag" aria-hidden="true">🇺🇸</span> Solar Data Tools</strong><p>11,520행 합성 PV 품질 파이프라인 실행</p><b>VALIDATED</b></article>
+        <article class="complete"><span>04 · AUDIT</span><strong><span class="tool-flag" aria-hidden="true">🇰🇷</span> FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
       </div>
       <div class="country-grid" aria-label="국가별 데이터 검증 상태">
         <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇺🇸</span><b>UNITED STATES</b><em>VERIFIED</em></div><h3>UCI SECOM</h3><p>반도체 공정 위험순위 연구의 정본 데이터</p><dl><div><dt>ROLE</dt><dd>Manufacturing evidence</dd></div><div><dt>STATUS</dt><dd>V1 complete</dd></div></dl></article>
