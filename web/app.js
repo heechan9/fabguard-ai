@@ -5,6 +5,13 @@ let professionalEvidenceHtml = "";
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
 const num = (value, digits = 3) => Number(value).toFixed(digits);
 const esc = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+const COUNTRY_CODES = {
+  "United States": "us", France: "fr", Germany: "de", Spain: "es", Italy: "it",
+  Canada: "ca", Finland: "fi", "South Korea": "kr", Japan: "jp", Taiwan: "tw",
+};
+const flagImage = (code, label) => { const src = `/assets/flags/${code}.svg`; return `<img class="flag-img" src="${src}" width="40" height="30" alt="${esc(label)} 국기" loading="lazy">`; };
+const candidateFlag = candidate => flagImage(COUNTRY_CODES[candidate.country], candidate.country);
+
 const shortTimestamp = value => {
   const match = String(value ?? "").match(/^\d{4}-(\d{2}-\d{2})[ T](\d{2}:\d{2})/);
   return match ? `${match[1]} ${match[2]}` : String(value ?? "");
@@ -75,7 +82,7 @@ function candidateRegistry(registry) {
   return `<details class="candidate-registry">
     <summary><span>EXPANSION CANDIDATES</span><strong>후속 국가·로봇 데이터 후보 보기</strong><small>${registry.candidates.length}개 국가 · 연결 완료가 아닌 조사 목록</small></summary>
     <div class="candidate-intro">후보는 공식 출처·접근성·라이선스·단위·시간대·독립적 연구가치를 통과한 뒤에만 구현 단계로 승격합니다.</div>
-    <div class="candidate-list">${registry.candidates.map(candidate => `<article><div><span class="flag" aria-hidden="true">${esc(candidate.flag)}</span><b>${esc(candidate.country)}</b><em>${esc(candidate.status)}</em></div><h3>${esc(candidate.sources)}</h3><p>${esc(candidate.role)}</p><small>GATE · ${esc(candidate.gate)}</small></article>`).join("")}</div>
+    <div class="candidate-list">${registry.candidates.map(candidate => `<article><div>${candidateFlag(candidate)}<b>${esc(candidate.country)}</b><em>${esc(candidate.status)}</em></div><h3>${esc(candidate.sources)}</h3><p>${esc(candidate.role)}</p><small>GATE · ${esc(candidate.gate)}</small></article>`).join("")}</div>
     <p class="candidate-boundary">${esc(registry.claim_boundary)}</p>
   </details>`;
 }
@@ -128,18 +135,18 @@ function summaryView() {
       <div class="tool-rail" aria-label="데이터 처리 도구">
         <article class="complete"><span>01 · INGEST</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p><b>LOCAL VERIFIED</b></article>
         <article class="complete"><span>02 · STRUCTURE</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Frictionless</strong><p>스키마 오류를 SDT 실행 전에 차단</p><b>VALIDATED</b></article>
-        <article class="complete"><span>03 · PV QUALITY</span><strong><span class="tool-flag" aria-hidden="true">🇺🇸</span> Solar Data Tools</strong><p>합성·호주 관측·영국 추정·EU 기준 PV 품질 파이프라인 실행</p><b>MULTI-SOURCE VALIDATED</b></article>
-        <article class="complete"><span>04 · AUDIT</span><strong><span class="tool-flag" aria-hidden="true">🇰🇷</span> FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
+        <article class="complete"><span>03 · PV QUALITY</span><strong>${flagImage("us", "미국")} Solar Data Tools</strong><p>합성·호주 관측·영국 추정·EU 기준 PV 품질 파이프라인 실행</p><b>MULTI-SOURCE VALIDATED</b></article>
+        <article class="complete"><span>04 · AUDIT</span><strong>${flagImage("kr", "대한민국")} FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
       </div>
       <div class="country-grid" aria-label="국가별 데이터 검증 상태">
-        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇺🇸</span><b>UNITED STATES</b><em>VERIFIED</em></div><h3>UCI SECOM</h3><p>반도체 공정 위험순위 연구의 정본 데이터</p><dl><div><dt>ROLE</dt><dd>Manufacturing evidence</dd></div><div><dt>STATUS</dt><dd>V1 complete</dd></div></dl></article>
-        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇦🇺</span><b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
-        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇬🇧</span><b>GREAT BRITAIN</b><em>VERIFIED</em></div><h3>PV_Live</h3><p>GB 국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>${pvlive.input_rows.toLocaleString()} intervals · E2E validated</dd></div></dl></article>
-        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇪🇺</span><b>EUROPEAN UNION</b><em>VERIFIED</em></div><h3>JRC PVGIS</h3><p>Brussels 기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>${pvgis.input_rows.toLocaleString()} hours · E2E validated</dd></div></dl></article>
-        <article class="country-card next"><div class="country-top"><span class="flag" aria-hidden="true">🇫🇷</span><b>FRANCE</b><em>CONTRACT READY</em></div><h3>RTE éCO2mix</h3><p>통합·확정값으로 바뀌는 국가 발전량 수정 이력</p><dl><div><dt>ROLE</dt><dd>Revision lineage</dd></div><div><dt>STATUS</dt><dd>Preflight passed · live E2E pending</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("us", "미국")}<b>UNITED STATES</b><em>VERIFIED</em></div><h3>UCI SECOM</h3><p>반도체 공정 위험순위 연구의 정본 데이터</p><dl><div><dt>ROLE</dt><dd>Manufacturing evidence</dd></div><div><dt>STATUS</dt><dd>V1 complete</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("au", "호주")}<b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("gb", "영국")}<b>GREAT BRITAIN</b><em>VERIFIED</em></div><h3>PV_Live</h3><p>GB 국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>${pvlive.input_rows.toLocaleString()} intervals · E2E validated</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("eu", "유럽연합")}<b>EUROPEAN UNION</b><em>VERIFIED</em></div><h3>JRC PVGIS</h3><p>Brussels 기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>${pvgis.input_rows.toLocaleString()} hours · E2E validated</dd></div></dl></article>
+        <article class="country-card next"><div class="country-top">${flagImage("fr", "프랑스")}<b>FRANCE</b><em>CONTRACT READY</em></div><h3>RTE éCO2mix</h3><p>통합·확정값으로 바뀌는 국가 발전량 수정 이력</p><dl><div><dt>ROLE</dt><dd>Revision lineage</dd></div><div><dt>STATUS</dt><dd>Preflight passed · live E2E pending</dd></div></dl></article>
       </div>
       <div class="dkasc-evidence" aria-label="호주 DKASC 관측 데이터 검증 결과">
-        <div><span>🇦🇺 OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
+        <div><span>${flagImage("au", "호주")} OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
         <div><span>DATA QUALITY</span><strong>${pct(dkasc.quality_score)}</strong><small>SDT 품질점수</small></div>
         <div><span>CONTRACT</span><strong>PASS</strong><small>Frictionless ${esc(dkasc.frictionless_version)}</small></div>
         <div><span>UNIT BOUNDARY</span><strong>kW 추정</strong><small>원본 스키마 직접 확인 대기</small></div>
