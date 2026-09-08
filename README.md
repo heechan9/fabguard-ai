@@ -8,13 +8,11 @@
 
 </div>
 
-<p align="center">
-  <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
-</p>
+<div align="center">
+
+[**🌐 웹 데모 보기 →**](https://fabguard-ai.vercel.app/) · [📊 정본 결과](https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md) · [🔬 상세 검증 결과](https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md) · [🧪 재현 방법](https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md) · [🗺️ 로드맵](https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md)
+
+</div>
 
 <div align="center">
 
@@ -33,12 +31,11 @@
 
 </div>
 
-<p align="center">
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#global-data-roadmap">🌍 국가별 데이터</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#tool-roles">🧰 도구별 역할</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
-</p>
+<div align="center">
+
+[🌏 English overview](https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md) · [🌍 국가별 데이터](https://github.com/heechan9/fabguard-ai#global-data-roadmap) · [🧰 도구별 역할](https://github.com/heechan9/fabguard-ai#tool-roles) · [👥 기여 기록](https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md)
+
+</div>
 
 <p align="center"><sub>위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.</sub></p>
 
