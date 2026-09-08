@@ -1,0 +1,22 @@
+{
+  "schema_version": "fabguard-dkasc-normalization/v1",
+  "input_rows_in_range": 105105,
+  "normalized_rows": 105120,
+  "interval_minutes": 5,
+  "off_grid_timestamps_rounded": 7,
+  "collision_groups": 4,
+  "valid_value_preferred_over_same_slot_null": 4,
+  "missing_timestamp_slots": 19,
+  "remaining_missing_power": 93,
+  "negative_values_clipped_for_sdt": 53817,
+  "source_file": "Alice_Springs_2025.csv",
+  "source_sha256": "d10ebe27ea417a36d5abcf552c6c29aa0ec932b36aa61eab5be0732854dcb896",
+  "normalized_file": "alice_springs_2025_normalized.csv",
+  "normalized_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
+  "source_type": "observed",
+  "source_url": "https://dkasolarcentre.com.au/download?location=alice-springs",
+  "source_accessed_at": "2026-09-07",
+  "timezone": "Australia/Darwin",
+  "power_unit_status": "inferred_kW_pending_direct_schema_confirmation",
+  "claim_boundary": "Observed DKASC data normalization only; not SECOM external validation, PV performance, or field validation."
+}

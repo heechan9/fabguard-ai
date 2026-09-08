@@ -1,0 +1,57 @@
+{
+  "schema_version": "fabguard-pv-sdt/v1",
+  "status": "sdt_contract_validated",
+  "source": {
+    "source_id": "dkasc-alice-springs-total-pv-2025",
+    "source_type": "observed",
+    "input_file": "alice_springs_2025_normalized.csv",
+    "input_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
+    "input_rows": 105120,
+    "timezone_declared": "Australia/Darwin",
+    "normalized_timezone": "UTC",
+    "sdt_analysis_clock": "declared source local wall time",
+    "input_power_unit": "kW",
+    "normalized_power_unit": "kW",
+    "sdt_input_power_unit": "W",
+    "observed_at": "2026-09-07T07:18:00+00:00"
+  },
+  "validation": {
+    "frictionless": {
+      "valid": true,
+      "version": "5.19.0",
+      "resource_path": "alice_springs_2025_normalized.csv",
+      "error_count": 0
+    }
+  },
+  "runtime": {
+    "solar_data_tools_version": "2.1.5",
+    "frictionless_version": "5.19.0",
+    "python_version": "3.11.16",
+    "solver": "CLARABEL"
+  },
+  "matrix": {
+    "raw_shape": [
+      288,
+      365
+    ],
+    "filled_shape": [
+      288,
+      365
+    ]
+  },
+  "sdt_report": {
+    "schema_version": "fabguard-sdt-report/v1",
+    "length": 1.0,
+    "capacity": 192.811637878418,
+    "sampling": 5.0,
+    "quality score": 0.9863013698630136,
+    "clearness score": 0.5287671232876713,
+    "clipped fraction": 0.0027397260273972603,
+    "time zone correction": 0.0,
+    "inverter clipping": false,
+    "capacity change": false,
+    "data quality warning": true,
+    "time shift correction": false
+  },
+  "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+}

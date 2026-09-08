@@ -68,8 +68,8 @@
 | 구분 | 현재 상태 |
 |---|---|
 | **검증 완료** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모 |
-| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성 PV 실행 |
-| **다음 시스템 데모** | 확보한 호주 DKASC 관측 파일을 공통 계약과 품질·감사 경로에 통과 |
+| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행 |
+| **실데이터 시스템 데모** | 호주 DKASC Alice Springs 2025 관측값 105,120개 슬롯을 정규화하고 Frictionless→SDT 경로로 검증 완료 |
 | **후속 시스템 데모** | 영국 PV_Live 추정값과 EU PVGIS 기준값의 호환성을 순차 비교 |
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
 
@@ -85,7 +85,7 @@
 |---|---|---|---|
 | 🇺🇸 미국 | **UCI SECOM** | 반도체 공정 위험순위 연구의 현재 정본 데이터 | ✅ 완료 |
 | 🌐 합성 환경 | **Fledge Sinusoid** | 실시간 수집·REST 연결·중복방지 검증 | ✅ 로컬 실연동 완료 |
-| 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | 🔵 파일 확보·E2E 처리 전 |
+| 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | ✅ Alice Springs 2025 E2E 검증 완료 |
 | 🇬🇧 영국 | **Sheffield Solar PV_Live** | 지역별 태양광 발전량 추정값 | 🔵 후속 어댑터 계획 |
 | 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 어댑터 계획 |
 | 🇫🇷 프랑스 | **RTE éCO2mix** | 잠정·통합·확정값의 수정 이력 감사 | 🟡 1차 범위 동결 후 후보 |
@@ -175,6 +175,7 @@
 - Fledge의 읽기 전용 asset REST API에서 데이터를 가져와 오류격리·중복방지·드리프트 경계로 전달하는 연결기
 - WSL2의 실제 Fledge v3.1.0에서 Sinusoid 수집·인증 REST pull·재시작 복구·중복격리를 로컬 검증
 - Frictionless Data v5.19.0 fail-closed 계약과 Solar Data Tools v2.1.5 합성 PV 11,520행 실행 검증
+- 호주 DKASC Alice Springs 2025 관측값을 재현 가능한 정규화기로 105,120개 5분 슬롯으로 변환하고 Frictionless→SDT E2E 검증 완료([보고서](results/dkasc-alice-springs-2025/report.json) · [정규화 감사](results/dkasc-alice-springs-2025/normalization_audit.json))
 
 ### 아직 구현하거나 검증하지 않음
 
