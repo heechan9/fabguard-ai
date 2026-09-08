@@ -192,6 +192,9 @@ function limitationsView() {
     <section class="professional-evidence" aria-label="방법론과 운영 설계"><div class="section-heading"><div><p class="kicker">PROFESSIONAL EVIDENCE</p><h2>방법론에서 현장 경계까지.</h2></div><p>홈에서 분리한 검증·운영 근거입니다. 공개데이터 결과와 향후 현장 설계를 구분합니다.</p></div>${professionalEvidenceHtml}</section>`;
 
   const fieldSection = [...app.querySelectorAll("section")].find(section => section.querySelector(".kicker")?.textContent.includes("FIELD EFFECT"));
+  app.querySelector(".principles-note")?.setAttribute("data-validation-step", "04");
+  app.querySelector(".evidence-ladder")?.setAttribute("data-validation-step", "05");
+  fieldSection?.setAttribute("data-validation-step", "06");
   fieldSection?.classList.add("field-effect-section");
   fieldSection?.querySelectorAll(".validation-grid article>b").forEach((number, index) => { number.textContent = `06${String.fromCharCode(65 + index)}`; });
   const research = app.querySelector(".research-note");
