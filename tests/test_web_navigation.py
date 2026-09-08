@@ -21,7 +21,8 @@ class WebNavigationTest(unittest.TestCase):
                 self.assertIn(f'hash === "{route}"', APP)
 
     def test_direct_section_routes_scroll_after_render(self):
-        self.assertIn("requestAnimationFrame(() =>", APP)
+        self.assertIn("window.setTimeout(() =>", APP)
+        self.assertIn("}, 50)", APP)
         self.assertIn('hash === "result"', APP)
         self.assertIn('hash === "global"', APP)
         self.assertIn('scrollIntoView({ behavior: "auto", block: "start" })', APP)
