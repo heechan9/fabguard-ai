@@ -1,0 +1,28 @@
+{
+  "schema_version": "fabguard-global-e2e/v1",
+  "status": "cross_source_e2e_validated",
+  "updated_at": "2026-09-08",
+  "sources": {
+    "pvlive_gb_2025": {
+      "country": "Great Britain",
+      "flag": "🇬🇧",
+      "source_type": "estimated",
+      "status": "sdt_contract_validated",
+      "input_rows": 17520,
+      "sampling_minutes": 30,
+      "frictionless_valid": true,
+      "input_sha256": "8a822cd0646fd023921da583655f8144cacc358665f838fee361a8ee3d7a8dcf"
+    },
+    "pvgis_brussels_2020": {
+      "country": "European Union / Belgium",
+      "flag": "🇪🇺",
+      "source_type": "reference",
+      "status": "sdt_contract_validated",
+      "input_rows": 8784,
+      "sampling_minutes": 60,
+      "frictionless_valid": true,
+      "input_sha256": "69a234b05b02fadbcd271d8a7af8607f3326a9118a4ddea98c6aa88e7c571a1e"
+    }
+  },
+  "claim_boundary": "Cross-source engineering data-quality compatibility only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+}
