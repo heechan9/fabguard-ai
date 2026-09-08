@@ -16,7 +16,7 @@ class WebFlagAssetsTest(unittest.TestCase):
 
     def test_web_uses_local_images_instead_of_regional_indicator_emoji(self):
         app = (ROOT / "web" / "app.js").read_text(encoding="utf-8")
-        self.assertIn('src="/assets/flags/${code}.svg"', app)
+        self.assertIn('`/assets/flags/${code}.svg`', app)
         self.assertNotIn("flagcdn.com", app)
         for emoji in ("🇺🇸", "🇦🇺", "🇬🇧", "🇪🇺", "🇫🇷", "🇰🇷"):
             with self.subTest(emoji=emoji):
