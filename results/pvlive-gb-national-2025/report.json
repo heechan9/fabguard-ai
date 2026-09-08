@@ -1,0 +1,57 @@
+{
+  "schema_version": "fabguard-pv-sdt/v1",
+  "status": "sdt_contract_validated",
+  "source": {
+    "source_id": "pvlive-gb-national-2025",
+    "source_type": "estimated",
+    "input_file": "pvlive_gb_2025.csv",
+    "input_sha256": "8a822cd0646fd023921da583655f8144cacc358665f838fee361a8ee3d7a8dcf",
+    "input_rows": 17520,
+    "timezone_declared": "UTC",
+    "normalized_timezone": "UTC",
+    "sdt_analysis_clock": "declared source local wall time",
+    "input_power_unit": "MW",
+    "normalized_power_unit": "kW",
+    "sdt_input_power_unit": "W",
+    "observed_at": "2026-09-08T15:29:00+00:00"
+  },
+  "validation": {
+    "frictionless": {
+      "valid": true,
+      "version": "5.19.0",
+      "resource_path": "pvlive_gb_2025.csv",
+      "error_count": 0
+    }
+  },
+  "runtime": {
+    "solar_data_tools_version": "2.1.5",
+    "frictionless_version": "5.19.0",
+    "python_version": "3.11.16",
+    "solver": "CLARABEL"
+  },
+  "matrix": {
+    "raw_shape": [
+      48,
+      366
+    ],
+    "filled_shape": [
+      48,
+      366
+    ]
+  },
+  "sdt_report": {
+    "schema_version": "fabguard-sdt-report/v1",
+    "length": 1.0027397260273974,
+    "capacity": 9525127.000000004,
+    "sampling": 30.0,
+    "quality score": 0.9918032786885246,
+    "clearness score": 0.07377049180327869,
+    "clipped fraction": 0.0273224043715847,
+    "time zone correction": 0.0,
+    "inverter clipping": true,
+    "capacity change": true,
+    "data quality warning": true,
+    "time shift correction": false
+  },
+  "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+}
