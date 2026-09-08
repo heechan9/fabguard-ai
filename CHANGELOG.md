@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+- Reconciled the live RTE éCO2mix records response with its 15-minute API envelope: structural :15/:45 solar nulls are explicitly counted and removed, while :00/:30 values remain subject to fail-closed 30-minute continuity and generation checks.
+
 - Replaced platform-dependent country-flag emoji with licensed local SVG assets across country cards, tool roles, and expansion candidates, with regression tests for Windows and offline rendering.
 
 - Synchronized the public README and web demo with canonical GB PV_Live and EU JRC PVGIS E2E evidence, added CI-backed global evidence checks, centered both clickable README navigation rows, and marked France RTE as preflight-ready rather than live-validated.
