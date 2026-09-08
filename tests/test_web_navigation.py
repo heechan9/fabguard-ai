@@ -30,6 +30,21 @@ class WebNavigationTest(unittest.TestCase):
         self.assertNotIn('class="integration-section"', APP)
         self.assertNotIn('combined.className = "operations-combined"', APP)
 
+    def test_section_numbers_share_one_visual_language(self):
+        self.assertIn("[data-section]:before{content:attr(data-section)", STYLE)
+        self.assertIn("[data-validation-step]:before{content:attr(data-validation-step)", STYLE)
+        self.assertIn("font-size:32px", STYLE)
+        self.assertIn(".field-effect-section .validation-grid article>b{font-size:16px", STYLE)
+
+    def test_removed_visuals_leave_no_dead_css(self):
+        for selector in ("wafer-stage", "wafer-grid", "wafer-scan", "wafer-node", "orbit-a", "orbit-b", "orbit-c", "integration-section", "integration-flow", "operations-combined"):
+            with self.subTest(selector=selector):
+                self.assertNotIn(selector, STYLE)
+        for animation in ("float", "scan", "sheen", "pulse"):
+            with self.subTest(animation=animation):
+                self.assertNotIn(f"@keyframes {animation}", STYLE)
+        self.assertEqual(STYLE.count(":root{"), 1)
+
     def test_navigation_routes_are_implemented(self):
         nav_routes = re.findall(r'<a href="#([^"]+)" data-route="([^"]+)">', INDEX)
         self.assertEqual(
