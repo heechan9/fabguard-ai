@@ -26,7 +26,9 @@ class WebNavigationTest(unittest.TestCase):
         self.assertIn('setAttribute("data-validation-step", "05")', APP)
         self.assertIn('setAttribute("data-validation-step", "06")', APP)
         self.assertIn('details.className = "validation-details"', APP)
-        self.assertIn('combined.className = "operations-combined"', APP)
+        self.assertIn("HUMAN-IN-THE-LOOP · SMART FACTORY FIT / 04–05", APP)
+        self.assertNotIn('class="integration-section"', APP)
+        self.assertNotIn('combined.className = "operations-combined"', APP)
 
     def test_navigation_routes_are_implemented(self):
         nav_routes = re.findall(r'<a href="#([^"]+)" data-route="([^"]+)">', INDEX)
