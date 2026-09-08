@@ -10,6 +10,21 @@ STYLE = (ROOT / "web" / "style.css").read_text(encoding="utf-8")
 
 
 class WebNavigationTest(unittest.TestCase):
+    def test_home_and_professional_evidence_are_separate_layers(self):
+        self.assertIn('app.querySelector(".global-section")?.remove()', APP)
+        self.assertIn('app.querySelectorAll(expertSelectors).forEach(section => section.remove())', APP)
+        self.assertIn('방법론과 한계 전체 보기', APP)
+        self.assertIn('${professionalEvidenceHtml}</section>', APP)
+
+    def test_global_data_has_its_own_view(self):
+        self.assertIn('requestedView === "global"', APP)
+        self.assertIn('section.classList.contains("global-section")', APP)
+
+    def test_validation_numbering_and_long_context_are_normalized(self):
+        self.assertIn('number.textContent = `06${String.fromCharCode(65 + index)}`', APP)
+        self.assertIn('details.className = "validation-details"', APP)
+        self.assertIn('combined.className = "operations-combined"', APP)
+
     def test_navigation_routes_are_implemented(self):
         nav_routes = re.findall(r'<a href="#([^"]+)" data-route="([^"]+)">', INDEX)
         self.assertEqual(
