@@ -63,8 +63,14 @@ class PVGISContractTest(unittest.TestCase):
             normalize_pvgis_payload(broken, request_params=self.params())
 
         broken = self.payload()
-        del broken["outputs"]["hourly"][0]["P"]
+        for row in broken["outputs"]["hourly"]:
+            del row["P"]
         with self.assertRaisesRegex(PVGISContractError, "missing required"):
+            normalize_pvgis_payload(broken, request_params=self.params())
+
+        broken = self.payload()
+        del broken["outputs"]["hourly"][0]["P"]
+        with self.assertRaisesRegex(PVGISContractError, "P contains missing"):
             normalize_pvgis_payload(broken, request_params=self.params())
 
     def test_duplicate_or_non_hourly_time_fails_closed(self) -> None:
