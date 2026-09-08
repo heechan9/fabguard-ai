@@ -14,3 +14,6 @@ results/*
 !results/dkasc-alice-springs-2025/*.json
 !results/pvlive-gb-national-smoke/
 !results/pvlive-gb-national-smoke/*.json
+!results/pvlive-gb-national-2025/
+!results/pvlive-gb-national-2025/fetch_audit.json
+!results/pvlive-gb-national-2025/report.json
