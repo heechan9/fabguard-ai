@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+- Registered Israel and Saudi Arabia as low-priority SOURCE AUDIT candidates for a distinct hot/desert-soiling PV stress axis, behind the France pre-audit queue; explicitly excluded UAE installation counts, unavailable Qatar generation series, and military-facility energy data.
+
 - Completed a bounded live smoke against the official PV_Live v4 production API for 48 GB national half-hour estimates, recording response metadata and SHA-256 without redistributing the raw response.
 - Added a seven-day-limited, UTC-only PV_Live fetch CLI with mocked network tests; Frictionless and SDT execution remain pending until redistribution and DST analysis-clock gates are resolved.
 
