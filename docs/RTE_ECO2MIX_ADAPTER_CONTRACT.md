@@ -14,7 +14,7 @@ different schemas and evidentiary meanings.
 - Dataset: `eco2mix-national-cons-def`.
 - Scope: France national electricity system.
 - Solar field: `solaire`, MW.
-- Generation series resolution: 30 minutes.
+- The records API exposes a 15-minute timestamp envelope, while `solaire` is populated at :00/:30 and structurally null at :15/:45; the admitted generation series is therefore 30 minutes.
 - Consolidated values are delivered around the middle of M+1 after checking
   and completion. Definitive values follow after all partners submit and
   verify metering, during the second half of A+1.
@@ -47,9 +47,11 @@ It must never become a new source type such as `observed-revised`.
 ## Fail-closed rules
 
 The contract rejects empty responses, missing fields, ambiguous timestamps,
-duplicate timestamps, non-finite or negative solar generation, unsupported
-revision states, expected-state mismatches, and gaps in a complete bounded
-30-minute page-set. The request builder limits a single audit window to seven
+duplicate timestamps, non-finite or negative half-hour solar generation, unexpected
+values in structural :15/:45 slots, unsupported revision states, expected-state
+mismatches, gaps in the complete 15-minute response envelope, and gaps in the
+admitted 30-minute generation series. Structural quarter-hour nulls are counted
+separately and never treated as missing generation measurements. The request builder limits a single audit window to seven
 days and an Opendatasoft page to 100 rows.
 
 CET/CEST source offsets are preserved in `source_timestamp`; normalized time
@@ -75,7 +77,7 @@ Before promotion to “live API audited”:
 
 1. query a small definitive 2024 window from the official records API;
 2. preserve raw JSON outside git;
-3. paginate without overlap and prove complete 30-minute coverage;
+3. paginate without overlap, prove complete 15-minute envelope coverage, record structural :15/:45 nulls, and prove the retained :00/:30 series is continuous;
 4. run this contract and Frictionless;
 5. run SDT as `source_type=estimated` with UTC;
 6. match row counts and SHA-256 across collection and SDT evidence;
