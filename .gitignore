@@ -12,3 +12,5 @@ results/*
 .env*
 !results/dkasc-alice-springs-2025/
 !results/dkasc-alice-springs-2025/*.json
+!results/pvlive-gb-national-smoke/
+!results/pvlive-gb-national-smoke/*.json

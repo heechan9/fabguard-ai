@@ -2,6 +2,9 @@
 
 ## 2026-09-08
 
+- Completed a bounded live smoke against the official PV_Live v4 production API for 48 GB national half-hour estimates, recording response metadata and SHA-256 without redistributing the raw response.
+- Added a seven-day-limited, UTC-only PV_Live fetch CLI with mocked network tests; Frictionless and SDT execution remain pending until redistribution and DST analysis-clock gates are resolved.
+
 - Added a fail-closed Sheffield Solar PV_Live pre-ingestion contract for GB 30-minute UTC estimates, mandatory revision lineage, MW units, entity scope, and local-only tests without claiming live API or SDT completion.
 - Documented separate gates for API access, data licensing, attribution, DST handling, hashes, Frictionless validation, and the first small live fixture.
 

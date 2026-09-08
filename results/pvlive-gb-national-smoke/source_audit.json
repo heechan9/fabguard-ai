@@ -1,0 +1,30 @@
+{
+  "schema_version": "fabguard-pvlive-live-smoke/v1",
+  "status": "pvlive_live_contract_validated",
+  "source_type": "estimated",
+  "provider": "Sheffield Solar / NESO",
+  "geographic_scope": "GB electricity network",
+  "api_host": "api.pvlive.uk",
+  "api_version": "v4",
+  "endpoint": "/pvlive/api/v4/gsp/0",
+  "query": {
+    "start": "2025-06-01T00:30:00Z",
+    "end": "2025-06-02T00:00:00Z",
+    "period": 30,
+    "extra_fields": "updated_gmt"
+  },
+  "retrieved_at": "2026-09-08T14:21:47.841384+00:00",
+  "http_status": 200,
+  "response_meta": ["gsp_id", "datetime_gmt", "generation_mw", "updated_gmt"],
+  "raw_response_sha256": "ad0070cda8832111af2bd25a480482033e1debf017c1674f074a856f8dd7c242",
+  "normalized_sha256": "33fc09ba70bfe7a11b410e8f753ce42565ecb7dd82d7809cbb1bce0e402d8dbe",
+  "rows": 48,
+  "intervals": 48,
+  "first_interval_end_utc": "2025-06-01T00:30:00Z",
+  "last_interval_end_utc": "2025-06-02T00:00:00Z",
+  "generation_mw_min": 0.0,
+  "generation_mw_max": 9424.46,
+  "updated_gmt_values": ["2026-08-13T00:00:00Z"],
+  "redistribution": "Raw response not committed; data redistribution terms require confirmation.",
+  "claim_boundary": "Live API access and input-contract smoke evidence only; not Frictionless or SDT completion, direct observations, SECOM external validation, field validation, or proof of PV performance."
+}

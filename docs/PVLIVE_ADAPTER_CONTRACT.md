@@ -2,7 +2,7 @@
 
 ## Status
 
-**Pre-ingestion contract implemented; live source audit and E2E execution remain pending.**
+**Pre-ingestion contract and bounded live API smoke completed; Frictionless and SDT E2E remain pending.**
 
 This document fixes the boundary for the next public-PV integration before any
 PV_Live value is admitted to FabGuard evidence.
@@ -63,14 +63,16 @@ Before the first live fixture is committed, re-check:
 If redistribution rights remain unclear, store only a minimal permissible
 fixture or a synthetic contract fixture plus hashes and derived audit evidence.
 
-## Next execution gate
+## Live smoke result
 
-1. Retrieve a small national (gsp_id 0) 30-minute range with updated_gmt.
-2. Record retrieval timestamp, API host, query and hashes.
-3. Pass the response through normalize_pvlive_frame.
-4. Validate the normalized CSV with Frictionless.
-5. Test the UTC-versus-Europe/London SDT clock policy across both DST changes.
-6. Run SDT and publish evidence only if every earlier gate passes.
+On 2026-09-08 the official production v4 endpoint returned 48 national GSP-0 half-hour estimates for 2025-06-01 with the expected gsp_id, datetime_gmt, generation_mw and updated_gmt fields. The response passed the input contract. Its raw response and normalized hashes, query and claim boundary are recorded in [source_audit.json](../results/pvlive-gb-national-smoke/source_audit.json); the raw response is not redistributed.
+
+## Remaining execution gate
+
+1. Confirm data redistribution and attribution terms directly enough for the intended evidence package.
+2. Validate a locally generated normalized CSV with Frictionless.
+3. Test the UTC-versus-Europe/London SDT clock policy across both DST changes.
+4. Fetch a sufficiently long range locally, run SDT, and publish only derived evidence and permitted artifacts.
 
 ## Claim boundary
 

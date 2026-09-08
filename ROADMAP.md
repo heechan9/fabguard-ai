@@ -165,7 +165,7 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
 재배포하지 않고 출처·조회일·원본 및 정규화 SHA-256·변환 규칙·결과 JSON만 기록한다.
 
 1. **완료:** DKASC `observed` 관측값을 최초 실데이터 검증원으로 통과시켰다.
-2. **진행 중:** PV_Live `estimated`의 사전 입력 계약을 구현했다. 실 API 접근·데이터 이용조건·DST 분석시계·작은 fixture를 확인한 뒤 E2E를 실행한다.
+2. **진행 중:** PV_Live `estimated`의 사전 입력 계약을 구현했다. 공식 v4 실 API에서 GB 국가 집계 48개 구간과 updated_gmt 스키마를 확인하고 원응답 해시를 기록했다. 원자료 재배포 조건과 DST 분석시계 확인 후 Frictionless→SDT E2E를 실행한다.
 3. **다음:** JRC PVGIS `reference`를 검증한다.
 4. Fledge Sinusoid `synthetic`을 포함한 네 유형의 결과와 라이선스·조회시각·SHA-256을 고정한 뒤 1차 범위를 동결한다.
 5. 동결 이후 프랑스 후보를 우선 사전감사하고, 다른 국가 후보는 독립적인 연구가치와 데이터 자격을 통과한 경우에만 순차 승격한다.
