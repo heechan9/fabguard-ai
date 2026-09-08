@@ -9,7 +9,7 @@ const COUNTRY_CODES = {
   "United States": "us", France: "fr", Germany: "de", Spain: "es", Italy: "it",
   Canada: "ca", Finland: "fi", "South Korea": "kr", Japan: "jp", Taiwan: "tw",
 };
-const flagImage = (code, label) => `<img class="flag-img" src="https://flagcdn.com/40x30/${code}.png" srcset="https://flagcdn.com/80x60/${code}.png 2x" width="40" height="30" alt="${esc(label)} 국기" loading="lazy">`;
+const flagImage = (code, label) => `<img class="flag-img" src="/assets/flags/${code}.svg" width="40" height="30" alt="${esc(label)} 국기" loading="lazy">`;
 const candidateFlag = candidate => flagImage(COUNTRY_CODES[candidate.country], candidate.country);
 
 const shortTimestamp = value => {
