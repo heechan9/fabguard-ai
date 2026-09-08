@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+- Prepared France slice 1 with a fail-closed RTE éCO2mix national solar pre-ingestion contract, bounded API request builder, CET/CEST-to-UTC normalization, MW and 30-minute continuity checks, orthogonal consolidated/definitive revision lineage, and offline tests; no live RTE result is claimed yet.
+
 - Prepared a version-pinned JRC PVGIS 5.3 hourly reference-data contract, fail-closed offline tests, provenance fields, and a bounded live-audit gate; no live PVGIS result is claimed yet.
 
 - Moved the unverified Middle East heat/soiling idea out of the public candidate registry and roadmap into a separate exploratory research note; it is not an approved source or implementation queue item.
