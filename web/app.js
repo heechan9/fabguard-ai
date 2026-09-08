@@ -1,5 +1,5 @@
 const app = document.querySelector("#app");
-let state = { summary: null, risks: null, phase1: null, dkasc: null, globalCandidates: null };
+let state = { summary: null, risks: null, phase1: null, dkasc: null, globalE2E: null, globalCandidates: null };
 let professionalEvidenceHtml = "";
 
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
@@ -48,6 +48,16 @@ function validateDKASC(dkasc) {
   if (!/^[a-f0-9]{64}$/.test(dkasc.normalized_sha256)) throw new Error("DKASC SHA-256 계약이 올바르지 않습니다.");
 }
 
+function validateGlobalE2E(summary) {
+  if (!summary || summary.schema_version !== "fabguard-global-e2e/v1" || summary.status !== "cross_source_e2e_validated") throw new Error("국제 E2E 요약 상태가 올바르지 않습니다.");
+  for (const key of ["pvlive_gb_2025", "pvgis_brussels_2020"]) {
+    const item = summary.sources?.[key];
+    if (!item || item.status !== "sdt_contract_validated" || item.frictionless_valid !== true) throw new Error(`${key} E2E 검증 상태가 올바르지 않습니다.`);
+    if (!Number.isInteger(item.input_rows) || item.input_rows <= 0 || !Number.isFinite(item.sampling_minutes)) throw new Error(`${key} E2E 수치가 올바르지 않습니다.`);
+    if (!/^[a-f0-9]{64}$/.test(item.input_sha256)) throw new Error(`${key} SHA-256 계약이 올바르지 않습니다.`);
+  }
+}
+
 function validateGlobalCandidates(registry) {
   if (!registry || registry.schema_version !== "fabguard-global-candidates/v1" || registry.status !== "planning_only") throw new Error("국제 데이터 후보 레지스트리 상태가 올바르지 않습니다.");
   if (!Array.isArray(registry.candidates) || registry.candidates.length === 0) throw new Error("국제 데이터 후보 목록이 비어 있습니다.");
@@ -72,16 +82,18 @@ function candidateRegistry(registry) {
 
 async function load() {
   try {
-    const [summaryResponse, riskResponse, phase1Response, dkascResponse, candidatesResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json"), fetch("/data/dkasc_summary.json"), fetch("/data/global_candidates.json")]);
-    if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok || !dkascResponse.ok || !candidatesResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
+    const [summaryResponse, riskResponse, phase1Response, dkascResponse, globalE2EResponse, candidatesResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json"), fetch("/data/dkasc_summary.json"), fetch("/data/global_e2e_summary.json"), fetch("/data/global_candidates.json")]);
+    if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok || !dkascResponse.ok || !globalE2EResponse.ok || !candidatesResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
     state.summary = await summaryResponse.json();
     state.risks = await riskResponse.json();
     state.phase1 = await phase1Response.json();
     state.dkasc = await dkascResponse.json();
+    state.globalE2E = await globalE2EResponse.json();
     state.globalCandidates = await candidatesResponse.json();
     validateSummaryDataset(state.summary?.dataset);
     validatePhase1(state.phase1);
     validateDKASC(state.dkasc);
+    validateGlobalE2E(state.globalE2E);
     validateGlobalCandidates(state.globalCandidates);
     route();
   } catch (error) {
@@ -103,6 +115,8 @@ function summaryView() {
   const ds = state.summary.dataset;
   const queueSize = state.risks.length;
   const dkasc = state.dkasc;
+  const pvlive = state.globalE2E.sources.pvlive_gb_2025;
+  const pvgis = state.globalE2E.sources.pvgis_brussels_2020;
   app.innerHTML = `
     <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p><div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#result">현재 결과 30초 확인</a></div></div>${waferVisual(ds.measurement_features)}</section>
     <section class="answer-strip" aria-label="FabGuard 핵심 요약"><article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로<br>점검 대상을 추천</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article></section>
@@ -114,15 +128,15 @@ function summaryView() {
       <div class="tool-rail" aria-label="데이터 처리 도구">
         <article class="complete"><span>01 · INGEST</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p><b>LOCAL VERIFIED</b></article>
         <article class="complete"><span>02 · STRUCTURE</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Frictionless</strong><p>스키마 오류를 SDT 실행 전에 차단</p><b>VALIDATED</b></article>
-        <article class="complete"><span>03 · PV QUALITY</span><strong><span class="tool-flag" aria-hidden="true">🇺🇸</span> Solar Data Tools</strong><p>합성 데이터와 호주 실제 관측 PV 품질 파이프라인 실행</p><b>OBSERVED VALIDATED</b></article>
+        <article class="complete"><span>03 · PV QUALITY</span><strong><span class="tool-flag" aria-hidden="true">🇺🇸</span> Solar Data Tools</strong><p>합성·호주 관측·영국 추정·EU 기준 PV 품질 파이프라인 실행</p><b>MULTI-SOURCE VALIDATED</b></article>
         <article class="complete"><span>04 · AUDIT</span><strong><span class="tool-flag" aria-hidden="true">🇰🇷</span> FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
       </div>
       <div class="country-grid" aria-label="국가별 데이터 검증 상태">
         <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇺🇸</span><b>UNITED STATES</b><em>VERIFIED</em></div><h3>UCI SECOM</h3><p>반도체 공정 위험순위 연구의 정본 데이터</p><dl><div><dt>ROLE</dt><dd>Manufacturing evidence</dd></div><div><dt>STATUS</dt><dd>V1 complete</dd></div></dl></article>
         <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇦🇺</span><b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
-        <article class="country-card planned"><div class="country-top"><span class="flag" aria-hidden="true">🇬🇧</span><b>GREAT BRITAIN</b><em>IN PROGRESS</em></div><h3>PV_Live</h3><p>GB 국가·지역 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>Live API contract passed · SDT pending</dd></div></dl></article>
-        <article class="country-card planned"><div class="country-top"><span class="flag" aria-hidden="true">🇪🇺</span><b>EUROPEAN UNION</b><em>PLANNED</em></div><h3>JRC PVGIS</h3><p>기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>Adapter pending</dd></div></dl></article>
-        <article class="country-card candidate"><div class="country-top"><span class="flag" aria-hidden="true">🇫🇷</span><b>FRANCE</b><em>CANDIDATE</em></div><h3>RTE éCO2mix</h3><p>잠정값이 통합·확정값으로 바뀌는 수정 이력</p><dl><div><dt>ROLE</dt><dd>Revision lineage</dd></div><div><dt>STATUS</dt><dd>Post-freeze candidate</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇬🇧</span><b>GREAT BRITAIN</b><em>VERIFIED</em></div><h3>PV_Live</h3><p>GB 국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>${pvlive.input_rows.toLocaleString()} intervals · E2E validated</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top"><span class="flag" aria-hidden="true">🇪🇺</span><b>EUROPEAN UNION</b><em>VERIFIED</em></div><h3>JRC PVGIS</h3><p>Brussels 기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>${pvgis.input_rows.toLocaleString()} hours · E2E validated</dd></div></dl></article>
+        <article class="country-card next"><div class="country-top"><span class="flag" aria-hidden="true">🇫🇷</span><b>FRANCE</b><em>CONTRACT READY</em></div><h3>RTE éCO2mix</h3><p>통합·확정값으로 바뀌는 국가 발전량 수정 이력</p><dl><div><dt>ROLE</dt><dd>Revision lineage</dd></div><div><dt>STATUS</dt><dd>Preflight passed · live E2E pending</dd></div></dl></article>
       </div>
       <div class="dkasc-evidence" aria-label="호주 DKASC 관측 데이터 검증 결과">
         <div><span>🇦🇺 OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
