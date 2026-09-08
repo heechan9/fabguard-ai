@@ -186,11 +186,11 @@ function syncNavigation(hash) {
 
 function finishRoute(hash) {
   syncNavigation(hash);
-  requestAnimationFrame(() => {
+  window.setTimeout(() => {
     const target = hash === "result" ? document.querySelector(".story-section") : hash === "global" ? document.querySelector(".global-section") : null;
     if (target) target.scrollIntoView({ behavior: "auto", block: "start" });
     else window.scrollTo({ top: 0, behavior: "auto" });
-  });
+  }, 50);
 }
 
 function route() {
