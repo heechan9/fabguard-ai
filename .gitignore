@@ -17,3 +17,6 @@ results/*
 !results/pvlive-gb-national-2025/
 !results/pvlive-gb-national-2025/fetch_audit.json
 !results/pvlive-gb-national-2025/report.json
+!results/pvgis-brussels-2020/
+!results/pvgis-brussels-2020/fetch_audit.json
+!results/pvgis-brussels-2020/report.json

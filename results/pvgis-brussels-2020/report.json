@@ -1,0 +1,57 @@
+{
+  "schema_version": "fabguard-pv-sdt/v1",
+  "status": "sdt_contract_validated",
+  "source": {
+    "source_id": "pvgis-brussels-sarah3-2020",
+    "source_type": "reference",
+    "input_file": "pvgis_brussels_2020.csv",
+    "input_sha256": "69a234b05b02fadbcd271d8a7af8607f3326a9118a4ddea98c6aa88e7c571a1e",
+    "input_rows": 8784,
+    "timezone_declared": "UTC",
+    "normalized_timezone": "UTC",
+    "sdt_analysis_clock": "declared source local wall time",
+    "input_power_unit": "W",
+    "normalized_power_unit": "kW",
+    "sdt_input_power_unit": "W",
+    "observed_at": "2026-09-08T15:58:35+00:00"
+  },
+  "validation": {
+    "frictionless": {
+      "valid": true,
+      "version": "5.19.0",
+      "resource_path": "pvgis_brussels_2020.csv",
+      "error_count": 0
+    }
+  },
+  "runtime": {
+    "solar_data_tools_version": "2.1.5",
+    "frictionless_version": "5.19.0",
+    "python_version": "3.11.16",
+    "solver": "CLARABEL"
+  },
+  "matrix": {
+    "raw_shape": [
+      24,
+      366
+    ],
+    "filled_shape": [
+      24,
+      366
+    ]
+  },
+  "sdt_report": {
+    "schema_version": "fabguard-sdt-report/v1",
+    "length": 1.0027397260273974,
+    "capacity": 0.5231580000000001,
+    "sampling": 60.0,
+    "quality score": 0.5710382513661202,
+    "clearness score": 0.20765027322404372,
+    "clipped fraction": 0.06284153005464481,
+    "time zone correction": 0.0,
+    "inverter clipping": true,
+    "capacity change": false,
+    "data quality warning": false,
+    "time shift correction": false
+  },
+  "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+}
