@@ -12,20 +12,26 @@ BASE = "https://github.com/heechan9/fabguard-ai/blob/main/"
 class ReadmeNavigationTest(unittest.TestCase):
     def test_primary_and_secondary_navigation_use_canonical_main_urls(self):
         readme = README.read_text(encoding="utf-8")
-        expected_urls = (
+        file_targets = (
             "results/v1/RESULTS_SUMMARY.md",
             "docs/PHASE1_ADVANCED_VALIDATION.md",
             "REPRODUCIBILITY.md",
             "ROADMAP.md",
             "docs/MELBOURNE_COLLABORATION.md",
-            "../fabguard-ai#global-data-roadmap",
-            "../fabguard-ai#tool-roles",
             "CONTRIBUTIONS.md",
         )
+        anchor_targets = (
+            "https://github.com/heechan9/fabguard-ai#global-data-roadmap",
+            "https://github.com/heechan9/fabguard-ai#tool-roles",
+        )
 
-        for target in expected_urls:
+        for target in file_targets:
             with self.subTest(target=target):
                 self.assertIn(f"]({BASE}{target})", readme)
+        for target in anchor_targets:
+            with self.subTest(target=target):
+                self.assertIn(f"]({target})", readme)
+        self.assertNotIn('<p align="center">\n  <a href="https://fabguard-ai.vercel.app/"', readme)
 
     def test_navigation_file_targets_exist(self):
         targets = (
