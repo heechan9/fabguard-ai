@@ -17,8 +17,8 @@
       "flag": "🇫🇷",
       "sources": "RTE · Enedis · Météo-France",
       "role": "Revision · grid · weather",
-      "status": "PRIORITY AUDIT",
-      "gate": "API budget, redistribution, CET/CEST and revision closure"
+      "status": "PREFLIGHT READY",
+      "gate": "Run bounded RTE live E2E; audit Enedis and Météo-France separately"
     },
     {
       "country": "Germany",
