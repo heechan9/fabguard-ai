@@ -1,0 +1,88 @@
+{
+  "schema_version": "fabguard-global-candidates/v1",
+  "status": "planning_only",
+  "updated_at": "2026-09-08",
+  "claim_boundary": "Candidate registration is not connection, validation, implementation commitment, or evidence of model performance.",
+  "candidates": [
+    {
+      "country": "United States",
+      "flag": "🇺🇸",
+      "sources": "Public robot operations/anomaly data",
+      "role": "Robot telemetry",
+      "status": "SOURCE AUDIT",
+      "gate": "Confirm official dataset, signals, labels and license"
+    },
+    {
+      "country": "France",
+      "flag": "🇫🇷",
+      "sources": "RTE · Enedis · Météo-France",
+      "role": "Revision · grid · weather",
+      "status": "PRIORITY AUDIT",
+      "gate": "API budget, redistribution, CET/CEST and revision closure"
+    },
+    {
+      "country": "Germany",
+      "flag": "🇩🇪",
+      "sources": "SMARD · industrial/robot data",
+      "role": "Grid · manufacturing · robotics",
+      "status": "SOURCE AUDIT",
+      "gate": "Confirm robot source, signal definitions and license"
+    },
+    {
+      "country": "Spain",
+      "flag": "🇪🇸",
+      "sources": "REE/ESIOS · self-consumption",
+      "role": "Grid · distributed PV",
+      "status": "SOURCE AUDIT",
+      "gate": "Resolution, units, license and missingness policy"
+    },
+    {
+      "country": "Italy",
+      "flag": "🇮🇹",
+      "sources": "Terna · GSE",
+      "role": "Generation · installation",
+      "status": "SOURCE AUDIT",
+      "gate": "Raw access, aggregation level and redistribution"
+    },
+    {
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "sources": "NRCan/CanmetENERGY · snow PV",
+      "role": "Cold/snow stress",
+      "status": "SOURCE AUDIT",
+      "gate": "Observed series, timezone, units and license"
+    },
+    {
+      "country": "Finland",
+      "flag": "🇫🇮",
+      "sources": "FMI Open Data",
+      "role": "High-latitude weather",
+      "status": "SOURCE AUDIT",
+      "gate": "PV observation join and temporal contract"
+    },
+    {
+      "country": "South Korea",
+      "flag": "🇰🇷",
+      "sources": "Public manufacturing · grid · PV",
+      "role": "Domestic industrial context",
+      "status": "SOURCE AUDIT",
+      "gate": "De-identification, field relevance and reuse rights"
+    },
+    {
+      "country": "Japan",
+      "flag": "🇯🇵",
+      "sources": "AIST/JRL · NEDO · Kyushu Electric",
+      "role": "Robotics · curtailment",
+      "status": "REPLY PENDING",
+      "gate": "AIST/JRL reply, telemetry access and citation terms"
+    },
+    {
+      "country": "Taiwan",
+      "flag": "🇹🇼",
+      "sources": "WM-811K · grid/PV · robotics",
+      "role": "Wafer map · energy · robotics",
+      "status": "DEFERRED",
+      "gate": "Review after Japan; verify provenance and reuse rights"
+    }
+  ]
+}
