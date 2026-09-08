@@ -10,10 +10,10 @@
 
 <p align="center">
   <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
+  <a href="results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
+  <a href="docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
+  <a href="REPRODUCIBILITY.md">🧪 재현 방법</a> ·
+  <a href="ROADMAP.md">🗺️ 로드맵</a>
 </p>
 
 <div align="center">
@@ -24,20 +24,20 @@
 
 <p>
   <a href="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml"><img src="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md"><img src="https://img.shields.io/badge/evidence-provisional-E9A23B" alt="Provisional evidence"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11"></a>
+  <a href="DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
+  <a href="results/v1/RESULTS_SUMMARY.md"><img src="https://img.shields.io/badge/evidence-provisional-E9A23B" alt="Provisional evidence"></a>
+  <a href="PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
+  <a href="ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
 </p>
 
 </div>
 
 <p align="center">
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#global-data-roadmap">🌍 국가별 데이터</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/README.md#tool-roles">🧰 도구별 역할</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+  <a href="docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
+  <a href="#global-data-roadmap">🌍 국가별 데이터</a> ·
+  <a href="#tool-roles">🧰 도구별 역할</a> ·
+  <a href="CONTRIBUTIONS.md">👥 기여 기록</a>
 </p>
 
 <p align="center"><sub>위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.</sub></p>
@@ -75,6 +75,8 @@
 
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
+<a id="global-data-roadmap"></a>
+
 ## Global data roadmap
 
 *국가별 데이터 계획*
@@ -89,6 +91,8 @@
 | 🇬🇧 영국 | **Sheffield Solar PV_Live** | 지역별 태양광 발전량 추정값 | 🔵 후속 어댑터 계획 |
 | 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 어댑터 계획 |
 | 🇫🇷 프랑스 | **RTE éCO2mix** | 잠정·통합·확정값의 수정 이력 감사 | 🟡 1차 범위 동결 후 후보 |
+
+<a id="tool-roles"></a>
 
 ### Tool roles
 
@@ -109,8 +113,9 @@
 
 | 국가 | 우선 검토 후보군 | 독립적 검토 목적 | 현재 판정 |
 |---|---|---|---|
+| 🇺🇸 미국 | **공개 로봇 운영·이상 데이터 후보군** | 로봇 telemetry·고장/이상 탐지 계약 검토 | 공식 데이터셋·원출처·라이선스 확정 전 조사 후보 |
 | 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | 1차 범위 동결 후 우선 사전감사 |
-| 🇩🇪 독일 | **SMARD · 독일 전력·산업 공개데이터 후보군** | 계통 투명성과 제조·에너지 운영 비교 | 출처·API·재배포 조건 확인 전 조사 후보 |
+| 🇩🇪 독일 | **SMARD · 전력/산업 · 공개 로봇 운영 데이터 후보군** | 계통 투명성과 제조·로봇 운영 비교 | 로봇 데이터 원출처·신호·라이선스 확인 전 조사 후보 |
 | 🇪🇸 스페인 | **REE/ESIOS · 자가소비 통계 후보군** | 고태양광 계통운영과 분산형 자가소비 비교 | 시계열 해상도·라이선스 확인 전 조사 후보 |
 | 🇮🇹 이탈리아 | **Terna · GSE 공개 통계/설비 후보군** | 발전·설비 등록·지역 차이를 연결 가능한지 검토 | 원자료 접근성과 재배포 조건 확인 전 조사 후보 |
 | 🇨🇦 캐나다 | **NRCan/CanmetENERGY · 적설 환경 PV 후보군** | 저온·적설 조건의 품질 경계 스트레스 테스트 | 실제 시계열과 라이선스 확인 전 조사 후보 |
