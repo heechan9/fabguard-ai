@@ -1,5 +1,5 @@
 const app = document.querySelector("#app");
-let state = { summary: null, risks: null, phase1: null, dkasc: null };
+let state = { summary: null, risks: null, phase1: null, dkasc: null, globalCandidates: null };
 
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
 const num = (value, digits = 3) => Number(value).toFixed(digits);
@@ -47,17 +47,41 @@ function validateDKASC(dkasc) {
   if (!/^[a-f0-9]{64}$/.test(dkasc.normalized_sha256)) throw new Error("DKASC SHA-256 계약이 올바르지 않습니다.");
 }
 
+function validateGlobalCandidates(registry) {
+  if (!registry || registry.schema_version !== "fabguard-global-candidates/v1" || registry.status !== "planning_only") throw new Error("국제 데이터 후보 레지스트리 상태가 올바르지 않습니다.");
+  if (!Array.isArray(registry.candidates) || registry.candidates.length === 0) throw new Error("국제 데이터 후보 목록이 비어 있습니다.");
+  const countries = new Set();
+  for (const candidate of registry.candidates) {
+    for (const key of ["country", "flag", "sources", "role", "status", "gate"]) {
+      if (typeof candidate[key] !== "string" || !candidate[key].trim()) throw new Error(`국제 데이터 후보의 ${key} 필드가 올바르지 않습니다.`);
+    }
+    if (countries.has(candidate.country)) throw new Error("국제 데이터 후보 국가가 중복되었습니다.");
+    countries.add(candidate.country);
+  }
+}
+
+function candidateRegistry(registry) {
+  return `<details class="candidate-registry">
+    <summary><span>EXPANSION CANDIDATES</span><strong>후속 국가·로봇 데이터 후보 보기</strong><small>${registry.candidates.length}개 국가 · 연결 완료가 아닌 조사 목록</small></summary>
+    <div class="candidate-intro">후보는 공식 출처·접근성·라이선스·단위·시간대·독립적 연구가치를 통과한 뒤에만 구현 단계로 승격합니다.</div>
+    <div class="candidate-list">${registry.candidates.map(candidate => `<article><div><span class="flag" aria-hidden="true">${esc(candidate.flag)}</span><b>${esc(candidate.country)}</b><em>${esc(candidate.status)}</em></div><h3>${esc(candidate.sources)}</h3><p>${esc(candidate.role)}</p><small>GATE · ${esc(candidate.gate)}</small></article>`).join("")}</div>
+    <p class="candidate-boundary">${esc(registry.claim_boundary)}</p>
+  </details>`;
+}
+
 async function load() {
   try {
-    const [summaryResponse, riskResponse, phase1Response, dkascResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json"), fetch("/data/dkasc_summary.json")]);
-    if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok || !dkascResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
+    const [summaryResponse, riskResponse, phase1Response, dkascResponse, candidatesResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json"), fetch("/data/dkasc_summary.json"), fetch("/data/global_candidates.json")]);
+    if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok || !dkascResponse.ok || !candidatesResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
     state.summary = await summaryResponse.json();
     state.risks = await riskResponse.json();
     state.phase1 = await phase1Response.json();
     state.dkasc = await dkascResponse.json();
+    state.globalCandidates = await candidatesResponse.json();
     validateSummaryDataset(state.summary?.dataset);
     validatePhase1(state.phase1);
     validateDKASC(state.dkasc);
+    validateGlobalCandidates(state.globalCandidates);
     route();
   } catch (error) {
     app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" onclick="location.reload()">다시 시도</button></section>`;
@@ -105,6 +129,7 @@ function summaryView() {
         <div><span>CONTRACT</span><strong>PASS</strong><small>Frictionless ${esc(dkasc.frictionless_version)}</small></div>
         <div><span>UNIT BOUNDARY</span><strong>kW 추정</strong><small>원본 스키마 직접 확인 대기</small></div>
       </div>
+      ${candidateRegistry(state.globalCandidates)}
       <div class="global-boundary"><span>CLAIM BOUNDARY</span><p>PV 확장은 데이터 수집·품질·감사 호환성 데모입니다. 태양광 결과를 SECOM 모델의 외부검증이나 패널 고장진단·현장 성과로 주장하지 않습니다.</p></div>
     </section>
     <section class="plain-guide" aria-label="FabGuard 작동 방식"><div><span>01 · 데이터 입력</span><strong>생산 과정의 측정값</strong><p>공개 데이터에 포함된 ${ds.samples.toLocaleString()}건의 생산 기록과 ${ds.measurement_features}개 익명 변수를 사용합니다.</p></div><div><span>02 · AI 분석</span><strong>위험도가 높은 순서로 정렬</strong><p>모든 생산 건을 판정하지 않고, 제한된 점검 시간을 어디에 먼저 쓸지 제안합니다.</p></div><div><span>03 · 사람의 판단</span><strong>엔지니어가 확인하고 결정</strong><p>실제 센서·설비·공정 이력을 대조한 뒤 재검사와 설비점검 여부를 결정합니다.</p></div></section>
