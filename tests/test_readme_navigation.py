@@ -46,6 +46,17 @@ class ReadmeNavigationTest(unittest.TestCase):
         self.assertIn('<a id="global-data-roadmap"></a>', readme)
         self.assertIn('<a id="tool-roles"></a>', readme)
 
+    def test_reader_routing_and_rigor_documents_are_prominent(self):
+        readme = README.read_text(encoding="utf-8")
+        summary_position = readme.index("## 30초 요약")
+        global_position = readme.index("## Global data roadmap")
+        decision_position = readme.index("## 왜 자동 판정이 아닌가요?")
+        self.assertLess(decision_position, global_position)
+        self.assertIn("빠르게 훑어보실 분은 아래 표로 충분합니다.", readme[summary_position:global_position])
+        for target in ("EXPERIMENT_CONTRACT.md", "docs/TEST_EXPOSURE.md", "docs/FAILURE_GOVERNANCE.md"):
+            with self.subTest(target=target):
+                self.assertIn(f"]({target})", readme[summary_position:global_position])
+
     def test_every_repository_local_readme_target_exists(self):
         readme = README.read_text(encoding="utf-8")
         markdown_targets = re.findall(r"!?\[[^\]]*\]\(([^)]+)\)", readme)
