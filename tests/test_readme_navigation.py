@@ -10,28 +10,29 @@ BASE = "https://github.com/heechan9/fabguard-ai/blob/main/"
 
 
 class ReadmeNavigationTest(unittest.TestCase):
-    def test_primary_and_secondary_navigation_use_canonical_main_urls(self):
+    def test_primary_and_secondary_navigation_use_plain_markdown_links(self):
         readme = README.read_text(encoding="utf-8")
-        file_targets = (
+        expected_targets = (
+            "https://fabguard-ai.vercel.app/",
             "results/v1/RESULTS_SUMMARY.md",
             "docs/PHASE1_ADVANCED_VALIDATION.md",
             "REPRODUCIBILITY.md",
             "ROADMAP.md",
             "docs/MELBOURNE_COLLABORATION.md",
+            "#global-data-roadmap",
+            "#tool-roles",
             "CONTRIBUTIONS.md",
         )
-        anchor_targets = (
-            "https://github.com/heechan9/fabguard-ai#global-data-roadmap",
-            "https://github.com/heechan9/fabguard-ai#tool-roles",
-        )
 
-        for target in file_targets:
+        primary = readme.split("<!-- primary-navigation -->", 1)[1].split("<!-- /primary-navigation -->", 1)[0]
+        secondary = readme.split("<!-- secondary-navigation -->", 1)[1].split("<!-- /secondary-navigation -->", 1)[0]
+        navigation = primary + secondary
+
+        for target in expected_targets:
             with self.subTest(target=target):
-                self.assertIn(f"]({BASE}{target})", readme)
-        for target in anchor_targets:
-            with self.subTest(target=target):
-                self.assertIn(f"]({target})", readme)
-        self.assertNotIn('<p align="center">\n  <a href="https://fabguard-ai.vercel.app/"', readme)
+                self.assertIn(f"]({target})", navigation)
+        self.assertNotIn("<div", navigation)
+        self.assertNotIn("<a ", navigation)
 
     def test_navigation_file_targets_exist(self):
         targets = (
