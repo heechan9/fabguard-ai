@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+- Replaced platform-dependent country-flag emoji with licensed local SVG assets across country cards, tool roles, and expansion candidates, with regression tests for Windows and offline rendering.
+
 - Synchronized the public README and web demo with canonical GB PV_Live and EU JRC PVGIS E2E evidence, added CI-backed global evidence checks, centered both clickable README navigation rows, and marked France RTE as preflight-ready rather than live-validated.
 
 - Prepared France slice 1 with a fail-closed RTE éCO2mix national solar pre-ingestion contract, bounded API request builder, CET/CEST-to-UTC normalization, MW and 30-minute continuity checks, orthogonal consolidated/definitive revision lineage, and offline tests; no live RTE result is claimed yet.
