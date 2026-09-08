@@ -37,9 +37,18 @@ class GlobalCandidateWebContractTest(unittest.TestCase):
             "South Korea",
             "Japan",
             "Taiwan",
+            "Israel",
+            "Saudi Arabia",
         }
         actual = {candidate["country"] for candidate in self.registry["candidates"]}
         self.assertEqual(actual, expected)
+
+    def test_middle_east_scope_excludes_unsuitable_sources(self):
+        text = json.dumps(self.registry).lower()
+        self.assertIn("hot/desert-soiling", text)
+        self.assertNotIn("uae", text)
+        self.assertNotIn("qatar", text)
+        self.assertNotIn("military base", text)
 
     def test_registry_remains_planning_only(self):
         text = json.dumps(self.registry).lower()
