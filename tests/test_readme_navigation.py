@@ -18,14 +18,14 @@ class ReadmeNavigationTest(unittest.TestCase):
             "REPRODUCIBILITY.md",
             "ROADMAP.md",
             "docs/MELBOURNE_COLLABORATION.md",
-            "README.md#global-data-roadmap",
-            "README.md#tool-roles",
+            "../fabguard-ai#global-data-roadmap",
+            "../fabguard-ai#tool-roles",
             "CONTRIBUTIONS.md",
         )
 
         for target in expected_urls:
             with self.subTest(target=target):
-                self.assertIn(f'href="{BASE}{target}"', readme)
+                self.assertIn(f"]({BASE}{target})", readme)
 
     def test_navigation_file_targets_exist(self):
         targets = (
