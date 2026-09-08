@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+- Synchronized the public README and web demo with canonical GB PV_Live and EU JRC PVGIS E2E evidence, added CI-backed global evidence checks, centered both clickable README navigation rows, and marked France RTE as preflight-ready rather than live-validated.
+
 - Prepared France slice 1 with a fail-closed RTE éCO2mix national solar pre-ingestion contract, bounded API request builder, CET/CEST-to-UTC normalization, MW and 30-minute continuity checks, orthogonal consolidated/definitive revision lineage, and offline tests; no live RTE result is claimed yet.
 
 - Prepared a version-pinned JRC PVGIS 5.3 hourly reference-data contract, fail-closed offline tests, provenance fields, and a bounded live-audit gate; no live PVGIS result is claimed yet.

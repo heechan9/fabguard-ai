@@ -9,7 +9,13 @@
 </div>
 
 <!-- primary-navigation -->
-[**🌐 웹 데모 보기 →**](https://fabguard-ai.vercel.app/) · [📊 정본 결과](results/v1/RESULTS_SUMMARY.md) · [🔬 상세 검증 결과](docs/PHASE1_ADVANCED_VALIDATION.md) · [🧪 재현 방법](REPRODUCIBILITY.md) · [🗺️ 로드맵](ROADMAP.md)
+<p align="center">
+  <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
+</p>
 <!-- /primary-navigation -->
 
 <div align="center">
@@ -30,7 +36,12 @@
 </div>
 
 <!-- secondary-navigation -->
-[🌏 English overview](docs/MELBOURNE_COLLABORATION.md) · [🌍 국가별 데이터](#global-data-roadmap) · [🧰 도구별 역할](#tool-roles) · [👥 기여 기록](CONTRIBUTIONS.md)
+<p align="center">
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai#global-data-roadmap">🌍 국가별 데이터</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai#tool-roles">🧰 도구별 역할</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+</p>
 <!-- /secondary-navigation -->
 
 <p align="center"><sub>위 이미지는 독자 제작 콘셉트이며 실제 공장·제휴·현장 배포 실적을 나타내지 않습니다.</sub></p>
@@ -65,7 +76,7 @@
 | **검증 완료** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모 |
 | **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행 |
 | **실데이터 시스템 데모** | 호주 DKASC Alice Springs 2025 관측값 105,120개 슬롯을 정규화하고 Frictionless→SDT 경로로 검증 완료 |
-| **후속 시스템 데모** | 영국 PV_Live 추정값과 EU PVGIS 기준값의 호환성을 순차 비교 |
+| **후속 시스템 데모** | 영국 PV_Live 2025 추정값 17,520개 구간과 EU PVGIS Brussels 2020 기준값 8,784개 구간을 Frictionless→SDT로 검증 완료 |
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
 
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
@@ -99,9 +110,9 @@
 | 🇺🇸 미국 | **UCI SECOM** | 반도체 공정 위험순위 연구의 현재 정본 데이터 | ✅ 완료 |
 | 🌐 합성 환경 | **Fledge Sinusoid** | 실시간 수집·REST 연결·중복방지 검증 | ✅ 로컬 실연동 완료 |
 | 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | ✅ Alice Springs 2025 E2E 검증 완료 |
-| 🇬🇧 영국 | **Sheffield Solar PV_Live** | GB 국가·지역 태양광 발전량 추정값 | 🟡 실 API·입력 계약 검증 완료, SDT 대기 |
-| 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 어댑터 계획 |
-| 🇫🇷 프랑스 | **RTE éCO2mix** | 잠정·통합·확정값의 수정 이력 감사 | 🟡 1차 범위 동결 후 후보 |
+| 🇬🇧 영국 | **Sheffield Solar PV_Live** | GB 국가 태양광 발전량 추정값 | ✅ 2025년 17,520개 구간 E2E 검증 완료 |
+| 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | ✅ Brussels 2020년 8,784개 구간 E2E 검증 완료 |
+| 🇫🇷 프랑스 | **RTE éCO2mix** | 통합·확정값의 수정 이력 감사 | 🟡 사전계약·오프라인 테스트 완료, 실 API E2E 대기 |
 
 <a id="tool-roles"></a>
 
@@ -117,7 +128,7 @@
 | 의사결정·감사 | 🇰🇷 **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
 | 최종 판단 | 👷 **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
 
-> **범위 동결:** 현재 검증 완료 범위는 Fledge Sinusoid와 호주 DKASC입니다. 영국 PV_Live와 EU PVGIS는 다음 구현 대상이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
+> **현재 검증 범위:** Fledge Sinusoid, 호주 DKASC, 영국 PV_Live와 EU JRC PVGIS의 계약·E2E 검증을 완료했습니다. 프랑스 RTE éCO2mix는 사전계약과 오프라인 테스트를 완료했지만 실 API E2E 전이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
 
 <details>
 <summary><strong>현재 범위 밖의 국가별 후속 후보 보기</strong></summary>
@@ -125,7 +136,7 @@
 | 국가 | 우선 검토 후보군 | 독립적 검토 목적 | 현재 판정 |
 |---|---|---|---|
 | 🇺🇸 미국 | **공개 로봇 운영·이상 데이터 후보군** | 로봇 telemetry·고장/이상 탐지 계약 검토 | 공식 데이터셋·원출처·라이선스 확정 전 조사 후보 |
-| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | 1차 범위 동결 후 우선 사전감사 |
+| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | RTE 사전계약 완료·실 API E2E 대기; Enedis·Météo-France 별도 감사 |
 | 🇩🇪 독일 | **SMARD · 전력/산업 · 공개 로봇 운영 데이터 후보군** | 계통 투명성과 제조·로봇 운영 비교 | 로봇 데이터 원출처·신호·라이선스 확인 전 조사 후보 |
 | 🇪🇸 스페인 | **REE/ESIOS · 자가소비 통계 후보군** | 고태양광 계통운영과 분산형 자가소비 비교 | 시계열 해상도·라이선스 확인 전 조사 후보 |
 | 🇮🇹 이탈리아 | **Terna · GSE 공개 통계/설비 후보군** | 발전·설비 등록·지역 차이를 연결 가능한지 검토 | 원자료 접근성과 재배포 조건 확인 전 조사 후보 |
@@ -186,7 +197,9 @@
 - WSL2의 실제 Fledge v3.1.0에서 Sinusoid 수집·인증 REST pull·재시작 복구·중복격리를 로컬 검증
 - Frictionless Data v5.19.0 fail-closed 계약과 Solar Data Tools v2.1.5 합성 PV 11,520행 실행 검증
 - 호주 DKASC Alice Springs 2025 관측값을 재현 가능한 정규화기로 105,120개 5분 슬롯으로 변환하고 Frictionless→SDT E2E 검증 완료([보고서](results/dkasc-alice-springs-2025/report.json) · [정규화 감사](results/dkasc-alice-springs-2025/normalization_audit.json))
-- 영국 Sheffield Solar PV_Live 추정값의 GB 범위·30분 UTC 구간·MW 단위·소급 수정 이력을 보존하는 fail-closed [입력 계약](docs/PVLIVE_ADAPTER_CONTRACT.md)과 제한형 fetcher 구현; 국가 집계 48개 구간의 실 API smoke 및 응답 해시 기록([감사 증거](results/pvlive-gb-national-smoke/source_audit.json)), Frictionless→SDT E2E는 대기
+- 영국 Sheffield Solar PV_Live 2025 국가 추정값 17,520개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvlive-gb-national-2025/report.json) · [수집 감사](results/pvlive-gb-national-2025/fetch_audit.json))
+- EU JRC PVGIS Brussels 2020 기준값 8,784개 시간 구간을 공식 API에서 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvgis-brussels-2020/report.json) · [수집 감사](results/pvgis-brussels-2020/fetch_audit.json))
+- 프랑스 RTE éCO2mix의 통합·확정 수정상태, MW 단위, CET/CEST→UTC 변환과 30분 연속성을 검사하는 fail-closed 사전계약 및 오프라인 테스트 구현; 실 API E2E는 대기
 
 ### 아직 구현하거나 검증하지 않음
 
