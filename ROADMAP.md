@@ -160,15 +160,16 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
 
 ## 공개 PV 데이터 실행 게이트
 
-현재 실제 외부 PV 데이터 E2E 통과 건수는 **1건**이다. 호주 DKASC Alice Springs 2025
+현재 실제 외부 PV 데이터 E2E 통과 건수는 **1건**이다. 영국 PV_Live는 아직 그 수에 포함하지 않으며, [사전 입력 계약](docs/PVLIVE_ADAPTER_CONTRACT.md)만 구현된 상태다. 호주 DKASC Alice Springs 2025
 `observed` 데이터의 정규화·계약검사·SDT 실행을 완료했으며, 원본 대용량 CSV는 저장소에
 재배포하지 않고 출처·조회일·원본 및 정규화 SHA-256·변환 규칙·결과 JSON만 기록한다.
 
 1. **완료:** DKASC `observed` 관측값을 최초 실데이터 검증원으로 통과시켰다.
-2. **다음:** PV_Live `estimated`, JRC PVGIS `reference`를 순차 검증한다.
-3. Fledge Sinusoid `synthetic`을 포함한 네 유형의 결과와 라이선스·조회시각·SHA-256을 고정한 뒤 1차 범위를 동결한다.
-4. 동결 이후 프랑스 후보를 우선 사전감사하고, 다른 국가 후보는 독립적인 연구가치와 데이터 자격을 통과한 경우에만 순차 승격한다.
-5. 잠정·통합·확정 상태는 새 source type이 아니라 `revision_status`라는 직교 필드로 설계한다.
+2. **진행 중:** PV_Live `estimated`의 사전 입력 계약을 구현했다. 실 API 접근·데이터 이용조건·DST 분석시계·작은 fixture를 확인한 뒤 E2E를 실행한다.
+3. **다음:** JRC PVGIS `reference`를 검증한다.
+4. Fledge Sinusoid `synthetic`을 포함한 네 유형의 결과와 라이선스·조회시각·SHA-256을 고정한 뒤 1차 범위를 동결한다.
+5. 동결 이후 프랑스 후보를 우선 사전감사하고, 다른 국가 후보는 독립적인 연구가치와 데이터 자격을 통과한 경우에만 순차 승격한다.
+6. 잠정·통합·확정 상태는 새 source type이 아니라 `revision_status`라는 직교 필드로 설계한다.
 
 프랑스 후보는 API 호출 예산, 라이선스·재배포 조건, CET/CEST 경계, 잠정값의 확정 종료조건을 모두 확인하기 전에는 구현하거나 확정했다고 표현하지 않는다. 다른 국가 후보에도 같은 fail-closed 원칙을 적용한다.
 

@@ -2,6 +2,9 @@
 
 ## 2026-09-08
 
+- Added a fail-closed Sheffield Solar PV_Live pre-ingestion contract for GB 30-minute UTC estimates, mandatory revision lineage, MW units, entity scope, and local-only tests without claiming live API or SDT completion.
+- Documented separate gates for API access, data licensing, attribution, DST handling, hashes, Frictionless validation, and the first small live fixture.
+
 - Recorded the reproducible DKASC Alice Springs 2025 observed-data E2E evidence and surfaced its Frictionless, Solar Data Tools, hash, unit, and claim boundaries in the public project views.
 - Separated the concise public home view from professional evidence, normalized validation numbering, added direct reader routes, and improved keyboard and navigation accessibility in PRs #60–64.
 - Repaired README navigation for GitHub mobile in PRs #65–66 by replacing HTML-wrapped controls with native Markdown file and section links.
