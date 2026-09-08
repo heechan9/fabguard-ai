@@ -144,8 +144,17 @@ function summaryView() {
 
 function risksView() {
   if (!state.risks.length) { app.innerHTML = `<section class="state"><h2>표시할 우선점검 생산 건이 없습니다.</h2></section>`; return; }
-  app.innerHTML = `<section class="page-hero"><div><p class="kicker">우선점검 목록</p><h1>먼저 확인할<br><span>생산 건 50개</span></h1><p class="lead">AI가 위험 신호가 큰 순서로 정렬한 목록입니다. 위험점수는 불량 확정값이 아니며, 행을 선택하면 엔지니어가 우선 확인할 익명 측정변수와 해석 한계를 볼 수 있습니다.</p></div><div class="queue-stat"><span>점검 후보</span><strong>${state.risks.length}</strong><small>위험도 순으로 정렬</small></div></section><section class="table-shell"><div class="panel-head"><span>시간순 검증구간 · 위험도 상위 목록</span><span class="live"><i></i> 데이터 준비됨</span></div><div class="scroll-hint">← 좌우로 밀어 전체 열 보기 →</div><div class="table-wrap"><table><thead><tr><th>순위</th><th>생산 건 ID</th><th>측정 시각</th><th>위험점수</th><th>실제 결과</th><th>근거 범위</th></tr></thead><tbody>${state.risks.map(row => `<tr data-id="${esc(row.sample_id)}"><td><b>#${String(row.rank).padStart(2, "0")}</b></td><td>${esc(row.sample_id)}</td><td><span class="timestamp-full">${esc(row.timestamp)}</span><span class="timestamp-short">${esc(shortTimestamp(row.timestamp))}</span></td><td class="risk"><span>${pct(row.risk_score)}</span></td><td><i class="label-dot ${row.label === 1 ? "fail" : "pass"}"></i>${row.label === 1 ? "불량" : "정상"}</td><td>${esc(row.evidence_scope)}</td></tr>`).join("")}</tbody></table></div></section>`;
-  document.querySelectorAll("tr[data-id]").forEach(row => row.addEventListener("click", () => location.hash = `detail/${row.dataset.id}`));
+  app.innerHTML = `<section class="page-hero"><div><p class="kicker">우선점검 목록</p><h1>먼저 확인할<br><span>생산 건 50개</span></h1><p class="lead">AI가 위험 신호가 큰 순서로 정렬한 목록입니다. 위험점수는 불량 확정값이 아니며, 행을 선택하면 엔지니어가 우선 확인할 익명 측정변수와 해석 한계를 볼 수 있습니다.</p></div><div class="queue-stat"><span>점검 후보</span><strong>${state.risks.length}</strong><small>위험도 순으로 정렬</small></div></section><section class="table-shell"><div class="panel-head"><span>시간순 검증구간 · 위험도 상위 목록</span><span class="live"><i></i> 데이터 준비됨</span></div><div class="scroll-hint">← 좌우로 밀어 전체 열 보기 →</div><div class="table-wrap"><table><thead><tr><th>순위</th><th>생산 건 ID</th><th>측정 시각</th><th>위험점수</th><th>실제 결과</th><th>근거 범위</th></tr></thead><tbody>${state.risks.map(row => `<tr data-id="${esc(row.sample_id)}" tabindex="0" role="link" aria-label="${esc(row.sample_id)} 상세 점검 결과 열기"><td><b>#${String(row.rank).padStart(2, "0")}</b></td><td>${esc(row.sample_id)}</td><td><span class="timestamp-full">${esc(row.timestamp)}</span><span class="timestamp-short">${esc(shortTimestamp(row.timestamp))}</span></td><td class="risk"><span>${pct(row.risk_score)}</span></td><td><i class="label-dot ${row.label === 1 ? "fail" : "pass"}"></i>${row.label === 1 ? "불량" : "정상"}</td><td>${esc(row.evidence_scope)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  document.querySelectorAll("tr[data-id]").forEach(row => {
+    const openDetail = () => { location.hash = `detail/${encodeURIComponent(row.dataset.id)}`; };
+    row.addEventListener("click", openDetail);
+    row.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openDetail();
+      }
+    });
+  });
 }
 
 function detailView(id) {
@@ -165,13 +174,30 @@ function limitationsView() {
     <section class="boundary-quote"><span>THE HONEST RESULT</span><blockquote>“0.5 임계값에서는 Fail을 분류하지 못했습니다.<br>그래서 자동 판정이 아닌 <em>위험순위화</em>에 집중했습니다.”</blockquote><p>실패한 성능을 감추지 않고, 제한된 점검 예산에서 활용 가능한 의사결정 근거로 재정의했습니다.</p></section>`;
 }
 
+function syncNavigation(hash) {
+  const activeRoute = hash.startsWith("detail/") ? "risks" : hash;
+  document.querySelectorAll("nav a[data-route]").forEach(link => {
+    const active = link.dataset.route === activeRoute;
+    link.classList.toggle("active", active);
+    if (active) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
+}
+
+function finishRoute(hash) {
+  syncNavigation(hash);
+  requestAnimationFrame(() => {
+    const target = hash === "result" ? document.querySelector(".story-section") : hash === "global" ? document.querySelector(".global-section") : null;
+    if (target) target.scrollIntoView({ behavior: "auto", block: "start" });
+    else window.scrollTo({ top: 0, behavior: "auto" });
+  });
+}
+
 function route() {
   if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
   if (hash === "summary" || hash === "result" || hash === "global") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") limitationsView(); else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
-  if (hash === "result") document.querySelector(".story-section")?.scrollIntoView({ behavior: "smooth" });
-  else if (hash === "global") document.querySelector(".global-section")?.scrollIntoView({ behavior: "smooth" });
-  else window.scrollTo({ top: 0, behavior: "instant" });
+  finishRoute(hash);
 }
 
 window.addEventListener("hashchange", route);
