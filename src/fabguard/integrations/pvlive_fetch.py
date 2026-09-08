@@ -72,7 +72,7 @@ def fetch_pvlive_range(
         payload = json.loads(raw)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise PVLiveFetchError("PV_Live response was unavailable or invalid JSON") from exc
-    if not isinstance(payload, dict) or set(payload) < {"meta", "data"}:
+    if not isinstance(payload, dict) or not {"meta", "data"}.issubset(payload):
         raise PVLiveFetchError("PV_Live response must contain meta and data")
     meta = payload["meta"]
     data = payload["data"]
