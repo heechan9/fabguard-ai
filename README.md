@@ -99,7 +99,7 @@
 | 🇺🇸 미국 | **UCI SECOM** | 반도체 공정 위험순위 연구의 현재 정본 데이터 | ✅ 완료 |
 | 🌐 합성 환경 | **Fledge Sinusoid** | 실시간 수집·REST 연결·중복방지 검증 | ✅ 로컬 실연동 완료 |
 | 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | ✅ Alice Springs 2025 E2E 검증 완료 |
-| 🇬🇧 영국 | **Sheffield Solar PV_Live** | GB 국가·지역 태양광 발전량 추정값 | 🟡 사전 계약 완료·실 API 감사 대기 |
+| 🇬🇧 영국 | **Sheffield Solar PV_Live** | GB 국가·지역 태양광 발전량 추정값 | 🟡 실 API·입력 계약 검증 완료, SDT 대기 |
 | 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | 🔵 후속 어댑터 계획 |
 | 🇫🇷 프랑스 | **RTE éCO2mix** | 잠정·통합·확정값의 수정 이력 감사 | 🟡 1차 범위 동결 후 후보 |
 
@@ -186,7 +186,7 @@
 - WSL2의 실제 Fledge v3.1.0에서 Sinusoid 수집·인증 REST pull·재시작 복구·중복격리를 로컬 검증
 - Frictionless Data v5.19.0 fail-closed 계약과 Solar Data Tools v2.1.5 합성 PV 11,520행 실행 검증
 - 호주 DKASC Alice Springs 2025 관측값을 재현 가능한 정규화기로 105,120개 5분 슬롯으로 변환하고 Frictionless→SDT E2E 검증 완료([보고서](results/dkasc-alice-springs-2025/report.json) · [정규화 감사](results/dkasc-alice-springs-2025/normalization_audit.json))
-- 영국 Sheffield Solar PV_Live 추정값의 GB 범위·30분 UTC 구간·MW 단위·소급 수정 이력을 보존하는 fail-closed [사전 입력 계약](docs/PVLIVE_ADAPTER_CONTRACT.md)과 단위 테스트 구현
+- 영국 Sheffield Solar PV_Live 추정값의 GB 범위·30분 UTC 구간·MW 단위·소급 수정 이력을 보존하는 fail-closed [입력 계약](docs/PVLIVE_ADAPTER_CONTRACT.md)과 제한형 fetcher 구현; 국가 집계 48개 구간의 실 API smoke 및 응답 해시 기록([감사 증거](results/pvlive-gb-national-smoke/source_audit.json)), Frictionless→SDT E2E는 대기
 
 ### 아직 구현하거나 검증하지 않음
 
