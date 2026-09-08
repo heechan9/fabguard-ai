@@ -1,5 +1,6 @@
 const app = document.querySelector("#app");
 let state = { summary: null, risks: null, phase1: null, dkasc: null, globalCandidates: null };
+let professionalEvidenceHtml = "";
 
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
 const num = (value, digits = 3) => Number(value).toFixed(digits);
@@ -140,6 +141,22 @@ function summaryView() {
     <section class="budget-section"><div class="section-heading"><div><p class="kicker">EVIDENCE / 03</p><h2>점검 범위별 Fail 포착률</h2></div><p>위험도가 높은 생산 건부터 확인했을 때의 시간순 홀드아웃 결과입니다.</p></div><div class="budget-grid">${state.summary.top_k.map((row, index) => `<article><div class="budget-top"><span>TOP ${pct(row.k_fraction)}</span><b>0${index + 1}</b></div><strong>${pct(row.fail_capture_rate)}</strong><div class="bar"><i style="width:${row.fail_capture_rate * 100}%"></i></div><p>${row.inspection_count}건 점검 <span>·</span> Fail ${row.captured_fail}건 포착</p></article>`).join("")}</div></section>
     <section class="decision-section"><div class="section-heading"><div><p class="kicker">HUMAN-IN-THE-LOOP / 04</p><h2>확률은 신호로,<br>판단은 현장으로.</h2></div><p>FabGuard는 AI가 품질을 확정하거나 조치를 자동 실행하지 않습니다. 위험점수와 점검예산을 연결해 엔지니어의 검토 순서를 만듭니다.</p></div><div class="decision-flow"><article><b>01</b><i>RISK SIGNAL</i><h3>위험도 정렬</h3><p>연속 위험점수로 생산 건의 검토 순서를 제시합니다.</p></article><article><b>02</b><i>BUDGET GUARDRAIL</i><h3>점검범위 선택</h3><p>현장 여력에 맞춰 상위 5%·10%·20%를 선택합니다.</p></article><article><b>03</b><i>CONTEXT CHECK</i><h3>4M·변동점 대조</h3><p>익명 변수의 실제 매핑과 품질·공정 이력을 확인합니다.</p></article><article><b>04</b><i>HUMAN DECISION</i><h3>엔지니어 승인</h3><p>재검사·설비점검 여부는 사람이 판단하고 기록합니다.</p></article></div><div class="design-boundary"><span>DESIGN BOUNDARY</span><p>중요 익명변수는 원인이 아닌 점검 후보입니다. SECOM만으로 4M 범주, 실제 센서, 수율 개선 또는 비용 절감 효과를 규명하지 않습니다.</p></div></section>
     <section class="integration-section"><div class="section-heading"><div><p class="kicker">SMART FACTORY FIT / 05</p><h2>현장 데이터와<br>판단 사이의 한 층.</h2></div><p>실제 확장 시 MES·FDC·검사시스템의 생산 이력을 점검 큐로 바꾸고, 엔지니어 판단과 후속 결과를 다시 추적합니다.</p></div><div class="integration-flow"><article><span>SOURCE</span><h3>설비·검사 데이터</h3><p>Lot·설비·공정·시간 식별자</p></article><article><span>CONTEXT</span><h3>MES · FDC</h3><p>추적 가능한 생산 이력</p></article><article class="active"><span>V1 IMPLEMENTED</span><h3>FabGuard</h3><p>위험점수 · Top-K 점검 큐</p></article><article><span>AUTHORITY</span><h3>엔지니어 검토</h3><p>재검사·설비점검 판단</p></article><article><span>FEEDBACK</span><h3>결과 기록</h3><p>조치·최종 품질·감사 로그</p></article></div><div class="implementation-note"><b>CURRENT BOUNDARY</b><p>V1은 공개 SECOM 데이터의 오프라인 위험순위화만 구현했습니다. 실시간 수집, MES/FDC 연동, 생산 제어와 피드백 저장은 목표 구조이며 구현 완료 기능이 아닙니다.</p></div></section>`;
+
+  const expertSelectors = ".advanced-evidence,.pipeline-section,.budget-section,.decision-section,.integration-section";
+  if (!professionalEvidenceHtml) professionalEvidenceHtml = [...app.querySelectorAll(expertSelectors)].map(section => section.outerHTML).join("");
+  const requestedView = location.hash.replace(/^#/, "") || "summary";
+  if (requestedView === "global") {
+    [...app.children].forEach(section => { if (!section.classList.contains("global-section")) section.remove(); });
+  } else {
+    app.querySelector(".global-section")?.remove();
+    app.querySelectorAll(expertSelectors).forEach(section => section.remove());
+    app.querySelector(".hero")?.setAttribute("data-section", "01");
+    app.querySelector(".plain-guide")?.setAttribute("data-section", "02");
+    app.querySelector(".data-strip")?.setAttribute("data-section", "03");
+    const result = app.querySelector(".story-section");
+    result?.setAttribute("data-section", "04");
+    result?.insertAdjacentHTML("afterend", `<section class="evidence-entry"><div><p class="kicker">FOR PROFESSIONAL REVIEW</p><h2>검증 설계와 한계를<br>더 확인하시겠어요?</h2><p>시간순 검증, 불확실성, 현장 적용 경계와 실패 기록을 한 화면에서 확인할 수 있습니다.</p></div><a class="button" href="#limitations">방법론과 한계 전체 보기 <span>→</span></a></section>`);
+  }
 }
 
 function risksView() {
@@ -171,7 +188,28 @@ function limitationsView() {
     <section class="evidence-ladder"><div><p class="kicker">EVIDENCE LADDER / 05</p><h2>측정한 것과<br>검증할 것을 분리합니다.</h2><p>스마트제조 연구에서 사용하는 성과지표를 향후 검증 항목으로 참고하되, FabGuard V1의 효과로 전용하지 않습니다.</p></div><div class="evidence-levels"><article class="measured"><span>MEASURED</span><h3>모델·운영 시뮬레이션</h3><p>PR-AUC · Top-K 포착률 · Lift · 점검 건수</p></article><article><span>FIELD VALIDATION</span><h3>제조 운영 KPI</h3><p>불량률 · 가동률 · 리드타임 · 의사결정시간</p></article><article><span>NOT CLAIMED</span><h3>사업 성과</h3><p>수율 · 제조원가 · 비용절감 · 매출</p></article></div><div class="implementation-note"><b>CLAIM BOUNDARY</b><p>현재 측정값은 고정 공개데이터의 오프라인 실험 결과입니다. 제조·사업 KPI에는 실제 시스템 연동, 작업 기록과 전후 또는 대조 검증이 필요합니다.</p></div></section>
     <section><div class="section-heading"><div><p class="kicker">FIELD EFFECT / 06</p><h2>도입 전후가 아니라,<br>반사실과 비교합니다.</h2></div><p>현장 KPI가 변해도 곧바로 FabGuard의 효과라고 결론내리지 않습니다. 실제 도입 전 처리·비교조건과 주요 지표를 먼저 고정합니다.</p></div><div class="validation-grid"><article><b>01</b><p class="kicker">CONTROLLED PILOT</p><h2>무작위·단계적 도입</h2><p>가능하면 shift·라인·기간 블록을 배정해 FabGuard 점검 큐 제공군과 기존 절차군을 비교합니다. 전면 도입 시에는 도입 순서를 나눈 단계적 시험을 검토합니다.</p></article><article><b>02</b><p class="kicker">QUASI-EXPERIMENT</p><h2>이중차분·컷오프</h2><p>유사한 미도입 라인과 변화 차이를 비교하거나, 고정된 점검 cutoff가 실제 배정을 결정할 때만 경계 주변의 국소 효과를 검토합니다.</p></article><article><b>03</b><p class="kicker">VALIDITY CHECKS</p><h2>가정·라벨·교란 기록</h2><p>평행추세, cutoff 조작, 동시 공정 변경과 함께 점검된 건에만 결과가 남는 선택적 라벨 편향 및 인간 override를 감사합니다.</p></article></div><div class="implementation-note"><b>PROPOSED PROTOCOL</b><p>위 내용은 향후 현장검증 계획이며 완료된 실험이 아닙니다. 현재 FabGuard가 증명한 범위는 공개데이터의 오프라인 모델·Top-K 결과뿐입니다.</p></div></section>
     <section class="research-note"><div class="research-note-heading"><b class="sequence-number">07</b><p class="kicker">EXTERNAL CONTEXT</p><h2>유사한 실패 양상,<br>직접 비교는 아님.</h2></div><div><p>최근 공개된 독립 벤치마크(Patel, 2026)에서도 SECOM 데이터에 무작위 층화 80/20 분할을 적용한 Random Forest의 F1이 0%로 보고되어, FabGuard가 시간순 25% 홀드아웃에서 관찰한 고정 임계값 분류 실패와 유사한 양상을 보였습니다.</p><p>분할 방식과 평가 지표가 달라 직접 비교할 수는 없지만, 이 사례는 SECOM의 극심한 클래스 불균형에서 고정 임계값 기반 이진 분류가 실패할 수 있음을 보여주는 제한적인 외부 근거입니다.</p><a class="text-link" href="https://arxiv.org/abs/2606.24173" target="_blank" rel="noreferrer">독립 벤치마크 확인 ↗</a></div></section>
-    <section class="boundary-quote"><span>THE HONEST RESULT</span><blockquote>“0.5 임계값에서는 Fail을 분류하지 못했습니다.<br>그래서 자동 판정이 아닌 <em>위험순위화</em>에 집중했습니다.”</blockquote><p>실패한 성능을 감추지 않고, 제한된 점검 예산에서 활용 가능한 의사결정 근거로 재정의했습니다.</p></section>`;
+    <section class="boundary-quote"><span>THE HONEST RESULT</span><blockquote>“0.5 임계값에서는 Fail을 분류하지 못했습니다.<br>그래서 자동 판정이 아닌 <em>위험순위화</em>에 집중했습니다.”</blockquote><p>실패한 성능을 감추지 않고, 제한된 점검 예산에서 활용 가능한 의사결정 근거로 재정의했습니다.</p></section>
+    <section class="professional-evidence" aria-label="방법론과 운영 설계"><div class="section-heading"><div><p class="kicker">PROFESSIONAL EVIDENCE</p><h2>방법론에서 현장 경계까지.</h2></div><p>홈에서 분리한 검증·운영 근거입니다. 공개데이터 결과와 향후 현장 설계를 구분합니다.</p></div>${professionalEvidenceHtml}</section>`;
+
+  const fieldSection = [...app.querySelectorAll("section")].find(section => section.querySelector(".kicker")?.textContent.includes("FIELD EFFECT"));
+  fieldSection?.classList.add("field-effect-section");
+  fieldSection?.querySelectorAll(".validation-grid article>b").forEach((number, index) => { number.textContent = `06${String.fromCharCode(65 + index)}`; });
+  const research = app.querySelector(".research-note");
+  if (research) {
+    const details = document.createElement("details");
+    details.className = "validation-details";
+    details.innerHTML = `<summary><span>07 · EXTERNAL CONTEXT</span><strong>독립 벤치마크 비교 근거 보기</strong></summary>`;
+    research.replaceWith(details);
+    details.append(research);
+  }
+  const decision = app.querySelector(".professional-evidence .decision-section");
+  const integration = app.querySelector(".professional-evidence .integration-section");
+  if (decision && integration) {
+    const combined = document.createElement("section");
+    combined.className = "operations-combined";
+    decision.before(combined);
+    combined.append(decision, integration);
+  }
 }
 
 function syncNavigation(hash) {
@@ -197,7 +235,7 @@ function finishRoute(hash) {
 function route() {
   if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
-  if (hash === "summary" || hash === "result" || hash === "global") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") limitationsView(); else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  if (hash === "summary" || hash === "result" || hash === "global") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
   finishRoute(hash);
 }
 
