@@ -26,6 +26,7 @@ class WebNavigationTest(unittest.TestCase):
         self.assertIn('hash === "result"', APP)
         self.assertIn('hash === "global"', APP)
         self.assertIn('scrollIntoView({ behavior: "auto", block: "start" })', APP)
+        self.assertIn('document.querySelector("#result")?.removeAttribute("id")', APP)
 
     def test_navigation_exposes_active_page(self):
         self.assertIn('link.setAttribute("aria-current", "page")', APP)

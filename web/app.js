@@ -175,7 +175,7 @@ function limitationsView() {
 }
 
 function syncNavigation(hash) {
-  const activeRoute = hash.startsWith("detail/") ? "risks" : hash;
+  const activeRoute = hash.startsWith("detail/") ? "risks" : hash === "result" ? "summary" : hash;
   document.querySelectorAll("nav a[data-route]").forEach(link => {
     const active = link.dataset.route === activeRoute;
     link.classList.toggle("active", active);
@@ -186,6 +186,7 @@ function syncNavigation(hash) {
 
 function finishRoute(hash) {
   syncNavigation(hash);
+  if (hash === "result") document.querySelector("#result")?.removeAttribute("id");
   window.setTimeout(() => {
     const target = hash === "result" ? document.querySelector(".story-section") : hash === "global" ? document.querySelector(".global-section") : null;
     if (target) target.scrollIntoView({ behavior: "auto", block: "start" });
