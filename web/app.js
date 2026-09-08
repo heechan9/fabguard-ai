@@ -9,7 +9,7 @@ const COUNTRY_CODES = {
   "United States": "us", France: "fr", Germany: "de", Spain: "es", Italy: "it",
   Canada: "ca", Finland: "fi", "South Korea": "kr", Japan: "jp", Taiwan: "tw",
 };
-const flagImage = (code, label) => `<img class="flag-img" src="/assets/flags/${code}.svg" width="40" height="30" alt="${esc(label)} 국기" loading="lazy">`;
+const flagImage = (code, label) => { const src = `/assets/flags/${code}.svg`; return `<img class="flag-img" src="${src}" width="40" height="30" alt="${esc(label)} 국기" loading="lazy">`; };
 const candidateFlag = candidate => flagImage(COUNTRY_CODES[candidate.country], candidate.country);
 
 const shortTimestamp = value => {
@@ -146,7 +146,7 @@ function summaryView() {
         <article class="country-card next"><div class="country-top">${flagImage("fr", "프랑스")}<b>FRANCE</b><em>CONTRACT READY</em></div><h3>RTE éCO2mix</h3><p>통합·확정값으로 바뀌는 국가 발전량 수정 이력</p><dl><div><dt>ROLE</dt><dd>Revision lineage</dd></div><div><dt>STATUS</dt><dd>Preflight passed · live E2E pending</dd></div></dl></article>
       </div>
       <div class="dkasc-evidence" aria-label="호주 DKASC 관측 데이터 검증 결과">
-        <div><span>🇦🇺 OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
+        <div><span>${flagImage("au", "호주")} OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
         <div><span>DATA QUALITY</span><strong>${pct(dkasc.quality_score)}</strong><small>SDT 품질점수</small></div>
         <div><span>CONTRACT</span><strong>PASS</strong><small>Frictionless ${esc(dkasc.frictionless_version)}</small></div>
         <div><span>UNIT BOUNDARY</span><strong>kW 추정</strong><small>원본 스키마 직접 확인 대기</small></div>
