@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-08
+
+- Recorded the reproducible DKASC Alice Springs 2025 observed-data E2E evidence and surfaced its Frictionless, Solar Data Tools, hash, unit, and claim boundaries in the public project views.
+- Separated the concise public home view from professional evidence, normalized validation numbering, added direct reader routes, and improved keyboard and navigation accessibility in PRs #60–64.
+- Repaired README navigation for GitHub mobile in PRs #65–66 by replacing HTML-wrapped controls with native Markdown file and section links.
+- Consolidated the previously duplicated human-decision and smart-factory flows into one four-stage operational path: source/context, risk/budget, human authority, and feedback/audit.
+- Preserved the boundary that MES/FDC integration, production control, feedback storage, field KPI gains, and causal effects remain unimplemented or unvalidated.
+
 ## 2026-09-07
 
 - Validated authenticated read-only REST ingestion against a local WSL2 Fledge v3.1.0 instance using the Sinusoid South plugin.
