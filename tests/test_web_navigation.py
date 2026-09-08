@@ -22,6 +22,9 @@ class WebNavigationTest(unittest.TestCase):
 
     def test_validation_numbering_and_long_context_are_normalized(self):
         self.assertIn('number.textContent = `06${String.fromCharCode(65 + index)}`', APP)
+        self.assertIn('setAttribute("data-validation-step", "04")', APP)
+        self.assertIn('setAttribute("data-validation-step", "05")', APP)
+        self.assertIn('setAttribute("data-validation-step", "06")', APP)
         self.assertIn('details.className = "validation-details"', APP)
         self.assertIn('combined.className = "operations-combined"', APP)
 
