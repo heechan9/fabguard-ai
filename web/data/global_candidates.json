@@ -83,22 +83,6 @@
       "role": "Wafer map · energy · robotics",
       "status": "DEFERRED",
       "gate": "Review after Japan; verify provenance and reuse rights"
-    },
-    {
-      "country": "Israel",
-      "flag": "🇮🇱",
-      "sources": "data.gov.il official open-data portal",
-      "role": "Hot/desert-soiling PV stress",
-      "status": "SOURCE AUDIT",
-      "gate": "Find an actual PV generation time series; confirm dataset license, schema, units and timezone"
-    },
-    {
-      "country": "Saudi Arabia",
-      "flag": "🇸🇦",
-      "sources": "Jeddah residential PV observed-data candidate · University of Southampton ePrints",
-      "role": "Hot/desert-soiling PV stress",
-      "status": "SOURCE AUDIT",
-      "gate": "Verify original dataset record, DOI 10.3390/en18112733, reuse license, schema, units and timezone"
     }
   ]
 }
