@@ -2,6 +2,8 @@
 
 ## 2026-09-09
 
+- Audited the full Enedis 2024 solar/total-band response: 17,568 timestamp rows contain 207 source energy nulls, zero negative values and zero other invalid values; nulls are now preserved without zero imputation and reported as explicit quality counters/warnings.
+
 - Reconciled Enedis Data Fair deep pagination: the first page must provide an exact total, later internal-dataset pages may omit it, any repeated total must agree, and final accumulated rows must still equal the first-page total.
 
 - Added a bounded Enedis national solar-injection collector using structured Data Fair filters, exact-count deep pagination, official-host and loop checks, complete UTC half-hour coverage, page hashes, and local-only raw/normalized data handling.
