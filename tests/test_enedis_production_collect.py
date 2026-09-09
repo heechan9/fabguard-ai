@@ -25,11 +25,24 @@ class EnedisProductionCollectTest(unittest.TestCase):
         def opener(url):
             if "after=" not in url:
                 return json.dumps({"total": 2, "results": rows[:1], "next": "https://opendata.enedis.fr/data-fair/api/v1/datasets/x/lines?after=1"}).encode()
-            return json.dumps({"total": 2, "results": rows[1:]}).encode()
+            return json.dumps({"results": rows[1:]}).encode()
         frame, audit = collect_enedis_range(start="2024-01-01T00:00:00Z", end="2024-01-01T01:00:00Z", opener=opener, retrieved_at=datetime(2026,9,9,tzinfo=timezone.utc))
         self.assertEqual(len(frame), 2)
         self.assertEqual(audit["pages"], 2)
         self.assertEqual(len(audit["page_sha256"]), 2)
+
+    def test_changed_later_total_fails_closed(self):
+        rows = [row("2024-01-01T01:00:00+01:00"), row("2024-01-01T01:30:00+01:00")]
+        def opener(url):
+            if "after=" not in url:
+                return json.dumps({"total": 2, "results": rows[:1], "next": "https://opendata.enedis.fr/data-fair/api/v1/datasets/x/lines?after=1"}).encode()
+            return json.dumps({"total": 3, "results": rows[1:]}).encode()
+        with self.assertRaisesRegex(EnedisProductionCollectError, "total changed"):
+            collect_enedis_range(
+                start="2024-01-01T00:00:00Z",
+                end="2024-01-01T01:00:00Z",
+                opener=opener,
+            )
 
     def test_ignored_parameter_total_change_and_bad_next_fail_closed(self):
         cases = [
