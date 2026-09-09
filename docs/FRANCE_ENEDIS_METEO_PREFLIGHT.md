@@ -8,6 +8,7 @@ These contracts prepare France slices 2 and 3 without claiming a completed live 
 - Licence: Licence Ouverte / Open Licence 2.0
 - Selection: `F5 : Solaire` and `P0 : Total toutes puissances`
 - Source measure: injected energy in Wh per half-hour. `mean_power_w` is explicitly derived as `energy_wh × 2`.
+- Missingness: source nulls remain null and raise auditable counters/warnings; they are never reinterpreted as zero.
 - Role: distribution-network aggregate and reconciliation context, not plant telemetry or an independent PV-performance verdict.
 
 The preflight contract intentionally uses Data Fair's `qs` expression. The API silently ignores arbitrary field-name query parameters, so callers must not treat an HTTP 200 response as proof that filtering occurred.
