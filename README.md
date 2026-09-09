@@ -99,6 +99,8 @@
 
 <a id="global-data-roadmap"></a>
 
+> 국가별 정본 증거와 경로는 [Country-organized evidence catalog](results/README.md)에서 바로 확인할 수 있습니다.
+
 ## Global data roadmap
 
 *국가별 데이터 계획*
