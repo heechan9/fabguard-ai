@@ -30,6 +30,7 @@ class EnedisProductionCollectTest(unittest.TestCase):
         self.assertEqual(len(frame), 2)
         self.assertEqual(audit["pages"], 2)
         self.assertEqual(len(audit["page_sha256"]), 2)
+        self.assertEqual(audit["missing_energy_rows"], 0)
 
     def test_changed_later_total_fails_closed(self):
         rows = [row("2024-01-01T01:00:00+01:00"), row("2024-01-01T01:30:00+01:00")]
