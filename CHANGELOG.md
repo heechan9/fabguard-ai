@@ -2,6 +2,8 @@
 
 ## 2026-09-09
 
+- Reconciled Enedis Data Fair deep pagination: the first page must provide an exact total, later internal-dataset pages may omit it, any repeated total must agree, and final accumulated rows must still equal the first-page total.
+
 - Added a bounded Enedis national solar-injection collector using structured Data Fair filters, exact-count deep pagination, official-host and loop checks, complete UTC half-hour coverage, page hashes, and local-only raw/normalized data handling.
 
 - Prepared France follow-up contracts for Enedis national half-hour solar injection aggregates and Météo-France Paris-Montsouris 2024 hourly weather observations, including fail-closed scope, continuity, unit-conversion and provenance tests; no Enedis live E2E result or PV-performance claim is made.
