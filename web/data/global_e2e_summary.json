@@ -1,7 +1,7 @@
 {
   "schema_version": "fabguard-global-e2e/v1",
   "status": "cross_source_e2e_validated",
-  "updated_at": "2026-09-08",
+  "updated_at": "2026-09-09",
   "sources": {
     "pvlive_gb_2025": {
       "country": "Great Britain",
@@ -22,6 +22,16 @@
       "sampling_minutes": 60,
       "frictionless_valid": true,
       "input_sha256": "69a234b05b02fadbcd271d8a7af8607f3326a9118a4ddea98c6aa88e7c571a1e"
+    },
+    "meteo_france_paris_2024": {
+      "country": "France",
+      "flag": "🇫🇷",
+      "source_type": "observed",
+      "status": "meteo_france_resource_contract_validated",
+      "input_rows": 8784,
+      "sampling_minutes": 60,
+      "frictionless_valid": true,
+      "input_sha256": "1af1edc7df371d080d3a33186452067c86d7dd63489bb47e81fd843aceec1225"
     }
   },
   "claim_boundary": "Cross-source engineering data-quality compatibility only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
