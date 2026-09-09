@@ -42,7 +42,12 @@ The revision status remains orthogonal to `source_type`:
 - `source_type=estimated`
 - `revision_status=consolidated|definitive`
 
-It must never become a new source type such as `observed-revised`.
+It must never become a new source type such as `observed-revised`. A caller
+may require one exact state, or explicitly choose the CLI's `published`
+policy to accept both official states while retaining each row's lineage.
+The live 2024 audit found 35,132 definitive envelope rows and four consolidated
+envelope rows at 2024-12-31 23:00–23:45 UTC; this tail must not be relabelled
+as definitive.
 
 ## Fail-closed rules
 
@@ -80,7 +85,7 @@ This respects the monthly call budget and keeps revision evidence auditable.
 
 `python -m fabguard.integrations.rte_eco2mix_collect` requests one UTC day at a time. Ordinary daily responses must contain exactly 96 unique quarter-hour rows and match `total_count`. DST transition days use the narrowly bounded 100-row spring or 92-row autumn policy above. The contract removes structural :15/:45 null slots, retains a 48-slot UTC half-hour grid, and records exact duplicate removals, source gaps, missing power and per-chunk hashes without publishing raw responses.
 
-A single run is limited to 366 days. The range is half-open (`start` included, `end` excluded) and both boundaries must be UTC midnight.
+A single run is limited to 366 days. The range is half-open (`start` included, `end` excluded) and both boundaries must be UTC midnight. `--expected-status definitive` or `consolidated` remains strict. `--expected-status published` accepts only those two recognized official states and records their separate counts; it does not promote consolidated rows to definitive.
 
 ## PC execution gate
 

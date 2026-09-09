@@ -2,6 +2,8 @@
 
 ## 2026-09-09
 
+- Added an explicit RTE `published` revision policy after the live 2024 source audit found 35,132 definitive and four consolidated envelope rows in the final UTC hour; per-row lineage is preserved and strict single-state modes remain fail-closed.
+
 - Reconciled RTE's audited Europe/Paris DST API artifacts: exact spring duplicates are removed only on the true transition day, autumn source gaps remain explicit nulls on a continuous UTC grid, conflicting or ordinary-day anomalies still fail closed, and all adjustments raise auditable quality counters.
 
 - Added a fail-closed daily-chunked RTE éCO2mix collector for up to 366 UTC days, with exact daily count checks, structural-null accounting, complete half-hour coverage, raw chunk hashes, normalized SHA-256, and offline regression tests.
