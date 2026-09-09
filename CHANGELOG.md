@@ -2,6 +2,8 @@
 
 ## 2026-09-09
 
+- Added a country-first machine-readable evidence catalog and navigation page while retaining all existing canonical paths, preventing broken links and duplicate evidence during the migration.
+
 - Recorded the canonical Enedis France 2024 E2E evidence: 17,568 half-hour rows passed Frictionless and Solar Data Tools with matching SHA-256 lineage; 207 source energy nulls remain explicitly preserved in the collection audit.
 
 - Audited the full Enedis 2024 solar/total-band response: 17,568 timestamp rows contain 207 source energy nulls, zero negative values and zero other invalid values; nulls are now preserved without zero imputation and reported as explicit quality counters/warnings.
