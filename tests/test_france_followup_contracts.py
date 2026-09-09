@@ -27,6 +27,18 @@ class EnedisContractTest(unittest.TestCase):
         self.assertEqual(normalized["mean_power_w"].tolist(), [20.0, 30.0])
         self.assertEqual(audit["license"], "Licence Ouverte / Open Licence 2.0")
 
+    def test_source_null_is_preserved_and_invalid_text_fails(self):
+        rows = self.rows()
+        rows[0]["total_energie_injectee_wh"] = None
+        normalized, audit = normalize_enedis_rows(rows)
+        self.assertTrue(pd.isna(normalized.loc[0, "injected_energy_wh"]))
+        self.assertEqual(audit["missing_energy_rows"], 1)
+        self.assertTrue(audit["data_quality_warning"])
+        rows = self.rows()
+        rows[0]["total_energie_injectee_wh"] = "not-a-number"
+        with self.assertRaises(EnedisProductionContractError):
+            normalize_enedis_rows(rows)
+
     def test_wrong_scope_gap_and_negative_fail_closed(self):
         rows = self.rows(); rows[0]["filiere_de_production"] = "F1 : Hydraulique"
         with self.assertRaises(EnedisProductionContractError): normalize_enedis_rows(rows)
