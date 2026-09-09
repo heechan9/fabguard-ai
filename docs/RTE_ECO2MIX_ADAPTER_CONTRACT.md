@@ -71,13 +71,19 @@ FabGuard does not poll indefinitely. For the first audit:
 
 This respects the monthly call budget and keeps revision evidence auditable.
 
+## Long-range collector
+
+`python -m fabguard.integrations.rte_eco2mix_collect` requests one UTC day at a time. Each daily response must contain exactly 96 quarter-hour rows and match `total_count`; the contract removes exactly 48 structural :15/:45 null slots and requires all 48 retained half-hours. The final merge rejects duplicate or missing timestamps and records per-chunk hashes without publishing raw responses.
+
+A single run is limited to 366 days. The range is half-open (`start` included, `end` excluded) and both boundaries must be UTC midnight.
+
 ## PC execution gate
 
 Before promotion to “live API audited”:
 
 1. query a small definitive 2024 window from the official records API;
 2. preserve raw JSON outside git;
-3. paginate without overlap, prove complete 15-minute envelope coverage, record structural :15/:45 nulls, and prove the retained :00/:30 series is continuous;
+3. collect non-overlapping UTC days, match every daily `total_count`, prove complete 15-minute envelope coverage, record structural :15/:45 nulls, and prove the retained :00/:30 series is continuous;
 4. run this contract and Frictionless;
 5. run SDT as `source_type=estimated` with UTC;
 6. match row counts and SHA-256 across collection and SDT evidence;

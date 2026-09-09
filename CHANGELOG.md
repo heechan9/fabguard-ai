@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-09
+
+- Added a fail-closed daily-chunked RTE éCO2mix collector for up to 366 UTC days, with exact daily count checks, structural-null accounting, complete half-hour coverage, raw chunk hashes, normalized SHA-256, and offline regression tests.
+
 ## 2026-09-08
 
 - Reconciled the live RTE éCO2mix records response with its 15-minute API envelope: structural :15/:45 solar nulls are explicitly counted and removed, while :00/:30 values remain subject to fail-closed 30-minute continuity and generation checks.
