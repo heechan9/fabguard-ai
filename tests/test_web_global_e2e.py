@@ -12,6 +12,7 @@ class GlobalE2ESummaryTest(unittest.TestCase):
         cases = {
             "pvlive_gb_2025": "results/pvlive-gb-national-2025/report.json",
             "pvgis_brussels_2020": "results/pvgis-brussels-2020/report.json",
+            "enedis_france_2024": "results/enedis-france-national-solar-2024/report.json",
         }
         self.assertEqual(summary["schema_version"], "fabguard-global-e2e/v1")
         self.assertEqual(summary["status"], "cross_source_e2e_validated")
@@ -26,6 +27,15 @@ class GlobalE2ESummaryTest(unittest.TestCase):
                 self.assertEqual(item["frictionless_valid"], report["validation"]["frictionless"]["valid"])
                 self.assertEqual(item["input_sha256"], report["source"]["input_sha256"])
                 self.assertRegex(item["input_sha256"], r"^[a-f0-9]{64}$")
+
+        enedis = summary["sources"]["enedis_france_2024"]
+        enedis_audit = json.loads(
+            (ROOT / "results/enedis-france-national-solar-2024/fetch_audit.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(enedis["input_rows"], enedis_audit["normalized_rows"])
+        self.assertEqual(enedis["input_sha256"], enedis_audit["normalized_sha256"])
+        self.assertEqual(enedis["missing_energy_rows"], enedis_audit["missing_energy_rows"])
+        self.assertTrue(enedis["data_quality_warning"])
 
         meteo = summary["sources"]["meteo_france_paris_2024"]
         audit = json.loads(

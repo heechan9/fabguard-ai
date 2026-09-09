@@ -22,3 +22,6 @@ results/*
 !results/pvgis-brussels-2020/report.json
 !results/meteo-france-paris-montsouris-2024/
 !results/meteo-france-paris-montsouris-2024/fetch_audit.json
+!results/enedis-france-national-solar-2024/
+!results/enedis-france-national-solar-2024/fetch_audit.json
+!results/enedis-france-national-solar-2024/report.json

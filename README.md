@@ -112,7 +112,7 @@
 | 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | ✅ Alice Springs 2025 E2E 검증 완료 |
 | 🇬🇧 영국 | **Sheffield Solar PV_Live** | GB 국가 태양광 발전량 추정값 | ✅ 2025년 17,520개 구간 E2E 검증 완료 |
 | 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | ✅ Brussels 2020년 8,784개 구간 E2E 검증 완료 |
-| 🇫🇷 프랑스 | **RTE éCO2mix** | 통합·확정값의 수정 이력 감사 | 🟡 사전계약·오프라인 테스트 완료, 실 API E2E 대기 |
+| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis · Météo-France** | 수정 이력·배전망 태양광·관측 기상 | 🟡 Enedis 17,568구간·Météo-France 8,784시간 E2E 검증 완료, RTE 연간 실행 대기 |
 
 <a id="tool-roles"></a>
 

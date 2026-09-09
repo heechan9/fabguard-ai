@@ -1,0 +1,45 @@
+{
+  "schema_version": "fabguard-enedis-production/v1",
+  "status": "enedis_chunked_collection_validated",
+  "source_type": "estimated",
+  "provider": "Enedis",
+  "dataset_id": "prod",
+  "dataset_page": "https://opendata.enedis.fr/datasets/prod",
+  "license": "Licence Ouverte / Open Licence 2.0",
+  "geographic_scope": "France national distribution network",
+  "sampling_minutes": 30,
+  "timestamp_semantics": "source CET/CEST offset converted to UTC",
+  "units": {
+    "injected_energy_wh": "Wh per half-hour",
+    "mean_power_w": "W",
+    "injection_points": "count"
+  },
+  "normalized_rows": 17568,
+  "missing_energy_rows": 207,
+  "data_quality_warning": true,
+  "missingness_policy": "preserve source nulls; do not impute them as zero",
+  "claim_boundary": "Enedis national distribution aggregate only; not plant telemetry, SECOM external validation, field validation, panel diagnosis, or proof of PV performance.",
+  "start_utc": "2024-01-01T00:00:00+00:00",
+  "end_utc_exclusive": "2025-01-01T00:00:00+00:00",
+  "pages": 2,
+  "api_total": 17568,
+  "retrieved_at": "2026-09-09T15:57:38.279410+00:00",
+  "page_sha256": [
+    "cde92c44e4bb92e398e571305a9cadf238a8a6a21227db2f46e24263ef488cd7",
+    "2b1bcdab50e98e12a3b73cb47ea5b1ec814ae9ab780630b5d322afa89b782fd7"
+  ],
+  "query": {
+    "size": 10000,
+    "filiere_de_production_eq": "F5 : Solaire",
+    "plage_de_puissance_injection_eq": "P0 : Total toutes puissances",
+    "horodate_gte": "2024-01-01T00:00:00Z",
+    "horodate_lt": "2025-01-01T00:00:00Z",
+    "sort": "horodate",
+    "select": "horodate,filiere_de_production,plage_de_puissance_injection,total_energie_injectee_wh,nb_points_injection",
+    "count": "exact",
+    "hint": "true"
+  },
+  "redistribution": "Raw API pages and normalized CSV remain local; compact audit evidence only.",
+  "normalized_file": "enedis_france_solar_2024.csv",
+  "normalized_sha256": "0c799e90699f703477145650c82c26267a08af40aafceca0db78626be7c490b5"
+}

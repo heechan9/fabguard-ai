@@ -32,6 +32,18 @@
       "sampling_minutes": 60,
       "frictionless_valid": true,
       "input_sha256": "1af1edc7df371d080d3a33186452067c86d7dd63489bb47e81fd843aceec1225"
+    },
+    "enedis_france_2024": {
+      "country": "France",
+      "flag": "🇫🇷",
+      "source_type": "estimated",
+      "status": "sdt_contract_validated",
+      "input_rows": 17568,
+      "sampling_minutes": 30,
+      "frictionless_valid": true,
+      "missing_energy_rows": 207,
+      "data_quality_warning": true,
+      "input_sha256": "0c799e90699f703477145650c82c26267a08af40aafceca0db78626be7c490b5"
     }
   },
   "claim_boundary": "Cross-source engineering data-quality compatibility only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."

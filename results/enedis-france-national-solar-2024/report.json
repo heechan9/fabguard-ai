@@ -1,0 +1,51 @@
+{
+  "schema_version": "fabguard-pv-sdt/v1",
+  "status": "sdt_contract_validated",
+  "source": {
+    "source_id": "enedis-france-national-solar-2024",
+    "source_type": "estimated",
+    "input_file": "enedis_france_solar_2024.csv",
+    "input_sha256": "0c799e90699f703477145650c82c26267a08af40aafceca0db78626be7c490b5",
+    "input_rows": 17568,
+    "timezone_declared": "UTC",
+    "normalized_timezone": "UTC",
+    "sdt_analysis_clock": "declared source local wall time",
+    "input_power_unit": "W",
+    "normalized_power_unit": "kW",
+    "sdt_input_power_unit": "W",
+    "observed_at": "2026-09-09T15:57:38+00:00"
+  },
+  "validation": {
+    "frictionless": {
+      "valid": true,
+      "version": "5.19.0",
+      "resource_path": "enedis_france_solar_2024.csv",
+      "error_count": 0
+    }
+  },
+  "runtime": {
+    "solar_data_tools_version": "2.1.5",
+    "frictionless_version": "5.19.0",
+    "python_version": "3.11.16",
+    "solver": "CLARABEL"
+  },
+  "matrix": {
+    "raw_shape": [48, 366],
+    "filled_shape": [48, 366]
+  },
+  "sdt_report": {
+    "schema_version": "fabguard-sdt-report/v1",
+    "length": 1.0027397260273974,
+    "capacity": 9494521.012,
+    "sampling": 30.0,
+    "quality score": 0.9562841530054644,
+    "clearness score": 0.11748633879781421,
+    "clipped fraction": 0.02185792349726776,
+    "time zone correction": 0.0,
+    "inverter clipping": true,
+    "capacity change": false,
+    "data quality warning": false,
+    "time shift correction": false
+  },
+  "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+}
