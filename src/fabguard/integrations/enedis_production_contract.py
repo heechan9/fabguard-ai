@@ -60,10 +60,22 @@ def normalize_enedis_rows(rows: Iterable[Mapping[str, Any]]) -> tuple[pd.DataFra
     if len(ordered) > 1 and not ordered.diff().dropna().eq(pd.Timedelta(minutes=30)).all():
         raise EnedisProductionContractError("timestamps are not a continuous half-hour series")
 
-    energy = pd.to_numeric(frame["total_energie_injectee_wh"], errors="coerce")
+    source_energy = frame["total_energie_injectee_wh"]
+    source_missing = source_energy.isna()
+    energy = pd.to_numeric(source_energy, errors="coerce")
+    if (energy.isna() & ~source_missing).any():
+        raise EnedisProductionContractError(
+            "injected energy contains a non-numeric non-null value"
+        )
+    finite_energy = energy.loc[~source_missing]
+    if (
+        not np.isfinite(finite_energy.to_numpy(float)).all()
+        or (finite_energy < 0).any()
+    ):
+        raise EnedisProductionContractError(
+            "non-missing injected energy must be finite and non-negative"
+        )
     points = pd.to_numeric(frame["nb_points_injection"], errors="coerce")
-    if energy.isna().any() or not np.isfinite(energy.to_numpy(float)).all() or (energy < 0).any():
-        raise EnedisProductionContractError("injected energy must be finite and non-negative")
     if points.isna().any() or (points < 0).any() or not np.equal(points, np.floor(points)).all():
         raise EnedisProductionContractError("injection-point count must be a non-negative integer")
 
@@ -87,6 +99,9 @@ def normalize_enedis_rows(rows: Iterable[Mapping[str, Any]]) -> tuple[pd.DataFra
         "timestamp_semantics": "source CET/CEST offset converted to UTC",
         "units": {"injected_energy_wh": "Wh per half-hour", "mean_power_w": "W", "injection_points": "count"},
         "normalized_rows": int(len(normalized)),
+        "missing_energy_rows": int(energy.isna().sum()),
+        "data_quality_warning": bool(energy.isna().any()),
+        "missingness_policy": "preserve source nulls; do not impute them as zero",
         "claim_boundary": (
             "Enedis national distribution aggregate only; not plant telemetry, SECOM external "
             "validation, field validation, panel diagnosis, or proof of PV performance."
