@@ -1,7 +1,7 @@
 {
   "schema_version": "fabguard-global-candidates/v1",
   "status": "planning_only",
-  "updated_at": "2026-09-08",
+  "updated_at": "2026-09-09",
   "claim_boundary": "Candidate registration is not connection, validation, implementation commitment, or evidence of model performance.",
   "candidates": [
     {
@@ -17,8 +17,8 @@
       "flag": "🇫🇷",
       "sources": "RTE · Enedis · Météo-France",
       "role": "Revision · grid · weather",
-      "status": "PREFLIGHT READY",
-      "gate": "Run bounded RTE live E2E; audit Enedis and Météo-France separately"
+      "status": "PARTIAL E2E",
+      "gate": "Météo-France verified; rerun annual RTE in published mode and implement Enedis live collection"
     },
     {
       "country": "Germany",

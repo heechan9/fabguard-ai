@@ -27,6 +27,17 @@ class GlobalE2ESummaryTest(unittest.TestCase):
                 self.assertEqual(item["input_sha256"], report["source"]["input_sha256"])
                 self.assertRegex(item["input_sha256"], r"^[a-f0-9]{64}$")
 
+        meteo = summary["sources"]["meteo_france_paris_2024"]
+        audit = json.loads(
+            (ROOT / "results/meteo-france-paris-montsouris-2024/fetch_audit.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(meteo["status"], audit["status"])
+        self.assertEqual(meteo["source_type"], audit["source_type"])
+        self.assertEqual(meteo["input_rows"], audit["normalized_rows"])
+        self.assertEqual(meteo["sampling_minutes"], audit["sampling_minutes"])
+        self.assertEqual(meteo["input_sha256"], audit["normalized_sha256"])
+        self.assertTrue(meteo["frictionless_valid"])
+
 
 if __name__ == "__main__":
     unittest.main()
