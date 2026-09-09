@@ -141,4 +141,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **Codex (OpenAI)**: Enedis Data Fair의 구조화 필터·정확한 전체 행 수·deep pagination·공식 호스트 제한·반복 링크 차단·UTC 반시간 격자·페이지 해시를 검증하는 실수집 CLI와 회귀 테스트를 구현
 - **최희찬 (`heechan9`)**: 프랑스 배전망 데이터의 연구 역할과 실수집 범위를 결정하고 로컬 실행 결과·공개 여부를 최종 승인
 
+### Enedis France 2024 E2E evidence
+
+- **Codex (OpenAI)**: 로컬 실수집·Frictionless·Solar Data Tools 결과를 정본 감사 JSON과 보고서로 구조화하고, 행 수·SHA-256 계보·207개 원본 결측 보존을 회귀 테스트와 웹데모·README에 동기화
+- **최희찬 (`heechan9`)**: Enedis 공식 연간 데이터를 로컬에서 수집하고 Frictionless·SDT를 실행해 결과를 제공했으며, 공개·병합 범위를 최종 승인
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
