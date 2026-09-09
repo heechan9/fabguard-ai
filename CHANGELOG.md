@@ -2,6 +2,8 @@
 
 ## 2026-09-09
 
+- Prepared France follow-up contracts for Enedis national half-hour solar injection aggregates and Météo-France Paris-Montsouris 2024 hourly weather observations, including fail-closed scope, continuity, unit-conversion and provenance tests; no Enedis live E2E result or PV-performance claim is made.
+
 - Added an explicit RTE `published` revision policy after the live 2024 source audit found 35,132 definitive and four consolidated envelope rows in the final UTC hour; per-row lineage is preserved and strict single-state modes remain fail-closed.
 
 - Reconciled RTE's audited Europe/Paris DST API artifacts: exact spring duplicates are removed only on the true transition day, autumn source gaps remain explicit nulls on a continuous UTC grid, conflicting or ordinary-day anomalies still fail closed, and all adjustments raise auditable quality counters.
