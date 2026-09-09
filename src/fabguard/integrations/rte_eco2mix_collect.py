@@ -130,7 +130,7 @@ def fetch_rte_day(
     *,
     start: str,
     end: str,
-    expected_status: str = "definitive",
+    expected_status: str | None = "definitive",
     opener: Callable[[str], bytes] = _default_opener,
     retrieved_at: datetime | None = None,
 ) -> tuple[pd.DataFrame, dict[str, object]]:
@@ -166,7 +166,9 @@ def fetch_rte_day(
             require_continuous=dst_audit["missing_quarter_hour_rows"] == 0,
         )
     except RTEEco2MixContractError as exc:
-        raise RTEEco2MixCollectError(str(exc)) from exc
+        raise RTEEco2MixCollectError(
+            f"RTE day {start_dt.date()} failed contract: {exc}"
+        ) from exc
 
     expected = pd.date_range(start_dt, end_dt, freq="30min", inclusive="left")
     normalized = (
@@ -189,6 +191,7 @@ def fetch_rte_day(
         **contract_audit,
         **dst_audit,
         "status": "rte_live_daily_contract_validated",
+        "requested_revision_policy": expected_status or "published",
         "input_rows": total_count,
         "normalized_rows": len(normalized),
         "query": params,
@@ -209,7 +212,7 @@ def collect_rte_range(
     *,
     start: str,
     end: str,
-    expected_status: str = "definitive",
+    expected_status: str | None = "definitive",
     fetcher: Callable[..., tuple[pd.DataFrame, dict[str, object]]] = fetch_rte_day,
 ) -> tuple[pd.DataFrame, dict[str, object]]:
     """Collect a half-open UTC date range through non-overlapping daily requests."""
@@ -257,6 +260,7 @@ def collect_rte_range(
         "dataset_id": "eco2mix-national-cons-def",
         "geographic_scope": "France national electricity system",
         "analysis_clock": "continuous UTC",
+        "requested_revision_policy": expected_status or "published",
         "start_utc": start_dt.isoformat(),
         "end_utc_exclusive": end_dt.isoformat(),
         "days": days,
@@ -296,7 +300,13 @@ def main() -> None:
     parser.add_argument("--start", required=True)
     parser.add_argument("--end", required=True)
     parser.add_argument(
-        "--expected-status", choices=("consolidated", "definitive"), default="definitive"
+        "--expected-status",
+        choices=("consolidated", "definitive", "published"),
+        default="definitive",
+        help=(
+            "Require one revision state, or accept both official states with "
+            "'published' while preserving per-row revision lineage"
+        ),
     )
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--audit-output", required=True, type=Path)
@@ -307,7 +317,9 @@ def main() -> None:
         frame, audit = collect_rte_range(
             start=args.start,
             end=args.end,
-            expected_status=args.expected_status,
+            expected_status=(
+                None if args.expected_status == "published" else args.expected_status
+            ),
         )
     except (RTEEco2MixCollectError, OSError, ValueError) as exc:
         parser.error(str(exc))
