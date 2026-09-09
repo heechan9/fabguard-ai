@@ -1,0 +1,22 @@
+{
+  "schema_version": "fabguard-meteofrance-hourly/v1",
+  "status": "meteo_france_resource_contract_validated",
+  "source_type": "observed",
+  "provider": "Météo-France",
+  "dataset_id": "6569b4473bedf2e7abad3b72",
+  "resource_id": "a77b4d44-d361-4e59-b6cc-cbbf435a2d89",
+  "resource_url": "https://meteofrance.s3.sbg.io.cloud.ovh.net/data/synchro_ftp/BASE/HOR/H_75_previous-2020-2024.csv.gz",
+  "license": "Licence Ouverte / Open Licence 2.0",
+  "station_id": "75114001",
+  "station_name": "PARIS-MONTSOURIS",
+  "year": 2024,
+  "normalized_rows": 8784,
+  "sampling_minutes": 60,
+  "timestamp_semantics": "metropolitan Météo-France hourly timestamp interpreted as UTC",
+  "conversion": "hourly GLO J/cm2 multiplied by 10000/3600 to hourly mean W/m2",
+  "claim_boundary": "Météo-France station weather observations only; not PV generation, plant telemetry, SECOM external validation, field validation, or proof of PV performance.",
+  "retrieved_at": "2026-09-09T14:50:56.107018+00:00",
+  "raw_sha256": "fc1f91d4c1fd663a21438dbf44d8e12e1cf6828490b20c3e94f2327dee5eb799",
+  "normalized_file": "paris_montsouris_2024.csv",
+  "normalized_sha256": "1af1edc7df371d080d3a33186452067c86d7dd63489bb47e81fd843aceec1225"
+}
