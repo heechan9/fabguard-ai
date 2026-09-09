@@ -46,6 +46,43 @@ class RTEEco2MixCollectTest(unittest.TestCase):
         self.assertEqual(query["limit"], ["100"])
         self.assertEqual(query["offset"], ["0"])
 
+    def test_published_policy_preserves_mixed_revision_lineage(self):
+        payload = self.payload("2024-12-31T00:00:00Z")
+        for row in payload["results"][-4:]:
+            row["nature"] = "Données consolidées"
+
+        frame, audit = fetch_rte_day(
+            start="2024-12-31T00:00:00Z",
+            end="2025-01-01T00:00:00Z",
+            expected_status=None,
+            opener=lambda _: json.dumps(payload).encode(),
+        )
+
+        self.assertEqual(len(frame), 48)
+        self.assertEqual(
+            frame["revision_status"].value_counts().to_dict(),
+            {"definitive": 46, "consolidated": 2},
+        )
+        self.assertEqual(
+            audit["revision_status_counts"],
+            {"consolidated": 2, "definitive": 46},
+        )
+        self.assertEqual(audit["requested_revision_policy"], "published")
+
+    def test_definitive_policy_rejects_mixed_tail_with_day_context(self):
+        payload = self.payload("2024-12-31T00:00:00Z")
+        for row in payload["results"][-4:]:
+            row["nature"] = "Données consolidées"
+
+        with self.assertRaisesRegex(
+            RTEEco2MixCollectError, "2024-12-31.*differs from expected_status"
+        ):
+            fetch_rte_day(
+                start="2024-12-31T00:00:00Z",
+                end="2025-01-01T00:00:00Z",
+                opener=lambda _: json.dumps(payload).encode(),
+            )
+
     def test_spring_dst_exact_duplicates_are_deduplicated(self):
         payload = self.payload("2024-03-31T00:00:00Z")
         payload["results"].extend(dict(row) for row in payload["results"][4:8])
