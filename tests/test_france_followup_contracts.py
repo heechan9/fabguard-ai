@@ -58,9 +58,14 @@ class MeteoFranceContractTest(unittest.TestCase):
     def test_missing_hour_and_negative_radiation_fail_closed(self):
         with self.assertRaises(MeteoFranceHourlyError):
             normalize_hourly_resource(weather_gzip(missing=True), station_id="75114001", year=2024)
-        raw = gzip.decompress(weather_gzip()).decode().replace(";36.0;1;1\n", ";-1;1;1\n", 1)
+        frame = pd.read_csv(io.BytesIO(gzip.decompress(weather_gzip())), sep=";")
+        frame.loc[0, "GLO"] = -1
+        buf = io.BytesIO()
+        frame.to_csv(buf, sep=";", index=False)
         with self.assertRaises(MeteoFranceHourlyError):
-            normalize_hourly_resource(gzip.compress(raw.encode()), station_id="75114001", year=2024)
+            normalize_hourly_resource(
+                gzip.compress(buf.getvalue()), station_id="75114001", year=2024
+            )
 
 
 if __name__ == "__main__": unittest.main()
