@@ -1,0 +1,64 @@
+{
+  "schema_version": "fabguard-evidence-catalog/v1",
+  "updated_at": "2026-09-09",
+  "layout_policy": "country -> source -> canonical evidence",
+  "migration_policy": "Existing canonical paths remain stable; new integrations declare a country_code and source_id before evidence is admitted.",
+  "countries": {
+    "us": {
+      "name": "United States",
+      "sources": {
+        "uci-secom": {
+          "role": "manufacturing evidence",
+          "status": "validated",
+          "canonical_paths": ["results/v1", "results/phase1"]
+        }
+      }
+    },
+    "au": {
+      "name": "Australia",
+      "sources": {
+        "dkasc-alice-springs-2025": {
+          "role": "observed PV",
+          "status": "e2e_validated",
+          "canonical_paths": ["results/dkasc-alice-springs-2025"]
+        }
+      }
+    },
+    "gb": {
+      "name": "Great Britain",
+      "sources": {
+        "pvlive-national-2025": {
+          "role": "estimated PV",
+          "status": "e2e_validated",
+          "canonical_paths": ["results/pvlive-gb-national-2025"]
+        }
+      }
+    },
+    "eu-be": {
+      "name": "European Union / Belgium",
+      "sources": {
+        "jrc-pvgis-brussels-2020": {
+          "role": "modelled reference PV",
+          "status": "e2e_validated",
+          "canonical_paths": ["results/pvgis-brussels-2020"]
+        }
+      }
+    },
+    "fr": {
+      "name": "France",
+      "sources": {
+        "enedis-national-solar-2024": {
+          "role": "distribution-grid estimated PV",
+          "status": "e2e_validated",
+          "canonical_paths": ["results/enedis-france-national-solar-2024"]
+        },
+        "meteo-france-paris-2024": {
+          "role": "observed weather context",
+          "status": "resource_contract_validated",
+          "canonical_paths": ["results/meteo-france-paris-montsouris-2024"]
+        }
+      }
+    }
+  },
+  "claim_boundary": "Country grouping is evidence organization only; it does not make heterogeneous sources interchangeable or prove cross-country model performance."
+}
