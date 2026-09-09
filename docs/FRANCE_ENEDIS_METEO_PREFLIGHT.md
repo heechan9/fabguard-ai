@@ -12,7 +12,20 @@ These contracts prepare France slices 2 and 3 without claiming a completed live 
 
 The preflight contract intentionally uses Data Fair's `qs` expression. The API silently ignores arbitrary field-name query parameters, so callers must not treat an HTTP 200 response as proof that filtering occurred.
 
-Before a live collector is promoted, run a bounded API audit and verify pagination, period filtering, duplicates, UTC continuity, source licence and redistribution policy. Raw downloads remain local.
+The bounded collector uses structured `_eq`, `_gte`, and `_lt` filters, exact totals, official-host-only `next` URLs, loop detection, page hashes, and a complete UTC half-hour grid. Raw pages and normalized CSV remain local.
+
+PC execution:
+
+```bat
+mkdir "%USERPROFILE%\fabguard-enedis-work" 2>nul
+python -m fabguard.integrations.enedis_production_collect ^
+  --start 2024-01-01T00:00:00Z ^
+  --end 2025-01-01T00:00:00Z ^
+  --output "%USERPROFILE%\fabguard-enedis-work\enedis_france_solar_2024.csv" ^
+  --audit-output "%USERPROFILE%\fabguard-enedis-work\fetch_audit.json"
+cd %USERPROFILE%\fabguard-enedis-work
+frictionless validate enedis_france_solar_2024.csv
+```
 
 ## Météo-France hourly station observations
 
