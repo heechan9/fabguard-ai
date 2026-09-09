@@ -99,12 +99,21 @@ def collect_enedis_range(
         if not isinstance(payload, dict) or not isinstance(payload.get("results"), list):
             raise EnedisProductionCollectError("Enedis response must contain a results list")
         total = payload.get("total")
-        if isinstance(total, bool) or not isinstance(total, int) or total < 0:
-            raise EnedisProductionCollectError("Enedis response must contain an exact integer total")
         if expected_total is None:
+            if isinstance(total, bool) or not isinstance(total, int) or total < 0:
+                raise EnedisProductionCollectError(
+                    "first Enedis page must contain an exact integer total"
+                )
             expected_total = total
-        elif total != expected_total:
-            raise EnedisProductionCollectError("Enedis total changed during pagination")
+        elif total is not None:
+            if isinstance(total, bool) or not isinstance(total, int) or total < 0:
+                raise EnedisProductionCollectError(
+                    "later Enedis total must be an integer when present"
+                )
+            if total != expected_total:
+                raise EnedisProductionCollectError(
+                    "Enedis total changed during pagination"
+                )
         hints = payload.get("meta", {}).get("hints", [])
         if any("ignored" in str(hint).lower() for hint in hints):
             raise EnedisProductionCollectError("Enedis reported an ignored query parameter")
