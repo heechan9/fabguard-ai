@@ -49,14 +49,19 @@ It must never become a new source type such as `observed-revised`.
 The contract rejects empty responses, missing fields, ambiguous timestamps,
 duplicate timestamps, non-finite or negative half-hour solar generation, unexpected
 values in structural :15/:45 slots, unsupported revision states, expected-state
-mismatches, gaps in the complete 15-minute response envelope, and gaps in the
-admitted 30-minute generation series. Structural quarter-hour nulls are counted
-separately and never treated as missing generation measurements. The request builder limits a single audit window to seven
-days and an Opendatasoft page to 100 rows.
+mismatches, unexplained gaps in the complete 15-minute response envelope, and
+unexplained gaps in the admitted 30-minute generation series. Structural
+quarter-hour nulls are counted separately and never treated as missing
+generation measurements. The request builder limits a single audit window to
+seven days and an Opendatasoft page to 100 rows.
 
 CET/CEST source offsets are preserved in `source_timestamp`; normalized time
-is UTC. DST transitions require an explicit fixture before a year-scale SDT
-run.
+is UTC. On an actual `Europe/Paris` offset-transition date only, the collector
+accepts the audited RTE API shapes: four byte-for-byte-equivalent duplicate
+quarter-hours on the spring transition, or four absent quarter-hours on the
+autumn transition. Conflicting duplicates still fail closed. Missing autumn
+half-hour generation values are inserted into the continuous UTC grid as null,
+never imputed as zero, and are counted in the audit and quality warning.
 
 ## Revision closure policy
 
@@ -73,7 +78,7 @@ This respects the monthly call budget and keeps revision evidence auditable.
 
 ## Long-range collector
 
-`python -m fabguard.integrations.rte_eco2mix_collect` requests one UTC day at a time. Each daily response must contain exactly 96 quarter-hour rows and match `total_count`; the contract removes exactly 48 structural :15/:45 null slots and requires all 48 retained half-hours. The final merge rejects duplicate or missing timestamps and records per-chunk hashes without publishing raw responses.
+`python -m fabguard.integrations.rte_eco2mix_collect` requests one UTC day at a time. Ordinary daily responses must contain exactly 96 unique quarter-hour rows and match `total_count`. DST transition days use the narrowly bounded 100-row spring or 92-row autumn policy above. The contract removes structural :15/:45 null slots, retains a 48-slot UTC half-hour grid, and records exact duplicate removals, source gaps, missing power and per-chunk hashes without publishing raw responses.
 
 A single run is limited to 366 days. The range is half-open (`start` included, `end` excluded) and both boundaries must be UTC midnight.
 
@@ -83,7 +88,7 @@ Before promotion to “live API audited”:
 
 1. query a small definitive 2024 window from the official records API;
 2. preserve raw JSON outside git;
-3. collect non-overlapping UTC days, match every daily `total_count`, prove complete 15-minute envelope coverage, record structural :15/:45 nulls, and prove the retained :00/:30 series is continuous;
+3. collect non-overlapping UTC days, match every daily `total_count`, prove complete 15-minute envelope coverage except declared DST artifacts, record structural :15/:45 nulls, and preserve any audited source gap as null in the continuous :00/:30 grid;
 4. run this contract and Frictionless;
 5. run SDT as `source_type=estimated` with UTC;
 6. match row counts and SHA-256 across collection and SDT evidence;
