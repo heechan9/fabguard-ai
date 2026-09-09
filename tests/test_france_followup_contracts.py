@@ -4,11 +4,11 @@ import unittest
 
 import pandas as pd
 
-from enedis_production_contract import (
+from fabguard.integrations.enedis_production_contract import (
     EnedisProductionContractError, SOLAR_LABEL, TOTAL_BAND_LABEL,
     build_solar_total_query, normalize_enedis_rows,
 )
-from meteo_france_hourly_collect import MeteoFranceHourlyError, normalize_hourly_resource
+from fabguard.integrations.meteo_france_hourly_collect import MeteoFranceHourlyError, normalize_hourly_resource
 
 
 class EnedisContractTest(unittest.TestCase):
