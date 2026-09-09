@@ -18,7 +18,7 @@
       "sources": "RTE · Enedis · Météo-France",
       "role": "Revision · grid · weather",
       "status": "PARTIAL E2E",
-      "gate": "Météo-France verified; rerun annual RTE in published mode and implement Enedis live collection"
+      "gate": "Météo-France and Enedis verified; rerun annual RTE in published mode"
     },
     {
       "country": "Germany",
