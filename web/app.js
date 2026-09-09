@@ -63,6 +63,8 @@ function validateGlobalE2E(summary) {
     if (!Number.isInteger(item.input_rows) || item.input_rows <= 0 || !Number.isFinite(item.sampling_minutes)) throw new Error(`${key} E2E 수치가 올바르지 않습니다.`);
     if (!/^[a-f0-9]{64}$/.test(item.input_sha256)) throw new Error(`${key} SHA-256 계약이 올바르지 않습니다.`);
   }
+  const enedis = summary.sources?.enedis_france_2024;
+  if (!enedis || enedis.status !== "sdt_contract_validated" || enedis.source_type !== "estimated" || enedis.frictionless_valid !== true || enedis.input_rows !== 17568 || enedis.missing_energy_rows !== 207 || enedis.data_quality_warning !== true || !/^[a-f0-9]{64}$/.test(enedis.input_sha256)) throw new Error("Enedis E2E 검증 상태가 올바르지 않습니다.");
   const meteo = summary.sources?.meteo_france_paris_2024;
   if (!meteo || meteo.status !== "meteo_france_resource_contract_validated" || meteo.source_type !== "observed" || meteo.frictionless_valid !== true || meteo.input_rows !== 8784 || !/^[a-f0-9]{64}$/.test(meteo.input_sha256)) throw new Error("Météo-France E2E 검증 상태가 올바르지 않습니다.");
 }
@@ -126,6 +128,7 @@ function summaryView() {
   const dkasc = state.dkasc;
   const pvlive = state.globalE2E.sources.pvlive_gb_2025;
   const pvgis = state.globalE2E.sources.pvgis_brussels_2020;
+  const enedis = state.globalE2E.sources.enedis_france_2024;
   const meteo = state.globalE2E.sources.meteo_france_paris_2024;
   app.innerHTML = `
     <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p><div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#result">현재 결과 30초 확인</a></div></div>${waferVisual(ds.measurement_features)}</section>
@@ -146,7 +149,7 @@ function summaryView() {
         <article class="country-card verified"><div class="country-top">${flagImage("au", "호주")}<b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
         <article class="country-card verified"><div class="country-top">${flagImage("gb", "영국")}<b>GREAT BRITAIN</b><em>VERIFIED</em></div><h3>PV_Live</h3><p>GB 국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>${pvlive.input_rows.toLocaleString()} intervals · E2E validated</dd></div></dl></article>
         <article class="country-card verified"><div class="country-top">${flagImage("eu", "유럽연합")}<b>EUROPEAN UNION</b><em>VERIFIED</em></div><h3>JRC PVGIS</h3><p>Brussels 기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>${pvgis.input_rows.toLocaleString()} hours · E2E validated</dd></div></dl></article>
-        <article class="country-card next"><div class="country-top">${flagImage("fr", "프랑스")}<b>FRANCE</b><em>PARTIAL E2E</em></div><h3>RTE · Météo-France</h3><p>국가 발전량 수정 이력 · 파리 관측 기상</p><dl><div><dt>ROLE</dt><dd>Revision · weather context</dd></div><div><dt>STATUS</dt><dd>${meteo.input_rows.toLocaleString()} weather hours verified · RTE annual rerun pending</dd></div></dl></article>
+        <article class="country-card next"><div class="country-top">${flagImage("fr", "프랑스")}<b>FRANCE</b><em>PARTIAL E2E</em></div><h3>RTE · Enedis · Météo-France</h3><p>국가 발전량 수정 이력 · 배전망 태양광 · 파리 관측 기상</p><dl><div><dt>ROLE</dt><dd>Revision · grid · weather</dd></div><div><dt>STATUS</dt><dd>Enedis ${enedis.input_rows.toLocaleString()} intervals · Météo-France ${meteo.input_rows.toLocaleString()} hours verified · RTE annual rerun pending</dd></div></dl></article>
       </div>
       <div class="dkasc-evidence" aria-label="호주 DKASC 관측 데이터 검증 결과">
         <div><span>${flagImage("au", "호주")} OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
