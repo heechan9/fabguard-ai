@@ -1,3 +1,4 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -84,6 +85,62 @@ class FledgeOperationsTest(unittest.TestCase):
             )
             self.assertEqual(report["dead_letter_count"], 1)
             self.assertEqual(store.load()["last_seen"], {})
+
+    def test_mixed_batch_isolates_nonfinite_json_safely(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            store = JsonStateStore(Path(directory) / "state.json")
+            processor = FledgeOperationsProcessor(OperationsConfig(), store)
+            overflow = json.loads(
+                '{"asset_code":"etch-bad","user_ts":"2026-09-04T01:00:00Z",'
+                '"reading":{"pressure":1e999}}'
+            )
+            report = processor.process_batch(
+                [
+                    {
+                        "asset_code": "etch-01",
+                        "user_ts": "2026-09-04T01:00:00Z",
+                        "reading": {"pressure": 1.2},
+                    },
+                    overflow,
+                ],
+                observed_at="2026-09-04T01:00:00Z",
+            )
+
+            json.dumps(report, allow_nan=False)
+            self.assertEqual(report["accepted_count"], 1)
+            self.assertEqual(report["dead_letter_count"], 1)
+            self.assertEqual(
+                report["dead_letters"][0]["reading"]["reading"]["pressure"],
+                "inf",
+            )
+            self.assertEqual(len(store.load()["seen"]), 1)
+
+    def test_delivery_failure_leaves_accepted_reading_retryable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            store = JsonStateStore(Path(directory) / "state.json")
+            processor = FledgeOperationsProcessor(OperationsConfig(), store)
+            valid = {
+                "asset_code": "etch-01",
+                "user_ts": "2026-09-04T01:00:00Z",
+                "reading": {"pressure": 1.2},
+            }
+
+            def fail_delivery(_report: dict[str, object]) -> None:
+                raise OSError("simulated report write failure")
+
+            with self.assertRaisesRegex(OSError, "simulated report write failure"):
+                processor.process_batch(
+                    [valid],
+                    observed_at="2026-09-04T01:00:00Z",
+                    deliver=fail_delivery,
+                )
+            self.assertEqual(store.load()["seen"], {})
+
+            retried = processor.process_batch(
+                [valid], observed_at="2026-09-04T01:00:00Z"
+            )
+            self.assertEqual(retried["accepted_count"], 1)
+            self.assertEqual(retried["dead_letter_count"], 0)
 
     def test_disconnect_alert_is_one_shot_and_resets_after_recovery(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

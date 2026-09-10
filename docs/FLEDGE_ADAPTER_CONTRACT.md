@@ -10,7 +10,7 @@ FabGuard가 검사 가능한 표로 정규화한다. 외부 패키지 없이 다
 - 비어 있지 않은 `asset_code`
 - `user_ts` 또는 `ts`의 UTC 파싱
 - 단위가 모호한 숫자형 epoch timestamp 차단(현재 로컬 계약은 ISO 8601 문자열만 허용)
-- `reading` 내부 측정값의 숫자/null 제한
+- `reading` 내부 측정값의 유한한 숫자/null 제한(`NaN`, `Infinity` 차단)
 - 필수 측정값 누락 시 fail-closed 처리
 - `asset_code + timestamp` 중복 차단
 - 안정적인 `sample_id`, `event_time`, `measurement__*` 출력
@@ -64,7 +64,8 @@ FLEDGE_AUTHTOKEN="<session-token>" fabguard-fledge-rest \
 
 현재 계약 검사는 배치 내 위반 하나에도 전체 호출을 중단하는 strict fail-closed 방식이다. 이는
 오프라인 검증 단계의 의도된 동작이다. REST 운영 경계에서는 전체 스트림을 중단시키지 않도록 오류 reading을 dead-letter 결과로 격리하고
-유효 reading 처리를 계속한다. upstream DLQ·metadata 규약과 production state backend는 여전히
+유효 reading 처리를 계속한다. 격리 원본은 비유한 숫자를 문자열 진단값으로 보존해 엄격한 JSON 출력도 방해하지 않는다. REST 결과 전달이
+실패하면 중복 방지 상태를 커밋하지 않아 정상 reading을 재시도할 수 있다. upstream DLQ·metadata 규약과 production state backend는 여전히
 별도 합의와 현장 검증이 필요하다.
 
 ## 다음 검토 게이트

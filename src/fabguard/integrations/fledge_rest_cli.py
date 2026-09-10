@@ -11,6 +11,21 @@ from .fledge_operations import FledgeOperationsProcessor, JsonStateStore, Operat
 from .fledge_rest import FledgeRestConfig, fetch_asset_readings
 
 
+def _write_json_atomic(path: Path, value: object) -> None:
+    """Write strict JSON through a sibling temporary file."""
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    payload = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False)
+    try:
+        with temporary.open("w", encoding="utf-8") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Pull and validate readings from a Fledge REST API")
     parser.add_argument("--base-url", required=True, help="Fledge base URL, for example http://localhost:8081")
@@ -55,26 +70,27 @@ def main() -> None:
         ),
         JsonStateStore(args.output_dir / "state.json"),
     )
-    report = processor.process_batch(readings, observed_at=args.observed_at, reference=reference)
-    report["source"] = {
-        "type": "fledge_rest_asset",
-        "base_url": args.base_url,
-        "asset_code": args.asset,
-        "requested_limit": args.limit,
-        "authentication_token_recorded": False,
-    }
-    report["claim_boundary"] = (
-        "Read from a Fledge REST-compatible endpoint and processed by the local FabGuard boundary; "
-        "not model scoring, field validation, or proof of production deployment."
-    )
-    (args.output_dir / "report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8"
-    )
-    (args.output_dir / "dead_letters.json").write_text(
-        json.dumps(report["dead_letters"], ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    (args.output_dir / "alerts.json").write_text(
-        json.dumps(report["alerts"], ensure_ascii=False, indent=2), encoding="utf-8"
+    def deliver(report: dict[str, object]) -> None:
+        report["source"] = {
+            "type": "fledge_rest_asset",
+            "base_url": args.base_url,
+            "asset_code": args.asset,
+            "requested_limit": args.limit,
+            "authentication_token_recorded": False,
+        }
+        report["claim_boundary"] = (
+            "Read from a Fledge REST-compatible endpoint and processed by the local FabGuard boundary; "
+            "not model scoring, field validation, or proof of production deployment."
+        )
+        _write_json_atomic(args.output_dir / "report.json", report)
+        _write_json_atomic(args.output_dir / "dead_letters.json", report["dead_letters"])
+        _write_json_atomic(args.output_dir / "alerts.json", report["alerts"])
+
+    report = processor.process_batch(
+        readings,
+        observed_at=args.observed_at,
+        reference=reference,
+        deliver=deliver,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
 
