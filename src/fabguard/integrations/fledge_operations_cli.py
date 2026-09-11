@@ -6,7 +6,9 @@ import argparse
 import json
 from pathlib import Path
 
-from .fledge_operations import FledgeOperationsProcessor, JsonStateStore, OperationsConfig
+from .fledge_operations import (
+    FledgeOperationsProcessor, JsonStateStore, OperationsConfig, write_operation_report,
+)
 from .fledge_smoke import load_readings
 
 
@@ -42,18 +44,10 @@ def main() -> None:
         if not isinstance(reference, dict):
             parser.error("--reference must contain a JSON object")
     report = processor.process_batch(
-        load_readings(args.input), observed_at=args.observed_at, reference=reference
+        load_readings(args.input), observed_at=args.observed_at, reference=reference,
+        deliver=lambda report: write_operation_report(args.output_dir, report),
     )
-    (args.output_dir / "report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2, default=str), encoding="utf-8"
-    )
-    (args.output_dir / "dead_letters.json").write_text(
-        json.dumps(report["dead_letters"], ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    (args.output_dir / "alerts.json").write_text(
-        json.dumps(report["alerts"], ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    print(json.dumps(report, ensure_ascii=False, indent=2, default=str))
+    print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
 
 
 if __name__ == "__main__":
