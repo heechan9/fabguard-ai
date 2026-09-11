@@ -307,6 +307,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [1개 라인·2주 최소 파일럿](docs/MINIMUM_PILOT.md) | 기존 절차 병행 shadow mode, 시작·중단 조건과 feasibility 지표 초안 |
 | [도메인 전문가 검토](docs/DOMAIN_EXPERT_REVIEW.md) | Top-K 큐 인수인계, 엔지니어 체크리스트, 기록·권한·에스컬레이션 초안 |
 | [실패 대응·책임·롤백](docs/FAILURE_GOVERNANCE.md) | 미탐·오경보·데이터/모델 장애 시 기본 동작, 역할과 재개 조건 |
+| [반도체 검토·검증 흐름](docs/SEMICONDUCTOR_REVIEW_WORKFLOW.md) | 공정·PE·품질 사용 사례와 데이터·승인 요구사항; 설계 문서, 현장 미검증 |
 | [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
 
 ## 기술 구성
