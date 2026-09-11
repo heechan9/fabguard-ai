@@ -57,12 +57,43 @@ Both REST and local-input CLI JSON artifacts are written through sibling tempora
 completion, processed IDs are not committed to `state.json`, so valid peers remain retryable. This
 is a local at-least-once safety property, not a multi-host transaction or production outbox.
 
-The three output files are individually atomic, not atomically committed together. A failed
-invocation may leave a partially refreshed output set; replay the original batch before consuming
-that set. CLI success requires all three files and state to be saved. A crash after output delivery
-but before state commit can repeat delivery. Direct process_batch callers must supply a durable
-deliver callback if they need the same output-before-state property. Stdout is only a convenience
-copy of the files, not the durable delivery boundary.
+### Recovering interrupted delivery
+
+Both CLIs now persist a strict-JSON `state.json.pending.json` journal before publishing outputs.
+It contains the complete report (including source metadata, rejected readings and alerts), the
+previous state and the next state. All three outputs are then replaced, state is saved, and the
+journal is removed, under the same single-writer lock.
+
+If output or state saving fails, fix the underlying disk/path problem and run the CLI again with
+the same output directory and its normal required arguments. Pending recovery happens before
+API access, input-file loading or reference loading. It uses the saved report and state without
+recomputing timestamps, drift or duplicate decisions; the original source may be unavailable.
+That invocation only recovers and prints the original report, then exits. Invoke again to ingest
+new data. New flags do not change the pending batch's original source or validation decisions.
+
+If state was saved but journal removal failed, recovery accepts the already-committed next state
+and replays the same report. Corrupt journals or state unrelated to either saved state fail closed
+without replacing outputs; preserve those files for manual inspection. Do not delete a pending
+journal merely to bypass recovery. It contains source evidence and needs the same access controls
+as report and dead-letter files. It does not store the REST authentication token.
+
+The three output files remain individually atomic, not atomically visible as a group. Treat an
+existing pending journal or an unsuccessful invocation as incomplete delivery. Concurrent readers
+must coordinate with the state lock; do not consume files during a write. This is recoverable local
+at-least-once delivery, not a multi-host or exactly-once transaction. Abrupt process termination can
+still leave the existing exclusive lock: confirm its owner is gone before operator cleanup as
+described above. Directory fsync and power-loss guarantees remain outside this local backend.
+
+Programmatic callers opt into the journal with `process_batch(..., durable_output=True)` and call
+`state_store.recover_pending()` before obtaining new input; a pending journal blocks new processing.
+Do not combine durable output with a custom delivery callback. The legacy callback path retains
+its retry behavior but does not get automatic journal recovery. Stdout is a convenience copy of
+the files, not the durable delivery boundary.
+
+Regression command: `PYTHONPATH=src python -m unittest discover -s tests -p 'test_fledge*.py' -v`.
+Coverage includes each artifact failure, unavailable-source recovery for both CLIs, state-save
+failure, post-commit cleanup failure, journal write failure, corrupt/divergent state and pending
+batch exclusion. These are injected local failure/restart tests, not field or power-loss tests.
 
 ## Local benchmark
 

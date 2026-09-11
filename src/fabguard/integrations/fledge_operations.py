@@ -58,6 +58,20 @@ def _json_safe_evidence(value: object) -> object:
     return repr(value)
 
 
+def _write_json_atomic(path: Path, value: object) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    payload = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False)
+    try:
+        with temporary.open("w", encoding="utf-8") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+
 def write_operation_report(output_dir: Path, report: dict[str, object]) -> None:
     """Deliver strict JSON artifacts while the caller holds the state lock.
 
@@ -69,18 +83,7 @@ def write_operation_report(output_dir: Path, report: dict[str, object]) -> None:
         ("dead_letters.json", report["dead_letters"]),
         ("alerts.json", report["alerts"]),
     ):
-        path = output_dir / name
-        temporary = path.with_suffix(path.suffix + ".tmp")
-        payload = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False)
-        try:
-            with temporary.open("w", encoding="utf-8") as handle:
-                handle.write(payload)
-                handle.flush()
-                os.fsync(handle.fileno())
-            os.replace(temporary, path)
-        except BaseException:
-            temporary.unlink(missing_ok=True)
-            raise
+        _write_json_atomic(output_dir / name, value)
 
 
 class JsonStateStore:
@@ -89,6 +92,55 @@ class JsonStateStore:
     def __init__(self, path: Path):
         self.path = path
         self.lock_path = path.with_suffix(path.suffix + ".lock")
+        self.pending_path = path.with_suffix(path.suffix + ".pending.json")
+
+    def recover_pending(self) -> dict[str, object] | None:
+        """Finish a journaled batch without reading its original source again."""
+        with self.exclusive():
+            if not self.pending_path.exists():
+                return None
+            try:
+                pending = json.loads(self.pending_path.read_text(encoding="utf-8"))
+                json.dumps(pending, allow_nan=False)
+                if not isinstance(pending, dict) or pending.get("schema_version") != 1:
+                    raise ValueError("invalid journal schema")
+                for key in ("previous_state", "next_state"):
+                    state = pending[key]
+                    if (not isinstance(state, dict)
+                            or not isinstance(state.get("seen", {}), dict)
+                            or not isinstance(state.get("last_seen", {}), dict)
+                            or not isinstance(state.get("disconnect_alerted", []), list)):
+                        raise ValueError("invalid journal state")
+                report = pending["report"]
+                if (not isinstance(report, dict)
+                        or not all(isinstance(report.get(key), list)
+                                   for key in ("accepted", "dead_letters", "alerts"))):
+                    raise ValueError("invalid journal report")
+            except (OSError, ValueError, TypeError, KeyError) as error:
+                raise StateStoreError("pending delivery journal is unreadable or corrupt") from error
+            # A prior attempt may have committed state and failed during cleanup.
+            if self.load() not in (pending["previous_state"], pending["next_state"]):
+                raise StateStoreError("state diverged from pending delivery; manual review required")
+            self._finish_delivery(pending)
+            return report
+
+    def commit_report(self, state: dict[str, object], report: dict[str, object]) -> None:
+        """Journal before publishing any artifact; caller must hold exclusive()."""
+        if self.pending_path.exists():
+            raise StateStoreError("pending delivery must be recovered before processing new input")
+        pending = {
+            "schema_version": 1,
+            "previous_state": self.load(),
+            "next_state": state,
+            "report": report,
+        }
+        _write_json_atomic(self.pending_path, pending)
+        self._finish_delivery(pending)
+
+    def _finish_delivery(self, pending: dict[str, object]) -> None:
+        write_operation_report(self.path.parent, pending["report"])
+        self.save(pending["next_state"])
+        self.pending_path.unlink()
 
     def load(self) -> dict[str, object]:
         if not self.path.exists():
@@ -177,13 +229,23 @@ class FledgeOperationsProcessor:
         observed_at: str | datetime,
         reference: Mapping[str, Iterable[float]] | None = None,
         deliver: Callable[[dict[str, object]], None] | None = None,
+        durable_output: bool = False,
+        report_context: Mapping[str, object] | None = None,
     ) -> dict[str, object]:
+        if durable_output and deliver is not None:
+            raise ValueError("durable_output cannot be combined with a custom deliver callback")
+        if report_context and set(report_context) - {"source", "claim_boundary"}:
+            raise ValueError("report_context may only contain source and claim_boundary")
         with self.state_store.exclusive():
+            if self.state_store.pending_path.exists():
+                raise StateStoreError("pending delivery must be recovered before processing new input")
             return self._process_locked(
                 readings,
                 observed_at=observed_at,
                 reference=reference,
                 deliver=deliver,
+                durable_output=durable_output,
+                report_context=report_context,
             )
 
     def _process_locked(
@@ -193,6 +255,8 @@ class FledgeOperationsProcessor:
         observed_at: str | datetime,
         reference: Mapping[str, Iterable[float]] | None,
         deliver: Callable[[dict[str, object]], None] | None,
+        durable_output: bool,
+        report_context: Mapping[str, object] | None,
     ) -> dict[str, object]:
         started = perf_counter()
         observed = _utc(observed_at)
@@ -312,7 +376,12 @@ class FledgeOperationsProcessor:
         # Validate and optionally deliver the complete report before consuming
         # accepted sample IDs in durable deduplication state. A delivery error
         # therefore leaves the batch retryable.
+        if report_context:
+            report.update(report_context)
         json.dumps(report, allow_nan=False)
+        if durable_output:
+            self.state_store.commit_report(persisted, report)
+            return report
         if deliver is not None:
             deliver(report)
         self.state_store.save(persisted)
