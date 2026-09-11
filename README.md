@@ -292,6 +292,9 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
 | [잠금 평가 준비 계약](docs/LOCKED_EVALUATION_CONTRACT.md) | 외부 데이터·잠금 모델·사전 승인 SHA-256 결합과 무실행 검증 게이트 |
 | [잠금 독립 평가 계약](docs/LOCKED_SCORING_CONTRACT.md) | 승인된 데이터·모델 바이트의 재검증, 무재학습 scoring과 통계 산출물 |
+| [석사 연구질문](docs/RESEARCH_QUESTION.md) · [V2 사전등록](docs/V2_PROTOCOL.md) | 단일 반증 가능 질문, 주장 한계와 missingness-indicator 제한 실험 |
+| [외부 데이터 판정 계약](docs/EXTERNAL_DATA_QUALIFICATION.md) | 데이터를 보기 전 고정한 동일 도메인·교차 도메인·부적합 판정 기준 |
+| [선행연구 위치](docs/RELATED_WORK.md) · [합성 잠금평가 드라이런](docs/LOCKED_EVALUATION_DRY_RUN.md) | 직접 비교 규칙과 fail-closed 검증 범위 |
 | [AI 활용·기여](AI_USAGE.md) · [기여 구분](CONTRIBUTIONS.md) | 사람·AI 협업 원칙과 작업 주체 |
 
 ### 현장·확장 설계
