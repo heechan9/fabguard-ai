@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-10
+
+- Addressed Codex Security scan `ac438ac3-d9a5-4e68-8f95-dbee8079d89c` finding 1 by rejecting nonfinite Fledge measurements, preserving rejected input as strict-JSON-safe evidence, and committing deduplication state only after REST report delivery succeeds.
+
 ## 2026-09-09
 
 - Added a country-first machine-readable evidence catalog and navigation page while retaining all existing canonical paths, preventing broken links and duplicate evidence during the migration.

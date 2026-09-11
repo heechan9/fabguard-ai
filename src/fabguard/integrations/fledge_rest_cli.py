@@ -7,7 +7,9 @@ import json
 import os
 from pathlib import Path
 
-from .fledge_operations import FledgeOperationsProcessor, JsonStateStore, OperationsConfig
+from .fledge_operations import (
+    FledgeOperationsProcessor, JsonStateStore, OperationsConfig, write_operation_report,
+)
 from .fledge_rest import FledgeRestConfig, fetch_asset_readings
 
 
@@ -55,26 +57,25 @@ def main() -> None:
         ),
         JsonStateStore(args.output_dir / "state.json"),
     )
-    report = processor.process_batch(readings, observed_at=args.observed_at, reference=reference)
-    report["source"] = {
-        "type": "fledge_rest_asset",
-        "base_url": args.base_url,
-        "asset_code": args.asset,
-        "requested_limit": args.limit,
-        "authentication_token_recorded": False,
-    }
-    report["claim_boundary"] = (
-        "Read from a Fledge REST-compatible endpoint and processed by the local FabGuard boundary; "
-        "not model scoring, field validation, or proof of production deployment."
-    )
-    (args.output_dir / "report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8"
-    )
-    (args.output_dir / "dead_letters.json").write_text(
-        json.dumps(report["dead_letters"], ensure_ascii=False, indent=2), encoding="utf-8"
-    )
-    (args.output_dir / "alerts.json").write_text(
-        json.dumps(report["alerts"], ensure_ascii=False, indent=2), encoding="utf-8"
+    def deliver(report: dict[str, object]) -> None:
+        report["source"] = {
+            "type": "fledge_rest_asset",
+            "base_url": args.base_url,
+            "asset_code": args.asset,
+            "requested_limit": args.limit,
+            "authentication_token_recorded": False,
+        }
+        report["claim_boundary"] = (
+            "Read from a Fledge REST-compatible endpoint and processed by the local FabGuard boundary; "
+            "not model scoring, field validation, or proof of production deployment."
+        )
+        write_operation_report(args.output_dir, report)
+
+    report = processor.process_batch(
+        readings,
+        observed_at=args.observed_at,
+        reference=reference,
+        deliver=deliver,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
 

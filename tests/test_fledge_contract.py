@@ -1,3 +1,4 @@
+import math
 import unittest
 
 import pandas as pd
@@ -69,6 +70,18 @@ class FledgeContractTest(unittest.TestCase):
             normalize_fledge_readings([valid], required_measurements=["temperature"])
         with self.assertRaisesRegex(FledgeContractError, "duplicate"):
             normalize_fledge_readings([valid, valid])
+
+    def test_rejects_nonfinite_measurements(self) -> None:
+        for value in (math.nan, math.inf, -math.inf):
+            reading = {
+                "asset_code": "etch-01",
+                "user_ts": "2026-09-04T01:00:00Z",
+                "reading": {"pressure": value},
+            }
+            with self.subTest(value=value), self.assertRaisesRegex(
+                FledgeContractError, "must be finite"
+            ):
+                normalize_fledge_readings([reading])
 
     def test_empty_batch_preserves_required_measurement_schema(self) -> None:
         frame = normalize_fledge_readings(

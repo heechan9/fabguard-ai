@@ -8,6 +8,7 @@ The upstream plugin lifecycle remains future work pending maintainer discussion.
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
+import math
 
 import pandas as pd
 
@@ -25,9 +26,10 @@ def normalize_fledge_readings(
 
     Expected envelope fields are ``asset_code``, ``reading`` and either
     ``user_ts`` or ``ts``. Timestamps must be ISO 8601 strings; numeric epoch
-    values are deliberately rejected because their unit is ambiguous. Measurement values must be numeric or null. Missing
-    required measurements fail closed so malformed edge data cannot silently
-    enter an experiment or inference path.
+    values are deliberately rejected because their unit is ambiguous.
+    Measurement values must be finite numeric values or null. Missing required
+    measurements fail closed so malformed edge data cannot silently enter an
+    experiment or inference path.
     """
 
     required = tuple(dict.fromkeys(required_measurements))
@@ -70,10 +72,15 @@ def normalize_fledge_readings(
         for name, value in measurements.items():
             if not isinstance(name, str) or not name:
                 raise FledgeContractError(f"reading[{index}] contains an invalid measurement name")
-            if value is not None and (isinstance(value, bool) or not isinstance(value, (int, float))):
-                raise FledgeContractError(
-                    f"reading[{index}].reading.{name} must be numeric or null"
-                )
+            if value is not None:
+                if isinstance(value, bool) or not isinstance(value, (int, float)):
+                    raise FledgeContractError(
+                        f"reading[{index}].reading.{name} must be numeric or null"
+                    )
+                if isinstance(value, float) and not math.isfinite(value):
+                    raise FledgeContractError(
+                        f"reading[{index}].reading.{name} must be finite"
+                    )
             feature = f"measurement__{name}"
             row[feature] = value
             if feature not in feature_order:

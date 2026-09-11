@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from time import perf_counter
-from typing import Iterable, Mapping
+from typing import Callable, Iterable, Mapping
 
 import numpy as np
 
@@ -43,6 +43,44 @@ class OperationsConfig:
 
 class StateStoreError(RuntimeError):
     """Raised when durable local state cannot be trusted or exclusively updated."""
+
+
+def _json_safe_evidence(value: object) -> object:
+    """Preserve rejected input without allowing NaN/Infinity to poison reports."""
+    if value is None or isinstance(value, (str, bool, int)):
+        return value
+    if isinstance(value, float):
+        return value if math.isfinite(value) else repr(value)
+    if isinstance(value, Mapping):
+        return {str(key): _json_safe_evidence(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe_evidence(item) for item in value]
+    return repr(value)
+
+
+def write_operation_report(output_dir: Path, report: dict[str, object]) -> None:
+    """Deliver strict JSON artifacts while the caller holds the state lock.
+
+    Each file is replaced atomically, but the group is not a transaction.
+    A failure must propagate so process_batch leaves state retryable.
+    """
+    for name, value in (
+        ("report.json", report),
+        ("dead_letters.json", report["dead_letters"]),
+        ("alerts.json", report["alerts"]),
+    ):
+        path = output_dir / name
+        temporary = path.with_suffix(path.suffix + ".tmp")
+        payload = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False)
+        try:
+            with temporary.open("w", encoding="utf-8") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, path)
+        except BaseException:
+            temporary.unlink(missing_ok=True)
+            raise
 
 
 class JsonStateStore:
@@ -138,9 +176,15 @@ class FledgeOperationsProcessor:
         *,
         observed_at: str | datetime,
         reference: Mapping[str, Iterable[float]] | None = None,
+        deliver: Callable[[dict[str, object]], None] | None = None,
     ) -> dict[str, object]:
         with self.state_store.exclusive():
-            return self._process_locked(readings, observed_at=observed_at, reference=reference)
+            return self._process_locked(
+                readings,
+                observed_at=observed_at,
+                reference=reference,
+                deliver=deliver,
+            )
 
     def _process_locked(
         self,
@@ -148,6 +192,7 @@ class FledgeOperationsProcessor:
         *,
         observed_at: str | datetime,
         reference: Mapping[str, Iterable[float]] | None,
+        deliver: Callable[[dict[str, object]], None] | None,
     ) -> dict[str, object]:
         started = perf_counter()
         observed = _utc(observed_at)
@@ -201,7 +246,7 @@ class FledgeOperationsProcessor:
                 last_seen[str(row["asset_code"])] = event_time.isoformat()
                 disconnect_alerted.discard(str(row["asset_code"]))
             except (FledgeContractError, ValueError, TypeError) as error:
-                raw = dict(reading) if isinstance(reading, Mapping) else repr(reading)
+                raw = _json_safe_evidence(reading)
                 dead_letters.append({"index": index, "reason": str(error), "reading": raw})
 
         for asset_code, timestamp in last_seen.items():
@@ -250,9 +295,8 @@ class FledgeOperationsProcessor:
             "last_seen": last_seen,
             "disconnect_alerted": sorted(disconnect_alerted),
         }
-        self.state_store.save(persisted)
         elapsed = max(perf_counter() - started, 1e-12)
-        return {
+        report: dict[str, object] = {
             "status": "local_operational_validation",
             "input_count": len(accepted) + len(dead_letters),
             "accepted_count": len(accepted),
@@ -265,3 +309,11 @@ class FledgeOperationsProcessor:
             "throughput_readings_per_second": (len(accepted) + len(dead_letters)) / elapsed,
             "claim_boundary": "Local operational harness; not execution inside Fledge or field validation.",
         }
+        # Validate and optionally deliver the complete report before consuming
+        # accepted sample IDs in durable deduplication state. A delivery error
+        # therefore leaves the batch retryable.
+        json.dumps(report, allow_nan=False)
+        if deliver is not None:
+            deliver(report)
+        self.state_store.save(persisted)
+        return report

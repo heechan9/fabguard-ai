@@ -21,8 +21,8 @@ coupling FabGuard's model experiment to the Fledge lifecycle.
 | --- | --- | --- |
 | Reading ingestion | JSON batches and the official read-only asset REST envelope enter the same normalization boundary | Completed against local Fledge v3.1.0; separately assess an in-process plugin and field sensor |
 | Fault scenarios | Missing/invalid, duplicate, late and disconnected-asset cases have deterministic tests | Sensor/network faults in a Fledge deployment |
-| Isolation | Invalid readings are written to a dead-letter result while valid rows continue | Select upstream DLQ or metadata convention |
-| Restart | Single-writer JSON state uses flush/fsync plus atomic replacement; corrupt state fails closed | Local Fledge restart verified; validate a production state backend |
+| Isolation | Invalid and nonfinite readings are written as JSON-safe dead-letter evidence while valid rows continue | Select upstream DLQ or metadata convention |
+| Restart | Single-writer JSON state uses flush/fsync plus atomic replacement; REST output must complete before accepted IDs are committed | Local Fledge restart verified; validate a production state backend |
 | Capacity | Ordered and deterministic stress-profile local reports record min/mean/max | Measure container/device latency, memory and back-pressure |
 | Drift and alerts | PSI handles minimum evidence and constant baselines; disconnect alerts are one-shot until recovery | Agree thresholds, baseline lifecycle and notification plugin mapping |
 
@@ -52,6 +52,17 @@ python -m fabguard.integrations.fledge_operations_cli ^
 
 This creates `report.json`, `dead_letters.json`, `alerts.json`, and atomic `state.json`. Running the
 same input again demonstrates restart-safe duplicate isolation.
+
+Both REST and local-input CLI JSON artifacts are written through sibling temporary files. If report delivery raises before
+completion, processed IDs are not committed to `state.json`, so valid peers remain retryable. This
+is a local at-least-once safety property, not a multi-host transaction or production outbox.
+
+The three output files are individually atomic, not atomically committed together. A failed
+invocation may leave a partially refreshed output set; replay the original batch before consuming
+that set. CLI success requires all three files and state to be saved. A crash after output delivery
+but before state commit can repeat delivery. Direct process_batch callers must supply a durable
+deliver callback if they need the same output-before-state property. Stdout is only a convenience
+copy of the files, not the durable delivery boundary.
 
 ## Local benchmark
 
