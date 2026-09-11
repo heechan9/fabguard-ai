@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 from .fledge_operations import (
-    FledgeOperationsProcessor, JsonStateStore, OperationsConfig, write_operation_report,
+    FledgeOperationsProcessor, JsonStateStore, OperationsConfig,
 )
 from .fledge_smoke import load_readings
 
@@ -27,6 +27,11 @@ def main() -> None:
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    store = JsonStateStore(args.output_dir / "state.json")
+    recovered = store.recover_pending()
+    if recovered is not None:
+        print(json.dumps(recovered, ensure_ascii=False, indent=2, allow_nan=False))
+        return
     processor = FledgeOperationsProcessor(
         OperationsConfig(
             required_measurements=tuple(args.require),
@@ -36,7 +41,7 @@ def main() -> None:
             dedupe_retention_seconds=args.dedupe_retention_seconds,
             drift_min_samples=args.drift_min_samples,
         ),
-        JsonStateStore(args.output_dir / "state.json"),
+        store,
     )
     reference = None
     if args.reference:
@@ -45,7 +50,7 @@ def main() -> None:
             parser.error("--reference must contain a JSON object")
     report = processor.process_batch(
         load_readings(args.input), observed_at=args.observed_at, reference=reference,
-        deliver=lambda report: write_operation_report(args.output_dir, report),
+        durable_output=True,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
 
