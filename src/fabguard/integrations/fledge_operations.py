@@ -58,6 +58,31 @@ def _json_safe_evidence(value: object) -> object:
     return repr(value)
 
 
+def write_operation_report(output_dir: Path, report: dict[str, object]) -> None:
+    """Deliver strict JSON artifacts while the caller holds the state lock.
+
+    Each file is replaced atomically, but the group is not a transaction.
+    A failure must propagate so process_batch leaves state retryable.
+    """
+    for name, value in (
+        ("report.json", report),
+        ("dead_letters.json", report["dead_letters"]),
+        ("alerts.json", report["alerts"]),
+    ):
+        path = output_dir / name
+        temporary = path.with_suffix(path.suffix + ".tmp")
+        payload = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False)
+        try:
+            with temporary.open("w", encoding="utf-8") as handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, path)
+        except BaseException:
+            temporary.unlink(missing_ok=True)
+            raise
+
+
 class JsonStateStore:
     """Small single-writer state store used to verify local restart behavior."""
 
