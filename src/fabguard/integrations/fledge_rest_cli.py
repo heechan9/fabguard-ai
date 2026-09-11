@@ -7,23 +7,10 @@ import json
 import os
 from pathlib import Path
 
-from .fledge_operations import FledgeOperationsProcessor, JsonStateStore, OperationsConfig
+from .fledge_operations import (
+    FledgeOperationsProcessor, JsonStateStore, OperationsConfig, write_operation_report,
+)
 from .fledge_rest import FledgeRestConfig, fetch_asset_readings
-
-
-def _write_json_atomic(path: Path, value: object) -> None:
-    """Write strict JSON through a sibling temporary file."""
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    payload = json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False)
-    try:
-        with temporary.open("w", encoding="utf-8") as handle:
-            handle.write(payload)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temporary, path)
-    except BaseException:
-        temporary.unlink(missing_ok=True)
-        raise
 
 
 def main() -> None:
@@ -82,9 +69,7 @@ def main() -> None:
             "Read from a Fledge REST-compatible endpoint and processed by the local FabGuard boundary; "
             "not model scoring, field validation, or proof of production deployment."
         )
-        _write_json_atomic(args.output_dir / "report.json", report)
-        _write_json_atomic(args.output_dir / "dead_letters.json", report["dead_letters"])
-        _write_json_atomic(args.output_dir / "alerts.json", report["alerts"])
+        write_operation_report(args.output_dir, report)
 
     report = processor.process_batch(
         readings,
