@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 
 from .fledge_operations import (
-    FledgeOperationsProcessor, JsonStateStore, OperationsConfig, write_operation_report,
+    FledgeOperationsProcessor, JsonStateStore, OperationsConfig,
 )
 from .fledge_rest import FledgeRestConfig, fetch_asset_readings
 
@@ -29,6 +29,13 @@ def main() -> None:
     parser.add_argument("--max-future-skew-seconds", type=float, default=5.0)
     parser.add_argument("--disconnect-after-seconds", type=float, default=120.0)
     args = parser.parse_args()
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    store = JsonStateStore(args.output_dir / "state.json")
+    recovered = store.recover_pending()
+    if recovered is not None:
+        print(json.dumps(recovered, ensure_ascii=False, indent=2, allow_nan=False))
+        return
 
     token = os.environ.get(args.token_env)
     readings = fetch_asset_readings(
@@ -55,27 +62,28 @@ def main() -> None:
             max_future_skew_seconds=args.max_future_skew_seconds,
             disconnect_after_seconds=args.disconnect_after_seconds,
         ),
-        JsonStateStore(args.output_dir / "state.json"),
+        store,
     )
-    def deliver(report: dict[str, object]) -> None:
-        report["source"] = {
+    report_context = {
+        "source": {
             "type": "fledge_rest_asset",
             "base_url": args.base_url,
             "asset_code": args.asset,
             "requested_limit": args.limit,
             "authentication_token_recorded": False,
-        }
-        report["claim_boundary"] = (
+        },
+        "claim_boundary": (
             "Read from a Fledge REST-compatible endpoint and processed by the local FabGuard boundary; "
             "not model scoring, field validation, or proof of production deployment."
-        )
-        write_operation_report(args.output_dir, report)
+        ),
+    }
 
     report = processor.process_batch(
         readings,
         observed_at=args.observed_at,
         reference=reference,
-        deliver=deliver,
+        durable_output=True,
+        report_context=report_context,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False))
 
