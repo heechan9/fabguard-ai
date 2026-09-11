@@ -53,9 +53,16 @@ python -m fabguard.integrations.fledge_operations_cli ^
 This creates `report.json`, `dead_letters.json`, `alerts.json`, and atomic `state.json`. Running the
 same input again demonstrates restart-safe duplicate isolation.
 
-REST JSON artifacts are written through sibling temporary files. If report delivery raises before
+Both REST and local-input CLI JSON artifacts are written through sibling temporary files. If report delivery raises before
 completion, processed IDs are not committed to `state.json`, so valid peers remain retryable. This
 is a local at-least-once safety property, not a multi-host transaction or production outbox.
+
+The three output files are individually atomic, not atomically committed together. A failed
+invocation may leave a partially refreshed output set; replay the original batch before consuming
+that set. CLI success requires all three files and state to be saved. A crash after output delivery
+but before state commit can repeat delivery. Direct process_batch callers must supply a durable
+deliver callback if they need the same output-before-state property. Stdout is only a convenience
+copy of the files, not the durable delivery boundary.
 
 ## Local benchmark
 
