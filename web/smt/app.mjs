@@ -1,8 +1,10 @@
 import * as THREE from './vendor/three.module.js';
 import {Simulation,STATIONS,FAULTS,assess} from './simulation.mjs';
 import {showEquipment} from './equipment.mjs';
+import {mountInspection} from './inspection.mjs';
 
 const $=id=>document.getElementById(id),sim=new Simulation();
+const inspection=mountInspection($('inspection-lab'));
 let selected='PCB-001',activeStation=2,followInjected=false;
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.label}<small>${s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
@@ -11,7 +13,7 @@ selectStation(2);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
 $('play').addEventListener('click',()=>{if(sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
-$('reset').addEventListener('click',()=>{sim.reset();selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
+$('reset').addEventListener('click',()=>{inspection.reset();sim.reset();selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
 $('speed').addEventListener('change',e=>{sim.speed=Number(e.target.value);});
 $('board-select').addEventListener('change',e=>{selected=e.target.value;updateUI();});
 $('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(sim.snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-synthetic-run.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
@@ -19,6 +21,7 @@ let prevOptions='',prevHistory='';
 function updateUI(){
  if(followInjected){const b=sim.boards.at(-1);if(b.fault&&!sim.pending){selected=b.id;followInjected=false;}}
  const options=sim.boards.map(b=>b.id).join(',');if(options!==prevOptions){$('board-select').replaceChildren(...sim.boards.map(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.id+(b.fault?` · ${FAULTS[b.fault]}`:'');return o;}));prevOptions=options;}
+ inspection.selectBoard(selected);
  $('board-select').value=selected;const b=sim.boards.find(b=>b.id===selected)||sim.boards[0],a=assess(b);
  $('board-status').textContent=a.status.replace('가상 AOI NG','가상 불량').replace('가상 AOI OK','가상 최종검사 통과').replace('관측값 정상 범위','가상 측정값이 설정 범위 안에 있어요');$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':''}`;
  $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATIONS[Math.max(0,b.stage)].label}`;
