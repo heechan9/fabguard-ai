@@ -9,3 +9,10 @@
 .smt-page footer a{color:var(--cyan);font-size:14px;text-underline-offset:4px}
 
 .inspection-cards[hidden],#inspection-takeaway[hidden]{display:none}
+
+.smt-page .inspection-context{border-left:0;padding-left:0;color:var(--muted)}
+.inspection-step{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;margin-right:8px;border:1px solid var(--line);border-radius:6px;background:rgba(57,214,196,.07);color:var(--cyan);font:600 13px monospace;vertical-align:middle}
+.smt-page main details>summary{min-height:44px;padding:10px 12px;border-radius:6px;cursor:pointer;line-height:1.6;transition:background .15s}
+.smt-page main details>summary:hover,.smt-page main details>summary:focus-visible{background:rgba(57,214,196,.09)}
+.smt-page main details>summary:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.smt-page main details>summary{transition:none}}
