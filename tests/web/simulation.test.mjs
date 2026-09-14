@@ -1,0 +1,8 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Simulation,assess,TOTAL} from '../../web/smt/simulation.mjs';
+test('12 deterministic boards complete without manufacturing claims',()=>{const s=new Simulation();s.advance(100);assert.equal(s.boards.length,12);assert.ok(s.boards.every(b=>b.done&&b.aoi==='OK'));assert.equal(s.time,44+TOTAL);assert.equal(s.running,false);const original=s.snapshot().boards;s.reset();s.advance(100);assert.deepEqual(s.snapshot().boards,original);});
+test('fault is next board only, disclosed after measurement',()=>{const s=new Simulation();s.arm('paste');s.advance(4);const b=s.boards[1];assert.equal(b.fault,'paste');assert.equal(b.volume,null);assert.equal(assess(b).level,'normal');s.advance(7);assert.ok(b.volume<80);assert.equal(assess(b).level,'warn');s.advance(100);assert.equal(b.aoi,'NG');assert.equal(s.boards.filter(x=>x.fault).length,1);});
+test('heat is not exposed before reflow exit',()=>{const s=new Simulation();s.arm('heat');s.advance(32.9);const b=s.boards[1];assert.equal(b.peak,null);s.advance(.2);assert.ok(b.peak>250);assert.equal(assess(b).level,'warn');});
+test('missing SPI never falsely normal, including AOI OK',()=>{const s=new Simulation();s.arm('missing');s.advance(100);const b=s.boards[1];assert.equal(b.aoi,'OK');assert.equal(b.volume,null);assert.equal(assess(b).level,'warn');});
+test('pause, pending replacement, invalid fault, end-of-batch guard',()=>{const s=new Simulation();s.running=false;s.advance(50);assert.equal(s.time,0);s.arm('paste');s.arm('heat');assert.equal(s.pending,'heat');assert.throws(()=>s.arm('other'));s.running=true;s.advance(100);assert.throws(()=>s.arm('heat'));});

@@ -33,3 +33,11 @@ jobs:
 
       - name: Check web JavaScript syntax
         run: node --check web/app.js
+
+      - name: Check shared evidence and SMT simulation
+        run: |
+          python scripts/build_web_evidence.py --check
+          node --check web/smt/app.mjs
+          node --check web/smt/evidence.mjs
+          node --check web/secom/secom.mjs
+          node --test tests/web/*.test.mjs

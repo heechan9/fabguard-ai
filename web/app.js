@@ -1,3 +1,4 @@
+import { mountEvidence } from "./smt/evidence.mjs";
 const app = document.querySelector("#app");
 let state = { summary: null, risks: null, phase1: null, dkasc: null, globalE2E: null, globalCandidates: null };
 let professionalEvidenceHtml = "";
@@ -173,6 +174,8 @@ function summaryView() {
   const requestedView = location.hash.replace(/^#/, "") || "summary";
   if (requestedView === "global") {
     [...app.children].forEach(section => { if (!section.classList.contains("global-section")) section.remove(); });
+    app.insertAdjacentHTML("beforeend", `<section id="country-evidence" class="panel evidence-section"></section>`);
+    mountEvidence();
   } else {
     app.querySelector(".global-section")?.remove();
     app.querySelectorAll(expertSelectors).forEach(section => section.remove());
@@ -181,6 +184,7 @@ function summaryView() {
     app.querySelector(".data-strip")?.setAttribute("data-section", "03");
     const result = app.querySelector(".story-section");
     result?.setAttribute("data-section", "04");
+    result?.insertAdjacentHTML("afterend", `<section class="evidence-entry smt-entry"><div><p class="kicker">SMT 3D LAB · SYNTHETIC SCENARIO</p><h2>공정 흐름을 직접 살펴보세요.</h2><p>PCB 이동·납 부족·과열·센서 누락을 조작하는 가상 실험실입니다. SECOM 모델을 SMT에 적용하지 않으며, 국가별 실제 분석 근거를 따로 확인할 수 있습니다.</p></div><a class="button" href="/smt/">SMT 3D 실험실 <span>→</span></a></section>`);
     result?.insertAdjacentHTML("afterend", `<section class="evidence-entry"><div><p class="kicker">FOR PROFESSIONAL REVIEW</p><h2>검증 설계와 한계를<br>더 확인하시겠어요?</h2><p>시간순 검증, 불확실성, 현장 적용 경계와 실패 기록을 한 화면에서 확인할 수 있습니다.</p></div><a class="button" href="#limitations">방법론과 한계 전체 보기 <span>→</span></a></section>`);
   }
 }

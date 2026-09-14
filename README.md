@@ -11,6 +11,8 @@
 <!-- primary-navigation -->
 <p align="center">
   <a href="https://fabguard-ai.vercel.app/"><strong>🌐 웹 데모 보기 →</strong></a> ·
+  <a href="https://fabguard-ai.vercel.app/smt/">SMT 3D 실험실</a> ·
+  <a href="https://fabguard-ai.vercel.app/secom/">반도체 분석</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
