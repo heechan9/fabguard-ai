@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Simulation} from '../../web/smt/simulation.mjs';
+import {measurementEvidence} from '../../web/smt/measurement-model.mjs';
+test('unmeasured values remain hidden even when raw synthetic values exist',()=>{const s=new Simulation();const e=measurementEvidence(s.boards[0]);assert.ok(e.every(x=>x.state==='waiting'));});
+test('mixed batch retains normal, low paste, heat and missing evidence',()=>{const s=new Simulation();for(const fault of ['paste','heat','missing']){s.arm(fault);s.advance(4);}s.advance(100);const e=s.boards.slice(0,4).map(measurementEvidence);assert.ok(e[0].every(x=>x.state==='within'));assert.equal(e[1][0].state,'outside');assert.match(e[1][0].difference,/%p/);assert.equal(e[2][1].state,'outside');assert.equal(e[3][0].state,'missing');assert.equal(s.boards[3].aoi,'OK');assert.match(e[3][0].measurement,/判断|판단 보류/);});
+test('inclusive limits, both directions, invalid numbers and reset',()=>{for(const [volume,peak,state] of [[80,235,'within'],[120,250,'within'],[65,251,'outside'],[121,234,'outside'],[NaN,Infinity,'missing']]){assert.ok(measurementEvidence({stage:8,volume,peak}).every(x=>x.state===state));}assert.match(measurementEvidence({stage:8,volume:65,peak:240})[0].difference,/15%p/);const s=new Simulation();s.advance(100);s.reset();assert.ok(measurementEvidence(s.boards[0]).every(x=>x.state==='waiting'));});
