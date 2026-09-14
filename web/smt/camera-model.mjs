@@ -1,5 +1,5 @@
 // Camera framing only; these values do not describe physical equipment performance.
-export const MIN_ZOOM=0.1, MAX_ZOOM=1.8;
+export const MIN_ZOOM=0.035, MAX_ZOOM=1.8;
 export const clampZoom=value=>Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,value));
 export const overviewDistance=aspect=>aspect<1.35?47:36;
 export function stationZoom(width,aspect){
