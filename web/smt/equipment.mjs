@@ -1,3 +1,4 @@
+import {STATION_TERMS} from './terms.mjs';
 // Transcribed from the user-provided school archive, not a live inventory.
 export const EQUIPMENT_SOURCE = {
   url: 'https://amic.tukorea.ac.kr/equ/equInfo/equInfo.hs',
@@ -20,6 +21,8 @@ export const EQUIPMENT = [
 
 export function showEquipment(root,index){
   const equipment=EQUIPMENT[index];
+  root.querySelector('[data-formal-name]').textContent=STATION_TERMS[index].plain+' — '+STATION_TERMS[index].formal;
+  root.querySelector('[data-term-explanation]').textContent=STATION_TERMS[index].explanation;
   root.querySelector('summary').textContent=`선택한 장비의 참고 모델 · ${equipment.model}`;
   const facts=[['자료의 장비명',equipment.name],['모델',equipment.model],
     ['제조사 표기',equipment.maker==='YAHAMA'?'YAHAMA (원문 표기 · 확인 필요)':equipment.maker],

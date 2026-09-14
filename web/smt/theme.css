@@ -17,3 +17,5 @@
 @media(max-width:800px){.smt-page .smt-main{width:94vw}.smt-page .heading{padding:24px 20px}.smt-page h1{font-size:30px}.smt-page .run-state{color:var(--muted)}.smt-page aside{border-color:var(--line)}#country-evidence{padding:20px 16px}.analysis-page .panel{padding:24px 16px}.evidence-section .evidence-table{min-width:560px}.lab-context{margin-top:20px}.smt-page .lab-context .text-link{font-size:13px}.smt-page #view-error{inset:12%;font-size:13px}}
 
 .measurement-details{margin:18px 0;line-height:1.65}.measurement-details summary{cursor:pointer;font-weight:700;color:#65d9c8}.measurement-card{border:1px solid #304650;border-radius:8px;padding:12px;margin-top:10px;overflow-wrap:anywhere}.measurement-card h3{font-size:15px;margin:0 0 8px}.measurement-card p{font-size:13px;margin:6px 0}.measurement-card strong{color:#a6c7ce}
+
+.technical-terms{border-top:1px solid #304650;margin-top:14px;padding-top:12px;line-height:1.75;overflow-wrap:anywhere}.technical-terms h3{font-size:15px;color:#65d9c8}.technical-terms p{font-size:13px}.station-strip abbr[title]{text-decoration:underline dotted;text-underline-offset:3px}
