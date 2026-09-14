@@ -1,3 +1,4 @@
+import {STATION_TERMS,plainCopy} from './terms.mjs';
 import {TapGuard} from './gesture-model.mjs';
 import {lotId,lotSummary} from './lot-model.mjs';
 import {measurementEvidence} from './measurement-model.mjs';
@@ -14,8 +15,8 @@ const compactView=matchMedia('(max-width: 900px)'),machineLabels=[];
 function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visible=!compactView.matches;}
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
-const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.label}<small>${s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i,focus=true){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATIONS[i].label}`;showEquipment($('equipment-reference'),i);if(focus)focusStation(i);}
+const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
+function selectStation(i,focus=true){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus)focusStation(i);}
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
@@ -27,20 +28,20 @@ $('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(si
 let prevOptions='',prevHistory='',prevEvidence='';
 function updateUI(){
  if(followInjected){const b=sim.boards.at(-1);if(b.fault&&!sim.pending){selected=b.id;followInjected=false;}}
- const options=sim.boards.map(b=>b.id).join(',');if(options!==prevOptions){$('board-select').replaceChildren(...sim.boards.map(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.id+(b.fault?` · ${FAULTS[b.fault]}`:'');return o;}));prevOptions=options;}
+ const options=sim.boards.map(b=>b.id).join(',');if(options!==prevOptions){$('board-select').replaceChildren(...sim.boards.map(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.id+(b.fault?` · ${plainCopy(FAULTS[b.fault])}`:'');return o;}));prevOptions=options;}
  inspection.selectBoard(selected);
  $('board-select').value=selected;const b=sim.boards.find(b=>b.id===selected)||sim.boards[0],a=assess(b);
- $('board-status').textContent=a.status.replace('가상 AOI NG','가상 불량').replace('가상 AOI OK','가상 최종검사 통과').replace('관측값 정상 범위','가상 측정값이 설정 범위 안에 있어요');$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':''}`;
+ $('board-status').textContent=a.status.replace('가상 AOI NG','가상 불량').replace('가상 AOI OK','가상 최종검사 통과').replace('리플로우 온도 검토','납땜 가열 온도 확인 필요').replace('관측값 정상 범위','가상 측정값이 설정 범위 안에 있어요');$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':''}`;
  $('lot-status').textContent='선택한 기판의 생산 묶음 · '+lotId(sim.boards.indexOf(b));
- $('lot-summary').textContent=lotSummary(sim.boards).map(g=>`${g.lot_id} · 투입 ${g.inserted}/4 · 완료 ${g.completed} · 가상 NG ${g.virtual_ng} · 측정 누락 ${g.missing_measurement}`).join('\n');
- $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATIONS[Math.max(0,b.stage)].label}`;
- $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=a.reason.replaceAll('SPI','납 검사(SPI)').replaceAll('가상 AOI','가상 최종 검사');
+ $('lot-summary').textContent=lotSummary(sim.boards).map(g=>`${g.lot_id} · 투입 ${g.inserted}/4 · 완료 ${g.completed} · 가상 불량(NG) ${g.virtual_ng} · 측정 누락 ${g.missing_measurement}`).join('\n');
+ $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATION_TERMS[Math.max(0,b.stage)].plain}`;
+ $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=plainCopy(a.reason);
  const evidence=measurementEvidence(b),evidenceKey=JSON.stringify(evidence);
  if(prevEvidence!==evidenceKey){$('measurement-evidence').replaceChildren(...evidence.map(item=>{const card=document.createElement('article');card.className='measurement-card';const title=document.createElement('h3');title.textContent=item.label;card.append(title);for(const [label,value] of [['데모 기준 범위',item.range],['가상 측정값',item.measurement],['비교 결과',item.difference],['다음 확인',item.next]]){const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=label+' · ';p.append(strong,document.createTextNode(value));card.append(p);}return card;}));prevEvidence=evidenceKey;}
- const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
+ const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
  const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('run-status').textContent=done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
  $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>b.stage>=2&&b.volume===null).length;
- $('pending').textContent=sim.pending?`다음 기판에 적용 · ${FAULTS[sim.pending]}`:sim.boards.length===12?'투입 완료 · 처음부터 다시 시작하세요':'문제를 선택해 보세요';
+ $('pending').textContent=sim.pending?`다음 기판에 적용 · ${plainCopy(FAULTS[sim.pending])}`:sim.boards.length===12?'투입 완료 · 처음부터 다시 시작하세요':'문제를 선택해 보세요';
  document.querySelectorAll('[data-fault]').forEach(button=>{button.disabled=sim.boards.length>=12;button.classList.toggle('armed',sim.pending===button.dataset.fault);button.setAttribute('aria-pressed',String(sim.pending===button.dataset.fault));});
 }
 
