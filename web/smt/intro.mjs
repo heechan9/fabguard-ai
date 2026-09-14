@@ -35,6 +35,7 @@ export function mountIntro({scene,positions,begin,update,end,available}){
  }
  caption(introShot(0));footer(introShot(0));
  button.addEventListener('click',()=>{dialog.showModal();});
+ if(location.hash==='#intro-dialog')dialog.showModal();
  function finish(cancelled=false,message=''){
   const job=active;if(!job)return;active=null;job.cancelled=cancelled;
   cancelAnimationFrame(job.frame);clearTimeout(job.watchdog);
@@ -66,7 +67,8 @@ export function mountIntro({scene,positions,begin,update,end,available}){
     const shot=introShot(t);update(sample,shot.station);
     const azimuth=shot.touring?.45:.72+t*.012,elevation=shot.touring?.48:.67;
     const distance=shot.touring?9.5:48;
-    const x=shot.touring?positions[0]+(positions[10]-positions[0])*shot.progress:0,y=shot.touring?1.4:.7;
+    const travel=shot.progress*10,left=Math.floor(travel);
+    const x=shot.touring?positions[left]+(positions[Math.min(10,left+1)]-positions[left])*(travel-left):0,y=shot.touring?1.4:.7;
     camera.position.set(x+Math.sin(azimuth)*Math.cos(elevation)*distance,y+Math.sin(elevation)*distance,Math.cos(azimuth)*Math.cos(elevation)*distance);
     camera.lookAt(x,y,0);job.renderer.render(scene,camera);
     caption(shot);ctx.drawImage(job.renderer.domElement,0,390,1080,960);footer(shot);
