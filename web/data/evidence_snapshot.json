@@ -1,0 +1,981 @@
+{
+  "schema_version": "fabguard-smt-evidence/v1",
+  "repository": "heechan9/fabguard-ai",
+  "revision": "d62f00e19ad34f7c7c59a56678083ae21f294a69",
+  "checked_at": "2026-09-14",
+  "mode": "repository-generated-analysis-snapshot",
+  "raw_data_recomputed": false,
+  "smt_model_connected": false,
+  "files": {
+    "results/dkasc-alice-springs-2025/report.json": {
+      "schema_version": "fabguard-pv-sdt/v1",
+      "status": "sdt_contract_validated",
+      "source": {
+        "source_id": "dkasc-alice-springs-total-pv-2025",
+        "source_type": "observed",
+        "input_file": "alice_springs_2025_normalized.csv",
+        "input_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
+        "input_rows": 105120,
+        "timezone_declared": "Australia/Darwin",
+        "normalized_timezone": "UTC",
+        "sdt_analysis_clock": "declared source local wall time",
+        "input_power_unit": "kW",
+        "normalized_power_unit": "kW",
+        "sdt_input_power_unit": "W",
+        "observed_at": "2026-09-07T07:18:00+00:00"
+      },
+      "validation": {
+        "frictionless": {
+          "valid": true,
+          "version": "5.19.0",
+          "resource_path": "alice_springs_2025_normalized.csv",
+          "error_count": 0
+        }
+      },
+      "runtime": {
+        "solar_data_tools_version": "2.1.5",
+        "frictionless_version": "5.19.0",
+        "python_version": "3.11.16",
+        "solver": "CLARABEL"
+      },
+      "matrix": {
+        "raw_shape": [
+          288,
+          365
+        ],
+        "filled_shape": [
+          288,
+          365
+        ]
+      },
+      "sdt_report": {
+        "schema_version": "fabguard-sdt-report/v1",
+        "length": 1.0,
+        "capacity": 192.811637878418,
+        "sampling": 5.0,
+        "quality score": 0.9863013698630136,
+        "clearness score": 0.5287671232876713,
+        "clipped fraction": 0.0027397260273972603,
+        "time zone correction": 0.0,
+        "inverter clipping": false,
+        "capacity change": false,
+        "data quality warning": true,
+        "time shift correction": false
+      },
+      "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+    },
+    "results/dkasc-alice-springs-2025/normalization_audit.json": {
+      "schema_version": "fabguard-dkasc-normalization/v1",
+      "input_rows_in_range": 105105,
+      "normalized_rows": 105120,
+      "interval_minutes": 5,
+      "off_grid_timestamps_rounded": 7,
+      "collision_groups": 4,
+      "valid_value_preferred_over_same_slot_null": 4,
+      "missing_timestamp_slots": 19,
+      "remaining_missing_power": 93,
+      "negative_values_clipped_for_sdt": 53817,
+      "source_file": "Alice_Springs_2025.csv",
+      "source_sha256": "d10ebe27ea417a36d5abcf552c6c29aa0ec932b36aa61eab5be0732854dcb896",
+      "normalized_file": "alice_springs_2025_normalized.csv",
+      "normalized_sha256": "219a54ed6014671aa79b941247eb73f0e0888d682f35c2e8b18322d327156cc2",
+      "source_type": "observed",
+      "source_url": "https://dkasolarcentre.com.au/download?location=alice-springs",
+      "source_accessed_at": "2026-09-07",
+      "timezone": "Australia/Darwin",
+      "power_unit_status": "inferred_kW_pending_direct_schema_confirmation",
+      "claim_boundary": "Observed DKASC data normalization only; not SECOM external validation, PV performance, or field validation."
+    },
+    "results/pvlive-gb-national-2025/report.json": {
+      "schema_version": "fabguard-pv-sdt/v1",
+      "status": "sdt_contract_validated",
+      "source": {
+        "source_id": "pvlive-gb-national-2025",
+        "source_type": "estimated",
+        "input_file": "pvlive_gb_2025.csv",
+        "input_sha256": "8a822cd0646fd023921da583655f8144cacc358665f838fee361a8ee3d7a8dcf",
+        "input_rows": 17520,
+        "timezone_declared": "UTC",
+        "normalized_timezone": "UTC",
+        "sdt_analysis_clock": "declared source local wall time",
+        "input_power_unit": "MW",
+        "normalized_power_unit": "kW",
+        "sdt_input_power_unit": "W",
+        "observed_at": "2026-09-08T15:29:00+00:00"
+      },
+      "validation": {
+        "frictionless": {
+          "valid": true,
+          "version": "5.19.0",
+          "resource_path": "pvlive_gb_2025.csv",
+          "error_count": 0
+        }
+      },
+      "runtime": {
+        "solar_data_tools_version": "2.1.5",
+        "frictionless_version": "5.19.0",
+        "python_version": "3.11.16",
+        "solver": "CLARABEL"
+      },
+      "matrix": {
+        "raw_shape": [
+          48,
+          366
+        ],
+        "filled_shape": [
+          48,
+          366
+        ]
+      },
+      "sdt_report": {
+        "schema_version": "fabguard-sdt-report/v1",
+        "length": 1.0027397260273974,
+        "capacity": 9525127.000000004,
+        "sampling": 30.0,
+        "quality score": 0.9918032786885246,
+        "clearness score": 0.07377049180327869,
+        "clipped fraction": 0.0273224043715847,
+        "time zone correction": 0.0,
+        "inverter clipping": true,
+        "capacity change": true,
+        "data quality warning": true,
+        "time shift correction": false
+      },
+      "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+    },
+    "results/pvlive-gb-national-2025/fetch_audit.json": {
+      "schema_version": "fabguard-pvlive-collection/v1",
+      "status": "pvlive_chunked_collection_validated",
+      "source_type": "estimated",
+      "geographic_scope": "GB electricity network",
+      "entity_type": "gsp",
+      "entity_id": 0,
+      "period_minutes": 30,
+      "analysis_clock": "continuous UTC/GMT",
+      "start_interval_end_utc": "2025-01-01T00:30:00+00:00",
+      "end_interval_end_utc": "2026-01-01T00:00:00+00:00",
+      "chunks": 53,
+      "rows": 17520,
+      "intervals": 17520,
+      "raw_chunk_sha256": [
+        "3af30533cbbabd801f1357c523989bbeb189288da6cd603ec869100788a21dd2",
+        "899a08354df491f9ef7867eeb7abef3f66f2e656544d12f2d2257b338a79ffc5",
+        "e787ef552fe8672fcddec58b44bbfe7bc8f85ac1d7e7adb79f9d6a467d8344e5",
+        "a408a7af12f8852658fe184e8156df68011380a2c6482f35497233f7aee45f06",
+        "4dab86f009a089c3aa05474937b71358f800288f19dafd4e27d57240566a302b",
+        "631a9fc56f04d6c9d434cd22f06de8a18971f2c473145e467c57edbc21916eab",
+        "d695097269740e049b9530cbcdf547be5b692deaaeaa22818dd378b4eb4dc993",
+        "22f12d7dfa5a81000df7b9b20c668f39db16ccd923087ca782d916c58fd14c2c",
+        "bfa0f5034dd3e025f9702151fcecfdeb82ee23006e79e52e3b8908dc67d21b29",
+        "0fa782ea69870a9dcecae12e5cd5c0175a4413e24509537a198113cbf4239bcb",
+        "0d93c76ca935b0603b91c90375d1a0638054899675f5f838076576d475a0dcd2",
+        "63e6730ac6c911ad2068c930e6fc4324921e5945b54cfee39973dd40e0223082",
+        "acbc35808ab59543866d3d4fc0c7a87600ccee258f7503a70297caf252fe4988",
+        "85217c1dec81390e53a06f00fbca7f0343071c1e227a692e3b4ce763e73b9ae3",
+        "8120e4c24f2946c1491b5ca320256580a0f6a452585296554add2c0da326dd23",
+        "b9fdab6e0989208803ab26db9396dc69ae07ee6dcf02958977ac84a6bc80f833",
+        "acb197ea88253c778ba0263343028e2118a33d5ee5c029ed2818fffe5b51b2f3",
+        "cba461bd435c1b7acf780169b5169d244c9f1ef06e2680d2b82578b906344117",
+        "404587b3d8bf96311d2003091b0c3879458130e4b0b097073a7ff15298723b9d",
+        "787c006fe3ad23458508bfa1fb5bc9876d47a76cf35d5b92f96c7cac2f9e4b86",
+        "8881199e1784cc59c7e4a62332135a763aedaced4ff419ab3d478b95e70dcac0",
+        "3b54e9019b67a0308bf93812eb0799011db290b73f0333820f17a4a05578e2bb",
+        "e6288ed830eac42347d8f22705e20e863bf76eff9f0858e4c6eec568cd239f3a",
+        "7de217bd206286f20c4d658a265e88e65675b2bab2d6c3db62e1cb3b9b461b50",
+        "f3c7404a3f849b564e1a057b6e0fc2d73a4b0e4c523d711250e17b366f5f61b2",
+        "7f2d427769aefb6e2d1c9ba9f5fd20bc780718e70420781d39bedf3b1c63d613",
+        "26953b14c1fee750a1b8ac8c9f88c4d56a76417038febfa7f71247eb451e2161",
+        "b6153d759be64ea6e9acf4fdae515309144ba4d11d749bb18bb4836a73c2b3cc",
+        "317a776ff3048615319c6cdcacd0c48533f861e3b54d8ebb95897b2e21ceef9e",
+        "ef281c7c32b0392e9def301ede33199d2af8b7e4ac9721ac06f8de15e9e715d4",
+        "c1c1865d2e9d1f6c2035ad2780c327419d2407410f74c8e07e45c69624cec2af",
+        "2bc7390ff01e7bd8da15ef00ca95cee7cfd887914aad6e2a161f1ffa53288974",
+        "15633d66620f1ecba65f61b4a6bb344674fbc7f791a83ba078e2e20c177fcec7",
+        "37c5b4b961340514034ef79d60da128bfd5284ebfd19f00512c9d250e470487a",
+        "4d48f78cf9de07d30a3202eaaf2a61ecd2a1d8894e8e5e0a5a4144050d5dbec3",
+        "82e3f0a127485a77d88a1542a4a6b7d55a2b85394813f11af2a085aacb76b78b",
+        "5fad13b26ca19664c6e8543e727105e75174588d493d15d3fdbae426afcb77e0",
+        "054c3d9adeee1795b44b25f4d8ccfc17063eeac8a0f7c75000faffdf5c6adea2",
+        "18af3824a21c93bc605d4a608d4ba93b3e89a8437d318f246b22a2adcebb6585",
+        "045a8d74f8ed0423c9172c0a086fff9894b957699580fe8804efa6c076d9dc4a",
+        "d75898277b2b05a8acf9d6bf61590c7c1a4b24b6a9c422d575f74d39ce2c7f8f",
+        "a46e6d73ed3d662a0e53bedc2d2c534caf2f51d7ed0a459ace57d9edc360d197",
+        "23779998664b703ea5759f5fa4ad2eaa133d559c1c7645d5ab5f67ce3e58e280",
+        "bc5b0b3566a567be4b9b3a9307de190b0ae001b233813693bf3837f55c07ea63",
+        "d05ee63b61491ed407caaaddd6b422b8365587577dd8b9211373dce92fb21910",
+        "4e22d8972fdd5caafdcdb5b73f52e8548f31d74c855bfc58ebe00c36a543d92f",
+        "0d4a0b3b40e02756987e47d0c0581abe05481b79a258b49cb7753070b8028b69",
+        "148c58a9ad90fa4b582c77ea015c0f8389290347638da82a3d0bb944edfbf694",
+        "51643424f486db670f15c7a446dceaa416ef6cb7c98a58bbdf099e4f64e86eee",
+        "b2c52ef1ef7ac45e00254a4920748ec9bb4667643de0d112220c93ef726c4d84",
+        "139ef72ee6be3a83837cbc569ae1ccb35c16d5429b0826b2434ab35405756651",
+        "3aa4838d51b74957215aeed71625c04176eaae67d4354111b08d1dec6ee4de9e",
+        "d76d754367879c147f5511b207143354c768f78437d4e178a0c7dc28f662b4c1"
+      ],
+      "claim_boundary": "PV_Live estimated-data collection only; not direct observation, SECOM external validation, field validation, or PV performance proof.",
+      "normalized_file": "pvlive_gb_2025.csv",
+      "normalized_sha256": "8a822cd0646fd023921da583655f8144cacc358665f838fee361a8ee3d7a8dcf"
+    },
+    "results/pvgis-brussels-2020/report.json": {
+      "schema_version": "fabguard-pv-sdt/v1",
+      "status": "sdt_contract_validated",
+      "source": {
+        "source_id": "pvgis-brussels-sarah3-2020",
+        "source_type": "reference",
+        "input_file": "pvgis_brussels_2020.csv",
+        "input_sha256": "69a234b05b02fadbcd271d8a7af8607f3326a9118a4ddea98c6aa88e7c571a1e",
+        "input_rows": 8784,
+        "timezone_declared": "UTC",
+        "normalized_timezone": "UTC",
+        "sdt_analysis_clock": "declared source local wall time",
+        "input_power_unit": "W",
+        "normalized_power_unit": "kW",
+        "sdt_input_power_unit": "W",
+        "observed_at": "2026-09-08T15:58:35+00:00"
+      },
+      "validation": {
+        "frictionless": {
+          "valid": true,
+          "version": "5.19.0",
+          "resource_path": "pvgis_brussels_2020.csv",
+          "error_count": 0
+        }
+      },
+      "runtime": {
+        "solar_data_tools_version": "2.1.5",
+        "frictionless_version": "5.19.0",
+        "python_version": "3.11.16",
+        "solver": "CLARABEL"
+      },
+      "matrix": {
+        "raw_shape": [
+          24,
+          366
+        ],
+        "filled_shape": [
+          24,
+          366
+        ]
+      },
+      "sdt_report": {
+        "schema_version": "fabguard-sdt-report/v1",
+        "length": 1.0027397260273974,
+        "capacity": 0.5231580000000001,
+        "sampling": 60.0,
+        "quality score": 0.5710382513661202,
+        "clearness score": 0.20765027322404372,
+        "clipped fraction": 0.06284153005464481,
+        "time zone correction": 0.0,
+        "inverter clipping": true,
+        "capacity change": false,
+        "data quality warning": false,
+        "time shift correction": false
+      },
+      "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+    },
+    "results/pvgis-brussels-2020/fetch_audit.json": {
+      "schema_version": "fabguard-pvgis-series/v1",
+      "status": "pre_ingestion_contract_validated",
+      "source_type": "reference",
+      "provider": "European Commission Joint Research Centre",
+      "api_version": "v5_3",
+      "endpoint": "https://re.jrc.ec.europa.eu/api/v5_3/seriescalc",
+      "request_params": {
+        "lat": 50.8503,
+        "lon": 4.3517,
+        "startyear": 2020,
+        "endyear": 2020,
+        "pvcalculation": 1,
+        "peakpower": 1.0,
+        "loss": 14.0,
+        "raddatabase": "PVGIS-SARAH3",
+        "outputformat": "json",
+        "browser": 0
+      },
+      "timestamp_semantics": "UTC hourly timestamp",
+      "units": {
+        "power_w": "W",
+        "plane_irradiance_w_m2": "W/m2",
+        "sun_height_deg": "degree",
+        "air_temperature_c": "degree C",
+        "wind_speed_10m_m_s": "m/s"
+      },
+      "input_rows": 8784,
+      "normalized_rows": 8784,
+      "reconstructed_rows": 0,
+      "response_canonical_sha256": "2a01d16f1f777c9c868984a5f3efbfeae5dcdc14f18d9c9199e2433d974e3641",
+      "claim_boundary": "JRC PVGIS modelled reference data only; not direct observation, SECOM external validation, field validation, or proof of PV performance.",
+      "retrieved_at": "2026-09-08T15:58:34.999867+00:00",
+      "raw_sha256": "b3b432c600ec50702e441495205f51b42b900efb714508dde74d9240cfabcc3d",
+      "normalized_sha256": "69a234b05b02fadbcd271d8a7af8607f3326a9118a4ddea98c6aa88e7c571a1e",
+      "normalized_file": "pvgis_brussels_2020.csv"
+    },
+    "results/enedis-france-national-solar-2024/report.json": {
+      "schema_version": "fabguard-pv-sdt/v1",
+      "status": "sdt_contract_validated",
+      "source": {
+        "source_id": "enedis-france-national-solar-2024",
+        "source_type": "estimated",
+        "input_file": "enedis_france_solar_2024.csv",
+        "input_sha256": "0c799e90699f703477145650c82c26267a08af40aafceca0db78626be7c490b5",
+        "input_rows": 17568,
+        "timezone_declared": "UTC",
+        "normalized_timezone": "UTC",
+        "sdt_analysis_clock": "declared source local wall time",
+        "input_power_unit": "W",
+        "normalized_power_unit": "kW",
+        "sdt_input_power_unit": "W",
+        "observed_at": "2026-09-09T15:57:38+00:00"
+      },
+      "validation": {
+        "frictionless": {
+          "valid": true,
+          "version": "5.19.0",
+          "resource_path": "enedis_france_solar_2024.csv",
+          "error_count": 0
+        }
+      },
+      "runtime": {
+        "solar_data_tools_version": "2.1.5",
+        "frictionless_version": "5.19.0",
+        "python_version": "3.11.16",
+        "solver": "CLARABEL"
+      },
+      "matrix": {
+        "raw_shape": [
+          48,
+          366
+        ],
+        "filled_shape": [
+          48,
+          366
+        ]
+      },
+      "sdt_report": {
+        "schema_version": "fabguard-sdt-report/v1",
+        "length": 1.0027397260273974,
+        "capacity": 9494521.012,
+        "sampling": 30.0,
+        "quality score": 0.9562841530054644,
+        "clearness score": 0.11748633879781421,
+        "clipped fraction": 0.02185792349726776,
+        "time zone correction": 0.0,
+        "inverter clipping": true,
+        "capacity change": false,
+        "data quality warning": false,
+        "time shift correction": false
+      },
+      "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+    },
+    "results/enedis-france-national-solar-2024/fetch_audit.json": {
+      "schema_version": "fabguard-enedis-production/v1",
+      "status": "enedis_chunked_collection_validated",
+      "source_type": "estimated",
+      "provider": "Enedis",
+      "dataset_id": "prod",
+      "dataset_page": "https://opendata.enedis.fr/datasets/prod",
+      "license": "Licence Ouverte / Open Licence 2.0",
+      "geographic_scope": "France national distribution network",
+      "sampling_minutes": 30,
+      "timestamp_semantics": "source CET/CEST offset converted to UTC",
+      "units": {
+        "injected_energy_wh": "Wh per half-hour",
+        "mean_power_w": "W",
+        "injection_points": "count"
+      },
+      "normalized_rows": 17568,
+      "missing_energy_rows": 207,
+      "data_quality_warning": true,
+      "missingness_policy": "preserve source nulls; do not impute them as zero",
+      "claim_boundary": "Enedis national distribution aggregate only; not plant telemetry, SECOM external validation, field validation, panel diagnosis, or proof of PV performance.",
+      "start_utc": "2024-01-01T00:00:00+00:00",
+      "end_utc_exclusive": "2025-01-01T00:00:00+00:00",
+      "pages": 2,
+      "api_total": 17568,
+      "retrieved_at": "2026-09-09T15:57:38.279410+00:00",
+      "page_sha256": [
+        "cde92c44e4bb92e398e571305a9cadf238a8a6a21227db2f46e24263ef488cd7",
+        "2b1bcdab50e98e12a3b73cb47ea5b1ec814ae9ab780630b5d322afa89b782fd7"
+      ],
+      "query": {
+        "size": 10000,
+        "filiere_de_production_eq": "F5 : Solaire",
+        "plage_de_puissance_injection_eq": "P0 : Total toutes puissances",
+        "horodate_gte": "2024-01-01T00:00:00Z",
+        "horodate_lt": "2025-01-01T00:00:00Z",
+        "sort": "horodate",
+        "select": "horodate,filiere_de_production,plage_de_puissance_injection,total_energie_injectee_wh,nb_points_injection",
+        "count": "exact",
+        "hint": "true"
+      },
+      "redistribution": "Raw API pages and normalized CSV remain local; compact audit evidence only.",
+      "normalized_file": "enedis_france_solar_2024.csv",
+      "normalized_sha256": "0c799e90699f703477145650c82c26267a08af40aafceca0db78626be7c490b5"
+    },
+    "results/meteo-france-paris-montsouris-2024/fetch_audit.json": {
+      "schema_version": "fabguard-meteofrance-hourly/v1",
+      "status": "meteo_france_resource_contract_validated",
+      "source_type": "observed",
+      "provider": "Météo-France",
+      "dataset_id": "6569b4473bedf2e7abad3b72",
+      "resource_id": "a77b4d44-d361-4e59-b6cc-cbbf435a2d89",
+      "resource_url": "https://meteofrance.s3.sbg.io.cloud.ovh.net/data/synchro_ftp/BASE/HOR/H_75_previous-2020-2024.csv.gz",
+      "license": "Licence Ouverte / Open Licence 2.0",
+      "station_id": "75114001",
+      "station_name": "PARIS-MONTSOURIS",
+      "year": 2024,
+      "normalized_rows": 8784,
+      "sampling_minutes": 60,
+      "timestamp_semantics": "metropolitan Météo-France hourly timestamp interpreted as UTC",
+      "conversion": "hourly GLO J/cm2 multiplied by 10000/3600 to hourly mean W/m2",
+      "claim_boundary": "Météo-France station weather observations only; not PV generation, plant telemetry, SECOM external validation, field validation, or proof of PV performance.",
+      "retrieved_at": "2026-09-09T14:50:56.107018+00:00",
+      "raw_sha256": "fc1f91d4c1fd663a21438dbf44d8e12e1cf6828490b20c3e94f2327dee5eb799",
+      "normalized_file": "paris_montsouris_2024.csv",
+      "normalized_sha256": "1af1edc7df371d080d3a33186452067c86d7dd63489bb47e81fd843aceec1225"
+    },
+    "results/v1/manifest.json": {
+      "project": "FabGuard AI V1",
+      "selected_candidate_from_train_cv": "random_forest_depth_none_leaf_8",
+      "selection_metric": "mean train repeated-CV average precision",
+      "evaluation_status": "provisional_due_to_prior_engineering_smoke_test_exposure",
+      "test_exposure_log": "docs/TEST_EXPOSURE.md",
+      "threshold": 0.5,
+      "config": {
+        "data_dir": "data/raw",
+        "output_dir": "results/v1",
+        "random_seed": 20260822,
+        "train_size": 1175,
+        "test_size": 392,
+        "missing_threshold": 0.5,
+        "cv_splits": 5,
+        "cv_repeats": 5,
+        "top_k_fractions": [
+          0.05,
+          0.1,
+          0.2
+        ],
+        "logistic_c_values": [
+          0.01,
+          0.1,
+          1.0
+        ],
+        "rf_candidates": [
+          [
+            8,
+            4,
+            "sqrt"
+          ],
+          [
+            null,
+            8,
+            "sqrt"
+          ]
+        ],
+        "rf_estimators": 120
+      },
+      "raw_hashes": {
+        "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+        "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+        "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+      },
+      "python": "3.12.13 (main, Aug  7 2026, 02:25:39) [Clang 22.1.3 ]",
+      "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "scikit_learn": "1.8.0"
+    },
+    "results/v1/data_audit.json": {
+      "samples": 1567,
+      "measurement_features": 590,
+      "pass_count": 1463,
+      "fail_count": 104,
+      "fail_rate": 0.06636885768985322,
+      "timestamp_parse_failures": 0,
+      "timestamp_min": "2008-07-19T11:55:00",
+      "timestamp_max": "2008-10-17T06:07:00",
+      "unique_timestamps": 1534,
+      "duplicate_timestamp_rows_after_first": 33,
+      "time_reversal_transitions": 0,
+      "duplicate_measurement_rows": 0,
+      "total_cells": 924530,
+      "missing_cells": 41951,
+      "missing_rate": 0.04537548808583821,
+      "features_with_missing": 538,
+      "features_missing_gt_50pct": 28,
+      "uninformative_features": 116,
+      "all_missing_features": 0,
+      "duplicate_features_after_first": 104,
+      "hashes": {
+        "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+        "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+        "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+      }
+    },
+    "web/data/summary.json": {
+      "status": "provisional",
+      "selected_model": "random_forest_depth_none_leaf_8",
+      "dataset": {
+        "samples": 1567,
+        "measurement_features": 590,
+        "pass_count": 1463,
+        "fail_count": 104,
+        "train_samples": null,
+        "train_fail": null,
+        "test_samples": null,
+        "test_fail": null
+      },
+      "cv": [
+        {
+          "candidate": "random_forest_depth_none_leaf_8",
+          "family": "random_forest",
+          "pr_auc_average_precision_mean": 0.2154697942817457,
+          "pr_auc_average_precision_std": 0.0650211395260438,
+          "pr_auc_average_precision_min": 0.1323233993237359,
+          "pr_auc_average_precision_max": 0.3564593137796634,
+          "fail_recall_mean": 0.0,
+          "fail_recall_std": 0.0,
+          "fail_recall_min": 0.0,
+          "fail_recall_max": 0.0,
+          "precision_mean": 0.0,
+          "precision_std": 0.0,
+          "precision_min": 0.0,
+          "precision_max": 0.0,
+          "f1_mean": 0.0,
+          "f1_std": 0.0,
+          "f1_min": 0.0,
+          "f1_max": 0.0,
+          "balanced_accuracy_mean": 0.5,
+          "balanced_accuracy_std": 0.0,
+          "balanced_accuracy_min": 0.5,
+          "balanced_accuracy_max": 0.5,
+          "false_alarm_rate_mean": 0.0,
+          "false_alarm_rate_std": 0.0,
+          "false_alarm_rate_min": 0.0,
+          "false_alarm_rate_max": 0.0,
+          "accuracy_mean": 0.9319148936170212,
+          "accuracy_std": 0.0,
+          "accuracy_min": 0.9319148936170212,
+          "accuracy_max": 0.9319148936170212
+        },
+        {
+          "candidate": "random_forest_depth_8_leaf_4",
+          "family": "random_forest",
+          "pr_auc_average_precision_mean": 0.2029027977427943,
+          "pr_auc_average_precision_std": 0.0594413165576755,
+          "pr_auc_average_precision_min": 0.1289858906720635,
+          "pr_auc_average_precision_max": 0.3290979883835144,
+          "fail_recall_mean": 0.0,
+          "fail_recall_std": 0.0,
+          "fail_recall_min": 0.0,
+          "fail_recall_max": 0.0,
+          "precision_mean": 0.0,
+          "precision_std": 0.0,
+          "precision_min": 0.0,
+          "precision_max": 0.0,
+          "f1_mean": 0.0,
+          "f1_std": 0.0,
+          "f1_min": 0.0,
+          "f1_max": 0.0,
+          "balanced_accuracy_mean": 0.5,
+          "balanced_accuracy_std": 0.0,
+          "balanced_accuracy_min": 0.5,
+          "balanced_accuracy_max": 0.5,
+          "false_alarm_rate_mean": 0.0,
+          "false_alarm_rate_std": 0.0,
+          "false_alarm_rate_min": 0.0,
+          "false_alarm_rate_max": 0.0,
+          "accuracy_mean": 0.9319148936170212,
+          "accuracy_std": 0.0,
+          "accuracy_min": 0.9319148936170212,
+          "accuracy_max": 0.9319148936170212
+        },
+        {
+          "candidate": "l1_logistic_c_0.01",
+          "family": "logistic",
+          "pr_auc_average_precision_mean": 0.177305203314034,
+          "pr_auc_average_precision_std": 0.0510281116148639,
+          "pr_auc_average_precision_min": 0.1130704428172006,
+          "pr_auc_average_precision_max": 0.3046599761173967,
+          "fail_recall_mean": 0.73,
+          "fail_recall_std": 0.0859990310022928,
+          "fail_recall_min": 0.5,
+          "fail_recall_max": 0.875,
+          "precision_mean": 0.1608571749005917,
+          "precision_std": 0.0245941450802121,
+          "precision_min": 0.11,
+          "precision_max": 0.2181818181818181,
+          "f1_mean": 0.2627863969985341,
+          "f1_std": 0.035654489875099,
+          "f1_min": 0.1896551724137931,
+          "f1_max": 0.3380281690140845,
+          "balanced_accuracy_mean": 0.7233561643835617,
+          "balanced_accuracy_std": 0.04460712297062,
+          "balanced_accuracy_min": 0.6381278538812785,
+          "balanced_accuracy_max": 0.8050799086757991,
+          "false_alarm_rate_mean": 0.2832876712328767,
+          "false_alarm_rate_std": 0.0482788996426573,
+          "false_alarm_rate_min": 0.1963470319634703,
+          "false_alarm_rate_max": 0.4063926940639269,
+          "accuracy_mean": 0.7176170212765958,
+          "accuracy_std": 0.0441180358409626,
+          "accuracy_min": 0.6,
+          "accuracy_max": 0.8
+        },
+        {
+          "candidate": "l1_logistic_c_0.1",
+          "family": "logistic",
+          "pr_auc_average_precision_mean": 0.1593299866989747,
+          "pr_auc_average_precision_std": 0.0424436359771824,
+          "pr_auc_average_precision_min": 0.0832789163083042,
+          "pr_auc_average_precision_max": 0.2865982188473484,
+          "fail_recall_mean": 0.385,
+          "fail_recall_std": 0.1077709763031463,
+          "fail_recall_min": 0.1875,
+          "fail_recall_max": 0.5625,
+          "precision_mean": 0.1426268840027042,
+          "precision_std": 0.0344194700949307,
+          "precision_min": 0.0769230769230769,
+          "precision_max": 0.2,
+          "f1_mean": 0.2073057199033617,
+          "f1_std": 0.0509914227844099,
+          "f1_min": 0.109090909090909,
+          "f1_max": 0.2857142857142857,
+          "balanced_accuracy_mean": 0.6082077625570776,
+          "balanced_accuracy_std": 0.0513726824653292,
+          "balanced_accuracy_min": 0.5115582191780822,
+          "balanced_accuracy_max": 0.69449200913242,
+          "false_alarm_rate_mean": 0.1685844748858447,
+          "false_alarm_rate_std": 0.0243026493748476,
+          "false_alarm_rate_min": 0.1095890410958904,
+          "false_alarm_rate_max": 0.2146118721461187,
+          "accuracy_mean": 0.8010212765957446,
+          "accuracy_std": 0.0214981373837426,
+          "accuracy_min": 0.7659574468085106,
+          "accuracy_max": 0.8425531914893617
+        },
+        {
+          "candidate": "l1_logistic_c_1",
+          "family": "logistic",
+          "pr_auc_average_precision_mean": 0.1574902273161705,
+          "pr_auc_average_precision_std": 0.0537086218198208,
+          "pr_auc_average_precision_min": 0.0730840241902937,
+          "pr_auc_average_precision_max": 0.2943093499136526,
+          "fail_recall_mean": 0.22,
+          "fail_recall_std": 0.0990186219859678,
+          "fail_recall_min": 0.0625,
+          "fail_recall_max": 0.375,
+          "precision_mean": 0.1298552446981054,
+          "precision_std": 0.0560542755310279,
+          "precision_min": 0.0263157894736842,
+          "precision_max": 0.2307692307692307,
+          "f1_mean": 0.1621393799192344,
+          "f1_std": 0.0703044368362884,
+          "f1_min": 0.037037037037037,
+          "f1_max": 0.2857142857142857,
+          "balanced_accuracy_mean": 0.555662100456621,
+          "balanced_accuracy_std": 0.0510818660688157,
+          "balanced_accuracy_min": 0.4467751141552511,
+          "balanced_accuracy_max": 0.641837899543379,
+          "false_alarm_rate_mean": 0.108675799086758,
+          "false_alarm_rate_std": 0.024483573732337,
+          "false_alarm_rate_min": 0.0593607305936073,
+          "false_alarm_rate_max": 0.1689497716894977,
+          "accuracy_mean": 0.8456170212765958,
+          "accuracy_std": 0.0238361187130803,
+          "accuracy_min": 0.7787234042553192,
+          "accuracy_max": 0.8808510638297873
+        },
+        {
+          "candidate": "dummy_prior",
+          "family": "dummy",
+          "pr_auc_average_precision_mean": 0.0680851063829787,
+          "pr_auc_average_precision_std": 0.0,
+          "pr_auc_average_precision_min": 0.0680851063829787,
+          "pr_auc_average_precision_max": 0.0680851063829787,
+          "fail_recall_mean": 0.0,
+          "fail_recall_std": 0.0,
+          "fail_recall_min": 0.0,
+          "fail_recall_max": 0.0,
+          "precision_mean": 0.0,
+          "precision_std": 0.0,
+          "precision_min": 0.0,
+          "precision_max": 0.0,
+          "f1_mean": 0.0,
+          "f1_std": 0.0,
+          "f1_min": 0.0,
+          "f1_max": 0.0,
+          "balanced_accuracy_mean": 0.5,
+          "balanced_accuracy_std": 0.0,
+          "balanced_accuracy_min": 0.5,
+          "balanced_accuracy_max": 0.5,
+          "false_alarm_rate_mean": 0.0,
+          "false_alarm_rate_std": 0.0,
+          "false_alarm_rate_min": 0.0,
+          "false_alarm_rate_max": 0.0,
+          "accuracy_mean": 0.9319148936170212,
+          "accuracy_std": 0.0,
+          "accuracy_min": 0.9319148936170212,
+          "accuracy_max": 0.9319148936170212
+        }
+      ],
+      "test": [
+        {
+          "family": "logistic",
+          "candidate": "l1_logistic_c_0.01",
+          "threshold": 0.5,
+          "pr_auc_average_precision": 0.0946915266680257,
+          "fail_recall": 0.0833333333333333,
+          "precision": 0.1666666666666666,
+          "f1": 0.1111111111111111,
+          "balanced_accuracy": 0.5280797101449275,
+          "false_alarm_rate": 0.0271739130434782,
+          "accuracy": 0.9183673469387756,
+          "tn": 358,
+          "fp": 10,
+          "fn": 22,
+          "tp": 2
+        },
+        {
+          "family": "random_forest",
+          "candidate": "random_forest_depth_none_leaf_8",
+          "threshold": 0.5,
+          "pr_auc_average_precision": 0.0934771814753373,
+          "fail_recall": 0.0,
+          "precision": 0.0,
+          "f1": 0.0,
+          "balanced_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "accuracy": 0.9387755102040816,
+          "tn": 368,
+          "fp": 0,
+          "fn": 24,
+          "tp": 0
+        },
+        {
+          "family": "dummy",
+          "candidate": "dummy_prior",
+          "threshold": 0.5,
+          "pr_auc_average_precision": 0.0612244897959183,
+          "fail_recall": 0.0,
+          "precision": 0.0,
+          "f1": 0.0,
+          "balanced_accuracy": 0.5,
+          "false_alarm_rate": 0.0,
+          "accuracy": 0.9387755102040816,
+          "tn": 368,
+          "fp": 0,
+          "fn": 24,
+          "tp": 0
+        }
+      ],
+      "top_k": [
+        {
+          "k_fraction": 0.05,
+          "inspection_count": 20,
+          "captured_fail": 4,
+          "total_fail": 24,
+          "fail_capture_rate": 0.1666666666666666,
+          "false_inspections": 16,
+          "precision": 0.2,
+          "inspection_burden": 0.0510204081632653,
+          "lift": 3.266666666666667
+        },
+        {
+          "k_fraction": 0.1,
+          "inspection_count": 40,
+          "captured_fail": 5,
+          "total_fail": 24,
+          "fail_capture_rate": 0.2083333333333333,
+          "false_inspections": 35,
+          "precision": 0.125,
+          "inspection_burden": 0.1020408163265306,
+          "lift": 2.0416666666666665
+        },
+        {
+          "k_fraction": 0.2,
+          "inspection_count": 79,
+          "captured_fail": 7,
+          "total_fail": 24,
+          "fail_capture_rate": 0.2916666666666667,
+          "false_inspections": 72,
+          "precision": 0.0886075949367088,
+          "inspection_burden": 0.2015306122448979,
+          "lift": 1.4472573839662448
+        }
+      ],
+      "warning": "Temporal holdout performance degraded; this is decision-support evidence, not a production claim."
+    },
+    "web/data/phase1_summary.json": {
+      "status": "scenario_and_provisional_validation",
+      "test_split_changed": false,
+      "source": "results/phase1 canonical CSV artifacts",
+      "ece": {
+        "before": 0.0922475456424685,
+        "after": 0.0400606623057735,
+        "bins": 10,
+        "populated_bins": 4
+      },
+      "best_cost": {
+        "k_fraction": 0.2,
+        "total_cost": 399.0,
+        "no_review_cost": 480.0,
+        "reduction": 81.0,
+        "inspection_cost": 1.0,
+        "missed_fail_cost": 20.0
+      },
+      "top10_capture": {
+        "mean": 0.2006969091482964,
+        "low": 0.0624526515151516,
+        "high": 0.3684697855750484,
+        "confidence": 0.95,
+        "bootstrap_replicates": 2000
+      },
+      "walk_forward": {
+        "min": 0.0541726604925306,
+        "max": 0.2798973362930078,
+        "folds": 4
+      },
+      "paired_model_comparison": {
+        "reference_candidate": "l1_logistic_c_0.01",
+        "challenger_candidate": "random_forest_depth_none_leaf_8",
+        "pairing_unit": "repeat_mean_of_shared_5_folds",
+        "paired_repeats": 5,
+        "mean_difference": 0.0381645909677117,
+        "challenger_repeat_wins": 5,
+        "two_sided_exact_sign_flip_p": 0.0625,
+        "statistically_significant_at_0_05": false
+      }
+    },
+    "web/data/global_e2e_summary.json": {
+      "schema_version": "fabguard-global-e2e/v1",
+      "status": "cross_source_e2e_validated",
+      "updated_at": "2026-09-09",
+      "sources": {
+        "pvlive_gb_2025": {
+          "country": "Great Britain",
+          "flag": "🇬🇧",
+          "source_type": "estimated",
+          "status": "sdt_contract_validated",
+          "input_rows": 17520,
+          "sampling_minutes": 30,
+          "frictionless_valid": true,
+          "input_sha256": "8a822cd0646fd023921da583655f8144cacc358665f838fee361a8ee3d7a8dcf"
+        },
+        "pvgis_brussels_2020": {
+          "country": "European Union / Belgium",
+          "flag": "🇪🇺",
+          "source_type": "reference",
+          "status": "sdt_contract_validated",
+          "input_rows": 8784,
+          "sampling_minutes": 60,
+          "frictionless_valid": true,
+          "input_sha256": "69a234b05b02fadbcd271d8a7af8607f3326a9118a4ddea98c6aa88e7c571a1e"
+        },
+        "meteo_france_paris_2024": {
+          "country": "France",
+          "flag": "🇫🇷",
+          "source_type": "observed",
+          "status": "meteo_france_resource_contract_validated",
+          "input_rows": 8784,
+          "sampling_minutes": 60,
+          "frictionless_valid": true,
+          "input_sha256": "1af1edc7df371d080d3a33186452067c86d7dd63489bb47e81fd843aceec1225"
+        },
+        "enedis_france_2024": {
+          "country": "France",
+          "flag": "🇫🇷",
+          "source_type": "estimated",
+          "status": "sdt_contract_validated",
+          "input_rows": 17568,
+          "sampling_minutes": 30,
+          "frictionless_valid": true,
+          "missing_energy_rows": 207,
+          "data_quality_warning": true,
+          "input_sha256": "0c799e90699f703477145650c82c26267a08af40aafceca0db78626be7c490b5"
+        }
+      },
+      "claim_boundary": "Cross-source engineering data-quality compatibility only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+    },
+    "results/catalog.json": {
+      "schema_version": "fabguard-evidence-catalog/v1",
+      "updated_at": "2026-09-09",
+      "layout_policy": "country -> source -> canonical evidence",
+      "migration_policy": "Existing canonical paths remain stable; new integrations declare a country_code and source_id before evidence is admitted.",
+      "countries": {
+        "us": {
+          "name": "United States",
+          "sources": {
+            "uci-secom": {
+              "role": "manufacturing evidence",
+              "status": "validated",
+              "canonical_paths": [
+                "results/v1",
+                "results/phase1"
+              ]
+            }
+          }
+        },
+        "au": {
+          "name": "Australia",
+          "sources": {
+            "dkasc-alice-springs-2025": {
+              "role": "observed PV",
+              "status": "e2e_validated",
+              "canonical_paths": [
+                "results/dkasc-alice-springs-2025"
+              ]
+            }
+          }
+        },
+        "gb": {
+          "name": "Great Britain",
+          "sources": {
+            "pvlive-national-2025": {
+              "role": "estimated PV",
+              "status": "e2e_validated",
+              "canonical_paths": [
+                "results/pvlive-gb-national-2025"
+              ]
+            }
+          }
+        },
+        "eu-be": {
+          "name": "European Union / Belgium",
+          "sources": {
+            "jrc-pvgis-brussels-2020": {
+              "role": "modelled reference PV",
+              "status": "e2e_validated",
+              "canonical_paths": [
+                "results/pvgis-brussels-2020"
+              ]
+            }
+          }
+        },
+        "fr": {
+          "name": "France",
+          "sources": {
+            "enedis-national-solar-2024": {
+              "role": "distribution-grid estimated PV",
+              "status": "e2e_validated",
+              "canonical_paths": [
+                "results/enedis-france-national-solar-2024"
+              ]
+            },
+            "meteo-france-paris-2024": {
+              "role": "observed weather context",
+              "status": "resource_contract_validated",
+              "canonical_paths": [
+                "results/meteo-france-paris-montsouris-2024"
+              ]
+            }
+          }
+        }
+      },
+      "claim_boundary": "Country grouping is evidence organization only; it does not make heterogeneous sources interchangeable or prove cross-country model performance."
+    },
+    "results/v1/test_metrics.csv": "family,candidate,threshold,pr_auc_average_precision,fail_recall,precision,f1,balanced_accuracy,false_alarm_rate,accuracy,tn,fp,fn,tp\nlogistic,l1_logistic_c_0.01,0.5,0.09469152666802576,0.08333333333333333,0.16666666666666666,0.1111111111111111,0.5280797101449275,0.02717391304347826,0.9183673469387755,358,10,22,2\nrandom_forest,random_forest_depth_none_leaf_8,0.5,0.09347718147533737,0.0,0.0,0.0,0.5,0.0,0.9387755102040817,368,0,24,0\ndummy,dummy_prior,0.5,0.061224489795918366,0.0,0.0,0.0,0.5,0.0,0.9387755102040817,368,0,24,0\n",
+    "results/v1/top_k_test.csv": "k_fraction,inspection_count,captured_fail,total_fail,fail_capture_rate,false_inspections,precision,inspection_burden,lift\n0.05,20,4,24,0.16666666666666666,16,0.2,0.05102040816326531,3.266666666666667\n0.1,40,5,24,0.20833333333333334,35,0.125,0.10204081632653061,2.0416666666666665\n0.2,79,7,24,0.2916666666666667,72,0.08860759493670886,0.20153061224489796,1.4472573839662448\n",
+    "results/phase1/inspection_cost_scenarios.csv": "k_fraction,inspection_count,captured_fail,missed_fail,inspection_cost_units,missed_fail_cost_units,scenario_total_cost,no_review_cost,scenario_cost_reduction\n0.05,20,2,22,1.0,20.0,460.0,480.0,20.0\n0.1,40,5,19,1.0,20.0,420.0,480.0,60.0\n0.2,79,8,16,1.0,20.0,399.0,480.0,81.0\n"
+  }
+}

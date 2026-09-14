@@ -1,0 +1,29 @@
+{
+  "schema_version": "fabguard-smt-evidence/v1",
+  "repository": "heechan9/fabguard-ai",
+  "revision": "d62f00e19ad34f7c7c59a56678083ae21f294a69",
+  "checked_at": "2026-09-14",
+  "mode": "repository-generated-analysis-snapshot",
+  "raw_data_recomputed": false,
+  "smt_model_connected": false,
+  "source_blob_shas": {
+    "results/dkasc-alice-springs-2025/report.json": "7221dc7e5e15330416179cd7efdcdf63729dcb6d",
+    "results/dkasc-alice-springs-2025/normalization_audit.json": "248f0e1826137e3930134566486a4d34f8f7e693",
+    "results/pvlive-gb-national-2025/report.json": "3b209b9cc9da44f3a898df3bf99aae4f36ce6506",
+    "results/pvlive-gb-national-2025/fetch_audit.json": "b8d26082dd6441805b4682be563b2c6e3b90db35",
+    "results/pvgis-brussels-2020/report.json": "b09949efd7a4ba7ed06d412523db13a778ccc246",
+    "results/pvgis-brussels-2020/fetch_audit.json": "c85684064933d93ceb77345236a8259a15bbbac8",
+    "results/enedis-france-national-solar-2024/report.json": "c59b1b4b8bbee711942776d624921d57933f0cc4",
+    "results/enedis-france-national-solar-2024/fetch_audit.json": "c4437edfdb22f7054ce2ea8af1f94863cbb5b2fa",
+    "results/meteo-france-paris-montsouris-2024/fetch_audit.json": "bd2d277bedc8277be90b5ab26f8b35f386f26388",
+    "results/v1/manifest.json": "55a640e5e508a1fe7f360877511d6c4131ca3625",
+    "results/v1/data_audit.json": "d78f3d4f14dfed580031310b24087ed8eb84b34a",
+    "web/data/summary.json": "de7978da9de867a14809c537ad5dd8f766bd0bf4",
+    "web/data/phase1_summary.json": "968c93e122e28f08a3f90b5789c306915366e02f",
+    "web/data/global_e2e_summary.json": "aa6636e4b24ae580bc21a51c5084e0470e056367",
+    "results/catalog.json": "6c8c7951a27aa014a7f76eb4a405482a3309e31a",
+    "results/v1/test_metrics.csv": "a57b0a703b2ed6b8af9223426326cab7ce93a060",
+    "results/v1/top_k_test.csv": "e780dca3f39be8c732c573489b9c60aab68159ed",
+    "results/phase1/inspection_cost_scenarios.csv": "c2d1513f4ba5b64c52b28e344c0cd0864977c71a"
+  }
+}

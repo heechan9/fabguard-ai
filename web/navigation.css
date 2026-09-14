@@ -1,0 +1,5 @@
+/* Shared navigation for the existing dashboard and its analysis/lab pages. */
+.topbar nav{gap:22px;align-items:center}.topbar nav a{white-space:nowrap;font-size:12px;min-height:42px;display:flex;align-items:center}.topbar .brand b{font-size:inherit;margin-left:0}.topbar .brand{letter-spacing:.08em}.topbar .system-state{font-size:10px}
+@media(max-width:1450px){.topbar{grid-template-columns:auto 1fr;gap:32px}.topbar nav{justify-self:end}.topbar .system-state{display:none}}
+@media(max-width:900px){.topbar{display:flex;flex-wrap:wrap;gap:10px;height:auto;min-height:72px;padding:14px 4vw}.topbar .brand>span:last-child{display:inline}.topbar nav{order:3;width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.topbar nav a{font-size:12px;justify-content:center;text-align:center;padding:8px 3px;min-width:0}}
+.lab-context{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:26px 0 20px;flex-wrap:wrap}.lab-context .status-chip{margin:0}.smt-entry{margin-bottom:80px}.smt-entry .button{white-space:nowrap}
