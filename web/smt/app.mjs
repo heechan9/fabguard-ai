@@ -2,6 +2,7 @@ import * as THREE from './vendor/three.module.js';
 import {Simulation,STATIONS,FAULTS,assess} from './simulation.mjs';
 import {showEquipment} from './equipment.mjs';
 import {mountInspection} from './inspection.mjs';
+import {clampZoom,overviewDistance,stationZoom} from './camera-model.mjs';
 
 const $=id=>document.getElementById(id),sim=new Simulation();
 const inspection=mountInspection($('inspection-lab'));
@@ -11,8 +12,8 @@ function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visibl
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.label}<small>${s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATIONS[i].label}`;showEquipment($('equipment-reference'),i);}
-selectStation(2);
+function selectStation(i,focus=true){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATIONS[i].label}`;showEquipment($('equipment-reference'),i);if(focus)focusStation(i);}
+selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
 $('play').addEventListener('click',()=>{if(sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
@@ -40,6 +41,8 @@ function updateUI(){
 const viewport=$('viewport'),boardMeshes=new Map(),machines=[],heads=[];
 let renderer,scene,camera,selectionRing;const widths=STATIONS.map((_,i)=>i===6?4.4:i===0||i===10?1.7:i===5||i===7||i===9?1.45:2.25),positions=[];
 let offset=0;for(let i=0;i<widths.length;i++){positions.push(offset+widths[i]/2);offset+=widths[i]+.65;}for(let i=0;i<positions.length;i++)positions[i]-=offset/2;
+let targetX=0,targetY=.6;
+function focusStation(i){targetX=positions[i];targetY=1.4;azimuth=.35;elevation=.55;zoom=stationZoom(widths[i],viewport.clientWidth/Math.max(1,viewport.clientHeight));cameraUpdate();}
 let azimuth=.35,elevation=.63,zoom=1,pinchDistance=0,lastPointer=null,dragDistance=0;const pointers=new Map();
 const color={shell:0xe4ecef,dark:0x344e5c,rail:0x5a7481,mint:0x43b998,amber:0xe8aa4e,red:0xd75948};
 function box(parent,w,h,d,x,y,z,c,opacity=1){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c,roughness:.65,metalness:.18,transparent:opacity<1,opacity,depthWrite:opacity===1}));mesh.position.set(x,y,z);mesh.castShadow=opacity===1;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -67,7 +70,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
  const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
 }
 function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;for(let k=0;k<4;k++){box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46);}for(let k=0;k<5;k++)box(group,.48,.006,.013,0,.041,-.31+k*.14,0xcbb776);scene.add(group);boardMeshes.set(b.id,group);return group;}
-function cameraUpdate(){if(!camera)return;const aspect=viewport.clientWidth/Math.max(1,viewport.clientHeight),distance=(aspect<1.35?47:36)*zoom;camera.position.set(Math.sin(azimuth)*Math.cos(elevation)*distance,Math.sin(elevation)*distance,Math.cos(azimuth)*Math.cos(elevation)*distance);camera.lookAt(0,.6,0);camera.aspect=aspect;camera.updateProjectionMatrix();}
+function cameraUpdate(){if(!camera)return;const aspect=viewport.clientWidth/Math.max(1,viewport.clientHeight),distance=overviewDistance(aspect)*zoom;camera.position.set(targetX+Math.sin(azimuth)*Math.cos(elevation)*distance,targetY+Math.sin(elevation)*distance,Math.cos(azimuth)*Math.cos(elevation)*distance);camera.lookAt(targetX,targetY,0);camera.aspect=aspect;camera.updateProjectionMatrix();}
 function resize(){if(!renderer)return;renderer.setSize(viewport.clientWidth,viewport.clientHeight);cameraUpdate();}
 try{
  scene=new THREE.Scene();scene.background=new THREE.Color(0x091018);scene.fog=new THREE.Fog(0x091018,65,130);camera=new THREE.PerspectiveCamera(42,1,.1,180);
@@ -83,13 +86,13 @@ try{
  new ResizeObserver(resize).observe(viewport);resize();
 }catch(error){$('view-error').hidden=false;console.error('3D initialization failed',error);}
 
-$('camera-reset').addEventListener('click',()=>{azimuth=.35;elevation=.63;zoom=1;cameraUpdate();});$('top-view').addEventListener('click',()=>{azimuth=0;elevation=1.53;zoom=1;cameraUpdate();});
-viewport.addEventListener('wheel',event=>{event.preventDefault();zoom=Math.max(.45,Math.min(1.8,zoom*Math.exp(event.deltaY*.001)));cameraUpdate();},{passive:false});
+$('camera-reset').addEventListener('click',()=>{targetX=0;targetY=.6;azimuth=.35;elevation=.63;zoom=1;cameraUpdate();});$('top-view').addEventListener('click',()=>{azimuth=0;elevation=1.53;cameraUpdate();});
+viewport.addEventListener('wheel',event=>{event.preventDefault();zoom=clampZoom(zoom*Math.exp(event.deltaY*.001));cameraUpdate();},{passive:false});
 viewport.addEventListener('pointerdown',event=>{pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});viewport.setPointerCapture(event.pointerId);lastPointer={x:event.clientX,y:event.clientY};dragDistance=0;if(pointers.size===2){const [a,b]=[...pointers.values()];pinchDistance=Math.hypot(a.x-b.x,a.y-b.y);}});
-viewport.addEventListener('pointermove',event=>{if(!pointers.has(event.pointerId))return;const prev=pointers.get(event.pointerId),dx=event.clientX-prev.x,dy=event.clientY-prev.y;dragDistance+=Math.abs(dx)+Math.abs(dy);pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0&&pinchDistance>0)zoom=Math.max(.45,Math.min(1.8,zoom*pinchDistance/d));pinchDistance=d;}else{azimuth-=dx*.006;elevation=Math.max(.2,Math.min(1.53,elevation+dy*.006));}cameraUpdate();});
+viewport.addEventListener('pointermove',event=>{if(!pointers.has(event.pointerId))return;const prev=pointers.get(event.pointerId),dx=event.clientX-prev.x,dy=event.clientY-prev.y;dragDistance+=Math.abs(dx)+Math.abs(dy);pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0&&pinchDistance>0)zoom=clampZoom(zoom*pinchDistance/d);pinchDistance=d;}else{azimuth-=dx*.006;elevation=Math.max(.2,Math.min(1.53,elevation+dy*.006));}cameraUpdate();});
 function pointerEnd(event){const clicked=pointers.size===1&&dragDistance<8;pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{pointers.delete(event.pointerId);pinchDistance=0;});
-viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(.2,elevation-.1);if(event.key==='+')zoom=Math.max(.45,zoom-.1);if(event.key==='-')zoom=Math.min(1.8,zoom+.1);cameraUpdate();});
+viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(.2,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
 function draw(){if(!renderer||!scene)return;for(const b of sim.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
  for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=sim.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(sim.time*4));}
  for(const {head} of heads){head.position.x=Math.sin(sim.time*3)*.62;head.position.z=Math.cos(sim.time*2)*.25;}renderer.render(scene,camera);
