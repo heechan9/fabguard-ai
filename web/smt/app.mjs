@@ -4,8 +4,8 @@ import {Simulation,STATIONS,FAULTS,assess} from './simulation.mjs';
 const $=id=>document.getElementById(id),sim=new Simulation();
 let selected='PCB-001',activeStation=2,followInjected=false;
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
-const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.name}`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].name} · ${STATIONS[i].description}`;}
+const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.label}<small>${s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
+function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;}
 selectStation(2);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
@@ -19,13 +19,13 @@ function updateUI(){
  if(followInjected){const b=sim.boards.at(-1);if(b.fault&&!sim.pending){selected=b.id;followInjected=false;}}
  const options=sim.boards.map(b=>b.id).join(',');if(options!==prevOptions){$('board-select').replaceChildren(...sim.boards.map(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.id+(b.fault?` · ${FAULTS[b.fault]}`:'');return o;}));prevOptions=options;}
  $('board-select').value=selected;const b=sim.boards.find(b=>b.id===selected)||sim.boards[0],a=assess(b);
- $('board-status').textContent=a.status;$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':''}`;
- $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATIONS[Math.max(0,b.stage)].name}`;
- $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=a.reason;
+ $('board-status').textContent=a.status.replace('가상 AOI NG','가상 불량').replace('가상 AOI OK','가상 최종검사 통과').replace('관측값 정상 범위','가상 측정값이 설정 범위 안에 있어요');$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':''}`;
+ $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATIONS[Math.max(0,b.stage)].label}`;
+ $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=a.reason.replaceAll('SPI','납 검사(SPI)').replaceAll('가상 AOI','가상 최종 검사');
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
  const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('run-status').textContent=done?'배치 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
  $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>b.stage>=2&&b.volume===null).length;
- $('pending').textContent=sim.pending?`다음 PCB · ${FAULTS[sim.pending]}`:sim.boards.length===12?'투입 완료 · 재실행 가능':'주입 대기 없음';
+ $('pending').textContent=sim.pending?`다음 PCB · ${FAULTS[sim.pending]}`:sim.boards.length===12?'투입 완료 · 처음부터 다시 시작하세요':'문제를 선택해 보세요';
  document.querySelectorAll('[data-fault]').forEach(button=>{button.disabled=sim.boards.length>=12;button.classList.toggle('armed',sim.pending===button.dataset.fault);button.setAttribute('aria-pressed',String(sim.pending===button.dataset.fault));});
 }
 
