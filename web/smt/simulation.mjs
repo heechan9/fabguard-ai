@@ -1,3 +1,4 @@
+import {lotId,lotSummary} from './lot-model.mjs';
 export const STATIONS=[
  {name:'Loader',label:'투입',duration:3,description:'PCB 투입. 각 보드에 고유 ID를 부여합니다.'},
  {name:'Printer',label:'납 인쇄',duration:4,description:'스크린 프린터. PCB 패드에 솔더 페이스트를 도포합니다.'},
@@ -34,5 +35,5 @@ export class Simulation{
    b.stage=stage;b.done=stage===11;b.progress=b.done?1:Math.max(0,(age-starts[stage])/STATIONS[stage].duration);
   }if(this.boards.length===12&&this.boards.every(b=>b.done))this.running=false;
  }
- snapshot(){return {schema_version:'fabguard-smt-synthetic/v1',data_source:'synthetic',decision_engine:'demo-rules-not-fabguard-model',seed:42,simulation_seconds:this.time,thresholds:{paste_percent:[80,120],peak_celsius:[235,250]},pending_fault:this.pending,boards:this.boards.map(b=>({...b,assessment:assess(b)}))};}
+ snapshot(){return {schema_version:'fabguard-smt-synthetic/v1',data_source:'synthetic',decision_engine:'demo-rules-not-fabguard-model',seed:42,simulation_seconds:this.time,thresholds:{paste_percent:[80,120],peak_celsius:[235,250]},pending_fault:this.pending,lot_policy:{kind:"synthetic-insertion-order",boards_per_lot:4,id_scope:"current-run",counts_may_overlap:true},lot_summary:lotSummary(this.boards),boards:this.boards.map((b,i)=>({...b,lot_id:lotId(i),assessment:assess(b)}))};}
 }
