@@ -1,0 +1,6 @@
+data_source,source_id,run_id,event_id,board_id,event_time,station_id,record_type,measurement_name,value,unit,missing_reason,inspection_result,defect_code
+synthetic,SIM-EXAMPLE,RUN-001,E-001,PCB-001,2026-09-14T09:00:00+09:00,spi,measurement,paste_volume_ratio,65,%,,,
+synthetic,SIM-EXAMPLE,RUN-001,E-002,PCB-001,2026-09-14T09:01:00+09:00,reflow,measurement,peak_temperature,245,degC,,,
+synthetic,SIM-EXAMPLE,RUN-001,E-003,PCB-001,2026-09-14T09:02:00+09:00,aoi,inspection,,,,,fail,SIM_PASTE_LOW
+synthetic,SIM-EXAMPLE,RUN-001,E-004,PCB-002,2026-09-14T09:03:00+09:00,spi,measurement,paste_volume_ratio,,%,sensor_missing,,
+synthetic,SIM-EXAMPLE,RUN-001,E-005,PCB-002,2026-09-14T09:05:00+09:00,aoi,inspection,,,,,unknown,

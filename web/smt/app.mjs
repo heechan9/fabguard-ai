@@ -1,11 +1,12 @@
 import * as THREE from './vendor/three.module.js';
 import {Simulation,STATIONS,FAULTS,assess} from './simulation.mjs';
+import {showEquipment} from './equipment.mjs';
 
 const $=id=>document.getElementById(id),sim=new Simulation();
 let selected='PCB-001',activeStation=2,followInjected=false;
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.label}<small>${s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;}
+function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;showEquipment($('equipment-reference'),i);}
 selectStation(2);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
