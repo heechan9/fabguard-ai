@@ -23,3 +23,13 @@
 .inside-note{position:absolute;bottom:48px;left:14px;right:14px;width:fit-content;max-width:calc(100% - 28px);padding:7px 10px;background:#091018e8;color:#85e3d2;font-size:12px;border:1px solid #304650;border-radius:6px;pointer-events:none}.inside-note[hidden]{display:none}#inside-view[aria-pressed="true"]{background:#2fcdbb;color:#062b29}.viewbar>div{display:flex;flex-wrap:wrap;gap:6px}
 
 .experience-map{margin:24px 0;padding:18px;border:1px solid #304650;border-radius:10px;background:#0c171f}.experience-map>p{margin:0 0 12px;font-weight:650}.experience-map>div{display:grid;grid-template-columns:1fr 1fr;gap:12px}.experience-map a{display:block;padding:14px;color:#6ce1d0;border:1px solid #304650;border-radius:8px;text-decoration:none}.experience-map a span{display:block;margin-top:7px;color:#b7c6cd;font-size:14px;line-height:1.7}.experience-title{font-size:22px;scroll-margin-top:120px}.experience-map a:focus-visible{outline:2px solid #6ce1d0;outline-offset:3px}@media(max-width:700px){.experience-map>div{grid-template-columns:1fr}}
+
+/* Explicit, user-started introduction recording, outside the production simulation controls. */
+.intro-launch{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin:1rem 0;color:var(--muted)}
+#intro-dialog{background:#101b25;color:#e9f2f5;border:1px solid #35505b;border-radius:16px;width:min(960px,92vw);max-height:90vh;padding:24px;overflow:auto}
+#intro-dialog::backdrop{background:rgba(0,0,0,.8)}
+.intro-header,.intro-actions{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.intro-actions{justify-content:flex-start}.intro-media{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.intro-media canvas,.intro-media video{width:min(360px,100%);height:auto;aspect-ratio:9/16;background:#080f14;border:1px solid #35505b}
+#intro-dialog [hidden]{display:none!important}#intro-download{display:inline-block;padding:12px;color:#39d6c4}
+#intro-dialog p{line-height:1.65}#intro-dialog button{min-height:44px}
