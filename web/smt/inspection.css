@@ -7,3 +7,5 @@
 .smt-page .data-preparation summary{font-size:18px;font-weight:650;cursor:pointer;min-height:44px;line-height:1.7}
 .smt-page .data-preparation summary:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 .smt-page footer a{color:var(--cyan);font-size:14px;text-underline-offset:4px}
+
+.inspection-cards[hidden],#inspection-takeaway[hidden]{display:none}
