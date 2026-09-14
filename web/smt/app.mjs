@@ -6,9 +6,12 @@ import {mountInspection} from './inspection.mjs';
 const $=id=>document.getElementById(id),sim=new Simulation();
 const inspection=mountInspection($('inspection-lab'));
 let selected='PCB-001',activeStation=2,followInjected=false;
+const compactView=matchMedia('(max-width: 900px)'),machineLabels=[];
+function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visible=!compactView.matches;}
+compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${s.label}<small>${s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;showEquipment($('equipment-reference'),i);}
+function selectStation(i){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATIONS[i].label} (${STATIONS[i].name}) · ${STATIONS[i].description}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATIONS[i].label}`;showEquipment($('equipment-reference'),i);}
 selectStation(2);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
@@ -61,7 +64,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
  if(i===0||i===10){for(let k=0;k<7;k++)box(group,.95,.04,.9,-.1,1.08+k*.1,0,0x55796d);box(group,.1,.9,1.25,-w/2+.1,1.43,0,color.dark);}
  if(i===7){for(let k=0;k<3;k++)cylinder(group,.18,.09,-.4+k*.4,.96,0,0x769ba7);}
  cylinder(group,.035,.5,w*.38,open?1.65:2.55,-.58,color.dark);const lamp=cylinder(group,.07,.15,w*.38,open?1.98:2.87,-.58,color.mint);group.userData.lamp=lamp;
- label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);machines.push(group);
+ const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
 }
 function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;for(let k=0;k<4;k++){box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46);}for(let k=0;k<5;k++)box(group,.48,.006,.013,0,.041,-.31+k*.14,0xcbb776);scene.add(group);boardMeshes.set(b.id,group);return group;}
 function cameraUpdate(){if(!camera)return;const aspect=viewport.clientWidth/Math.max(1,viewport.clientHeight),distance=(aspect<1.35?47:36)*zoom;camera.position.set(Math.sin(azimuth)*Math.cos(elevation)*distance,Math.sin(elevation)*distance,Math.cos(azimuth)*Math.cos(elevation)*distance);camera.lookAt(0,.6,0);camera.aspect=aspect;camera.updateProjectionMatrix();}

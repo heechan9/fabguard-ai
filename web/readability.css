@@ -8,3 +8,16 @@
 @media(max-width:1100px){.smt-page .workspace{grid-template-columns:minmax(0,1fr) 300px}.topbar nav{gap:12px}.topbar nav a{font-size:13px}}
 @media(max-width:900px){.topbar nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.topbar nav a{font-size:13px;white-space:normal;line-height:1.5}.hero{min-height:auto}.smt-page .heading{display:block}.quick-start{grid-template-columns:1fr}.quick-start li{padding:12px 15px}.quick-start p{margin-top:2px}.smt-page .workspace{grid-template-columns:1fr}.smt-page aside{border-left:0;border-top:1px solid var(--line)}.smt-page .run-state{margin-top:18px}.smt-page .bottom-grid{grid-template-columns:1fr}}
 @media(max-width:620px){.hero{padding-top:30px;gap:24px}.hero h1{font-size:40px}.hero-visual{min-height:320px}.smt-page .heading{padding:20px}.smt-page .scene-caption{font-size:12px;left:10px;gap:4px}.smt-page .gesture{font-size:12px;left:12px}.smt-page .seed{display:none}.smt-page .section-head{align-items:flex-start;flex-wrap:wrap}.smt-page .scenario-buttons{grid-template-columns:1fr}.smt-page .scenario-buttons button{min-height:80px;display:grid;grid-template-columns:26px 1fr;gap:3px 12px;padding:14px}.smt-page .scenario-buttons span{grid-row:1/3;margin:3px 0}.smt-page .scenario-buttons small{grid-column:2;margin:0}.result-numbers{grid-template-columns:1fr;gap:20px}.result-numbers>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-right:8px}.result-numbers strong{margin-top:0;font-size:36px;white-space:nowrap}.result-numbers span{max-width:140px}.plain-result{padding:20px 16px}.evidence-section .evidence-facts{grid-template-columns:1fr}.evidence-section .evidence-picks{display:grid;grid-template-columns:1fr 1fr}.evidence-section .evidence-picks button{font-size:14px;padding:10px}.evidence-section .evidence-head h3{font-size:21px;line-height:1.4}.table-shell td{font-size:14px}.reading-key{gap:8px 18px}.global-heading{gap:20px}.country-card{padding:20px}.data-strip{margin-bottom:60px}.story-section{margin-bottom:60px}}
+/* Keep the SMT viewport visible on phones; navigation remains horizontally scrollable. */
+.selected-station-caption{display:none}
+@media(max-width:900px){
+  .smt-page .topbar{height:auto;min-height:0;padding:10px 3vw 6px;gap:6px;flex-wrap:wrap}
+  .smt-page .topbar .brand{font-size:14px;min-height:30px}
+  .smt-page .topbar .brand-mark{width:22px;height:22px}
+  .smt-page .topbar nav{display:flex;width:100%;max-width:100%;margin:0;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+  .smt-page .topbar nav a{flex:0 0 auto;min-height:44px;padding:8px 10px;white-space:nowrap;font-size:13px}
+  .smt-page .topbar nav a[aria-current=page]{border-bottom:2px solid var(--cyan)}
+  .smt-page .selected-station-caption{display:block;position:absolute;left:12px;bottom:44px;max-width:calc(100% - 24px);padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:rgba(7,11,15,.9);color:var(--cyan);font-size:14px;line-height:1.5;pointer-events:none}
+  .smt-page .scene-caption{font-size:12px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+  .smt-page #fault-controls,.smt-page #board-inspector,.smt-page #smt-lab,.smt-page #country-evidence{scroll-margin-top:115px}
+}
