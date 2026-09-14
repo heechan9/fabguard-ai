@@ -19,3 +19,5 @@
 .measurement-details{margin:18px 0;line-height:1.65}.measurement-details summary{cursor:pointer;font-weight:700;color:#65d9c8}.measurement-card{border:1px solid #304650;border-radius:8px;padding:12px;margin-top:10px;overflow-wrap:anywhere}.measurement-card h3{font-size:15px;margin:0 0 8px}.measurement-card p{font-size:13px;margin:6px 0}.measurement-card strong{color:#a6c7ce}
 
 .technical-terms{border-top:1px solid #304650;margin-top:14px;padding-top:12px;line-height:1.75;overflow-wrap:anywhere}.technical-terms h3{font-size:15px;color:#65d9c8}.technical-terms p{font-size:13px}.station-strip abbr[title]{text-decoration:underline dotted;text-underline-offset:3px}
+
+.inside-note{position:absolute;bottom:48px;left:14px;right:14px;width:fit-content;max-width:calc(100% - 28px);padding:7px 10px;background:#091018e8;color:#85e3d2;font-size:12px;border:1px solid #304650;border-radius:6px;pointer-events:none}.inside-note[hidden]{display:none}#inside-view[aria-pressed="true"]{background:#2fcdbb;color:#062b29}.viewbar>div{display:flex;flex-wrap:wrap;gap:6px}

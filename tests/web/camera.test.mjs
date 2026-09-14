@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {clampZoom,overviewDistance,stationZoom} from '../../web/smt/camera-model.mjs';
 
 test('zoom permits a closer view while bounding pinch, wheel and keyboard inputs',()=>{
-  assert.equal(clampZoom(0.01),0.1);
+  assert.equal(clampZoom(0.01),0.035);
   assert.equal(clampZoom(2),1.8);
   assert.equal(clampZoom(0.2),0.2);
   assert.ok(clampZoom(0)<0.45);
