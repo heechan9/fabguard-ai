@@ -7,6 +7,7 @@
 .tour-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
 .tour-actions button{min-height:44px;padding:10px 16px}
 .tour-actions button:focus-visible{outline:3px solid #30cfbc;outline-offset:3px}
+.tour-actions button[aria-pressed="true"]{border-color:#35caba;box-shadow:inset 0 0 0 1px #35caba}
 .tour-state{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .tour-state dt{color:var(--muted,#aab9c2)}
 .tour-state dd{margin:6px 0;font-size:18px;font-weight:700;overflow-wrap:anywhere}

@@ -33,3 +33,39 @@ test('reset and a new case remove stale events; snapshots cannot mutate state', 
   assert.equal(lesson.snapshot().condition, 'waiting');
   assert.equal(lesson.snapshot().events.length, 0);
 });
+
+test('READY never clears overdue maintenance; acknowledging it never completes work', () => {
+  const lesson = new AlarmLesson();
+  lesson.begin('maintenance');
+  lesson.acknowledge();
+  assert.equal(lesson.snapshot().equipment, 'ready');
+  assert.equal(lesson.snapshot().condition, 'active');
+  assert.equal(lesson.snapshot().acknowledged, true);
+  assert.equal(lesson.snapshot().quality, 'not_assessed');
+  lesson.recover(); lesson.recover();
+  assert.equal(lesson.snapshot().condition, 'recovered');
+  assert.equal(lesson.snapshot().quality, 'not_assessed');
+  assert.equal(lesson.snapshot().events.length, 3);
+  lesson.begin('maintenance'); lesson.recover();
+  assert.equal(lesson.snapshot().acknowledged, false);
+});
+
+test('case changes and resets clear stale READY and maintenance history; invalid cases leave state intact', () => {
+  const lesson = new AlarmLesson();
+  lesson.begin('maintenance'); lesson.acknowledge(); lesson.recover();
+  lesson.begin('solution');
+  assert.equal(lesson.snapshot().caseId, 'solution');
+  assert.equal(lesson.snapshot().equipment, 'not_assessed');
+  assert.equal(lesson.snapshot().acknowledged, false);
+  assert.equal(lesson.snapshot().events.length, 1);
+  const before = lesson.snapshot();
+  for (const invalid of ['unknown', '__proto__', 'toString', null]) {
+    lesson.begin(invalid);
+    assert.deepEqual(lesson.snapshot(), before);
+  }
+  lesson.begin('maintenance'); lesson.reset();
+  assert.equal(lesson.snapshot().caseId, null);
+  assert.equal(lesson.snapshot().equipment, 'not_assessed');
+  assert.equal(lesson.snapshot().condition, 'waiting');
+  assert.deepEqual(lesson.snapshot().events, []);
+});

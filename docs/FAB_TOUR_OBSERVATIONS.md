@@ -68,3 +68,57 @@ of the photographed installation or endorsement):
   https://www.suss.com/en/products-solutions/imaging-solutions/mask-alignment
 - Korvus e-beam evaporation:
   https://korvustech.com/e-beam-evaporation/
+
+## Third supplied set — processing roles and maintenance context
+
+Seven photographs: 41565, 41567, 41568, 41569, 41570, 41574, 41566.jpg.
+Videos 41571.mp4 (27.093 s), 41573.mp4 (49.663 s), and 41563.mp4
+(4.608 s) were each inspected as three representative frames using
+`ffmpeg -vf 'fps=3/<duration>,scale=480:-1,tile=3x1'`. No audio transcription,
+continuous motion validation, or numerical time-series extraction was done.
+
+- 41565/41566 show an ICP Etcher usage-log heading and a MAXIS HMI with
+  Set/Monitor columns, recipe and step fields, pressure, RF, gas and temperature
+  labels, plus standby/idle displays. 41574 shows the same HMI partly obscured.
+  Video 41571/41573 frames show the ICP Etcher equipment label and HMI;
+  41563 frames show an open circular chamber/handling area. These establish
+  a process category and display concepts, not exact model or etch performance.
+- 41567/41568 show DISCO DAD3350 and Blade Replacement fields, including
+  blade specifications, usage, and replacement reason. The Lot ID in this
+  context is not assumed to be a wafer production LOT without a data dictionary.
+- 41569/41570 show DISCO DGP8760 Grinder / Polisher branding and fields for
+  wheel wear, processed wafers, estimated wafers, and grinding time. READY
+  labels for components coexist with a message about exceeded PM periods.
+  A component's READY label does not establish overall health, product quality,
+  permission to operate, or whether physical maintenance has actually occurred.
+
+Added three explanatory roles with original SVG concepts: selective plasma
+etching, backside grinding/polishing, and blade dicing. They are separate roles,
+not an asserted chronological route or manufacturer CAD. Candidate measurement
+needs (etch depth/profile, thickness variation, surface/crack inspection,
+cut position/width/chipping, consumable usage and maintenance history) are
+future data requirements, not measured values obtained from these images.
+
+Extended the existing alarm lesson with a synthetic READY + overdue-maintenance
+case. Acknowledgement cannot clear the condition. Only an explicit hypothetical
+completion action changes it; product quality remains unassessed. Switching
+cases and resetting remove stale READY states, acknowledgements, and history.
+Set/Monitor differences require process-phase context before interpretation.
+Estimated Wafers remains an equipment-displayed estimate with unknown formula
+and validation; it is not a FabGuard AI prediction or a remaining-life result.
+No photographed numerical recipes, account information, or original media
+are published.
+
+Primary references checked for general roles (not installation validation):
+- Oxford Instruments ICP etching:
+  https://plasma.oxinst.com/technologies/icp-rie
+- DISCO DAD3350:
+  https://www.disco.co.jp/eg/products/dicer/dad3350.html
+- DISCO grinding and polishing:
+  https://www.disco.co.jp/eg/solution/library/grinding.html
+  https://www.disco.co.jp/eg/solution/library/strlf.html
+
+Validation for this addition: `node --test tests/web/*.test.mjs` — 35 passed,
+0 failed, 0 skipped. New regression cases cover READY/maintenance separation,
+acknowledgement and completion in either order, switching cases, invalid case
+identifiers, and reset. No physical equipment behaviour has been validated.
