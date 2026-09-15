@@ -2,5 +2,105 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101b25"><title>FabGuard · SECOM 반도체 분석</title><meta name="description" content="SECOM 예측모델의 과거 평가 결과와 잠정 검증 한계. SMT 시나리오와 별도 화면."><link rel="stylesheet" href="/smt/evidence.css"><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/navigation.css"><link rel="stylesheet" href="/smt/theme.css"><link rel="stylesheet" href="/readability.css"></head>
 <body class="analysis-page"><a class="skip-link" href="#secom-evidence">분석으로 건너뛰기</a><div class="ambient" aria-hidden="true"></div><header class="topbar"><a class="brand" href="/#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a><nav aria-label="주요 화면"><a href="/#summary">프로젝트 소개</a><a href="/#global">국가별 자료</a><a href="/#risks">우선점검 목록</a><a href="/#limitations">검증과 한계</a><a href="/smt/">3D 공정 체험</a><a href="/secom/" aria-current="page">반도체 분석 결과</a></nav><span class="system-state"><i></i> GLOBAL INDUSTRIAL AI · OPEN DATA</span></header>
 <main class="secom-main"><div class="lab-context"><a href="/#risks" class="text-link">SECOM 우선점검 목록 →</a><a href="/#limitations" class="text-link">방법론과 한계 →</a></div>
+<p><a href="#fab-tour">팹 투어에서 본 장비 화면 이해하기 ↓</a></p>
 <section id="secom-evidence" class="panel evidence-section"><p class="evidence-load" role="status">반도체 분석 근거를 불러오는 중…</p></section><noscript><p>분석 결과를 표시하려면 JavaScript를 켜 주세요. <a href="/data/evidence_snapshot.json">저장된 근거 JSON</a>도 직접 확인할 수 있습니다.</p></noscript>
+<section id="fab-tour" class="panel tour-section" aria-labelledby="tour-title">
+<p class="eyebrow">팹 투어 관찰에서 출발한 별도 학습 체험</p>
+<h2 id="tour-title">장비의 역할부터, 화면의 신호까지</h2>
+<p>위에서는 과거 생산 자료를 분석했어요. 여기서는 팹 투어에서 본 장비의 역할과 화면 읽는 법을 배워 봅니다. 일반 공정 원리를 설명하는 도식과 가상 알람 체험이며, 해당 장비나 SECOM 분석과 연결되어 있지 않아요.</p>
+<nav class="tour-map" aria-label="팹 투어 학습 순서"><a href="#tour-equipment-title">01 · 장비의 역할</a><a href="#tour-signals-title">02 · 상태와 알림</a><a href="#tour-metrology-title">03 · 결과 측정</a><a href="#tour-operations-title">04 · 현장 운영</a></nav>
+<section class="tour-equipment" aria-labelledby="tour-equipment-title">
+<h3 id="tour-equipment-title">이 장비들은 무엇을 만드는 걸까요?</h3>
+<p>반도체 재료판인 웨이퍼에 층과 무늬를 만들고, 두께를 줄이거나 작은 칩으로 나누는 장비들이에요. 각 카드의 ‘자세히 보기’를 펼치면 역할과 필요한 데이터를 볼 수 있어요.</p>
+<p class="tour-flow"><b>무늬를 만드는 기본 흐름</b><span>감광액 바르기 → 위치 맞추고 빛 쬐기 → 현상하기</span><small>원리 이해를 위해 건조·가열 등 중간 단계를 생략했어요. 투어 장비의 실제 운전 순서나 레시피가 아닙니다.</small></p>
+<div class="tour-grid tour-roles">
+<article><span class="tour-role-label">바르고 현상하기</span><h4>무늬를 만들 준비를 해요</h4><p>빛에 반응하는 감광액(PR)을 바르고, 노광 후 현상 과정에서 일부를 제거해 무늬를 남겨요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-coating-title"><title id="tour-coating-title">웨이퍼 위의 감광막과 현상 후 일부가 제거된 감광막의 단면 개념도</title><rect x="20" y="32" width="240" height="18" rx="3" fill="#35caba"/><rect x="20" y="52" width="240" height="16" rx="3" fill="#6f8593"/><path d="M130 75v10m-5-5 5 5 5-5" fill="none" stroke="#d4e3e9" stroke-width="2"/><path d="M20 97h60v18H20zm100 0h40v18h-40zm80 0h60v18h-60z" fill="#35caba"/><rect x="20" y="117" width="240" height="16" rx="3" fill="#6f8593"/></svg>
+<p class="tour-key">청록색: 감광막 · 회색: 웨이퍼<br>위: 도포 후 · 아래: 현상 후의 개념</p>
+<details><summary>감광액 도포·현상 (PR Track) 자세히 보기</summary><p>사진의 ‘PR track’ 표기, 원형 처리부와 노즐·배관을 참고했어요. 각 사진 속 처리부가 도포용인지 현상용인지는 개별 확인이 필요합니다. PR은 Photoresist의 약어예요.</p><p>막 두께와 균일도를 판단하려면 실제 막 두께 측정값이 필요해요. 회전속도·시간·재료 기록도 함께 수집해야 합니다. 사진으로 두께나 불량을 계산하지 않아요.</p><p>어느 부분이 제거되는지는 감광액 종류와 공정에 따라 달라요. 도식은 특정 양성·음성 레지스트 레시피를 재현하지 않습니다.</p><p><a href="https://www.suss.com/en/products-solutions/coating-solutions/coating-and-developing">일반 원리 참고 · SUSS 도포·현상 장비 설명</a></p></details></article>
+<article><span class="tour-role-label">위치를 맞추고 빛 쬐기</span><h4>무늬가 놓일 자리를 맞춰요</h4><p>무늬가 있는 판인 마스크와 웨이퍼의 위치를 맞추고 빛을 쬐어 감광막에 무늬를 옮길 준비를 해요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-alignment-title"><title id="tour-alignment-title">마스크와 웨이퍼의 위치를 맞추는 정렬 기준 십자 표시 개념도</title><rect x="20" y="18" width="240" height="104" rx="10" fill="none" stroke="#6f8593" stroke-width="2"/><path d="M60 48h40m-20-20v40M180 88h40m-20-20v40" fill="none" stroke="#35caba" stroke-width="6"/><path d="M60 48h40m-20-20v40M180 88h40m-20-20v40" fill="none" stroke="#f6c26b" stroke-width="2" stroke-dasharray="4 3"/></svg>
+<p class="tour-key">청록색: 웨이퍼의 기준 표시<br>노란 점선: 마스크의 기준 표시</p>
+<details><summary>정렬·노광 (Mask Aligner) 자세히 보기</summary><p>사진과 영상에 보이는 SUSS MicroTec 표기와 정렬·관찰부를 참고했어요. 정확한 장비 모델과 정렬 정밀도는 확인하지 않았습니다.</p><p>정렬 오차를 평가하려면 기준 표시의 위치 측정값이 필요해요. 노광 조건은 빛의 세기·시간 등 별도 기록이 필요합니다. 도식에서 십자가 겹친 것은 설명용 그림이며 실측 결과가 아니에요.</p><p><a href="https://www.suss.com/en/products-solutions/imaging-solutions/mask-alignment">일반 원리 참고 · SUSS 마스크 정렬 장비 설명</a></p></details></article>
+<article><span class="tour-role-label">얇은 막 쌓기 · 별도 공정</span><h4>재료를 얇은 층으로 입혀요</h4><p>전자빔으로 증발시킨 재료를 진공 안에서 웨이퍼 표면에 쌓아 얇은 막을 만들어요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-deposition-title"><title id="tour-deposition-title">진공 챔버 안에서 증발원으로부터 재료가 이동하여 웨이퍼에 막을 형성하는 개념도</title><rect x="20" y="8" width="240" height="124" rx="20" fill="none" stroke="#6f8593" stroke-width="2"/><rect x="65" y="27" width="150" height="12" rx="3" fill="#6f8593"/><path d="M65 43h150" stroke="#35caba" stroke-width="6"/><path d="m115 103-30-45m55 45V58m25 45 30-45" stroke="#f6c26b" stroke-width="2" stroke-dasharray="5 5"/><path d="M110 105h60l-10 16h-40z" fill="#f6c26b"/></svg>
+<p class="tour-key">위: 막이 쌓이는 웨이퍼<br>아래: 증발원 · 점선: 재료 이동의 개념</p>
+<details><summary>전자빔 증착 (E-beam Evaporation) 자세히 보기</summary><p>사진의 ‘E beam Evaporater’ 표기로 장비 종류를 확인했어요. 내부 사진만으로 전자총·증발원·셔터의 세부 구성을 확정하지 않았습니다.</p><p>막 두께를 확인하려면 두께 측정값이 필요해요. 진공도·증착 속도·시간·재료 기록은 분석에 필요한 후보 데이터이며 이번 사진에서 확보한 데이터가 아닙니다.</p><p>증착 순서는 만들려는 구조와 공정에 따라 달라요. 위의 무늬 만들기 흐름 바로 다음 단계로 고정하지 않습니다.</p><p><a href="https://korvustech.com/e-beam-evaporation/">일반 원리 참고 · Korvus 전자빔 증착 설명</a></p></details></article>
+</div>
+<h3>필요한 부분을 깎고, 얇게 만들고, 나누기도 해요</h3>
+<p>아래는 서로 다른 가공 역할이에요. 카드 순서는 실제 생산 순서가 아니며, 제품과 공정 방식에 따라 달라집니다.</p>
+<div class="tour-grid tour-roles">
+<article><span class="tour-role-label">선택한 부분 제거하기</span><h4>남길 부분을 보호하고 깎아요</h4><p>보호막으로 가린 부분은 남기고, 드러난 재료를 플라즈마로 제거해 필요한 모양을 만들어요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-etch-title"><title id="tour-etch-title">보호막 사이로 드러난 재료를 제거하는 식각 단면 개념도</title><path d="M95 20v30m-6-7 6 7 6-7m84-23v30m-6-7 6 7 6-7" fill="none" stroke="#f6c26b" stroke-width="3"/><path d="M20 70h50v28h50V70h40v28h50V70h50v55H20z" fill="#6f8593"/><path d="M20 60h50v10H20zm100 0h40v10h-40zm90 0h50v10h-50z" fill="#35caba"/><path d="M70 70h50m40 0h50" stroke="#aab9c2" stroke-width="2" stroke-dasharray="4 4"/></svg>
+<p class="tour-key">청록색: 보호막 · 회색: 가공할 재료<br>점선 아래의 홈: 제거된 부분의 개념</p>
+<details><summary>플라즈마 식각 (ICP Etcher) 자세히 보기</summary><p>사진의 사용 일지와 영상의 ‘ICP Etcher’ 표기를 확인했어요. ICP는 유도결합 플라즈마(Inductively Coupled Plasma)를 뜻합니다. 사진 속 장비의 정확한 모델이나 식각 성능은 확인하지 않았어요.</p><p>식각 깊이·형상은 실제 측정이 필요해요. 압력·고주파 전력(RF)·가스 유량·온도와 공정 단계의 시간 기록은 분석에 필요한 후보 자료입니다. 화면에 보이는 설정값만으로 식각 결과를 예측하지 않아요.</p><p><a href="https://plasma.oxinst.com/technologies/icp-rie">일반 원리 참고 · Oxford Instruments ICP 식각</a></p></details></article>
+<article><span class="tour-role-label">웨이퍼 두께 줄이기</span><h4>뒷면을 갈아 얇게 만들어요</h4><p>웨이퍼 뒷면을 갈아 두께를 줄이고, 필요에 따라 연마로 표면을 다듬어요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-grind-title"><title id="tour-grind-title">가공 전 두꺼운 웨이퍼와 뒷면 가공 후 얇은 웨이퍼의 단면 비교 개념도</title><rect x="20" y="30" width="100" height="65" rx="3" fill="#6f8593"/><path d="M20 95h100" stroke="#35caba" stroke-width="5"/><path d="M135 75h20m-7-6 7 6-7 6" fill="none" stroke="#d4e3e9" stroke-width="2"/><rect x="170" y="75" width="90" height="20" rx="3" fill="#6f8593"/><path d="M170 95h90" stroke="#35caba" stroke-width="5"/><path d="M170 30h90v40h-90z" fill="none" stroke="#aab9c2" stroke-dasharray="4 4"/></svg>
+<p class="tour-key">왼쪽: 가공 전 · 오른쪽: 가공 후<br>청록선: 소자 쪽 면 · 점선: 제거할 뒷면 영역</p>
+<details><summary>뒷면 연삭·연마 (Back Grinding / Polishing) 자세히 보기</summary><p>사진에는 DISCO DGP8760과 Grinder / Polisher 표기가 보여요. 화면의 마모량·처리 장수·정비 알림은 관리할 정보의 종류를 알려주지만, 가공 품질 자체를 입증하지는 않아요.</p><p>결과를 평가하려면 가공 전후 두께, 위치별 두께 차이, 표면·균열 검사와 휠 교체·정비 이력이 필요해요. 사진의 숫자를 수명 예측 모델로 사용하지 않습니다.</p><p><a href="https://www.disco.co.jp/eg/solution/library/grinding.html">일반 원리 참고 · DISCO 연삭</a> · <a href="https://www.disco.co.jp/eg/solution/library/strlf.html">연마</a></p></details></article>
+<article><span class="tour-role-label">작은 칩으로 나누기</span><h4>칩 사이의 길을 따라 잘라요</h4><p>웨이퍼에 만들어진 칩들을 정해진 절단 경로를 따라 분리해요. 이 장비는 얇은 절단 날을 사용하는 방식이에요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-dicing-title"><title id="tour-dicing-title">웨이퍼 위의 칩 사이를 지나는 절단 경로 개념도</title><circle cx="140" cy="70" r="60" fill="#6f8593"/><path d="M112 17v106m28-113v120m28-113v106M87 42h106M80 70h120M87 98h106" fill="none" stroke="#0a141c" stroke-width="4"/><path d="M140 10v120" stroke="#f6c26b" stroke-width="2" stroke-dasharray="5 4"/></svg>
+<p class="tour-key">회색 칸: 칩 영역<br>노란 점선: 절단 경로 하나의 예시</p>
+<details><summary>웨이퍼 절단 (Dicing Saw) 자세히 보기</summary><p>사진의 DISCO DAD3350 표기와 절단 날 교체 화면을 확인했어요. 절단 날(Blade)의 규격·사용 이력과 교체 사유를 구분해 기록하는 모습을 참고했습니다.</p><p>잘 잘렸는지 확인하려면 절단 위치·폭, 가장자리 깨짐(Chipping) 검사 결과가 필요해요. 날 사용량과 교체 기록만으로 불량이나 남은 수명을 확정할 수는 없어요.</p><p><a href="https://www.disco.co.jp/eg/products/dicer/dad3350.html">장비 역할 참고 · DISCO DAD3350 공식 설명</a></p></details></article>
+</div>
+<h3>액체를 이용해 제거하거나, 금속을 쌓기도 해요</h3>
+<div class="tour-grid tour-roles tour-pair">
+<article><span class="tour-role-label">액체로 재료 제거하기</span><h4>웨이퍼를 돌리며 표면을 처리해요</h4><p>스핀 방식의 습식 식각은 웨이퍼에 액체 약품을 공급해 재료를 제거하는 방법이에요. 회전과 액체 공급 조건을 함께 관리합니다.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-wet-etch-title"><title id="tour-wet-etch-title">회전하는 웨이퍼에 액체를 공급하는 습식 식각 개념도</title><path d="M75 15h65v25" fill="none" stroke="#6f8593" stroke-width="10"/><path d="M140 49v12m-18-7-6 12m42-12 6 12" stroke="#35caba" stroke-width="3"/><ellipse cx="140" cy="88" rx="90" ry="23" fill="#6f8593"/><path d="M68 83q72 25 144 0" fill="none" stroke="#35caba" stroke-width="3"/><path d="M190 123q-50 16-100-1m9-6-9 6 9 6" fill="none" stroke="#f6c26b" stroke-width="2"/></svg>
+<p class="tour-key">청록색: 공급 액체 · 회색: 웨이퍼<br>노란 화살표: 회전의 개념</p>
+<details><summary>습식 식각 (Spin Etcher) 자세히 보기</summary><p>사진의 SPIN ETCHER 화면에는 액체 공급·폐액 경로, 단계·시간, 웨이퍼 고정 관련 항목이 보여요. 화면의 No Chemical이나 Active 표시만으로 실제 약품 공급·공정 진행 여부를 확정하지 않았습니다.</p><p>분석 자료로는 약품 식별·농도 확인 기록, 공급량, 온도, 회전 속도, 단계별 시간과 처리 전후 측정값이 필요해요. 제거된 두께나 균일도는 측정 결과로 확인해야 합니다.</p><p><a href="https://www.sps-polos.com/support/applications/spin-etching/">일반 원리 참고 · POLOS 스핀 식각</a> — 다른 장비의 설명이며 사진 속 장비의 조건·성능을 검증하는 자료는 아니에요.</p></details></article>
+<article><span class="tour-role-label">전기로 금속층 만들기</span><h4>용액 속 금속을 표면에 쌓아요</h4><p>전기도금은 용액에 전류를 흘려 전기가 통하는 표면에 금속층을 만드는 방법이에요.</p>
+<svg viewBox="0 0 280 140" role="img" aria-labelledby="tour-plating-title"><title id="tour-plating-title">용액에서 금속 이온이 도전성 표면에 금속층을 형성하는 전기도금 개념도</title><rect x="20" y="20" width="240" height="108" rx="12" fill="#123b40"/><rect x="90" y="86" width="120" height="22" fill="#6f8593"/><path d="M90 80h120" stroke="#f6c26b" stroke-width="8"/><circle cx="105" cy="42" r="5" fill="#f6c26b"/><circle cx="150" cy="35" r="5" fill="#f6c26b"/><circle cx="195" cy="42" r="5" fill="#f6c26b"/><path d="M105 51v17m45-24v24m45-17v17" stroke="#f6c26b" stroke-dasharray="3 3"/><path d="M230 9v99h-20" fill="none" stroke="#35caba" stroke-width="3"/></svg>
+<p class="tour-key">노란 점: 금속 이온 · 노란 층: 쌓인 금속<br>회색: 도전성 표면 · 전극·배선은 일부 생략한 개념도</p>
+<details><summary>전기도금 (Electroplating) 자세히 보기</summary><p>사진에는 ELECTRO PLATING MACHINE 표기와 온도·회전 속도 표시가 보여요. 정확한 장비 모델·도금 금속·용액 조성은 확인하지 않았습니다. 별도의 열린 처리부 사진도 상세 전극 구조를 확정하는 근거로 쓰지 않아요.</p><p>두께와 품질을 분석하려면 전류·전압·시간, 도금 면적, 용액 관리 이력과 실제 두께·균일도·표면 검사 결과를 함께 연결해야 해요. 온도나 회전 속도 표시만으로 막 두께를 계산하지 않습니다.</p><p><a href="https://newsroom.lamresearch.com/Tech-Brief-Elements-of-Electroplating">일반 원리 참고 · Lam Research 전기도금 설명</a></p></details></article>
+</div>
+<p class="tour-boundary">모든 그림은 역할을 설명하는 개념도예요. 실물 CAD·치수·계산 결과가 아니며, SMT의 부품 조립 공정과 별도로 다룹니다.</p>
+</section>
+<h3 id="tour-signals-title">장비의 역할을 알았다면, 이제 상태 화면을 읽어 봐요</h3>
+<div class="tour-grid">
+<article><h3>① 목표와 실제를 따로 보기</h3><p>장비 화면에는 설정값(SET)과 현재 표시값(ACT 또는 Monitor)이 나란히 보였어요. 목표를 입력했다는 사실만으로 실제 공정이 그 값에 도달했다고 볼 수는 없어요.</p><p>확인할 기록: 측정 시각, 단위, 설정값, 실제값, 허용 범위와 공정 단계. 대기 중인지 처리 중인지에 따라 의미가 달라져요. 측정값이 없으면 정상 대신 ‘확인 필요’로 남깁니다.</p></article>
+<article><h3>② 어떤 작업인지 연결하기</h3><p>생산 묶음(LOT), 작업 조건 묶음(Recipe), 실행 회차(Run)는 서로 다른 정보예요. 같은 조건을 여러 번 실행하거나 여러 생산 묶음에 적용할 수 있어요.</p><p>아래 체험은 DEMO-LOT-01 · DEMO-RECIPE-A · DEMO-RUN-01이라는 가상 식별자를 사용해요.</p></article>
+<article><h3>③ 알람을 확인하고 이력 남기기</h3><p>투어 사진의 알람 목록에는 용액 부족과 폐액 넘침 메시지, 경고·알람 구분, 발생 시각이 보였어요. 알람을 읽었다는 기록과 원인이 해소됐다는 기록은 따로 필요해요.</p><p>장비 알람만으로 생산품 불량이나 원인을 확정하지 않아요.</p></article>
+</div>
+<div class="tour-demo"><h3>‘준비 완료’나 ‘확인함’이면, 문제도 해결된 걸까요?</h3><p>가상 사례를 고른 뒤 ‘알림을 읽었어요’를 눌러 보세요. 장비의 준비 표시, 정비 필요 여부, 사람이 읽었는지, 제품 품질은 서로 다른 정보예요. 사례를 바꾸면 이전 체험 기록은 초기화됩니다.</p>
+<p class="evidence-tag">가상 사례 · DEMO-LOT-01 / DEMO-RECIPE-A / DEMO-RUN-01</p>
+<div class="tour-actions" role="group" aria-label="가상 사례 선택"><button data-action="begin" data-case="solution" aria-pressed="false">용액이 부족한 사례</button><button data-action="begin" data-case="maintenance" aria-pressed="false">준비 상태지만 정비가 필요한 사례</button></div>
+<div class="tour-actions"><button data-action="acknowledge" disabled>알림을 읽었어요</button><button data-action="recover" disabled>조건 해소를 가정하기</button><button data-action="reset">체험 초기화</button></div>
+<dl class="tour-state" aria-live="polite"><div><dt>알람·정비 조건</dt><dd data-condition>사례 선택 전</dd></div><div><dt>사용자의 확인</dt><dd data-ack>—</dd></div><div><dt>장비 구성부의 준비 표시</dt><dd data-equipment>이 사례에서 확인하지 않음</dd></div><div><dt>생산품 품질</dt><dd>이 체험에서 판정하지 않음</dd></div></dl>
+<h3>발생 순서대로 남는 기록</h3><p data-empty>먼저 위의 가상 사례를 선택하세요.</p><ol data-events></ol>
+<p>조건 해소는 버튼으로 정한 가정이에요. 실제 센서 확인·정비·운전 허가를 뜻하지 않으며, 생산품 품질은 이 체험에서 판정하지 않습니다.</p>
+<noscript><p>버튼 체험에는 JavaScript가 필요해요. 핵심은 ‘알람 확인’과 ‘조건 해소’가 서로 다른 상태라는 점입니다.</p></noscript></div>
+<details><summary>정비 알림과 ‘예상 처리 장수’는 어떻게 읽나요?</summary><p>연마기 사진에는 구성부의 READY 표시와 정비 주기를 지났다는 메시지가 함께 있었어요. READY 하나로 장비 전체가 정상이라거나 운전해도 된다고 결론낼 수는 없습니다.</p><p>같은 화면의 Estimated Wafers는 장비가 표시한 추정 항목이에요. 계산 방식·적용 조건·정확도는 확인하지 않았습니다. FabGuard가 검증한 AI 예측이 아니며, 실제 남은 수명을 확정하는 값으로 쓰지 않아요.</p><p>소모품 분석을 하려면 날·휠 식별자, 사용량과 단위, 정비·교체 시각과 사유, 해당 실행의 품질 검사 결과를 함께 모아야 해요. 사진에 보이는 Blade Replacement의 Lot ID도 의미를 확인하기 전에는 웨이퍼 생산 묶음과 같은 ID로 연결하지 않습니다.</p></details>
+<details><summary>저장된 레시피와 실제 실행 기록은 달라요</summary><p>추가 영상에는 Deep Si Etcher와 MUC-21 표기가 보이고, 화면에는 레시피 목록과 날짜가 다른 펌프 경고들이 함께 보여요. 이 자료는 레시피 관리와 경고 이력을 설명하는 사례입니다. 목록만으로 어떤 조건을 실제 실행했는지, 경고가 현재도 지속되는지는 알 수 없어요.</p><p>재현 가능한 기록에는 레시피 ID와 버전, 승인 상태, 실제 실행에 사용한 조건 사본, Run의 시작·종료 시각과 결과가 필요해요. 파일 이름이나 수정 날짜만으로 승인된 버전이라고 판단하지 않습니다. 이는 FabGuard의 기록 설계에 참고할 항목이에요.</p><p>경고 이력도 발생·해소 시각과 확인 기록을 구분해야 해요. 다른 화면에 보이는 Buzzer off는 소리 관련 조작 표기이며, 경고 확인·원인 해소와 같은 뜻으로 취급하지 않습니다.</p><p><a href="https://www.mmc.or.jp/en/magazine/61e/08.pdf">배경 참고 · MMC에 수록된 Sumitomo 장비 소개(2007)</a>에는 여러 MUC-21 기반 구성이 등장해요. 사진 속 세부 구성이나 식각 깊이·성능은 이 자료로 확정하지 않습니다.</p></details>
+<section class="tour-metrology" aria-labelledby="tour-metrology-title">
+<p class="tour-role-label">만드는 과정에서, 만든 결과 확인으로</p>
+<h3 id="tour-metrology-title">잘 만들어졌는지는 무엇으로 확인할까요?</h3>
+<p>지금까지는 장비의 역할과 상태를 살펴봤어요. 결과를 확인하려면 알고 싶은 것에 맞는 측정이 필요해요. 높이 차이, 얇은 막의 두께, 재료 특성, 휨은 서로 다른 질문입니다.</p>
+<p class="tour-flow"><b>현재 상태: 실제 측정 결과는 아직 없어요</b><span>아래는 측정 방법 안내예요. 사진과 영상에서 수치·스펙트럼·측정 지도를 추출한 분석 결과가 아닙니다.</span></p>
+<div class="tour-table-wrap" role="region" aria-label="질문별 측정 방법 비교" tabindex="0">
+<table class="tour-measurements"><caption>알고 싶은 것에 맞춰 측정 방법 고르기</caption><thead><tr><th scope="col">알고 싶은 것</th><th scope="col">어떻게 확인하나요?</th><th scope="col">참고 장비</th></tr></thead><tbody>
+<tr><th scope="row">표면의 높이 차이는?</th><td>가느다란 탐침으로 표면을 따라가며 높이를 기록해요.</td><td>접촉식 프로파일러<br><span>Dektak 150</span></td></tr>
+<tr><th scope="row">얇은 막의 두께는?</th><td>반사된 빛을 측정하고 재료·층 구조 모델에 맞춰 두께를 구해요.</td><td>광학식 막 두께 측정<br><span>NanoSpec 계열</span></td></tr>
+<tr><th scope="row">재료에 어떤 결합 특성이 있나요?</th><td>적외선을 흡수하는 양상을 스펙트럼으로 살펴봐요.</td><td>적외선 분광<br><span>FTIR · VERTEX 70v</span></td></tr>
+<tr><th scope="row">웨이퍼가 얼마나 휘었나요?</th><td>여러 레이저 빔이 반사되는 모습을 이용해 휨을 측정해요.</td><td>곡률·휨 측정<br><span>kSA MOS Ultra-Scan</span></td></tr>
+</tbody></table></div>
+<div class="tour-measurement-details">
+<details><summary>높이 차이와 막 두께가 항상 같은 것은 아니에요</summary><p>사진에는 Veeco Dektak 150과 3D profiler 표기가 보여요. 접촉식 프로파일러는 표면의 높이 변화와 단차를 살펴보는 장비예요. 높이 차이를 막 두께로 해석하려면 비교할 기준면과 시료 구조가 맞아야 합니다.</p><p>스캔 위치·길이·측정 조건·교정 기록과 원본 높이 데이터를 함께 남겨야 해요. 위치를 맞추는 십자 표시 화면만으로 측정 완료나 전체 표면의 정상 여부를 판단하지 않아요.</p><p><a href="https://www.bruker.com/en/products-and-solutions/test-and-measurement/stylus-profilometers/dektak-pro.html">일반 원리 참고 · Bruker 접촉식 프로파일러</a> — 다른 세대의 장비 설명이며 사진 속 장비의 사양 검증 자료는 아니에요.</p></details>
+<details><summary>빛으로 구한 두께에는 재료와 층 구조의 가정이 들어가요</summary><p>사진의 Nanospec 표기와 광학 측정 장면을 참고했어요. 정확한 장비 모델은 확인하지 않았습니다. NanoSpec 계열의 분광 반사 측정은 파장별 반사광과 재료·층 구조 모델을 이용하는 방식이에요.</p><p>분석하려면 반사광 원본, 기준 시료·교정 기록, 재료의 광학 특성, 층 구조, 측정 위치와 모델 적합 상태가 필요해요. 모니터에 숫자가 보인다는 사실만으로 두께의 정확성을 검증할 수는 없습니다. 이 계산은 미래의 불량을 예측하는 AI와도 다른 개념이에요.</p><p><a href="https://nnci.net/tools/nanospec-film-thickness-measurement-system">일반 원리 참고 · NNCI NanoSpec 측정 안내</a> — 동일 설치 장비의 모델 확인 자료는 아니에요.</p></details>
+<details><summary>적외선 스펙트럼은 재료 특성을 해석하는 자료예요</summary><p>사진에는 VERTEX 70v 표기가 보여요. 푸리에 변환 적외선 분광(FTIR, Fourier Transform Infrared Spectroscopy)은 적외선과 물질의 상호작용을 이용해 화학 결합 특성을 살펴보는 방법입니다.</p><p>실제 해석에는 원본 스펙트럼, 배경 측정, 시료 준비와 측정 방식, 비교할 기준 자료가 필요해요. 장비 외관만으로 시료 성분·오염·순도나 합격 여부를 판정하지 않습니다.</p><p><a href="https://www.bruker.com/en/products-and-solutions/infrared-and-raman/ft-ir-routine-spectrometer/what-is-ft-ir-spectroscopy.html">일반 원리 참고 · Bruker 적외선 분광 안내</a></p></details>
+<details><summary>휨을 재는 것과 막의 응력을 계산하는 것은 달라요</summary><p>사진에는 k-Space의 MOS Ultra-Scan 표기가 보여요. 이 장비의 MOS는 여러 빔을 쓰는 광학 센서(Multi-beam Optical Sensor)를 뜻해요. 반사된 레이저 배열을 이용해 위치별 곡률과 휨을 살펴봅니다.</p><p>막이 내부에서 당기거나 미는 정도인 응력은 곡률 자료에 물성·두께와 모델 가정을 더해 계산해요. 공정 전후 곡률, 기판·막 두께, 기판의 탄성 특성, 교정과 모델 적용 조건을 확인해야 합니다. 외관 사진에서 휨·응력 값을 만들거나, 휨만으로 불량을 확정하지 않아요.</p><p><a href="https://k-space.com/product/mos-scan/">일반 원리 참고 · k-Space 곡률·휨 측정</a> · <a href="https://k-space.com/document/application-notes-ksa-mos-resolution-and-sensitivity/">응력 해석과 측정 오차</a></p></details>
+</div>
+<details><summary>측정 결과를 어느 웨이퍼·공정에 연결해야 할까요?</summary><p>사진 속 칸이 있는 보관함은 웨이퍼를 담는 카세트를 설명하는 참고예요. 같은 보관함에 있다는 사실만으로 모두 같은 생산 묶음이거나 같은 처리를 받았다고 볼 수는 없어요.</p><p>개별 웨이퍼 ID, 생산 묶음(LOT), 보관함 ID와 칸 번호(Slot), 공정 실행 회차(Run)를 따로 기록해요. 웨이퍼가 이동하면 보관 위치 이력도 갱신해야 합니다.</p><p>측정 기록에는 장비·시각·위치·방법·단위·원본 파일·교정 정보를 붙여야 해요. 평가 기준과 비교 가능한 측정 결과를 확보하기 전까지 FabGuard에서는 ‘미측정·확인 필요’로 구분합니다. 현재 사진만으로 이 추적 관계가 확인된 것은 아니에요.</p></details>
+</section>
+<section class="tour-operations" aria-labelledby="tour-operations-title">
+<p class="tour-role-label">장비를 둘러싼 운영 기록</p><h3 id="tour-operations-title">사람·시료·전원도 함께 관리해요</h3>
+<p>팹 운영에는 입실 절차, 시료 보관, 장비를 지원하는 전원 설비도 포함돼요. 이번 현장의 게시물과 전원반은 어떤 관리 기록이 필요한지 살펴보는 사례입니다.</p>
+<div class="tour-grid">
+<article><h4>누가 사용할 수 있나요?</h4><p>Open Lab 게시물은 역할별 복장과 입실 절차를 안내하고 있어요. 복장 색상만으로 장비 조작 권한을 판단할 수는 없습니다.</p><details><summary>기록 설계에 참고하기</summary><p>사용자 역할, 교육 이수, 장비별 사용 승인, 적용할 절차의 버전과 유효 기간을 구분해요. 사진 속 복장·착용 순서는 해당 시설의 사례이며 모든 팹의 공통 규칙으로 적용하지 않아요. 실제 입실·작업은 해당 시설의 최신 안내에 따릅니다.</p></details></article>
+<article><h4>이 시료는 누구의 것인가요?</h4><p>게시물에는 시료·시약의 이름, 반입·보관 날짜, 사용자와 지정 장소를 관리하는 항목이 있어요.</p><details><summary>보관 이력에 연결하기</summary><p>시료 ID, 담당자, 반입 시각, 승인된 위치와 이동 이력을 구분해 기록할 수 있어요. 시약은 물질 식별자와 보관 조건도 따로 관리해야 합니다. 이 화면은 관리 항목을 설명하며, 실제 재고·사용자·승인 기록은 연결되어 있지 않아요.</p></details></article>
+<article><h4>장비 주변에도 전기가 필요해요</h4><p>MCC-604 전원반에는 에어샤워·패스박스 등의 회로 표기와 계기가 보여요. 이는 공정 장비 자체와 구분할 지원 설비의 사례예요.</p><details><summary>전류와 전력 사용량 구분하기</summary><p>계기의 전압·전류와 차단기 용량은 누적 전력 사용량(kWh)과 다른 정보예요. 전력 사용량 분석에는 측정 구간, 시각, 누적 유효전력량과 검증된 회로·설비 연결 정보가 필요합니다.</p><p>탄소배출량까지 계산하려면 사용 전력에 적용할 지역·기간·산정 방식에 맞는 배출계수도 필요해요. 사진의 바늘 위치나 0.00 표시로 사용량·탄소배출·장비 정상을 추정하지 않습니다. 현재 에너지 데이터와 이 전원반의 연결도 확인되지 않았어요.</p></details></article>
+</div></section>
+<details><summary>관찰 자료와 구현 범위</summary><p>2026년 9월 15일 사용자가 제공한 다섯 차례 팹 투어 사진과 영상의 대표 프레임을 참고했어요. 장비 표기와 처리부 외형, 화면의 알람 목록, SET/ACT·Monitor, Recipe·Lot ID·Run, 챔버 상태·인터록 표시, 정비 관련 항목과 측정 장비·보관함, 현장 운영 게시물·전원반을 관찰했습니다. 인터록은 운전 조건을 확인하는 보호 기능을 가리키며, 이 체험에서는 실제 동작을 재현하지 않아요.</p><p>산화 장비 화면과 SMT 납땜 가열은 서로 다른 공정입니다. 장비의 실제 레시피·임계값·계정 정보는 체험에 옮기지 않았고, 익명 SECOM 변수에 장비 이름을 붙이지 않았습니다. 실물 내부 구조·열전달·가스 흐름은 추가 자료와 검증이 필요해요.</p></details>
+</section>
+<link rel="stylesheet" href="./tour.css"><script type="module" src="./tour.mjs"></script>
 <footer><p><b>분석 범위</b> 공개 SECOM 자료의 재현 가능한 연구 결과입니다. 현장 배포·수율 개선·원인 진단을 입증한 결과가 아닙니다.</p><span>HEECHAN CHOI · FABGUARD</span></footer></main><script type="module" src="./secom.mjs"></script></body></html>
