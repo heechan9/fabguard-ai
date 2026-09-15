@@ -122,3 +122,127 @@ Validation for this addition: `node --test tests/web/*.test.mjs` — 35 passed,
 0 failed, 0 skipped. New regression cases cover READY/maintenance separation,
 acknowledgement and completion in either order, switching cases, invalid case
 identifiers, and reset. No physical equipment behaviour has been validated.
+
+## Fourth supplied set — choosing measurements and linking records
+
+Nine photographs: 41577, 41578, 41579, 41583, 41584, 41585, 41586,
+41553, 41552.jpg. Video 41580.mp4 (53.994 s) was inspected as three
+representative frames with `fps=3/<duration>,scale=480:-1,tile=3x1`.
+The frames show an optical instrument, sample stage and display. No audio
+transcription, full motion validation or numerical extraction was performed.
+
+- 41577/41578 show Veeco Dektak 150 and 3D profiler labels. 41583 shows
+  a positioning/scan interface rather than a completed height profile.
+  The labels do not establish installed mapping options or achieved precision.
+- 41579 and video frames show an optical instrument/sample stage; 41584
+  shows a Nanospec label on the associated workstation. NanoSpec is discussed
+  at family level; workstation labels do not establish the instrument model.
+- 41553 shows VERTEX 70v branding. No spectrum, sample preparation or
+  configured measurement accessories are established by the exterior image.
+- 41552 shows k-Space MOS Ultra-Scan branding. The photograph does not
+  establish a measured curvature/stress map, a temperature stage, or any
+  optional measurement package.
+- 41585 shows slotted carriers. No slot count, occupied slots, identities,
+  production LOT membership or transfer history was extracted.
+- 41586 shows a cabinet with a DRIE SOP label. This is retained as an
+  observation, not treated as evidence of a particular deep-etch process,
+  aspect ratio, recipe, or the actual configuration of the earlier ICP tool.
+
+Added a compact measurement-selection table and native disclosures in
+`/secom/#tour-metrology-title`, with a three-anchor map of the existing tour.
+It distinguishes stylus height/step measurements, model-based optical film
+thickness, infrared spectra and curvature/bow measurements. Film stress is
+described as an interpretation requiring before/after curvature, thickness,
+elastic properties, calibration and model assumptions. No measured result,
+synthetic spectrum, film-thickness prediction or automatic quality decision
+has been introduced. Missing measurements remain explicit in the prose.
+
+Record-linking guidance distinguishes wafer ID, production LOT, carrier ID,
+slot and process Run, along with measurement time/location/method/units,
+raw file and calibration. This is a future data contract, not an implemented
+equipment connector or reconstructed trace of the photographed samples.
+
+Primary references checked on 2026-09-15 for general methods:
+- Bruker Dektak Pro (different generation; principles only, not Dektak 150 specs):
+  https://www.bruker.com/en/products-and-solutions/test-and-measurement/stylus-profilometers/dektak-pro.html
+- NNCI NanoSpec (different installations; family-level optical method):
+  https://nnci.net/tools/nanospec-film-thickness-measurement-system
+- Bruker FTIR fundamentals (not configuration verification for VERTEX 70v):
+  https://www.bruker.com/en/products-and-solutions/infrared-and-raman/ft-ir-routine-spectrometer/what-is-ft-ir-spectroscopy.html
+- k-Space curvature/bow and stress interpretation:
+  https://k-space.com/product/mos-scan/
+  https://k-space.com/document/application-notes-ksa-mos-resolution-and-sensitivity/
+
+This addition changes static HTML/CSS and documentation only. The existing web
+suite passes all 35 tests. Static checks confirm unique IDs, valid labelled-by
+and tour anchor references, balanced sections/disclosures, and four measurement
+rows; `git diff --check` is clean. Browser visual
+verification remains incomplete: local navigation was blocked by the browser
+client, and the preview navigated to a Vercel origin that automatic approval
+review did not permit. No account access or alternative bypass was attempted.
+
+## Fifth supplied set — wet processing and supporting operations
+
+Nine photographs: 41600, 41599, 41598, 41594, 41593, 41592, 41591,
+41590, 41589.jpg. The 3.700 s video 41595.mp4 was inspected as three
+representative frames (`fps=3/3.7002,scale=480:-1,tile=3x1`). Those frames
+show a Deep Si Etcher label, MUC-21 branding and the recipe-list screen.
+No audio transcription, continuous operation verification, or numerical
+process result was obtained from the clip.
+
+- 41589/41591 show SPIN ETCHER, liquid/waste paths, stage/time fields,
+  wafer-holding controls and a buzzer control. No Chemical and Active are
+  observed interface labels, not verified chemical inventory or run states.
+  The exact tool model and actual chemical composition remain unknown.
+- 41592 shows ELECTRO PLATING MACHINE, temperature and rotation displays.
+  The deposited metal, solution, exact model, current history and measured
+  film are not established. 41593 shows an open circular processing area;
+  its detailed electrode arrangement and tool identity are not assigned.
+- 41594 and the video show MUC-21 branding, a recipe directory/list and
+  process-pump warning entries with different dates. A stored recipe is not
+  an execution record; visible dates are not proof of approved versioning.
+  Neither current warning activity nor root cause is established.
+- 41590 shows DAD3350 again; it supplements the existing dicing observation
+  without duplicating a role card or adding unsupported cutting results.
+- 41598/41599 show this facility's entry/gowning, role, sample and reagent
+  storage guidance. These are site-specific observations, not universal
+  cleanroom rules, confirmed current permissions, or a completed audit.
+  No wearer identity or authorization is inferred from garment colour.
+- 41600 shows MCC-604 and circuit labels for supporting equipment such as
+  air showers and pass boxes. Meter types and breaker ratings are not an
+  energy dataset; values, circuit topology, operational health and carbon
+  emissions are not reconstructed from the photograph.
+
+The static lesson adds two labelled conceptual role diagrams (spin wet
+etching and electroplating), a recipe/execution/acknowledgement disclosure,
+and a fourth navigation stop for supporting operations. No cabinet wiring
+diagram is reconstructed. The plating
+diagram illustrates deposition at a conductive surface and explicitly omits
+parts of the electrode/wiring arrangement; it is not an operating schematic.
+
+Future record-design guidance includes recipe ID/version/approval and the
+conditions actually used by a Run; warning onset/clearance/acknowledgement;
+training and equipment-specific authorization; sample ownership/location;
+and metered active energy with measurement boundaries. Carbon accounting
+would additionally require a factor appropriate to the region, period and
+accounting method. None of these integrations or datasets is implemented.
+The synthetic lesson remains the existing two scenarios; no equipment
+control, recipe execution, real approval or automatic quality decision is added.
+
+Primary references checked on 2026-09-15:
+- POLOS spin etching, general principle for a different tool:
+  https://www.sps-polos.com/support/applications/spin-etching/
+- Lam Research electroplating introduction (2018-08-13):
+  https://newsroom.lamresearch.com/Tech-Brief-Elements-of-Electroplating
+  https://www.lamresearch.com/technical-glossary/
+- Sumitomo member profile in MMC MICRONANO No. 61 (2007-10-30):
+  https://www.mmc.or.jp/en/magazine/61e/08.pdf
+  This historical manufacturer profile describes multiple MUC-21-based
+  configurations. It does not identify this installed configuration or
+  validate its etch depth, rate or aspect ratio.
+
+Only static HTML/CSS and observation documentation change in this addition.
+All 35 web tests pass. Static checks confirm eight labelled SVGs, four valid
+tour anchors, four measurement rows, unique IDs, valid labelled-by references,
+and balanced structural elements. `git diff --check` passes. The browser
+limitation recorded above still applies.

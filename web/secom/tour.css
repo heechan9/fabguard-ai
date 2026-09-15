@@ -1,7 +1,21 @@
 .tour-section{margin-top:32px;line-height:1.7}
 .tour-section h2{font-size:clamp(23px,4vw,34px);line-height:1.3}
 .tour-section h3{font-size:18px}
+.tour-section [id]{scroll-margin-top:120px}
+.tour-map{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+.tour-map a{display:flex;align-items:center;min-height:44px;padding:10px 14px;border:1px solid var(--border,#30434b);border-radius:8px;text-decoration:none}
+.tour-map a:hover{background:rgba(53,202,186,.08)}
+.tour-map a:focus-visible,.tour-table-wrap:focus-visible{outline:3px solid #35caba;outline-offset:3px}
+.tour-metrology,.tour-operations{margin:32px 0;padding-top:24px;border-top:1px solid var(--border,#30434b)}
+.tour-table-wrap{overflow-x:auto;margin:24px 0}
+.tour-measurements{width:100%;border-collapse:collapse;font-size:15px;line-height:1.6}
+.tour-measurements caption{text-align:left;font-weight:700;margin-bottom:12px}
+.tour-measurements th,.tour-measurements td{padding:14px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border,#30434b);overflow-wrap:anywhere}
+.tour-measurements thead{background:rgba(53,202,186,.08)}
+.tour-measurements td span{color:var(--muted,#aab9c2);font-size:13px}
+.tour-measurement-details details{border-bottom:1px solid var(--border,#30434b)}
 .tour-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:24px 0}
+.tour-pair{grid-template-columns:repeat(2,minmax(0,1fr))}
 .tour-grid article,.tour-demo{border:1px solid var(--border,#30434b);border-radius:12px;padding:20px;background:rgba(255,255,255,.025)}
 .tour-grid p{color:var(--muted,#aab9c2)}
 .tour-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
@@ -24,5 +38,5 @@
 .tour-roles svg{display:block;width:100%;height:auto;margin:20px 0 8px;background:#0a141c;border-radius:10px}
 .tour-roles details{border-top:1px solid var(--border,#30434b);margin-top:16px}
 .tour-roles summary{font-weight:600;min-height:44px;overflow-wrap:anywhere}
-.tour-roles summary:focus-visible{outline:3px solid #35caba;outline-offset:3px}
+.tour-section summary:focus-visible{outline:3px solid #35caba;outline-offset:3px}
 @media(max-width:700px){.tour-grid,.tour-state{grid-template-columns:1fr}.tour-grid article,.tour-demo{padding:16px}}
