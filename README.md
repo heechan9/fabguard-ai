@@ -20,6 +20,8 @@
 </p>
 <!-- /primary-navigation -->
 
+**파일 찾기:** [전체 문서 지도](docs/README.md) · [웹 코드 안내](web/README.md) · [결과 자료 목록](results/README.md)
+
 <div align="center">
 
 <img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="FabGuard의 목표 운영상과 엔지니어 중심 의사결정을 표현한 독자 제작 콘셉트 이미지" width="820">
@@ -269,10 +271,10 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | 경로 | 역할 |
 |---|---|
 | `src/fabguard/` | 데이터 처리·학습·평가·보고 코드 |
-| `web/` | 일반 사용자용 정적 웹 데모 |
+| [web/](web/README.md) | 정적 웹 데모의 화면별 코드·데이터·검증 안내 |
 | `results/v1/` | 정본 실험 결과와 우선점검 목록 |
 | `tests/` | 데이터 계약과 파이프라인 검증 |
-| `docs/` | 운영 설계·화면·검증·직무 연계 문서 |
+| [docs/](docs/README.md) | 목적별 문서 지도와 권장 읽기 순서 |
 | `evals/` | 완료 기준과 평가 사례 |
 
 ## 문서 안내
