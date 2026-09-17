@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-17
+
+- Added portfolio decision cards, canonical result links, evaluation limitations and explicit human/AI attribution ([#112](https://github.com/heechan9/fabguard-ai/pull/112)).
+- Added a categorized documentation map and web code guide while preserving canonical code and result paths ([#113](https://github.com/heechan9/fabguard-ai/pull/113)).
+- Linked the merged portfolio module and added contribution instructions and a PR template ([#114](https://github.com/heechan9/fabguard-ai/pull/114)).
+- Consolidated README document navigation and marked the original 14-day plan as historical planning, not a completion report.
+
 ## 2026-09-10
 
 - Addressed Codex Security scan `ac438ac3-d9a5-4e68-8f95-dbee8079d89c` finding 1 by rejecting nonfinite Fledge measurements, preserving rejected input as strict-JSON-safe evidence, and committing deduplication state only after REST report delivery succeeds.

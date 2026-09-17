@@ -1,5 +1,7 @@
 # FabGuard AI - 14일 실행 계획
 
+> 이 문서는 V1 착수 당시의 14일 계획을 보존한 기록입니다. 아래 항목은 완료 확인표가 아닙니다. 현재 확장 범위와 다음 작업은 [ROADMAP.md](ROADMAP.md), 실행 결과는 [결과 목록](results/README.md), 테스트 노출 이력은 [TEST_EXPOSURE.md](docs/TEST_EXPOSURE.md)를 확인하세요.
+
 ## Day 14 성공
 
 재현 가능한 한 명령으로 보존 테스트 평가와 priority table을 생성하고, 3분 데모에서 고위험 생산 건과 우선 확인 변수를 설명한다.
