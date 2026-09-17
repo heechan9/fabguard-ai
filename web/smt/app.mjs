@@ -1,3 +1,4 @@
+import {mountIntro} from './intro.mjs';
 import {detailMachine,dressFloor} from './factory-visuals.mjs';
 import {STATION_TERMS,plainCopy} from './terms.mjs';
 import {TapGuard} from './gesture-model.mjs';
@@ -11,6 +12,7 @@ import {clampZoom,overviewDistance,stationZoom} from './camera-model.mjs';
 
 const $=id=>document.getElementById(id),sim=new Simulation();
 const inspection=mountInspection($('inspection-lab'));
+let introBusy=false;
 let selected='PCB-001',activeStation=2,followInjected=false,insideView=false;
 const compactView=matchMedia('(max-width: 900px)'),machineLabels=[];
 function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visible=!compactView.matches&&!insideView&&zoom>=.45;}
@@ -107,16 +109,35 @@ viewport.addEventListener('pointermove',event=>{if(!pointers.has(event.pointerId
 function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{tapGuard.end(event.pointerId,true);pointers.delete(event.pointerId);pinchDistance=0;});
 viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(-.15,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
-function draw(){if(!renderer||!scene)return;for(const b of sim.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
- for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=sim.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(sim.time*4));}
- for(const {head} of heads){head.position.x=Math.sin(sim.time*3)*.62;head.position.z=Math.cos(sim.time*2)*.25;}renderer.render(scene,camera);
+function draw(source=sim,paint=true){if(!renderer||!scene)return;for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
+ for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=source.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(source.time*4));}
+ for(const {head} of heads){head.position.x=Math.sin(source.time*3)*.62;head.position.z=Math.cos(source.time*2)*.25;}if(paint)renderer.render(scene,camera);
 }
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)sim.running=false;
 sim.advance(.001);updateUI();let last=performance.now(),lastUI=0;
-function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;if(!document.hidden)sim.advance(dt*sim.speed);if(now-lastUI>100){updateUI();lastUI=now;}draw();requestAnimationFrame(frame);}requestAnimationFrame(frame);
+function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;if(introBusy){requestAnimationFrame(frame);return;}if(!document.hidden)sim.advance(dt*sim.speed);if(now-lastUI>100){updateUI();lastUI=now;}draw();requestAnimationFrame(frame);}requestAnimationFrame(frame);
 
 // Optional browser agent surface. Uses the same validated actions as the visible UI.
 if(document.modelContext?.registerTool){const lifecycle=new AbortController();addEventListener('pagehide',()=>lifecycle.abort(),{once:true});for(const tool of[
  {name:'read_smt_simulation',description:'Read the synthetic SMT run. No real factory or AI model is connected.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>sim.snapshot()},
  {name:'stage_smt_fault',description:'Arm one synthetic fault for the next PCB, replacing any pending fault.',inputSchema:{type:'object',properties:{fault:{type:'string',enum:Object.keys(FAULTS)}},required:['fault'],additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>{if(!input||Object.keys(input).length!==1||!Object.hasOwn(FAULTS,input.fault))throw new Error('Invalid fault');arm(input.fault);return {pending_fault:sim.pending};}}
  ]){try{Promise.resolve(document.modelContext.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}}}
+
+// The introduction uses its own seeded run and camera. Restore the live view on every exit.
+let introBoardIds;
+mountIntro({scene,positions,available:()=>Boolean(renderer&&scene&&machines.length===11),
+ begin(){introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;},
+ update(sample,station){
+  const ids=new Set(sample.boards.map(b=>b.id));
+  for(const [id,mesh] of boardMeshes)if(!ids.has(id))mesh.visible=false;
+  draw(sample,false);for(const m of machines)m.userData.cover.visible=m.userData.station!==station;
+  for(const sprite of machineLabels)sprite.visible=false;
+ },
+ end(){
+  if(!introBusy)return;
+  for(const [id,mesh] of boardMeshes)if(!introBoardIds.has(id)){
+   scene.remove(mesh);mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});boardMeshes.delete(id);
+  }
+  introBusy=false;selectionRing.visible=true;updateInterior();draw();
+ }
+});
