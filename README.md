@@ -292,6 +292,8 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 
 ## 문서 안내
 
+전체 목록은 [문서 지도](docs/README.md), 수정·PR 절차는 [작업 참여 안내](CONTRIBUTING.md)를 확인하세요.
+
 ### 먼저 읽기
 
 | 문서 | 내용 |

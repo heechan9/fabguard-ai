@@ -9,6 +9,7 @@
 | 대상 | 진입 파일 | 관련 자료 |
 |---|---|---|
 | 메인 화면 | [index.html](index.html), [app.js](app.js) | [style.css](style.css), [navigation.css](navigation.css), [readability.css](readability.css) |
+| 소개 화면의 판단·근거 카드 | [portfolio-story.mjs](portfolio-story.mjs), [portfolio-story.css](portfolio-story.css) | [설계 근거](../docs/AX_PORTFOLIO_APPLICATION.md) |
 | SMT 3D 실험실 | [smt/index.html](smt/index.html), [smt/app.mjs](smt/app.mjs) | [구현 문서](../docs/SMT_WEB_INTEGRATION.md), [합성 시나리오](../docs/SMT_INSPECTION_SCENARIOS.md) |
 | 반도체 분석 화면 | [secom/index.html](secom/index.html), [secom/secom.mjs](secom/secom.mjs) | [정본 결과](../results/v1/RESULTS_SUMMARY.md) |
 | 화면에 표시할 데이터 | [data/](data/) | [증거 스냅샷 생성기](../scripts/build_web_evidence.py), [입력 목록](../scripts/web_evidence_sources.json) |
