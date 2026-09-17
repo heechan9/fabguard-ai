@@ -7,6 +7,7 @@
 - Linked the merged portfolio module and added contribution instructions and a PR template ([#114](https://github.com/heechan9/fabguard-ai/pull/114)).
 - Consolidated README document navigation and marked the original 14-day plan as historical planning, not a completion report.
 - Reduced root-level document clutter by grouping project planning, validation and contribution records under `docs/`, with all repository and web links updated to their canonical paths.
+- Added a result-to-review evidence flow with visible lift arithmetic, fail-closed consistency checks, and an issue-reporting route; unsupported before/after claims remain excluded.
 
 ## 2026-09-10
 

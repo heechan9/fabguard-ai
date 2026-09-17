@@ -5,11 +5,12 @@ export function storyEvidence(summary) {
   const test = summary?.test?.find(row => row.candidate === summary.selected_model);
   const top = summary?.top_k?.find(row => Math.abs(row.k_fraction - 0.1) < 0.000001);
   if (summary?.status !== 'provisional' || !test || !top) throw new Error('포트폴리오 결과의 잠정 상태와 근거를 확인할 수 없습니다.');
-  const counts = [test.tp, test.fp, test.tn, test.fn, top.inspection_count, top.captured_fail, top.total_fail];
+  const counts = [test.tp, test.fp, test.tn, test.fn, top.inspection_count, top.captured_fail, top.total_fail, top.false_inspections];
   if (!counts.every(value => Number.isSafeInteger(value) && value >= 0)) throw new Error('포트폴리오 결과 건수가 올바르지 않습니다.');
   const total = test.tp + test.fp + test.tn + test.fn;
-  if (!total || !top.total_fail || !top.inspection_count || top.total_fail !== test.tp + test.fn || top.captured_fail > top.total_fail || top.captured_fail > top.inspection_count || top.inspection_count > total) throw new Error('포트폴리오 결과의 분모가 일치하지 않습니다.');
-  return { total, inspected: top.inspection_count, captured: top.captured_fail, failures: top.total_fail, missed: top.total_fail - top.captured_fail, passed: top.inspection_count - top.captured_fail };
+  const expectedLift = (top.captured_fail / top.inspection_count) / (top.total_fail / total);
+  if (!total || !top.total_fail || !top.inspection_count || top.total_fail !== test.tp + test.fn || top.captured_fail > top.total_fail || top.captured_fail > top.inspection_count || top.inspection_count > total || top.false_inspections !== top.inspection_count - top.captured_fail || !Number.isFinite(top.lift) || Math.abs(top.lift - expectedLift) > 1e-12) throw new Error('포트폴리오 결과의 분모 또는 계산값이 일치하지 않습니다.');
+  return { total, inspected: top.inspection_count, captured: top.captured_fail, failures: top.total_fail, missed: top.total_fail - top.captured_fail, passed: top.false_inspections, lift: top.lift };
 }
 
 export function renderHeroEvidence(summary) {
@@ -30,6 +31,12 @@ export function renderPortfolioStory(summary) {
       <article><span class="portfolio-tag">오프라인 평가</span><h3>점검할 여력이 한정된다면?</h3><p>생산 기록을 위험도 순으로 정렬하고, 먼저 살펴볼 범위를 정했습니다.</p><p><b>${e.inspected}건 중 불량 ${e.captured}건 · 정상 ${e.passed}건.</b> 점검 범위 밖의 불량 ${e.missed}건까지 함께 공개합니다.</p><a href="#risks">우선점검 목록 열기 →</a><a href="${repo}results/v1/top_k_test.csv">점검 범위별 원자료</a></article>
       <article><span class="portfolio-tag">가상 공정 체험</span><h3>어디서 사람이 판단해야 할까?</h3><p>SMT 공정과 이상 시나리오를 조작하며 확인할 위치와 판단 경계를 살펴봅니다.</p><p>합성 시나리오입니다. 실제 설비 제어·물리 해석이나 SECOM 모델의 SMT 성능을 증명하지 않습니다.</p><a href="/smt/">가상 공정 체험 열기 →</a><a href="${repo}docs/SMT_INSPECTION_SCENARIOS.md">시나리오와 검증 범위</a></article>
       <article><span class="portfolio-tag">데이터 연결 검증</span><h3>출처가 다른 값을 함께 다룬다면?</h3><p>관측·추정·기준·합성 값을 구분하고, 형식·단위·시간·출처를 확인하는 계약을 구현했습니다.</p><p>태양광 자료의 연결 검증입니다. 반도체 모델의 외부 성능이나 제조 효과로 해석하지 않습니다.</p><a href="#global">출처별 검증 결과 열기 →</a><a href="${repo}results/README.md">국가별 증거 목록</a></article>
+    </div>
+    <div class="portfolio-proof-flow" aria-label="결과에서 검토 요청까지의 증거 흐름">
+      <article><span>01 · 결과</span><h3>${e.inspected}건 우선점검 → 불량 ${e.captured}건</h3><p>전체 ${e.total}건에서 정한 점검 예산의 잠정 결과입니다.</p></article>
+      <article><span>02 · 원자료</span><h3>분자와 분모 확인</h3><p>불량 ${e.failures}건 중 ${e.captured}건 포착, ${e.missed}건 누락, 정상 ${e.passed}건 점검.</p><a href="${repo}results/v1/top_k_test.csv">Top-K CSV</a></article>
+      <article><span>03 · 계산 검증</span><h3>집중도 ${e.lift.toFixed(2)}배</h3><p>(${e.captured} ÷ ${e.inspected}) ÷ (${e.failures} ÷ ${e.total}) = ${e.lift.toFixed(2)}. 전후 개선율이나 인과효과가 아닙니다.</p></article>
+      <article><span>04 · 검토 요청</span><h3>근거의 오류를 알려주세요</h3><p>재현 불일치, 누락된 한계, 화면과 원자료의 차이를 이슈로 남길 수 있습니다.</p><a href="https://github.com/heechan9/fabguard-ai/issues">GitHub 이슈 열기 →</a></article>
     </div>
     <details class="portfolio-decisions"><summary>제작 과정 · 사람과 AI의 역할, 검증에서 드러난 한계</summary>
       <div class="portfolio-process-grid">

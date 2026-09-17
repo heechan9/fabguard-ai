@@ -18,15 +18,20 @@ test('headline counts match canonical evaluation CSV, including missed and norma
   assert.equal(e.failures, Number(top.total_fail));
   assert.equal(e.missed, Number(top.total_fail) - Number(top.captured_fail));
   assert.equal(e.passed, Number(top.false_inspections));
+  assert.equal(e.lift, Number(top.lift));
   assert.match(renderHeroEvidence(summary), /24건 중 19건/);
   assert.match(renderHeroEvidence(summary), /홀드아웃 사전 노출/);
   assert.match(renderPortfolioStory(summary), /불량 5건 · 정상 35건/);
+  assert.match(renderPortfolioStory(summary), /\(5 ÷ 40\) ÷ \(24 ÷ 392\) = 2\.04/);
+  assert.match(renderPortfolioStory(summary), /전후 개선율이나 인과효과가 아닙니다/);
+  assert.match(renderPortfolioStory(summary), /github\.com\/heechan9\/fabguard-ai\/issues/);
 });
 
 test('missing or contradictory evidence fails before rendering a success claim', () => {
   const changes = [s => s.status = 'confirmed', s => s.test = [], s => s.top_k = [],
     s => s.top_k[1].total_fail = 25, s => s.top_k[1].captured_fail = 41,
     s => s.top_k[1].inspection_count = 393, s => s.top_k[1].inspection_count = NaN,
-    s => s.test.find(r => r.candidate === s.selected_model).tp = -1];
+    s => s.test.find(r => r.candidate === s.selected_model).tp = -1,
+    s => s.top_k[1].false_inspections = 34, s => s.top_k[1].lift = 9.99];
   for (const change of changes) { const bad = structuredClone(summary); change(bad); assert.throws(() => renderHeroEvidence(bad)); }
 });
