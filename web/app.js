@@ -1,4 +1,5 @@
 import { mountEvidence } from "./smt/evidence.mjs";
+import { renderHeroEvidence, renderPortfolioStory, storyEvidence } from "./portfolio-story.mjs";
 const app = document.querySelector("#app");
 let state = { summary: null, risks: null, phase1: null, dkasc: null, globalE2E: null, globalCandidates: null };
 let professionalEvidenceHtml = "";
@@ -103,6 +104,7 @@ async function load() {
     state.globalE2E = await globalE2EResponse.json();
     state.globalCandidates = await candidatesResponse.json();
     validateSummaryDataset(state.summary?.dataset);
+    storyEvidence(state.summary);
     validatePhase1(state.phase1);
     validateDKASC(state.dkasc);
     validateGlobalE2E(state.globalE2E);
@@ -132,7 +134,7 @@ function summaryView() {
   const enedis = state.globalE2E.sources.enedis_france_2024;
   const meteo = state.globalE2E.sources.meteo_france_paris_2024;
   app.innerHTML = `
-    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p><div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#result">현재 결과 30초 확인</a></div></div>${waferVisual(ds.measurement_features)}</section>
+    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p>${renderHeroEvidence(state.summary)}<div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#process">판단과 검증 과정 보기</a></div></div>${waferVisual(ds.measurement_features)}</section>
     <section class="answer-strip" aria-label="FabGuard 핵심 요약"><article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로<br>점검 대상을 추천</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article></section>
     <section class="global-section" id="global" aria-labelledby="global-title">
       <div class="global-heading">
@@ -163,7 +165,7 @@ function summaryView() {
     </section>
     <section class="plain-guide" aria-label="FabGuard 작동 방식"><div><span>01 · 데이터 입력</span><strong>생산 과정의 측정값</strong><p>공개 데이터에 포함된 ${ds.samples.toLocaleString()}건의 생산 기록과 ${ds.measurement_features}개 익명 변수를 사용합니다.</p></div><div><span>02 · AI 분석</span><strong>위험도가 높은 순서로 정렬</strong><p>모든 생산 건을 판정하지 않고, 제한된 점검 시간을 어디에 먼저 쓸지 제안합니다.</p></div><div><span>03 · 사람의 판단</span><strong>엔지니어가 확인하고 결정</strong><p>실제 센서·설비·공정 이력을 대조한 뒤 재검사와 설비점검 여부를 결정합니다.</p></div></section>
     <section class="data-strip" aria-label="프로젝트 데이터 요약"><div><span>01</span><strong>${ds.samples.toLocaleString()}</strong><small>분석한 생산 기록</small></div><div><span>02</span><strong>${ds.measurement_features}</strong><small>익명 측정변수</small></div><div><span>03</span><strong>${ten.total_fail}</strong><small>검증구간 실제 불량</small></div><div><span>04</span><strong>${queueSize}</strong><small>우선점검 생산 건</small></div></section>
-    <section class="story-section" id="result"><div class="section-intro"><p class="kicker">현재 결과</p><h2>${ten.inspection_count}건을 먼저 봤을 때<br>불량 ${ten.captured_fail}건을 찾았습니다.</h2><p>전체 검증구간을 무작정 확인하는 대신 AI 위험도가 높은 상위 10%를 먼저 살펴본 결과입니다. 아직 독립 현장 데이터에서 다시 검증해야 하는 잠정 결과입니다.</p></div><div class="command-panel"><div class="panel-head"><span>검증 결과 요약</span><span class="live"><i></i> 잠정 결과</span></div><div class="metrics-grid"><article><span>위험순위 품질 지표</span><strong>${num(test.pr_auc_average_precision)}</strong><small>PR-AUC · 높을수록 불량 순위화가 좋음</small></article><article><span>먼저 찾은 불량</span><strong>${ten.captured_fail}<em> / ${ten.total_fail}</em></strong><small>${ten.inspection_count}건 점검으로 전체 불량의 ${pct(ten.fail_capture_rate)} 포착</small></article><article><span>무작위 점검 대비 효율</span><strong>${num(ten.lift, 2)}<em>배</em></strong><small>같은 수를 무작위로 점검했을 때와 비교</small></article></div><div class="caution"><span>꼭 확인하세요</span><p>실제 공장 성과나 불량 원인을 입증한 결과가 아닙니다. 공개 데이터에서 우선점검 방식의 가능성을 시험한 결과입니다.</p></div></div></section>
+    <section class="story-section" id="result"><div class="section-intro"><p class="kicker">현재 결과</p><h2>${ten.inspection_count}건을 먼저 봤을 때<br>불량 ${ten.captured_fail}건을 찾았습니다.</h2><p>전체 검증구간을 무작정 확인하는 대신 AI 위험도가 높은 상위 10%를 먼저 살펴본 결과입니다. 전체 불량 ${ten.total_fail}건 중 ${ten.total_fail - ten.captured_fail}건은 이 범위 밖에 남았습니다. 홀드아웃 사전 노출이 있는 잠정 결과이며 독립 제조 데이터 검증이 필요합니다.</p></div><div class="command-panel"><div class="panel-head"><span>검증 결과 요약</span><span class="live"><i></i> 잠정 결과</span></div><div class="metrics-grid"><article><span>위험순위 품질 지표</span><strong>${num(test.pr_auc_average_precision)}</strong><small>PR-AUC · 높을수록 불량 순위화가 좋음</small></article><article><span>먼저 찾은 불량</span><strong>${ten.captured_fail}<em> / ${ten.total_fail}</em></strong><small>${ten.inspection_count}건 점검으로 전체 불량의 ${pct(ten.fail_capture_rate)} 포착</small></article><article><span>전체 불량률 대비 농축도</span><strong>${num(ten.lift, 2)}<em>배</em></strong><small>점검 범위 내 불량률 ÷ 검증구간 전체 불량률</small></article></div><div class="caution"><span>꼭 확인하세요</span><p>실제 공장 성과나 불량 원인을 입증한 결과가 아닙니다. 공개 데이터에서 우선점검 방식의 가능성을 시험한 결과입니다.</p></div></div></section>
     <section class="advanced-evidence"><div class="section-heading"><div><p class="kicker">PHASE 1 / 고급 검증</p><h2>점추정치보다<br>변동성과 불확실성을 봅니다.</h2></div><p>같은 시간순 테스트 구간을 유지한 추가 검증입니다. 비용은 실제 금액이 아니라 점검 전략을 비교하기 위한 가정값입니다.</p></div><div class="evidence-cards"><article><span>확률 보정 · ECE</span><strong>${state.phase1.ece.before.toFixed(3)} <i>→</i> ${state.phase1.ece.after.toFixed(3)}</strong><p>예측 확률과 실제 결과의 차이가 감소했습니다. 단, ${state.phase1.ece.bins}개 구간 중 표본이 존재한 구간은 ${state.phase1.ece.populated_bins}개입니다.</p></article><article><span>비용 시나리오 내 최저</span><strong>상위 ${pct(state.phase1.best_cost.k_fraction)}</strong><p>${num(state.phase1.best_cost.total_cost, 0)}점 · 무점검 ${num(state.phase1.best_cost.no_review_cost, 0)}점 대비 ${num(state.phase1.best_cost.reduction, 0)}점 감소</p></article><article><span>${state.phase1.walk_forward.folds}구간 Walk-forward PR-AUC</span><strong>${state.phase1.walk_forward.min.toFixed(3)}–${state.phase1.walk_forward.max.toFixed(3)}</strong><p>구간별 변동이 커서 단일 홀드아웃 수치를 대표 성능으로 볼 수 없습니다.</p></article><article><span>RF vs Logistic · repeat paired</span><strong>Δ ${state.phase1.paired_model_comparison.mean_difference.toFixed(4)} · p=${state.phase1.paired_model_comparison.two_sided_exact_sign_flip_p.toFixed(4)}</strong><p>RF가 ${state.phase1.paired_model_comparison.paired_repeats}개 repeat 중 ${state.phase1.paired_model_comparison.challenger_repeat_wins}개에서 높았지만, 5% 기준 통계적 유의성은 확인되지 않았습니다. 25개 중첩 fold를 독립 표본으로 세지 않았습니다.</p></article></div><div class="uncertainty-note"><b>${Math.round(state.phase1.top10_capture.confidence * 100)}% 부트스트랩 구간</b><p>상위 10% 불량 포착률은 ${pct(state.phase1.top10_capture.low)}–${pct(state.phase1.top10_capture.high)}로 넓습니다(${state.phase1.top10_capture.bootstrap_replicates.toLocaleString()}회). 희소 불량 표본이 작아 실제 현장 성능으로 확대 해석할 수 없습니다.</p></div></section>
     <section class="pipeline-section"><div class="section-heading"><div><p class="kicker">SYSTEM / 02</p><h2>누출을 막고, 위험을 정렬하다.</h2></div><p>모든 전처리는 학습 폴드에만 적합하고 마지막 25% 구간은 시간순 홀드아웃으로 분리했습니다.</p></div><div class="pipeline"><article><span>01</span><i>DATA</i><h3>SECOM 입력</h3><p>${ds.samples.toLocaleString()}건 · ${ds.measurement_features}변수</p></article><article><span>02</span><i>GUARD</i><h3>누출 방지 전처리</h3><p>학습 폴드 내부 적합</p></article><article><span>03</span><i>MODEL</i><h3>위험도 산출</h3><p>비교·선택·홀드아웃</p></article><article><span>04</span><i>ACTION</i><h3>우선점검 큐</h3><p>Top-k 의사결정 지원</p></article></div></section>
     <section class="budget-section"><div class="section-heading"><div><p class="kicker">EVIDENCE / 03</p><h2>점검 범위별 Fail 포착률</h2></div><p>위험도가 높은 생산 건부터 확인했을 때의 시간순 홀드아웃 결과입니다.</p></div><div class="budget-grid">${state.summary.top_k.map((row, index) => `<article><div class="budget-top"><span>TOP ${pct(row.k_fraction)}</span><b>0${index + 1}</b></div><strong>${pct(row.fail_capture_rate)}</strong><div class="bar"><i style="width:${row.fail_capture_rate * 100}%"></i></div><p>${row.inspection_count}건 점검 <span>·</span> Fail ${row.captured_fail}건 포착</p></article>`).join("")}</div></section>
@@ -180,12 +182,13 @@ function summaryView() {
     app.querySelector(".global-section")?.remove();
     app.querySelectorAll(expertSelectors).forEach(section => section.remove());
     app.querySelector(".hero")?.setAttribute("data-section", "01");
-    app.querySelector(".plain-guide")?.setAttribute("data-section", "02");
-    app.querySelector(".data-strip")?.setAttribute("data-section", "03");
+    app.querySelector(".plain-guide")?.remove();
+    app.querySelector(".data-strip")?.remove();
     const result = app.querySelector(".story-section");
-    result?.setAttribute("data-section", "04");
+    result?.setAttribute("data-section", "02");
     result?.insertAdjacentHTML("afterend", `<section class="evidence-entry smt-entry"><div><p class="kicker">SMT 3D LAB · SYNTHETIC SCENARIO</p><h2>공정 흐름을 직접 살펴보세요.</h2><p>PCB 이동·납 부족·과열·센서 누락을 조작하는 가상 실험실입니다. SECOM 모델을 SMT에 적용하지 않으며, 국가별 실제 분석 근거를 따로 확인할 수 있습니다.</p></div><a class="button" href="/smt/">SMT 3D 실험실 <span>→</span></a></section>`);
     result?.insertAdjacentHTML("afterend", `<section class="evidence-entry"><div><p class="kicker">FOR PROFESSIONAL REVIEW</p><h2>검증 설계와 한계를<br>더 확인하시겠어요?</h2><p>시간순 검증, 불확실성, 현장 적용 경계와 실패 기록을 한 화면에서 확인할 수 있습니다.</p></div><a class="button" href="#limitations">방법론과 한계 전체 보기 <span>→</span></a></section>`);
+    result?.insertAdjacentHTML("afterend", renderPortfolioStory(state.summary));
   }
 }
 
@@ -238,7 +241,7 @@ function limitationsView() {
 }
 
 function syncNavigation(hash) {
-  const activeRoute = hash.startsWith("detail/") ? "risks" : hash === "result" ? "summary" : hash;
+  const activeRoute = hash.startsWith("detail/") ? "risks" : (hash === "result" || hash === "process") ? "summary" : hash;
   document.querySelectorAll("nav a[data-route]").forEach(link => {
     const active = link.dataset.route === activeRoute;
     link.classList.toggle("active", active);
@@ -251,7 +254,7 @@ function finishRoute(hash) {
   syncNavigation(hash);
   if (hash === "result") document.querySelector("#result")?.removeAttribute("id");
   window.setTimeout(() => {
-    const target = hash === "result" ? document.querySelector(".story-section") : hash === "global" ? document.querySelector(".global-section") : null;
+    const target = hash === "result" ? document.querySelector(".story-section") : hash === "global" ? document.querySelector(".global-section") : hash === "process" ? document.querySelector("#process") : null;
     if (target) target.scrollIntoView({ behavior: "auto", block: "start" });
     else window.scrollTo({ top: 0, behavior: "auto" });
   }, 50);
@@ -260,7 +263,7 @@ function finishRoute(hash) {
 function route() {
   if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
-  if (hash === "summary" || hash === "result" || hash === "global") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  if (hash === "summary" || hash === "result" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
   finishRoute(hash);
 }
 
