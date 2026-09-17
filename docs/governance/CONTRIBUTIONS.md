@@ -162,4 +162,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **최희찬 (`heechan9`)**: 교육자료 원칙의 팹가드 적용과 GitHub 정리 방향 요청, 공개 및 병합 승인
 - 구현과 병합 이력: [#112](https://github.com/heechan9/fabguard-ai/pull/112), [#113](https://github.com/heechan9/fabguard-ai/pull/113), [#114](https://github.com/heechan9/fabguard-ai/pull/114)
 
+### Result-to-evidence portfolio flow
+
+- **Codex (OpenAI)**: 수업의 결과·근거·계산 검증·연락 구조를 실제 V1 증거에 맞춰 웹에 구현하고, lift 산식과 원자료가 불일치하면 표시를 중단하는 회귀 검증 추가
+- **최희찬 (`heechan9`)**: 추가 수업 화면을 제공하고 FabGuard 적용을 요청했으며, 없는 공정 전후 성과는 만들지 않는 기존 주장 경계를 유지
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
