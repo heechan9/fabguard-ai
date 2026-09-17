@@ -6,6 +6,7 @@
 - Added a categorized documentation map and web code guide while preserving canonical code and result paths ([#113](https://github.com/heechan9/fabguard-ai/pull/113)).
 - Linked the merged portfolio module and added contribution instructions and a PR template ([#114](https://github.com/heechan9/fabguard-ai/pull/114)).
 - Consolidated README document navigation and marked the original 14-day plan as historical planning, not a completion report.
+- Reduced root-level document clutter by grouping project planning, validation and contribution records under `docs/`, with all repository and web links updated to their canonical paths.
 
 ## 2026-09-10
 

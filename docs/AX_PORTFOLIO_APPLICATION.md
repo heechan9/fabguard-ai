@@ -32,7 +32,7 @@
 | 점검 범위의 불량률이 전체 불량률의 2.04배 | 위 CSV의 lift | (5/40)/(24/392); 실측 비용·시간 절감이나 무작위 대조시험 결과가 아님 |
 | SMT 공정과 이상 시나리오를 조작 가능 | [시나리오](SMT_INSPECTION_SCENARIOS.md), [웹 구현](../web/smt/) | 합성 체험; 물리 모델·SECOM SMT 전이 성능 아님 |
 | 출처별 데이터 연결 검증 | [증거 목록](../results/README.md) | 관측·추정·기준·합성을 구분; 반도체 외부검증 아님 |
-| 사람과 AI의 기여가 구분됨 | [AI_USAGE](../AI_USAGE.md), [CONTRIBUTIONS](../CONTRIBUTIONS.md) | 개별 오류 발견을 사용자의 직접 작업으로 새로 귀속하지 않음 |
+| 사람과 AI의 기여가 구분됨 | [AI_USAGE](governance/AI_USAGE.md), [CONTRIBUTIONS](governance/CONTRIBUTIONS.md) | 개별 오류 발견을 사용자의 직접 작업으로 새로 귀속하지 않음 |
 
 ## 화면 변경
 

@@ -20,7 +20,7 @@ The temporal holdout contains 392 records and 24 failures. Reviewing the highest
 
 Random Forest exceeded Logistic Regression in all five repeat-level paired comparisons, with a mean average-precision difference of +0.0382. The exact two-sided sign-flip result is p=0.0625, so the repository does not claim statistical significance at the 5% level or deployment superiority.
 
-All figures above are provisional public-data results. Canonical artifacts and their interpretation boundaries are documented in [`results/v1/RESULTS_SUMMARY.md`](../results/v1/RESULTS_SUMMARY.md), [`PHASE1_ADVANCED_VALIDATION.md`](PHASE1_ADVANCED_VALIDATION.md) and the [experiment contract](../EXPERIMENT_CONTRACT.md).
+All figures above are provisional public-data results. Canonical artifacts and their interpretation boundaries are documented in [`results/v1/RESULTS_SUMMARY.md`](../results/v1/RESULTS_SUMMARY.md), [`PHASE1_ADVANCED_VALIDATION.md`](PHASE1_ADVANCED_VALIDATION.md) and the [experiment contract](validation/EXPERIMENT_CONTRACT.md).
 
 ## Reproduce the review surface
 
@@ -32,7 +32,7 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 python -m http.server 8000 -d web
 ```
 
-Then open `http://localhost:8000`. Re-running the complete experiment also requires the official UCI SECOM files; see the [reproducibility guide](../REPRODUCIBILITY.md).
+Then open `http://localhost:8000`. Re-running the complete experiment also requires the official UCI SECOM files; see the [reproducibility guide](validation/REPRODUCIBILITY.md).
 
 ## Focused review requests
 
@@ -54,7 +54,7 @@ Please open a [focused GitHub issue](https://github.com/heechan9/fabguard-ai/iss
 - review the two-week, one-line shadow-mode pilot before any site-specific values are filled in;
 - reproduce the evidence chain and report a mismatch as a narrowly scoped issue.
 
-The owner, Heechan Choi, led the problem framing, requirements, evaluation choices, result review and repository operation. Detailed human and AI contribution boundaries are recorded in [`CONTRIBUTIONS.md`](../CONTRIBUTIONS.md) and [`AI_USAGE.md`](../AI_USAGE.md).
+The owner, Heechan Choi, led the problem framing, requirements, evaluation choices, result review and repository operation. Detailed human and AI contribution boundaries are recorded in [`CONTRIBUTIONS.md`](governance/CONTRIBUTIONS.md) and [`AI_USAGE.md`](governance/AI_USAGE.md).
 
 ## Melbourne-oriented objective
 
