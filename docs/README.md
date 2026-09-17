@@ -10,7 +10,7 @@
 | 모델·평가 검토 | [데이터셋 카드](../DATASET_CARD.md) → [실험계약](../EXPERIMENT_CONTRACT.md) → [데이터 감사](../FABGUARD_DATA_AUDIT.md) → [재현 방법](../REPRODUCIBILITY.md) |
 | 웹 화면 수정 | [웹 코드 안내](../web/README.md) → [화면 명세](SCREENS.md) → [SMT 웹 통합](SMT_WEB_INTEGRATION.md) |
 | 현장 적용 가능성 검토 | [엔지니어 검토 흐름](SEMICONDUCTOR_REVIEW_WORKFLOW.md) → [최소 파일럿 초안](MINIMUM_PILOT.md) → [실패 대응 초안](FAILURE_GOVERNANCE.md) |
-| 작업 범위·기여 확인 | [요구사항](../PRD.md) → [로드맵](../ROADMAP.md) → [기여 기록](../CONTRIBUTIONS.md) → [AI 사용 기록](../AI_USAGE.md) |
+| 작업 범위·기여 확인 | [요구사항](../PRD.md) → [로드맵](../ROADMAP.md) → [작업 참여 안내](../CONTRIBUTING.md) → [기여 기록](../CONTRIBUTIONS.md) → [AI 사용 기록](../AI_USAGE.md) |
 
 ## 문서의 상태를 읽는 법
 
@@ -21,6 +21,7 @@
 
 ## 제품·화면·포트폴리오
 
+- [포트폴리오 판단·증거·AI 기여 설명](AX_PORTFOLIO_APPLICATION.md)
 - [FabGuard AI 흐름과 실패 경로](FLOW.md)
 - [FabGuard AI 화면 명세](SCREENS.md)
 - [SMT lab within the FabGuard web demo](SMT_WEB_INTEGRATION.md)
