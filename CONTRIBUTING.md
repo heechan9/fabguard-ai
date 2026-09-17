@@ -1,12 +1,12 @@
 # FabGuard 작업 참여 안내
 
-[프로젝트 소개](README.md) · [문서 지도](docs/README.md) · [기여 기록](CONTRIBUTIONS.md)
+[프로젝트 소개](README.md) · [문서 지도](docs/README.md) · [기여 기록](docs/governance/CONTRIBUTIONS.md)
 
-이 문서는 변경 방법을 안내한다. 누가 무엇을 구현했는지는 `CONTRIBUTIONS.md`, AI 활용 내역은 [AI_USAGE.md](AI_USAGE.md)에 기록한다. 구현 규칙은 [AGENTS.md](AGENTS.md)가 기준이다.
+이 문서는 변경 방법을 안내한다. 누가 무엇을 구현했는지는 [CONTRIBUTIONS.md](docs/governance/CONTRIBUTIONS.md), AI 활용 내역은 [AI_USAGE.md](docs/governance/AI_USAGE.md)에 기록한다. 구현 규칙은 [AGENTS.md](AGENTS.md)가 기준이다.
 
 ## 작업 시작
 
-1. [요구사항](PRD.md)과 관련 문서를 읽고 변경 목적을 하나로 좁힌다.
+1. [요구사항](docs/project/PRD.md)과 관련 문서를 읽고 변경 목적을 하나로 좁힌다.
 2. 최신 `main`에서 작업 브랜치를 만든다. 예: `docs/문서주제`, `fix/오류주제`, `feat/기능주제`.
 3. 기존 실행 명령과 정본 결과 경로를 확인하고 필요한 파일만 수정한다.
 4. 관련 검증을 실행하고 실제 결과를 PR에 기록한다.
@@ -18,7 +18,7 @@
 |---|---|
 | 문서·탐색 링크 | [문서 지도](docs/README.md), 변경한 상대 링크의 대상·앵커 확인 |
 | 웹 화면 | [웹 코드 안내](web/README.md), 관련 JavaScript 검사와 웹 테스트 |
-| 모델·전처리·평가 | [실험계약](EXPERIMENT_CONTRACT.md), [재현 가이드](REPRODUCIBILITY.md), 관련 Python 테스트 |
+| 모델·전처리·평가 | [실험계약](docs/validation/EXPERIMENT_CONTRACT.md), [재현 가이드](docs/validation/REPRODUCIBILITY.md), 관련 Python 테스트 |
 | 외부 데이터·연동 | [문서 지도](docs/README.md)의 수집·연동 계약, [결과 카탈로그](results/README.md) |
 
 전체 자동 검사의 실제 명령은 [CI 워크플로](.github/workflows/ci.yml)를 따른다. 문서 변경만으로 학습을 다시 실행하거나 정본 결과를 덮어쓸 필요는 없다.

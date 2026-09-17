@@ -33,13 +33,13 @@ export function renderPortfolioStory(summary) {
     </div>
     <details class="portfolio-decisions"><summary>제작 과정 · 사람과 AI의 역할, 검증에서 드러난 한계</summary>
       <div class="portfolio-process-grid">
-        <article><h3>사람이 정한 방향</h3><p>최희찬: 반도체 생산 건 우선점검 문제, 프로젝트 범위와 사용자 관점, 결과의 주장 경계를 결정하고 검토합니다.</p><a href="${repo}CONTRIBUTIONS.md">기여 기록 확인</a></article>
-        <article><h3>AI에게 맡긴 구현</h3><p>Codex가 실험·평가 코드, 웹 화면, 기술 문서와 테스트의 대부분을 작성했습니다. 이를 사용자의 단독 직접 코딩 성과로 표시하지 않습니다.</p><a href="${repo}AI_USAGE.md">AI 활용 기록 확인</a></article>
+        <article><h3>사람이 정한 방향</h3><p>최희찬: 반도체 생산 건 우선점검 문제, 프로젝트 범위와 사용자 관점, 결과의 주장 경계를 결정하고 검토합니다.</p><a href="${repo}docs/governance/CONTRIBUTIONS.md">기여 기록 확인</a></article>
+        <article><h3>AI에게 맡긴 구현</h3><p>Codex가 실험·평가 코드, 웹 화면, 기술 문서와 테스트의 대부분을 작성했습니다. 이를 사용자의 단독 직접 코딩 성과로 표시하지 않습니다.</p><a href="${repo}docs/governance/AI_USAGE.md">AI 활용 기록 확인</a></article>
         <article><h3>확인하고 공개한 문제</h3><p>고정 임계값에서 불량을 포착하지 못한 결과와 홀드아웃 사전 노출을 기록했습니다. 자동 불량 판정 성능을 주장하지 않고 잠정 결과로 관리합니다.</p><a href="${repo}docs/TEST_EXPOSURE.md">노출과 변경 이력 확인</a></article>
         <article><h3>아직 필요한 증거</h3><p>독립 제조 데이터와 실제 점검·품질 기록이 필요합니다. 익명 변수의 원인성, 수율 개선, 비용 절감은 입증하지 못했습니다.</p><a href="${repo}docs/INDEPENDENT_DATA_VALIDATION.md">다음 검증 조건 확인</a></article>
       </div>
       <p class="portfolio-credit">역할 설명은 저장소의 기여·AI 활용 기록에 근거합니다. 개별 오류를 사용자가 직접 발견했다는 이력은 추가하지 않았습니다.</p>
     </details>
-    <p class="portfolio-question"><b>검토 질문</b> 왜 정확도보다 점검 범위별 포착·누락을 봤을까요? <a href="${repo}EXPERIMENT_CONTRACT.md">평가 기준</a>와 <a href="${repo}REPRODUCIBILITY.md">재현 방법</a>에서 확인할 수 있습니다.</p>
+    <p class="portfolio-question"><b>검토 질문</b> 왜 정확도보다 점검 범위별 포착·누락을 봤을까요? <a href="${repo}docs/validation/EXPERIMENT_CONTRACT.md">평가 기준</a>와 <a href="${repo}docs/validation/REPRODUCIBILITY.md">재현 방법</a>에서 확인할 수 있습니다.</p>
   </section>`;
 }

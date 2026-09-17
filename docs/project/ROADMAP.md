@@ -87,9 +87,9 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 현재 준비 상태: **WSL2의 로컬 Fledge v3.1.0에서 인증된 asset REST pull, Sinusoid South
 service, 재시작 후 수집 재개, 중복 격리와 토큰 비기록 검증을 완료했다. 현장·생산 검증과
 in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
-[`docs/FLEDGE_ADAPTER_CONTRACT.md`](docs/FLEDGE_ADAPTER_CONTRACT.md)에 기록한다. 공식 커뮤니티
+[`docs/FLEDGE_ADAPTER_CONTRACT.md`](../FLEDGE_ADAPTER_CONTRACT.md)에 기록한다. 공식 커뮤니티
 접촉 전 후보 범위와 기여 절차는
-[`docs/FLEDGE_UPSTREAM_READINESS.md`](docs/FLEDGE_UPSTREAM_READINESS.md)를 따른다.
+[`docs/FLEDGE_UPSTREAM_READINESS.md`](../FLEDGE_UPSTREAM_READINESS.md)를 따른다.
 
 ### 확정사항
 
@@ -115,7 +115,7 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
   계층과 Fledge 수명주기를 분리한다.
 - 이 코드는 연계 가능성을 검증하는 독자 구현이며 Fledge 호환 또는 현장 배포 완료를 뜻하지 않는다.
 - 로컬 운영 검증 하니스의 오류 격리, 재시작 상태, 지연·단절, 부하 측정, 드리프트·알림 계약은
-  [`docs/FLEDGE_OPERATIONAL_VALIDATION.md`](docs/FLEDGE_OPERATIONAL_VALIDATION.md)에 기록한다.
+  [`docs/FLEDGE_OPERATIONAL_VALIDATION.md`](../FLEDGE_OPERATIONAL_VALIDATION.md)에 기록한다.
 
 ### 진입 조건
 
@@ -160,7 +160,7 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
 
 ## 공개 PV 데이터 실행 게이트
 
-현재 실제 외부 PV 데이터 E2E 통과 건수는 **1건**이다. 영국 PV_Live는 아직 그 수에 포함하지 않으며, [사전 입력 계약](docs/PVLIVE_ADAPTER_CONTRACT.md)만 구현된 상태다. 호주 DKASC Alice Springs 2025
+현재 실제 외부 PV 데이터 E2E 통과 건수는 **1건**이다. 영국 PV_Live는 아직 그 수에 포함하지 않으며, [사전 입력 계약](../PVLIVE_ADAPTER_CONTRACT.md)만 구현된 상태다. 호주 DKASC Alice Springs 2025
 `observed` 데이터의 정규화·계약검사·SDT 실행을 완료했으며, 원본 대용량 CSV는 저장소에
 재배포하지 않고 출처·조회일·원본 및 정규화 SHA-256·변환 규칙·결과 JSON만 기록한다.
 

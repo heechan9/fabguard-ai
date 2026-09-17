@@ -25,6 +25,11 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 ## PR별 구현 기록
 
+### Repository document structure cleanup
+
+- **Codex (OpenAI)**: 루트 문서를 프로젝트·검증·거버넌스 폴더로 재분류하고 README, 웹 링크, 문서 지도와 경로 회귀 테스트를 함께 갱신
+- **최희찬 (`heechan9`)**: GitHub 첫 화면의 파일 과밀 문제를 제기하고 정리 작업 및 병합을 요청
+
 ### PR #14 - Phase 1 고급 검증
 
 - **Codex (OpenAI)**: 비용 기반 Top-K, bootstrap 신뢰구간, PSI 드리프트, walk-forward 평가, 확률 보정 코드와 단위·회귀 테스트 및 실험계약 문서를 직접 구현

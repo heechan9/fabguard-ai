@@ -1,6 +1,6 @@
 # FabGuard AI - 14일 실행 계획
 
-> 이 문서는 V1 착수 당시의 14일 계획을 보존한 기록입니다. 아래 항목은 완료 확인표가 아닙니다. 현재 확장 범위와 다음 작업은 [ROADMAP.md](ROADMAP.md), 실행 결과는 [결과 목록](results/README.md), 테스트 노출 이력은 [TEST_EXPOSURE.md](docs/TEST_EXPOSURE.md)를 확인하세요.
+> 이 문서는 V1 착수 당시의 14일 계획을 보존한 기록입니다. 아래 항목은 완료 확인표가 아닙니다. 현재 확장 범위와 다음 작업은 [ROADMAP.md](ROADMAP.md), 실행 결과는 [결과 목록](../../results/README.md), 테스트 노출 이력은 [TEST_EXPOSURE.md](../TEST_EXPOSURE.md)를 확인하세요.
 
 ## Day 14 성공
 
@@ -34,4 +34,3 @@ Day 7 이후 새 모델군·새 화면·새 문제정의를 추가하지 않는�
 ## 후순위
 
 Streamlit 화면, XGBoost, calibration, 비용 기반 threshold는 V1 핵심 산출물이 모두 끝난 경우에만 진행한다.
-

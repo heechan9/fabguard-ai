@@ -15,8 +15,8 @@
   <a href="https://fabguard-ai.vercel.app/secom/">반도체 분석</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/validation/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/project/ROADMAP.md">🗺️ 로드맵</a>
 </p>
 <!-- /primary-navigation -->
 
@@ -31,10 +31,10 @@
 <p>
   <a href="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml"><img src="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/validation/DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md"><img src="https://img.shields.io/badge/evidence-provisional-E9A23B" alt="Provisional evidence"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/project/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/project/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
 </p>
 
 </div>
@@ -44,7 +44,7 @@
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
   <a href="https://github.com/heechan9/fabguard-ai#global-data-roadmap">🌍 국가별 데이터</a> ·
   <a href="https://github.com/heechan9/fabguard-ai#tool-roles">🧰 도구별 역할</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/governance/CONTRIBUTIONS.md">👥 기여 기록</a>
 </p>
 <!-- /secondary-navigation -->
 
@@ -54,7 +54,7 @@
 
 ## 30초 요약
 
-빠르게 훑어보실 분은 아래 표로 충분합니다. 방법론을 검토하시는 분은 [실험계약](EXPERIMENT_CONTRACT.md)부터 확인해 주세요.
+빠르게 훑어보실 분은 아래 표로 충분합니다. 방법론을 검토하시는 분은 [실험계약](docs/validation/EXPERIMENT_CONTRACT.md)부터 확인해 주세요.
 
 | 질문 | 답 |
 |---|---|
@@ -73,7 +73,7 @@
 |---|---|---|
 | 점검 여력이 제한될 때 위험순위를 사용 | [점검 범위별 결과](results/v1/top_k_test.csv) | 상위 40건에서 불량 5건 포착, 전체 불량 24건 중 19건은 범위 밖 |
 | 평가 실패와 노출을 공개 | [홀드아웃 노출 기록](docs/TEST_EXPOSURE.md) | 잠정 결과이며 독립 제조 데이터 검증 필요 |
-| AI 구현과 사람의 기여를 구분 | [AI 활용 기록](AI_USAGE.md) · [기여 기록](CONTRIBUTIONS.md) | 사용자의 직접 재현·수정 범위는 해당 기록으로 확인 |
+| AI 구현과 사람의 기여를 구분 | [AI 활용 기록](docs/governance/AI_USAGE.md) · [기여 기록](docs/governance/CONTRIBUTIONS.md) | 사용자의 직접 재현·수정 범위는 해당 기록으로 확인 |
 
 [프로젝트의 판단과 증거 구성](docs/AX_PORTFOLIO_APPLICATION.md)에서 화면별 근거와 검토 질문을 확인할 수 있습니다.
 
@@ -99,7 +99,7 @@
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
 > ### 🔍 엄밀함을 확인하고 싶다면
-> - [실험계약](EXPERIMENT_CONTRACT.md) — 분할·전처리·평가 전에 고정한 불변조건
+> - [실험계약](docs/validation/EXPERIMENT_CONTRACT.md) — 분할·전처리·평가 전에 고정한 불변조건
 > - [테스트 노출 기록](docs/TEST_EXPOSURE.md) — 홀드아웃 노출과 결과 해석 경계
 > - [실패 거버넌스](docs/FAILURE_GOVERNANCE.md) — 실패를 숨기지 않고 기록·판정하는 기준
 
@@ -236,7 +236,7 @@
 - 개발 중 홀드아웃이 먼저 노출된 이력은 [TEST_EXPOSURE.md](docs/TEST_EXPOSURE.md)에 공개했습니다.
 - 현장 효과는 단순 전후 비교로 주장하지 않고, 무작위·단계적 도입 또는 조건에 맞는 준실험 설계를 검토합니다.
 
-자세한 실험 조건은 [실험계약](EXPERIMENT_CONTRACT.md), 현장 검증 계획은 [인과효과 검증 계획](docs/CAUSAL_FIELD_VALIDATION.md)에서 확인할 수 있습니다.
+자세한 실험 조건은 [실험계약](docs/validation/EXPERIMENT_CONTRACT.md), 현장 검증 계획은 [인과효과 검증 계획](docs/CAUSAL_FIELD_VALIDATION.md)에서 확인할 수 있습니다.
 
 <details>
 <summary><strong>Open engineering & collaboration</strong> — 재현·검토·기여 경로 보기</summary>
@@ -245,11 +245,11 @@ FabGuard is a reviewable industrial-AI prototype rather than a black-box demo. E
 
 | Engineering signal | Where to review it |
 |---|---|
-| Leakage-aware preprocessing and temporal holdout | [Experiment contract](EXPERIMENT_CONTRACT.md) |
-| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](REPRODUCIBILITY.md) |
+| Leakage-aware preprocessing and temporal holdout | [Experiment contract](docs/validation/EXPERIMENT_CONTRACT.md) |
+| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](docs/validation/REPRODUCIBILITY.md) |
 | Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
-| Boundary between prototype evidence and factory claims | [Dataset card](DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
-| Staged path to external industrial open source | [Roadmap](ROADMAP.md) |
+| Boundary between prototype evidence and factory claims | [Dataset card](docs/validation/DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
+| Staged path to external industrial open source | [Roadmap](docs/project/ROADMAP.md) |
 | Frozen Train-only model artifact and trust boundary | [Locked model export](docs/LOCKED_MODEL_EXPORT.md) |
 
 Focused issues and reviewable pull requests are welcome, especially for validation design, data-contract tests, drift diagnostics, calibration, documentation, and contract-preserving adapters.
@@ -297,10 +297,10 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | 확인할 내용 | 문서 |
 |---|---|
 | 결과와 평가 한계 | [정본 결과](results/v1/RESULTS_SUMMARY.md) · [홀드아웃 노출 기록](docs/TEST_EXPOSURE.md) |
-| 데이터와 평가 기준 | [데이터셋 카드](DATASET_CARD.md) · [실험계약](EXPERIMENT_CONTRACT.md) |
-| 직접 재현하기 | [재현 가이드](REPRODUCIBILITY.md) · [웹 코드 안내](web/README.md) |
-| 앞으로의 계획 | [현재 로드맵](ROADMAP.md) · [초기 14일 계획](PLAN.md) |
-| 작업 참여와 기여 구분 | [작업 참여 안내](CONTRIBUTING.md) · [기여 기록](CONTRIBUTIONS.md) · [AI 사용 기록](AI_USAGE.md) |
+| 데이터와 평가 기준 | [데이터셋 카드](docs/validation/DATASET_CARD.md) · [실험계약](docs/validation/EXPERIMENT_CONTRACT.md) |
+| 직접 재현하기 | [재현 가이드](docs/validation/REPRODUCIBILITY.md) · [웹 코드 안내](web/README.md) |
+| 앞으로의 계획 | [현재 로드맵](docs/project/ROADMAP.md) · [초기 14일 계획](docs/project/PLAN.md) |
+| 작업 참여와 기여 구분 | [작업 참여 안내](CONTRIBUTING.md) · [기여 기록](docs/governance/CONTRIBUTIONS.md) · [AI 사용 기록](docs/governance/AI_USAGE.md) |
 | 변경 이력 | [Changelog](CHANGELOG.md) |
 
 ## 기술 구성

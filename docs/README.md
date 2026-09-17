@@ -7,10 +7,10 @@
 | 읽는 목적 | 권장 순서 |
 |---|---|
 | 프로젝트를 빠르게 이해 | [README](../README.md) → [정본 결과](../results/v1/RESULTS_SUMMARY.md) → [검증 한계](TEST_EXPOSURE.md) |
-| 모델·평가 검토 | [데이터셋 카드](../DATASET_CARD.md) → [실험계약](../EXPERIMENT_CONTRACT.md) → [데이터 감사](../FABGUARD_DATA_AUDIT.md) → [재현 방법](../REPRODUCIBILITY.md) |
+| 모델·평가 검토 | [데이터셋 카드](validation/DATASET_CARD.md) → [실험계약](validation/EXPERIMENT_CONTRACT.md) → [데이터 감사](validation/FABGUARD_DATA_AUDIT.md) → [재현 방법](validation/REPRODUCIBILITY.md) |
 | 웹 화면 수정 | [웹 코드 안내](../web/README.md) → [화면 명세](SCREENS.md) → [SMT 웹 통합](SMT_WEB_INTEGRATION.md) |
 | 현장 적용 가능성 검토 | [엔지니어 검토 흐름](SEMICONDUCTOR_REVIEW_WORKFLOW.md) → [최소 파일럿 초안](MINIMUM_PILOT.md) → [실패 대응 초안](FAILURE_GOVERNANCE.md) |
-| 작업 범위·기여 확인 | [요구사항](../PRD.md) → [로드맵](../ROADMAP.md) → [작업 참여 안내](../CONTRIBUTING.md) → [기여 기록](../CONTRIBUTIONS.md) → [AI 사용 기록](../AI_USAGE.md) |
+| 작업 범위·기여 확인 | [요구사항](project/PRD.md) → [로드맵](project/ROADMAP.md) → [작업 참여 안내](../CONTRIBUTING.md) → [기여 기록](governance/CONTRIBUTIONS.md) → [AI 사용 기록](governance/AI_USAGE.md) |
 
 ## 문서의 상태를 읽는 법
 
@@ -18,6 +18,16 @@
 - SECOM 결과는 홀드아웃 노출 이력이 있는 잠정 오프라인 증거다. 실제 수율·비용 개선 실적이 아니다.
 - PV·날씨 자료는 별도 데이터 연동 검증이다. 반도체 모델의 외부 성능 검증으로 합치지 않는다.
 - 결과 수치는 각 정본 결과 파일에서 확인한다. 이 지도에는 수치를 복제하지 않는다.
+
+## 폴더 구조
+
+| 폴더 | 내용 |
+|---|---|
+| [`project/`](project/) | 요구사항, 현재 로드맵, 초기 계획 기록 |
+| [`validation/`](validation/) | 데이터셋 카드, 실험계약, 데이터 감사, 재현 절차 |
+| [`governance/`](governance/) | 사람·AI 기여와 활용 기록 |
+| [`audits/`](audits/) | 병합 후 감사 기록 |
+| [`research/`](research/) | 후속 조사와 연구 메모 |
 
 ## 제품·화면·포트폴리오
 
@@ -70,5 +80,5 @@
 1. 새 문서는 위의 관련 분류에 링크하고, 설계인지 실행 증거인지 본문에서 명시한다.
 2. 실험 결과는 기존 정본 경로를 사용한다. 정리 목적으로 결과 사본을 만들지 않는다.
 3. 파일을 옮길 때는 참조하는 코드·문서·검증을 함께 수정한다.
-4. 구현 작업은 [AGENTS.md](../AGENTS.md), 재현 명령은 [REPRODUCIBILITY.md](../REPRODUCIBILITY.md)를 따른다.
+4. 구현 작업은 [AGENTS.md](../AGENTS.md), 재현 명령은 [REPRODUCIBILITY.md](validation/REPRODUCIBILITY.md)를 따른다.
 5. 아직 병합되지 않은 제안은 해당 PR에서 검토한다. 이 목록은 현재 브랜치에 존재하는 파일만 연결한다.
