@@ -292,42 +292,16 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 
 ## 문서 안내
 
-전체 목록은 [문서 지도](docs/README.md), 수정·PR 절차는 [작업 참여 안내](CONTRIBUTING.md)를 확인하세요.
+전체 문서는 [문서 지도](docs/README.md)에서 목적별로 찾을 수 있습니다. 첫 방문에는 아래 순서로 확인하세요.
 
-### 먼저 읽기
-
-| 문서 | 내용 |
+| 확인할 내용 | 문서 |
 |---|---|
-| [결과 요약](results/v1/RESULTS_SUMMARY.md) | 모델별 성능과 Top-K 결과 |
-| [데이터셋 카드](DATASET_CARD.md) | 데이터 출처·구성·사용 한계 |
-| [실험계약](EXPERIMENT_CONTRACT.md) | 분할·전처리·평가 불변조건 |
-| [International collaboration brief](docs/MELBOURNE_COLLABORATION.md) | English overview, evidence boundary, reproducibility and focused review requests |
-
-### 재현·기술 검토
-
-| 문서 | 내용 |
-|---|---|
-| [재현성 가이드](REPRODUCIBILITY.md) | 환경·명령·산출물 재현 절차 |
-| [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
-| [잠금 평가 준비 계약](docs/LOCKED_EVALUATION_CONTRACT.md) | 외부 데이터·잠금 모델·사전 승인 SHA-256 결합과 무실행 검증 게이트 |
-| [잠금 독립 평가 계약](docs/LOCKED_SCORING_CONTRACT.md) | 승인된 데이터·모델 바이트의 재검증, 무재학습 scoring과 통계 산출물 |
-| [AI 활용·기여](AI_USAGE.md) · [기여 구분](CONTRIBUTIONS.md) | 사람·AI 협업 원칙과 작업 주체 |
-
-### 현장·확장 설계
-
-| 문서 | 내용 |
-|---|---|
-| [프로젝트 로드맵](ROADMAP.md) | FabGuard → Fledge → Solar Data Tools 단계적 확장과 진입 조건 |
-| [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 실제 Fledge v3.1.0 REST·재시작·중복격리 로컬 검증과 현장 미검증 경계 |
-| [독립 데이터 검증](docs/INDEPENDENT_DATA_VALIDATION.md) | 외부 제조 CSV의 출처·스키마·라벨·시간·품질 검사와 모델 성능 미검증 경계 |
-| [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
-| [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
-| [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
-| [1개 라인·2주 최소 파일럿](docs/MINIMUM_PILOT.md) | 기존 절차 병행 shadow mode, 시작·중단 조건과 feasibility 지표 초안 |
-| [도메인 전문가 검토](docs/DOMAIN_EXPERT_REVIEW.md) | Top-K 큐 인수인계, 엔지니어 체크리스트, 기록·권한·에스컬레이션 초안 |
-| [실패 대응·책임·롤백](docs/FAILURE_GOVERNANCE.md) | 미탐·오경보·데이터/모델 장애 시 기본 동작, 역할과 재개 조건 |
-| [반도체 검토·검증 흐름](docs/SEMICONDUCTOR_REVIEW_WORKFLOW.md) | 공정·PE·품질 사용 사례와 데이터·승인 요구사항; 설계 문서, 현장 미검증 |
-| [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
+| 결과와 평가 한계 | [정본 결과](results/v1/RESULTS_SUMMARY.md) · [홀드아웃 노출 기록](docs/TEST_EXPOSURE.md) |
+| 데이터와 평가 기준 | [데이터셋 카드](DATASET_CARD.md) · [실험계약](EXPERIMENT_CONTRACT.md) |
+| 직접 재현하기 | [재현 가이드](REPRODUCIBILITY.md) · [웹 코드 안내](web/README.md) |
+| 앞으로의 계획 | [현재 로드맵](ROADMAP.md) · [초기 14일 계획](PLAN.md) |
+| 작업 참여와 기여 구분 | [작업 참여 안내](CONTRIBUTING.md) · [기여 기록](CONTRIBUTIONS.md) · [AI 사용 기록](AI_USAGE.md) |
+| 변경 이력 | [Changelog](CHANGELOG.md) |
 
 ## 기술 구성
 

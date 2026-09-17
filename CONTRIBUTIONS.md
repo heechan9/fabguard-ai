@@ -151,4 +151,10 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **Codex (OpenAI)**: 미국·호주·영국·EU/벨기에·프랑스 정본 증거를 국가→출처→역할 구조로 탐색하는 JSON 카탈로그와 문서·회귀 테스트를 구현하고, 기존 경로를 유지해 링크 파손과 증거 복제를 방지
 - **최희찬 (`heechan9`)**: 국가별 데이터 분류 방향과 적용 범위를 결정하고 공개·병합을 승인
 
+### Portfolio evidence and repository documentation organization
+
+- **Codex (OpenAI)**: 포트폴리오 판단·근거 카드와 검증 코드 구현, 문서 지도·웹 코드 안내·작업 참여 안내·PR 양식 작성, 상대 링크와 탐색 테스트 확인, README 중복 안내 축소와 초기 계획의 기록 성격 명시
+- **최희찬 (`heechan9`)**: 교육자료 원칙의 팹가드 적용과 GitHub 정리 방향 요청, 공개 및 병합 승인
+- 구현과 병합 이력: [#112](https://github.com/heechan9/fabguard-ai/pull/112), [#113](https://github.com/heechan9/fabguard-ai/pull/113), [#114](https://github.com/heechan9/fabguard-ai/pull/114)
+
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
