@@ -34,6 +34,7 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 - **Codex (OpenAI)**: 비용 기반 Top-K, bootstrap 신뢰구간, PSI 드리프트, walk-forward 평가, 확률 보정 코드와 단위·회귀 테스트 및 실험계약 문서를 직접 구현
 - **최희찬 (`heechan9`)**: 연구 문제와 우선순위 설정, 활용 범위·수용 기준 결정, 결과 검토 및 병합·공개 여부 최종 승인
+- **Claude 감사 → Codex 구현 (2026-09-18)**: V1 연구질문, V2 독립 확인, 외부 데이터 자격, 관련 연구 문서와 global-section 가독성·데이터 유형·후보 레지스트리 시각 계약을 정리했다. SMT reflow 간격은 기존 3D 교차판정 테스트가 충족하므로 형상을 변경하지 않았다.
 - GitHub Contents API를 통한 업로드 특성상 커밋 업로더 계정과 실제 파일 작성 주체가 다를 수 있으므로 이 기록과 PR 설명을 기여 근거로 사용합니다.
 
 ### Global collaboration README and Phase 1 result interpretation

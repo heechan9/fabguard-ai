@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { storyEvidence, renderHeroEvidence, renderPortfolioStory } from '../../web/portfolio-story.mjs';
 const summary = JSON.parse(readFileSync(new URL('../../web/data/summary.json', import.meta.url), 'utf8'));
+const app = readFileSync(new URL('../../web/app.js', import.meta.url), 'utf8');
 const csv = path => {
   const [head, ...rows] = readFileSync(new URL(path, import.meta.url), 'utf8').trim().split(/\r?\n/);
   return rows.map(row => Object.fromEntries(row.split(',').map((value, i) => [head.split(',')[i], value])));
@@ -25,6 +26,8 @@ test('headline counts match canonical evaluation CSV, including missed and norma
   assert.match(renderPortfolioStory(summary), /\(5 ÷ 40\) ÷ \(24 ÷ 392\) = 2\.04/);
   assert.match(renderPortfolioStory(summary), /전후 개선율이나 인과효과가 아닙니다/);
   assert.match(renderPortfolioStory(summary), /github\.com\/heechan9\/fabguard-ai\/issues/);
+  assert.match(app, /실패한 성능을 숨기지 않고, 제한된 자원에서 쓸 수 있는 판단 근거로 다시 설계했습니다/);
+  assert.match(app, /위험도 순으로 추천하고<br>근거의 한계까지 표시/);
 });
 
 test('missing or contradictory evidence fails before rendering a success claim', () => {

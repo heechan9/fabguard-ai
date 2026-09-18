@@ -102,6 +102,7 @@
 > - [실험계약](docs/validation/EXPERIMENT_CONTRACT.md) — 분할·전처리·평가 전에 고정한 불변조건
 > - [테스트 노출 기록](docs/TEST_EXPOSURE.md) — 홀드아웃 노출과 결과 해석 경계
 > - [실패 거버넌스](docs/FAILURE_GOVERNANCE.md) — 실패를 숨기지 않고 기록·판정하는 기준
+> - [핵심 연구질문](RESEARCH_QUESTION.md) · [관련 연구](RELATED_WORK.md) · [V2 독립 확인 프로토콜](docs/V2_PROTOCOL.md) · [외부 데이터 자격 심사](docs/EXTERNAL_DATA_QUALIFICATION.md)
 
 ## 왜 자동 판정이 아닌가요?
 

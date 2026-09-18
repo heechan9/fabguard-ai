@@ -13,6 +13,8 @@ const COUNTRY_CODES = {
 };
 const flagImage = (code, label) => { const src = `/assets/flags/${code}.svg`; return `<img class="flag-img" src="${src}" width="40" height="30" alt="${esc(label)} 국기" loading="lazy">`; };
 const candidateFlag = candidate => flagImage(COUNTRY_CODES[candidate.country], candidate.country);
+const candidateTone = status => status === "PARTIAL E2E" ? "next" : status === "DEFERRED" ? "deferred" : "candidate";
+const dataRole = (kind, label) => `<span class="data-role data-role--${kind}"><i aria-hidden="true"></i>${esc(label)}</span>`;
 
 const shortTimestamp = value => {
   const match = String(value ?? "").match(/^\d{4}-(\d{2}-\d{2})[ T](\d{2}:\d{2})/);
@@ -88,7 +90,7 @@ function candidateRegistry(registry) {
   return `<details class="candidate-registry">
     <summary><span>EXPANSION CANDIDATES</span><strong>후속 국가·로봇 데이터 후보 보기</strong><small>${registry.candidates.length}개 국가 · 연결 완료가 아닌 조사 목록</small></summary>
     <div class="candidate-intro">후보는 공식 출처·접근성·라이선스·단위·시간대·독립적 연구가치를 통과한 뒤에만 구현 단계로 승격합니다.</div>
-    <div class="candidate-list">${registry.candidates.map(candidate => `<article><div>${candidateFlag(candidate)}<b>${esc(candidate.country)}</b><em>${esc(candidate.status)}</em></div><h3>${esc(candidate.sources)}</h3><p>${esc(candidate.role)}</p><small>GATE · ${esc(candidate.gate)}</small></article>`).join("")}</div>
+    <div class="candidate-list">${registry.candidates.map(candidate => `<article class="${candidateTone(candidate.status)}"><div class="candidate-top">${candidateFlag(candidate)}<b>${esc(candidate.country)}</b><em>${esc(candidate.status)}</em></div><h3>${esc(candidate.sources)}</h3><p>${esc(candidate.role)}</p><small>GATE · ${esc(candidate.gate)}</small></article>`).join("")}</div>
     <p class="candidate-boundary">${esc(registry.claim_boundary)}</p>
   </details>`;
 }
@@ -134,25 +136,25 @@ function summaryView() {
   const enedis = state.globalE2E.sources.enedis_france_2024;
   const meteo = state.globalE2E.sources.meteo_france_paris_2024;
   app.innerHTML = `
-    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다.</p>${renderHeroEvidence(state.summary)}<div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#process">판단과 검증 과정 보기</a></div></div>${waferVisual(ds.measurement_features)}</section>
-    <section class="answer-strip" aria-label="FabGuard 핵심 요약"><article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로<br>점검 대상을 추천</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article></section>
+    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> 공개 반도체 데이터 · 오프라인 데모</div><p class="kicker">FABGUARD AI</p><h1>모두 볼 수 없다면,<br><span>위험한 것부터.</span></h1><p class="hero-ko">반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong></p><p class="lead">AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다. 실패한 성능을 숨기지 않고, 제한된 자원에서 쓸 수 있는 판단 근거로 다시 설계했습니다.</p>${renderHeroEvidence(state.summary)}<div class="hero-actions"><a class="button" href="#risks">점검 목록 직접 보기 <span>→</span></a><a class="text-link" href="#process">판단과 검증 과정 보기</a></div></div>${waferVisual(ds.measurement_features)}</section>
+    <section class="answer-strip" aria-label="FabGuard 핵심 요약"><article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로 추천하고<br>근거의 한계까지 표시</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article></section>
     <section class="global-section" id="global" aria-labelledby="global-title">
       <div class="global-heading">
         <div><p class="kicker">GLOBAL DATA NETWORK / SYSTEM DEMO</p><h2 id="global-title">서로 다른 국가의 데이터를<br><span>같은 감사 규칙으로.</span></h2></div>
-        <div class="global-summary"><strong>4</strong><span>DATA ROLES</span><p>관측 · 추정 · 기준 · 합성을 구분하며, 국가 수보다 출처와 검증 상태를 우선합니다.</p></div>
+        <div class="global-summary"><strong>4</strong><span>DATA ROLES</span><p>관측 · 추정 · 기준 · 합성을 구분하며, 국가 수보다 출처와 검증 상태를 우선합니다.</p><div class="data-role-key" aria-label="데이터 유형 색상 구분">${dataRole("observed", "관측")}${dataRole("estimated", "추정")}${dataRole("reference", "기준")}${dataRole("synthetic", "합성")}</div></div>
       </div>
       <div class="tool-rail" aria-label="데이터 처리 도구">
-        <article class="complete"><span>01 · INGEST</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p><b>LOCAL VERIFIED</b></article>
+        <article class="complete"><span>01 · INGEST</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Fledge</strong><p>합성 센서 REST 연결·재시작·중복격리 검증</p>${dataRole("synthetic", "합성")}<b>LOCAL VERIFIED</b></article>
         <article class="complete"><span>02 · STRUCTURE</span><strong><span class="tool-flag" aria-hidden="true">🌐</span> Frictionless</strong><p>스키마 오류를 SDT 실행 전에 차단</p><b>VALIDATED</b></article>
         <article class="complete"><span>03 · PV QUALITY</span><strong>${flagImage("us", "미국")} Solar Data Tools</strong><p>합성·호주 관측·영국 추정·EU 기준 PV 품질 파이프라인 실행</p><b>MULTI-SOURCE VALIDATED</b></article>
         <article class="complete"><span>04 · AUDIT</span><strong>${flagImage("kr", "대한민국")} FabGuard</strong><p>출처·시각·단위·해시·주장 경계 기록</p><b>IMPLEMENTED</b></article>
       </div>
       <div class="country-grid" aria-label="국가별 데이터 검증 상태">
         <article class="country-card verified"><div class="country-top">${flagImage("us", "미국")}<b>UNITED STATES</b><em>VERIFIED</em></div><h3>UCI SECOM</h3><p>반도체 공정 위험순위 연구의 정본 데이터</p><dl><div><dt>ROLE</dt><dd>Manufacturing evidence</dd></div><div><dt>STATUS</dt><dd>V1 complete</dd></div></dl></article>
-        <article class="country-card verified"><div class="country-top">${flagImage("au", "호주")}<b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>Observed</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
-        <article class="country-card verified"><div class="country-top">${flagImage("gb", "영국")}<b>GREAT BRITAIN</b><em>VERIFIED</em></div><h3>PV_Live</h3><p>GB 국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>Estimated</dd></div><div><dt>STATUS</dt><dd>${pvlive.input_rows.toLocaleString()} intervals · E2E validated</dd></div></dl></article>
-        <article class="country-card verified"><div class="country-top">${flagImage("eu", "유럽연합")}<b>EUROPEAN UNION</b><em>VERIFIED</em></div><h3>JRC PVGIS</h3><p>Brussels 기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>Reference</dd></div><div><dt>STATUS</dt><dd>${pvgis.input_rows.toLocaleString()} hours · E2E validated</dd></div></dl></article>
-        <article class="country-card next"><div class="country-top">${flagImage("fr", "프랑스")}<b>FRANCE</b><em>PARTIAL E2E</em></div><h3>RTE · Enedis · Météo-France</h3><p>국가 발전량 수정 이력 · 배전망 태양광 · 파리 관측 기상</p><dl><div><dt>ROLE</dt><dd>Revision · grid · weather</dd></div><div><dt>STATUS</dt><dd>Enedis ${enedis.input_rows.toLocaleString()} intervals · Météo-France ${meteo.input_rows.toLocaleString()} hours verified · RTE annual rerun pending</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("au", "호주")}<b>AUSTRALIA</b><em>VERIFIED</em></div><h3>DKASC</h3><p>Alice Springs 2025 실제 관측 시계열</p><dl><div><dt>ROLE</dt><dd>${dataRole("observed", "Observed")}</dd></div><div><dt>STATUS</dt><dd>E2E contract validated</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("gb", "영국")}<b>GREAT BRITAIN</b><em>VERIFIED</em></div><h3>PV_Live</h3><p>GB 국가 단위 태양광 발전 추정값</p><dl><div><dt>ROLE</dt><dd>${dataRole("estimated", "Estimated")}</dd></div><div><dt>STATUS</dt><dd>${pvlive.input_rows.toLocaleString()} intervals · E2E validated</dd></div></dl></article>
+        <article class="country-card verified"><div class="country-top">${flagImage("eu", "유럽연합")}<b>EUROPEAN UNION</b><em>VERIFIED</em></div><h3>JRC PVGIS</h3><p>Brussels 기상·모델 기반 태양광 기준 시계열</p><dl><div><dt>ROLE</dt><dd>${dataRole("reference", "Reference")}</dd></div><div><dt>STATUS</dt><dd>${pvgis.input_rows.toLocaleString()} hours · E2E validated</dd></div></dl></article>
+        <article class="country-card next"><div class="country-top">${flagImage("fr", "프랑스")}<b>FRANCE</b><em>PARTIAL E2E</em></div><h3>RTE · Enedis · Météo-France</h3><p>국가 발전량 수정 이력 · 배전망 태양광 · 파리 관측 기상</p><dl><div><dt>ROLE</dt><dd><span class="role-pair">${dataRole("estimated", "Grid estimate")}${dataRole("observed", "Weather observed")}</span></dd></div><div><dt>STATUS</dt><dd>Enedis ${enedis.input_rows.toLocaleString()} intervals · Météo-France ${meteo.input_rows.toLocaleString()} hours verified · RTE annual rerun pending</dd></div></dl></article>
       </div>
       <div class="dkasc-evidence" aria-label="호주 DKASC 관측 데이터 검증 결과">
         <div><span>${flagImage("au", "호주")} OBSERVED DATA</span><strong>${dkasc.normalized_rows.toLocaleString()}</strong><small>5분 간격 정규화 슬롯</small></div>
