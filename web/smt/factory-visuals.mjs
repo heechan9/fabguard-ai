@@ -1,4 +1,6 @@
 // Original schematic geometry for explaining station roles; not vendor CAD.
+export const shouldAutoRevealInterior=stationIndex=>stationIndex===6;
+
 export function detailMachine(i,group,cover,w,box,cylinder){
  const steel=0x728996,panel=0xc4d1d6,teal=0x297f86,dark=0x213b48;
  // Low cabinet seams and ventilation, shared across the line.

@@ -1,5 +1,7 @@
 # Changelog
 
+- Fixed the SMT reflow close-up so selecting station 07 automatically reveals the explanatory interior instead of letting the roof obscure the PCB path; the existing Interior View control can still restore the exterior.
+
 ## 2026-09-18 — Research question and global evidence readability
 
 - Froze the V1 research question and added independent V2, external-data qualification, and related-work documents.
