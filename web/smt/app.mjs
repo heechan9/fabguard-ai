@@ -1,4 +1,4 @@
-import {detailMachine,dressFloor} from './factory-visuals.mjs';
+import {detailMachine,dressFloor,shouldAutoRevealInterior} from './factory-visuals.mjs';
 import {STATION_TERMS,plainCopy} from './terms.mjs';
 import {TapGuard} from './gesture-model.mjs';
 import {lotId,lotSummary} from './lot-model.mjs';
@@ -17,7 +17,7 @@ function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visibl
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i,focus=true){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){focusStation(i);updateInterior();}}
+function selectStation(i,focus=true){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
