@@ -16,3 +16,7 @@
 .smt-page main details>summary:hover,.smt-page main details>summary:focus-visible{background:rgba(57,214,196,.09)}
 .smt-page main details>summary:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.smt-page main details>summary{transition:none}}
+
+.smt-page .nvidia-aoi-plan{margin:24px 0;padding:28px;scroll-margin-top:120px}.aoi-plan-heading{display:flex;justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap}.smt-page .nvidia-aoi-plan h2{font-size:clamp(24px,3vw,32px);line-height:1.4}.smt-page .nvidia-aoi-plan>p{font-size:15px;line-height:1.85;color:var(--muted)}.aoi-gates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:22px 0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--line)}.aoi-gates article{min-width:0;padding:18px;background:rgba(7,15,23,.94)}.aoi-gates span{display:block;color:var(--cyan);font:600 12px monospace}.aoi-gates b{display:block;margin:10px 0;font-size:16px;line-height:1.5}.smt-page .aoi-gates p{margin:0;color:var(--muted);font-size:13px;line-height:1.75}.smt-page .aoi-boundary{padding:14px 16px;border-left:3px solid var(--amber);background:rgba(228,168,61,.06)}.aoi-boundary b{color:var(--text)}
+@media(max-width:900px){.aoi-gates{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.smt-page .nvidia-aoi-plan{padding:20px 16px}.aoi-gates{grid-template-columns:1fr}}

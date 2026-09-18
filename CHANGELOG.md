@@ -2,7 +2,7 @@
 
 ## 2026-09-18
 
-- Added a planning-only NVIDIA TAO Optical Inspection contract with explicit data, GPU, leakage, evaluation and claim gates; no AOI training or validation result is claimed.
+- Added a planning-only NVIDIA TAO Optical Inspection contract and a matching simulation readiness panel with explicit data, GPU, leakage, evaluation and claim gates; no AOI training or validation result is claimed.
 
 ## 2026-09-17
 

@@ -169,7 +169,7 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 ### NVIDIA TAO AOI preflight contract
 
-- **Codex (OpenAI)**: NVIDIA 공식 Optical Inspection 스킬의 TAO 7.1.0 실행 요구사항을 검토하고, 기존 SECOM 결과와 분리된 AOI 데이터·GPU·누출 방지·평가·주장 계약과 회귀 테스트 구현
+- **Codex (OpenAI)**: NVIDIA 공식 Optical Inspection 스킬의 TAO 7.1.0 실행 요구사항을 검토하고, 기존 SECOM 결과와 분리된 AOI 데이터·GPU·누출 방지·평가·주장 계약, 시뮬레이션 준비 패널과 회귀 테스트 구현
 - **최희찬 (`heechan9`)**: NVIDIA 플러그인 활용 방향을 승인하고 FabGuard의 후속 시각검사 준비 작업을 요청
 
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
