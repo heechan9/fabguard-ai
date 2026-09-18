@@ -34,6 +34,11 @@ test('headline counts match canonical evaluation CSV, including missed and norma
   assert.match(app, /현장 요구 정의/);
   assert.match(app, /하루에 몇 건을 실제로 확인할 수 있는지 먼저 정합니다/);
   assert.match(app, /다음 운영규칙을 검토할 근거로 남깁니다/);
+  assert.match(app, /isEnglish \? "Observed" : "관측"/);
+  assert.match(app, /isEnglish \? "Estimated" : "추정"/);
+  assert.match(app, /isEnglish \? "Reference" : "기준"/);
+  assert.match(app, /isEnglish \? "GREAT BRITAIN" : "영국"/);
+  assert.doesNotMatch(app, /dataRole\("estimated", "Estimated"\)/);
   const beginner = beginnerLines('ko');
   assert.equal(beginner.length, 3);
   for (const term of ['위험도', '우선점검', 'PR-AUC', '잠정결과', '농축도', '홀드아웃']) {
