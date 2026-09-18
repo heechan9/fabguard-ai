@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-18 — Research question and global evidence readability
+
+- Froze the V1 research question and added independent V2, external-data qualification, and related-work documents.
+- Raised legacy global-data captions to at least 12px, added four explicit data-role markers, and aligned expansion candidates with country-card flags and status tones.
+- Kept the SMT reflow geometry unchanged because the 3D swept-volume regression test already verifies more than 0.38 units of panel clearance.
+
 ## 2026-09-18
 
 - Added a planning-only NVIDIA TAO Optical Inspection contract and a matching simulation readiness panel with explicit data, GPU, leakage, evaluation and claim gates; no AOI training or validation result is claimed.

@@ -7,6 +7,7 @@
 | 읽는 목적 | 권장 순서 |
 |---|---|
 | 프로젝트를 빠르게 이해 | [README](../README.md) → [정본 결과](../results/v1/RESULTS_SUMMARY.md) → [검증 한계](TEST_EXPOSURE.md) |
+| 연구질문·V2 확인 설계 | [연구질문](../RESEARCH_QUESTION.md) → [관련 연구](../RELATED_WORK.md) → [V2 프로토콜](V2_PROTOCOL.md) → [외부 데이터 자격](EXTERNAL_DATA_QUALIFICATION.md) |
 | 모델·평가 검토 | [데이터셋 카드](validation/DATASET_CARD.md) → [실험계약](validation/EXPERIMENT_CONTRACT.md) → [데이터 감사](validation/FABGUARD_DATA_AUDIT.md) → [재현 방법](validation/REPRODUCIBILITY.md) |
 | 웹 화면 수정 | [웹 코드 안내](../web/README.md) → [화면 명세](SCREENS.md) → [SMT 웹 통합](SMT_WEB_INTEGRATION.md) |
 | 현장 적용 가능성 검토 | [엔지니어 검토 흐름](SEMICONDUCTOR_REVIEW_WORKFLOW.md) → [최소 파일럿 초안](MINIMUM_PILOT.md) → [실패 대응 초안](FAILURE_GOVERNANCE.md) |
@@ -41,6 +42,10 @@
 
 ## 모델 평가·재현·한계
 
+- [FabGuard 핵심 연구질문](../RESEARCH_QUESTION.md)
+- [FabGuard 관련 연구와 차별점](../RELATED_WORK.md)
+- [FabGuard V2 독립 확인 프로토콜](V2_PROTOCOL.md)
+- [외부 데이터 자격 심사](EXTERNAL_DATA_QUALIFICATION.md)
 - [NVIDIA TAO AOI 최소 실험계약](validation/NVIDIA_TAO_AOI_EXPERIMENT_CONTRACT.md)
 - [FabGuard Phase 1: decision and temporal validation](PHASE1_ADVANCED_VALIDATION.md)
 - [Test Holdout Exposure Log](TEST_EXPOSURE.md)
