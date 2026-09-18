@@ -7,6 +7,7 @@
 | 읽는 목적 | 권장 순서 |
 |---|---|
 | 프로젝트를 빠르게 이해 | [README](../README.md) → [정본 결과](../results/v1/RESULTS_SUMMARY.md) → [검증 한계](TEST_EXPOSURE.md) |
+| 1분 안에 방법론 검토 | [1페이지 검증 요약](ONE_PAGE_SUMMARY.md) → 연결된 정본 문서·원자료 |
 | 연구질문·V2 확인 설계 | [연구질문](../RESEARCH_QUESTION.md) → [관련 연구](../RELATED_WORK.md) → [V2 프로토콜](V2_PROTOCOL.md) → [외부 데이터 자격](EXTERNAL_DATA_QUALIFICATION.md) |
 | 모델·평가 검토 | [데이터셋 카드](validation/DATASET_CARD.md) → [실험계약](validation/EXPERIMENT_CONTRACT.md) → [데이터 감사](validation/FABGUARD_DATA_AUDIT.md) → [재현 방법](validation/REPRODUCIBILITY.md) |
 | 웹 화면 수정 | [웹 코드 안내](../web/README.md) → [화면 명세](SCREENS.md) → [SMT 웹 통합](SMT_WEB_INTEGRATION.md) |

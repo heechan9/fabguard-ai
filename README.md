@@ -103,6 +103,7 @@
 > - [테스트 노출 기록](docs/TEST_EXPOSURE.md) — 홀드아웃 노출과 결과 해석 경계
 > - [실패 거버넌스](docs/FAILURE_GOVERNANCE.md) — 실패를 숨기지 않고 기록·판정하는 기준
 > - [핵심 연구질문](RESEARCH_QUESTION.md) · [관련 연구](RELATED_WORK.md) · [V2 독립 확인 프로토콜](docs/V2_PROTOCOL.md) · [외부 데이터 자격 심사](docs/EXTERNAL_DATA_QUALIFICATION.md)
+> - [1페이지 검증 요약](docs/ONE_PAGE_SUMMARY.md) — 방법론·실패·불확실성·주장 경계를 30초 안에 확인
 
 ## 왜 자동 판정이 아닌가요?
 
