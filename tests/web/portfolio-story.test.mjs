@@ -31,6 +31,9 @@ test('headline counts match canonical evaluation CSV, including missed and norma
   assert.match(renderPortfolioStory(summary), /github\.com\/heechan9\/fabguard-ai\/issues/);
   assert.match(app, /실패한 성능을 숨기지 않고, 제한된 자원에서 쓸 수 있는 판단 근거로 다시 설계했습니다/);
   assert.match(app, /위험도 순으로 추천하고<br>근거의 한계까지 표시/);
+  assert.match(app, /현장 요구 정의/);
+  assert.match(app, /하루에 몇 건을 실제로 확인할 수 있는지 먼저 정합니다/);
+  assert.match(app, /다음 운영규칙을 검토할 근거로 남깁니다/);
   const beginner = beginnerLines('ko');
   assert.equal(beginner.length, 3);
   for (const term of ['위험도', '우선점검', 'PR-AUC', '잠정결과', '농축도', '홀드아웃']) {
@@ -45,6 +48,9 @@ test('headline counts match canonical evaluation CSV, including missed and norma
 
   const onePageUrl = new URL('../../docs/ONE_PAGE_SUMMARY.md', import.meta.url);
   const onePage = readFileSync(onePageUrl, 'utf8');
+  assert.match(onePage, /현장 의사결정 구조/);
+  assert.match(onePage, /Top-K 점검예산/);
+  assert.match(onePage, /현장 구현 전/);
   const phase1 = JSON.parse(readFileSync(new URL('../../web/data/phase1_summary.json', import.meta.url), 'utf8'));
   assert.match(onePage, new RegExp(`\\+${phase1.paired_model_comparison.mean_difference.toFixed(4)}`));
   assert.match(onePage, new RegExp(`p=${phase1.paired_model_comparison.two_sided_exact_sign_flip_p.toFixed(4)}`));
