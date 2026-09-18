@@ -41,6 +41,7 @@
 
 ## 모델 평가·재현·한계
 
+- [NVIDIA TAO AOI 최소 실험계약](validation/NVIDIA_TAO_AOI_EXPERIMENT_CONTRACT.md)
 - [FabGuard Phase 1: decision and temporal validation](PHASE1_ADVANCED_VALIDATION.md)
 - [Test Holdout Exposure Log](TEST_EXPOSURE.md)
 - [Independent manufacturing data validation](INDEPENDENT_DATA_VALIDATION.md)

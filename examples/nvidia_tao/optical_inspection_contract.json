@@ -1,0 +1,60 @@
+{
+  "schema_version": "fabguard-nvidia-tao-optical-inspection/v1",
+  "status": "planned_blocked_pending_data_and_gpu",
+  "evidence_scope": "independent_aoi_visual_inspection",
+  "secom_v1_result_reused": false,
+  "nvidia": {
+    "skill": "tao-train-optical-inspection",
+    "container_image": "nvcr.io/nvidia/tao/tao-toolkit:7.1.0-pyt",
+    "automl_policy": "on",
+    "model_type": "Siamese_3",
+    "monitoring_metric": "val_acc"
+  },
+  "runtime_gate": {
+    "docker": "required_unverified",
+    "nvidia_container_toolkit": "required_unverified",
+    "gpu_count": 1,
+    "minimum_vram_gb": 8
+  },
+  "dataset_gate": {
+    "train_images": null,
+    "train_csv": null,
+    "validation_images": null,
+    "validation_csv": null,
+    "test_images": null,
+    "test_csv": null,
+    "inference_images": null,
+    "inference_csv": null,
+    "split_unit": "physical_board_or_lot",
+    "golden_reference_provenance_required": true,
+    "dataset_conversion": "not_run_no_dataset"
+  },
+  "acceptance_gate": {
+    "required_metrics": [
+      "confusion_matrix",
+      "defect_recall",
+      "false_negative_count",
+      "false_positive_count",
+      "per_defect_type_recall"
+    ],
+    "thresholds": null,
+    "independent_test_required": true,
+    "domain_expert_review_required": true
+  },
+  "artifacts": {
+    "checkpoint": null,
+    "evaluation_report": null,
+    "onnx_model": null,
+    "tensorrt_engine": null
+  },
+  "claims_allowed": [
+    "experiment contract prepared"
+  ],
+  "claims_blocked": [
+    "training completed",
+    "defect detection validated",
+    "production ready",
+    "yield improved",
+    "cost reduced"
+  ]
+}
