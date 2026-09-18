@@ -5,6 +5,8 @@ import { storyEvidence, renderHeroEvidence, renderPortfolioStory } from '../../w
 import { beginnerLines } from '../../web/home-copy.mjs';
 const summary = JSON.parse(readFileSync(new URL('../../web/data/summary.json', import.meta.url), 'utf8'));
 const app = readFileSync(new URL('../../web/app.js', import.meta.url), 'utf8');
+const style = readFileSync(new URL('../../web/style.css', import.meta.url), 'utf8');
+const index = readFileSync(new URL('../../web/index.html', import.meta.url), 'utf8');
 const csv = path => {
   const [head, ...rows] = readFileSync(new URL(path, import.meta.url), 'utf8').trim().split(/\r?\n/);
   return rows.map(row => Object.fromEntries(row.split(',').map((value, i) => [head.split(',')[i], value])));
@@ -37,6 +39,9 @@ test('headline counts match canonical evaluation CSV, including missed and norma
   assert.match(app, /new URLSearchParams\(location\.search\)/);
   assert.match(app, /location\.hash \|\| "#summary"/);
   assert.match(app, /hash === "answer-overview"/);
+  assert.match(style, /grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
+  assert.match(style, /@media\(max-width:1400px\)/);
+  assert.match(index, /반도체 분석 결과<\/a><button id="language-toggle"/);
 
   const onePageUrl = new URL('../../docs/ONE_PAGE_SUMMARY.md', import.meta.url);
   const onePage = readFileSync(onePageUrl, 'utf8');
