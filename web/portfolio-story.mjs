@@ -13,8 +13,14 @@ export function storyEvidence(summary) {
   return { total, inspected: top.inspection_count, captured: top.captured_fail, failures: top.total_fail, missed: top.total_fail - top.captured_fail, passed: top.false_inspections, lift: top.lift };
 }
 
-export function renderHeroEvidence(summary) {
+export function renderHeroEvidence(summary, language='ko') {
   const e = storyEvidence(summary);
+  if(language==='en')return `<div class="portfolio-result" aria-label="Provisional evaluation result and limits">
+    <p><strong>Review ${e.inspected} records first → capture ${e.captured} failures</strong></p>
+    <p>${e.total} holdout records · ${e.missed} of ${e.failures} failures remain outside the review budget</p>
+    <small>Provisional public-data result · holdout exposed during an engineering smoke run · no field impact claim</small>
+    <a href="${repo}results/v1/RESULTS_SUMMARY.md">Canonical result</a> · <a href="${repo}docs/TEST_EXPOSURE.md">Why it is provisional</a>
+  </div>`;
   return `<div class="portfolio-result" aria-label="잠정 평가 결과와 한계">
     <p><strong>${e.inspected}건 우선점검 → 불량 ${e.captured}건 포착</strong></p>
     <p>검증 ${e.total}건 · 전체 불량 ${e.failures}건 중 ${e.missed}건은 점검 범위 밖</p>
