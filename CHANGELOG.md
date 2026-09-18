@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-18
+
+- Added a planning-only NVIDIA TAO Optical Inspection contract and a matching simulation readiness panel with explicit data, GPU, leakage, evaluation and claim gates; no AOI training or validation result is claimed.
+
 ## 2026-09-17
 
 - Added portfolio decision cards, canonical result links, evaluation limitations and explicit human/AI attribution ([#112](https://github.com/heechan9/fabguard-ai/pull/112)).
