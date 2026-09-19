@@ -52,6 +52,7 @@ export function renderPortfolioStory(summary) {
         <article><h3>아직 필요한 증거</h3><p>독립 제조 데이터와 실제 점검·품질 기록이 필요합니다. 익명 변수의 원인성, 수율 개선, 비용 절감은 입증하지 못했습니다.</p><a href="${repo}docs/INDEPENDENT_DATA_VALIDATION.md">다음 검증 조건 확인</a></article>
       </div>
       <p class="portfolio-credit">역할 설명은 저장소의 기여·AI 활용 기록에 근거합니다. 개별 오류를 사용자가 직접 발견했다는 이력은 추가하지 않았습니다.</p>
+      <p>직무 관점에서 읽기: 공정은 점검 순서, 품질은 포착과 누락, 스마트제조는 데이터 연결의 근거를 확인할 수 있습니다. 실제 공정 개선·설비 제어 실적은 아닙니다. <a href="${repo}docs/AX_PORTFOLIO_APPLICATION.md#직무별로-확인할-증거">직무별 증거와 설명 예시 →</a></p>
     </details>
     <p class="portfolio-question"><b>검토 질문</b> 왜 정확도보다 점검 범위별 포착·누락을 봤을까요? <a href="${repo}docs/validation/EXPERIMENT_CONTRACT.md">평가 기준</a>와 <a href="${repo}docs/validation/REPRODUCIBILITY.md">재현 방법</a>에서 확인할 수 있습니다.</p>
   </section>`;
