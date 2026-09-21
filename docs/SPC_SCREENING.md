@@ -45,3 +45,7 @@ PYTHONPATH=src python -m fabguard.spc --input examples/spc_synthetic.csv --basel
 `tests/test_spc.py`는 NIST 계산 예시 대조, 미래값 변경 시 한계 불변,
 경계 포함, 결측 보류, 부적절한 기준 구간, 잘못된 CSV·시간순서 거부를 검사한다.
 기존 모델의 PR-AUC·포착률·공정 개선 효과는 이 기능으로 새롭게 입증되지 않는다.
+
+## 웹 합성 체험
+
+`/equipment/index.html#spc-demo`에서 예제 초기화·높은 값·낮은 값·결측 버튼으로 고정 기준과 이후 측정을 비교한다. 업로드 CSV는 이 체험에 입력되지 않는다. 브라우저 계산과 Python 원본을 같은 입력으로 대조하는 회귀 테스트를 유지한다. 모바일 그래프는 내부 가로 스크롤을 지원하고, 수치는 별도 표로 제공한다.
