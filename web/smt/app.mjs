@@ -4,7 +4,7 @@ import {TapGuard} from './gesture-model.mjs';
 import {lotId,lotSummary} from './lot-model.mjs';
 import {measurementEvidence} from './measurement-model.mjs';
 import * as THREE from './vendor/three.module.js';
-import {Simulation,STATIONS,FAULTS,assess} from './simulation.mjs';
+import {Simulation,STATIONS,FAULTS,assess,manufacturingEvents} from './simulation.mjs';
 import {showEquipment} from './equipment.mjs';
 import {mountInspection} from './inspection.mjs';
 import {clampZoom,overviewDistance,stationZoom} from './camera-model.mjs';
@@ -26,6 +26,7 @@ $('reset').addEventListener('click',()=>{inspection.reset();sim.reset();selected
 $('speed').addEventListener('change',e=>{sim.speed=Number(e.target.value);});
 $('board-select').addEventListener('change',e=>{selected=e.target.value;updateUI();});
 $('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(sim.snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-synthetic-run.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+$('export-review').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(manufacturingEvents(sim.snapshot()),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-manufacturing-events.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 let prevOptions='',prevHistory='',prevEvidence='';
 function updateUI(){
  if(followInjected){const b=sim.boards.at(-1);if(b.fault&&!sim.pending){selected=b.id;followInjected=false;}}
@@ -40,7 +41,7 @@ function updateUI(){
  const evidence=measurementEvidence(b),evidenceKey=JSON.stringify(evidence);
  if(prevEvidence!==evidenceKey){$('measurement-evidence').replaceChildren(...evidence.map(item=>{const card=document.createElement('article');card.className='measurement-card';const title=document.createElement('h3');title.textContent=item.label;card.append(title);for(const [label,value] of [['데모 기준 범위',item.range],['가상 측정값',item.measurement],['비교 결과',item.difference],['다음 확인',item.next]]){const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=label+' · ';p.append(strong,document.createTextNode(value));card.append(p);}return card;}));prevEvidence=evidenceKey;}
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
- const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('run-status').textContent=done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
+ const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('export-review').disabled=!done;$('run-status').textContent=done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
  $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>b.stage>=2&&b.volume===null).length;
  $('pending').textContent=sim.pending?`다음 기판에 적용 · ${plainCopy(FAULTS[sim.pending])}`:sim.boards.length===12?'투입 완료 · 처음부터 다시 시작하세요':'문제를 선택해 보세요';
  document.querySelectorAll('[data-fault]').forEach(button=>{button.disabled=sim.boards.length>=12;button.classList.toggle('armed',sim.pending===button.dataset.fault);button.setAttribute('aria-pressed',String(sim.pending===button.dataset.fault));});

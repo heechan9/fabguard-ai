@@ -11,7 +11,7 @@
 | 연구질문·V2 확인 설계 | [연구질문](../RESEARCH_QUESTION.md) → [관련 연구](../RELATED_WORK.md) → [V2 프로토콜](V2_PROTOCOL.md) → [외부 데이터 자격](EXTERNAL_DATA_QUALIFICATION.md) |
 | 모델·평가 검토 | [데이터셋 카드](validation/DATASET_CARD.md) → [실험계약](validation/EXPERIMENT_CONTRACT.md) → [데이터 감사](validation/FABGUARD_DATA_AUDIT.md) → [재현 방법](validation/REPRODUCIBILITY.md) |
 | 웹 화면 수정 | [웹 코드 안내](../web/README.md) → [화면 명세](SCREENS.md) → [SMT 웹 통합](SMT_WEB_INTEGRATION.md) |
-| 현장 적용 가능성 검토 | [엔지니어 검토 흐름](SEMICONDUCTOR_REVIEW_WORKFLOW.md) → [최소 파일럿 초안](MINIMUM_PILOT.md) → [실패 대응 초안](FAILURE_GOVERNANCE.md) |
+| 현장 적용 가능성 검토 | [실행 가능한 제조 검토 슬라이스](MANUFACTURING_REVIEW_SLICE.md) → [엔지니어 검토 흐름](SEMICONDUCTOR_REVIEW_WORKFLOW.md) → [최소 파일럿 초안](MINIMUM_PILOT.md) → [실패 대응 초안](FAILURE_GOVERNANCE.md) |
 | 작업 범위·기여 확인 | [요구사항](project/PRD.md) → [로드맵](project/ROADMAP.md) → [작업 참여 안내](../CONTRIBUTING.md) → [기여 기록](governance/CONTRIBUTIONS.md) → [AI 사용 기록](governance/AI_USAGE.md) |
 
 ## 문서의 상태를 읽는 법
@@ -57,6 +57,7 @@
 
 ## 현장 적용 설계·검토·책임
 
+- [SMT/Fledge 이벤트에서 SPC·사람 검토 감사까지의 실행 슬라이스](MANUFACTURING_REVIEW_SLICE.md)
 - [Industrial AI 운영 설계 노트](INDUSTRIAL_AI_DESIGN.md)
 - [반도체 공정 이상 검토·검증·승인 사용 사례](SEMICONDUCTOR_REVIEW_WORKFLOW.md)
 - [FabGuard 도메인 전문가 검토 워크플로우 초안](DOMAIN_EXPERT_REVIEW.md)

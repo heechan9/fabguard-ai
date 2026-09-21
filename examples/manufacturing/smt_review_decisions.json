@@ -1,0 +1,14 @@
+{
+  "schema_version": "fabguard-manufacturing-review-decisions/v1",
+  "decisions": [
+    {
+      "review_id": "e6fb7d4abb34307995c50755",
+      "reviewer_role": "process_engineer",
+      "decided_at": "2026-09-01T01:00:00Z",
+      "outcome": "insufficient_evidence",
+      "action": "reinspect",
+      "rationale": "Synthetic screening signal requires an independent physical measurement."
+    }
+  ]
+}
+

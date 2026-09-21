@@ -91,7 +91,7 @@
 | 구분 | 현재 상태 |
 |---|---|
 | **검증 완료** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모 |
-| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행 |
+| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행, 합성 SMT 이벤트→Frozen SPC→사람 검토 감사 슬라이스 |
 | **실데이터 시스템 데모** | 호주 DKASC Alice Springs 2025 관측값 105,120개 슬롯을 정규화하고 Frictionless→SDT 경로로 검증 완료 |
 | **후속 시스템 데모** | 영국 PV_Live 2025 추정값 17,520개 구간과 EU PVGIS Brussels 2020 기준값 8,784개 구간을 Frictionless→SDT로 검증 완료 |
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
@@ -216,6 +216,7 @@
 - 사전 승인·SHA-256에 결합된 독립 데이터에 재학습 없이 점수를 내는 잠금 평가 runner
 - Fledge의 읽기 전용 asset REST API에서 데이터를 가져와 오류격리·중복방지·드리프트 경계로 전달하는 연결기
 - WSL2의 실제 Fledge v3.1.0에서 Sinusoid 수집·인증 REST pull·재시작 복구·중복격리를 로컬 검증
+- SMT 웹 실행을 LOT·Unit·장비·Run·Recipe·규격 버전이 있는 합성 Fledge 이벤트로 내보내고, Frozen SPC 우선검토 큐와 사람의 판정·보류 감사 로그로 연결하는 오프라인 슬라이스([계약과 재현](docs/MANUFACTURING_REVIEW_SLICE.md))
 - Frictionless Data v5.19.0 fail-closed 계약과 Solar Data Tools v2.1.5 합성 PV 11,520행 실행 검증
 - 호주 DKASC Alice Springs 2025 관측값을 재현 가능한 정규화기로 105,120개 5분 슬롯으로 변환하고 Frictionless→SDT E2E 검증 완료([보고서](results/dkasc-alice-springs-2025/report.json) · [정규화 감사](results/dkasc-alice-springs-2025/normalization_audit.json))
 - 영국 Sheffield Solar PV_Live 2025 국가 추정값 17,520개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvlive-gb-national-2025/report.json) · [수집 감사](results/pvlive-gb-national-2025/fetch_audit.json))

@@ -1,0 +1,272 @@
+{
+  "schema_version": "fabguard-manufacturing-events/v1",
+  "source_id": "fabguard-smt-3d-synthetic",
+  "data_role": "synthetic",
+  "measurement": {
+    "name": "solder_paste_volume_pct",
+    "unit": "percent"
+  },
+  "readings": [
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:01:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 99
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-001",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:02:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 101
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-002",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:03:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 98
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-003",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:04:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 102
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-004",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:05:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 99
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-005",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:06:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 101
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-006",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:07:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 98
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-007",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:08:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 102
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-008",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:09:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 99
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-009",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:10:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 101
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-010",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:11:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 100
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-011",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:12:00Z",
+      "reading": {
+        "solder_paste_volume_pct": 130
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-012",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    },
+    {
+      "asset_code": "SPI-DEMO-01",
+      "user_ts": "2026-09-01T00:13:00Z",
+      "reading": {
+        "solder_paste_volume_pct": null
+      },
+      "manufacturing": {
+        "lot_id": "SMT-DEMO-L001",
+        "unit_id": "PCB-013",
+        "equipment_id": "SPI-DEMO-01",
+        "process_step": "solder_paste_inspection",
+        "run_id": "RUN-DEMO-001",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "spec_version": "demo-v1",
+        "units": {
+          "solder_paste_volume_pct": "percent"
+        }
+      }
+    }
+  ]
+}
+
