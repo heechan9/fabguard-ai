@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {parseCSV,validateCSV} from '../../web/equipment/contract.mjs';
+const mapping={board_id:0,pad_id:1,value:2};
+const context={equipment:'SPI',role:'synthetic',metric:'paste_height_um'};
+test('BOM, CRLF, quoted comma and escaped quotes',()=>{assert.deepEqual(parseCSV('\uFEFFa,b\r\n"x,y","a""b"\r\n').rows,[['x,y','a"b']]);});
+test('reject malformed headers and quotes',()=>{for(const text of ['a,a\n1,2','a,\n1,2','a,b\n"x,y','a,b\n"x"z,2'])assert.throws(()=>parseCSV(text));});
+test('zero accepted; missing, NaN, Infinity, negative, duplicate quarantined',()=>{const d=parseCSV('a,b,c\nB,P,0\nB,P,1\nC,P,\nD,P,NaN\nE,P,Infinity\nF,P,-1');const r=validateCSV(d,mapping,context);assert.equal(r.accepted.length,1);assert.equal(r.rejected.length,5);});
+test('mapping and context fail closed',()=>{const d=parseCSV('a,b,c\nB,P,1');assert.throws(()=>validateCSV(d,{...mapping,value:0},context));assert.throws(()=>validateCSV(d,mapping,{...context,role:''}));});
+test('column mismatch quarantined; HTML is plain data',()=>{const d=parseCSV('a,b,c\n<script>,P,12\nB,P,1,extra');const r=validateCSV(d,mapping,context);assert.equal(r.accepted[0].board_id,'<script>');assert.equal(r.rejected.length,1);});
