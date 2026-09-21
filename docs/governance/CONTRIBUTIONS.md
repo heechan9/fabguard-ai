@@ -25,6 +25,12 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 ## PR별 구현 기록
 
+### Manufacturing event-to-review audit slice
+
+- **Codex (OpenAI)**: SMT 합성 실행을 Fledge 호환 reading과 LOT·Unit·장비·Run·Recipe·규격 버전 계약으로 내보내고, Frozen SPC 우선검토 큐 및 사람의 판정·보류 감사 로그로 연결하는 CLI·예시·회귀 테스트 구현
+- **최희찬 (`heechan9`)**: 기존 Fledge·SPC·SMT 기능을 하나의 제조 의사결정 흐름으로 연결하는 우선순위와 공개·병합 범위 결정
+- **경계**: 합성 오프라인 검증이며 실제 MES/FDC/APC, 물리 장비, 불량 판정, 자동 재학습 또는 현장 개선 실적이 아님
+
 ### Repository document structure cleanup
 
 - **Codex (OpenAI)**: 루트 문서를 프로젝트·검증·거버넌스 폴더로 재분류하고 README, 웹 링크, 문서 지도와 경로 회귀 테스트를 함께 갱신
