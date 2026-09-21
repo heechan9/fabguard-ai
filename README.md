@@ -149,7 +149,7 @@
 | 의사결정·감사 | 🇰🇷 **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
 | 최종 판단 | 👷 **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
 
-> **현재 검증 범위:** Fledge Sinusoid, 호주 DKASC, 영국 PV_Live와 EU JRC PVGIS의 계약·E2E 검증을 완료했습니다. 프랑스 RTE éCO2mix는 사전계약과 오프라인 테스트를 완료했지만 실 API E2E 전이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
+> **현재 검증 범위:** Fledge Sinusoid와 Solar Data Tools 기반 호주 DKASC, 영국 PV_Live, EU JRC PVGIS, 프랑스 Enedis의 계약·E2E 검증을 완료했습니다. Météo-France는 별도의 관측 기상 맥락으로 검증했으며 SDT 전력 입력으로 사용하지 않습니다. 프랑스 RTE éCO2mix는 사전계약과 오프라인 테스트를 완료했지만 실 API E2E 전이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
 
 <details>
 <summary><strong>현재 범위 밖의 국가별 후속 후보 보기</strong></summary>
@@ -157,7 +157,7 @@
 | 국가 | 우선 검토 후보군 | 독립적 검토 목적 | 현재 판정 |
 |---|---|---|---|
 | 🇺🇸 미국 | **공개 로봇 운영·이상 데이터 후보군** | 로봇 telemetry·고장/이상 탐지 계약 검토 | 공식 데이터셋·원출처·라이선스 확정 전 조사 후보 |
-| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | RTE 사전계약 완료·실 API E2E 대기; Enedis·Météo-France 별도 감사 |
+| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | Enedis·Météo-France E2E 완료; RTE 사전계약 완료·실 API E2E 대기 |
 | 🇩🇪 독일 | **SMARD · 전력/산업 · 공개 로봇 운영 데이터 후보군** | 계통 투명성과 제조·로봇 운영 비교 | 로봇 데이터 원출처·신호·라이선스 확인 전 조사 후보 |
 | 🇪🇸 스페인 | **REE/ESIOS · 자가소비 통계 후보군** | 고태양광 계통운영과 분산형 자가소비 비교 | 시계열 해상도·라이선스 확인 전 조사 후보 |
 | 🇮🇹 이탈리아 | **Terna · GSE 공개 통계/설비 후보군** | 발전·설비 등록·지역 차이를 연결 가능한지 검토 | 원자료 접근성과 재배포 조건 확인 전 조사 후보 |
@@ -220,6 +220,7 @@
 - 호주 DKASC Alice Springs 2025 관측값을 재현 가능한 정규화기로 105,120개 5분 슬롯으로 변환하고 Frictionless→SDT E2E 검증 완료([보고서](results/dkasc-alice-springs-2025/report.json) · [정규화 감사](results/dkasc-alice-springs-2025/normalization_audit.json))
 - 영국 Sheffield Solar PV_Live 2025 국가 추정값 17,520개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvlive-gb-national-2025/report.json) · [수집 감사](results/pvlive-gb-national-2025/fetch_audit.json))
 - EU JRC PVGIS Brussels 2020 기준값 8,784개 시간 구간을 공식 API에서 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvgis-brussels-2020/report.json) · [수집 감사](results/pvgis-brussels-2020/fetch_audit.json))
+- 프랑스 Enedis 2024 국가 태양광 추정값 17,568개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/enedis-france-national-solar-2024/report.json) · [수집 감사](results/enedis-france-national-solar-2024/fetch_audit.json))
 - 프랑스 RTE éCO2mix의 통합·확정 수정상태, MW 단위, CET/CEST→UTC 변환과 30분 연속성을 검사하는 fail-closed 사전계약 및 오프라인 테스트 구현; 실 API E2E는 대기
 
 ### 아직 구현하거나 검증하지 않음
