@@ -1,5 +1,9 @@
 # FabGuard 작업 상태와 다음 검증
 
+> **2026-09-22 후속:** [실행·검증 기록](../validation/REMAINING_WORK_VERIFICATION_20260922.md).
+> #111 교육 체험은 병합됨. #110 충돌은 해결했으나 GPU 녹화 검증 대기.
+> RTE는 44일·2,112행 부분 검사 후 네트워크 403으로 연간 실행 중단. 아래는 최초 점검 당시 기록.
+
 점검일: 2026-09-22 UTC. 기준 main: [`3ade67d`](https://github.com/heechan9/fabguard-ai/commit/3ade67d81ce425f12f1db9811c122bb578d89bfd).
 이 문서는 해당 시점의 작업 인수인계 기록이다. 다음 작업 전에 원격 main·PR·CI를 다시 조회한다.
 
