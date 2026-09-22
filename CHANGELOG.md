@@ -1,5 +1,27 @@
 # Changelog
 
+- Connected completed synthetic SMT runs to a strict manufacturing-event contract, frozen-baseline SPC review queue, and explicit human decision audit; this remains offline synthetic evidence without MES/FDC or equipment control.
+- Fixed the SMT reflow close-up so selecting station 07 automatically reveals the explanatory interior instead of letting the roof obscure the PCB path; the existing Interior View control can still restore the exterior.
+
+## 2026-09-18 — Research question and global evidence readability
+
+- Froze the V1 research question and added independent V2, external-data qualification, and related-work documents.
+- Raised legacy global-data captions to at least 12px, added four explicit data-role markers, and aligned expansion candidates with country-card flags and status tones.
+- Kept the SMT reflow geometry unchanged because the 3D swept-volume regression test already verifies more than 0.38 units of panel clearance.
+
+## 2026-09-18
+
+- Added a planning-only NVIDIA TAO Optical Inspection contract and a matching simulation readiness panel with explicit data, GPU, leakage, evaluation and claim gates; no AOI training or validation result is claimed.
+
+## 2026-09-17
+
+- Added portfolio decision cards, canonical result links, evaluation limitations and explicit human/AI attribution ([#112](https://github.com/heechan9/fabguard-ai/pull/112)).
+- Added a categorized documentation map and web code guide while preserving canonical code and result paths ([#113](https://github.com/heechan9/fabguard-ai/pull/113)).
+- Linked the merged portfolio module and added contribution instructions and a PR template ([#114](https://github.com/heechan9/fabguard-ai/pull/114)).
+- Consolidated README document navigation and marked the original 14-day plan as historical planning, not a completion report.
+- Reduced root-level document clutter by grouping project planning, validation and contribution records under `docs/`, with all repository and web links updated to their canonical paths.
+- Added a result-to-review evidence flow with visible lift arithmetic, fail-closed consistency checks, and an issue-reporting route; unsupported before/after claims remain excluded.
+
 ## 2026-09-10
 
 - Addressed Codex Security scan `ac438ac3-d9a5-4e68-8f95-dbee8079d89c` finding 1 by rejecting nonfinite Fledge measurements, preserving rejected input as strict-JSON-safe evidence, and committing deduplication state only after REST report delivery succeeds.

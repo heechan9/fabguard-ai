@@ -16,12 +16,12 @@ class ReadmeNavigationTest(unittest.TestCase):
             "https://fabguard-ai.vercel.app/",
             f"{BASE}results/v1/RESULTS_SUMMARY.md",
             f"{BASE}docs/PHASE1_ADVANCED_VALIDATION.md",
-            f"{BASE}REPRODUCIBILITY.md",
-            f"{BASE}ROADMAP.md",
+            f"{BASE}docs/validation/REPRODUCIBILITY.md",
+            f"{BASE}docs/project/ROADMAP.md",
             f"{BASE}docs/MELBOURNE_COLLABORATION.md",
             "https://github.com/heechan9/fabguard-ai#global-data-roadmap",
             "https://github.com/heechan9/fabguard-ai#tool-roles",
-            f"{BASE}CONTRIBUTIONS.md",
+            f"{BASE}docs/governance/CONTRIBUTIONS.md",
         )
 
         primary = readme.split("<!-- primary-navigation -->", 1)[1].split("<!-- /primary-navigation -->", 1)[0]
@@ -39,10 +39,10 @@ class ReadmeNavigationTest(unittest.TestCase):
         targets = (
             "results/v1/RESULTS_SUMMARY.md",
             "docs/PHASE1_ADVANCED_VALIDATION.md",
-            "REPRODUCIBILITY.md",
-            "ROADMAP.md",
+            "docs/validation/REPRODUCIBILITY.md",
+            "docs/project/ROADMAP.md",
             "docs/MELBOURNE_COLLABORATION.md",
-            "CONTRIBUTIONS.md",
+            "docs/governance/CONTRIBUTIONS.md",
         )
 
         for target in targets:
@@ -61,7 +61,7 @@ class ReadmeNavigationTest(unittest.TestCase):
         decision_position = readme.index("## 왜 자동 판정이 아닌가요?")
         self.assertLess(decision_position, global_position)
         self.assertIn("빠르게 훑어보실 분은 아래 표로 충분합니다.", readme[summary_position:global_position])
-        for target in ("EXPERIMENT_CONTRACT.md", "docs/TEST_EXPOSURE.md", "docs/FAILURE_GOVERNANCE.md"):
+        for target in ("docs/validation/EXPERIMENT_CONTRACT.md", "docs/TEST_EXPOSURE.md", "docs/FAILURE_GOVERNANCE.md"):
             with self.subTest(target=target):
                 self.assertIn(f"]({target})", readme[summary_position:global_position])
 

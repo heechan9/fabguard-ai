@@ -15,10 +15,12 @@
   <a href="https://fabguard-ai.vercel.app/secom/">반도체 분석</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md">📊 정본 결과</a> ·
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/PHASE1_ADVANCED_VALIDATION.md">🔬 상세 검증 결과</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md">🗺️ 로드맵</a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/validation/REPRODUCIBILITY.md">🧪 재현 방법</a> ·
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/project/ROADMAP.md">🗺️ 로드맵</a>
 </p>
 <!-- /primary-navigation -->
+
+**파일 찾기:** [전체 문서 지도](docs/README.md) · [웹 코드 안내](web/README.md) · [결과 자료 목록](results/README.md)
 
 <div align="center">
 
@@ -29,10 +31,10 @@
 <p>
   <a href="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml"><img src="https://github.com/heechan9/fabguard-ai/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&amp;logoColor=white" alt="Python 3.11"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/validation/DATASET_CARD.md"><img src="https://img.shields.io/badge/UCI_SECOM-1%2C567_runs-6257E8" alt="UCI SECOM dataset"></a>
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/results/v1/RESULTS_SUMMARY.md"><img src="https://img.shields.io/badge/evidence-provisional-E9A23B" alt="Provisional evidence"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/project/PRD.md"><img src="https://img.shields.io/badge/final_decision-human-00A7B5" alt="Human final decision"></a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/project/ROADMAP.md"><img src="https://img.shields.io/badge/global_data_contract-roadmap-5B5FEF" alt="Global data roadmap"></a>
 </p>
 
 </div>
@@ -42,7 +44,7 @@
   <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/MELBOURNE_COLLABORATION.md">🌏 English overview</a> ·
   <a href="https://github.com/heechan9/fabguard-ai#global-data-roadmap">🌍 국가별 데이터</a> ·
   <a href="https://github.com/heechan9/fabguard-ai#tool-roles">🧰 도구별 역할</a> ·
-  <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTIONS.md">👥 기여 기록</a>
+  <a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/governance/CONTRIBUTIONS.md">👥 기여 기록</a>
 </p>
 <!-- /secondary-navigation -->
 
@@ -52,7 +54,7 @@
 
 ## 30초 요약
 
-빠르게 훑어보실 분은 아래 표로 충분합니다. 방법론을 검토하시는 분은 [실험계약](EXPERIMENT_CONTRACT.md)부터 확인해 주세요.
+빠르게 훑어보실 분은 아래 표로 충분합니다. 방법론을 검토하시는 분은 [실험계약](docs/validation/EXPERIMENT_CONTRACT.md)부터 확인해 주세요.
 
 | 질문 | 답 |
 |---|---|
@@ -61,6 +63,19 @@
 | 무엇으로 시험했나요? | 미국 UCI가 공개한 반도체 공정 데이터 **1,567건·익명 측정변수 590개**로 오프라인 시험했습니다. |
 | 현재 결과는 어떤가요? | 후기 검증 392건 중 상위 40건을 먼저 봤을 때 전체 불량 24건 중 **5건을 포착**했습니다. 자동 불량 판정 성능은 확보하지 못했습니다. |
 | 실제 공장에서 검증했나요? | 아직 아닙니다. 수율 개선·비용 절감·고장 예방 효과를 주장하지 않습니다. |
+
+### 문제를 어떻게 정하고 검증했나요?
+
+최희찬의 문제·범위 결정과 AI 보조 구현을 구분하여 기록하는 개인 프로젝트입니다.
+코드와 문서 대부분은 Codex가 작성했으며, 단독 직접 코딩 성과로 표현하지 않습니다.
+
+| 확인할 판단 | 클릭해서 볼 증거 | 현재 한계 |
+|---|---|---|
+| 점검 여력이 제한될 때 위험순위를 사용 | [점검 범위별 결과](results/v1/top_k_test.csv) | 상위 40건에서 불량 5건 포착, 전체 불량 24건 중 19건은 범위 밖 |
+| 평가 실패와 노출을 공개 | [홀드아웃 노출 기록](docs/TEST_EXPOSURE.md) | 잠정 결과이며 독립 제조 데이터 검증 필요 |
+| AI 구현과 사람의 기여를 구분 | [AI 활용 기록](docs/governance/AI_USAGE.md) · [기여 기록](docs/governance/CONTRIBUTIONS.md) | 사용자의 직접 재현·수정 범위는 해당 기록으로 확인 |
+
+[프로젝트의 판단과 증거 구성](docs/AX_PORTFOLIO_APPLICATION.md)에서 화면별 근거와 검토 질문을 확인할 수 있습니다.
 
 ### 이렇게 사용합니다
 
@@ -76,7 +91,7 @@
 | 구분 | 현재 상태 |
 |---|---|
 | **검증 완료** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모 |
-| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행 |
+| **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행, 합성 SMT 이벤트→Frozen SPC→사람 검토 감사 슬라이스 |
 | **실데이터 시스템 데모** | 호주 DKASC Alice Springs 2025 관측값 105,120개 슬롯을 정규화하고 Frictionless→SDT 경로로 검증 완료 |
 | **후속 시스템 데모** | 영국 PV_Live 2025 추정값 17,520개 구간과 EU PVGIS Brussels 2020 기준값 8,784개 구간을 Frictionless→SDT로 검증 완료 |
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |
@@ -84,9 +99,11 @@
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
 > ### 🔍 엄밀함을 확인하고 싶다면
-> - [실험계약](EXPERIMENT_CONTRACT.md) — 분할·전처리·평가 전에 고정한 불변조건
+> - [실험계약](docs/validation/EXPERIMENT_CONTRACT.md) — 분할·전처리·평가 전에 고정한 불변조건
 > - [테스트 노출 기록](docs/TEST_EXPOSURE.md) — 홀드아웃 노출과 결과 해석 경계
 > - [실패 거버넌스](docs/FAILURE_GOVERNANCE.md) — 실패를 숨기지 않고 기록·판정하는 기준
+> - [핵심 연구질문](RESEARCH_QUESTION.md) · [관련 연구](RELATED_WORK.md) · [V2 독립 확인 프로토콜](docs/V2_PROTOCOL.md) · [외부 데이터 자격 심사](docs/EXTERNAL_DATA_QUALIFICATION.md)
+> - [1페이지 검증 요약](docs/ONE_PAGE_SUMMARY.md) — 방법론·실패·불확실성·주장 경계를 30초 안에 확인
 
 ## 왜 자동 판정이 아닌가요?
 
@@ -132,7 +149,7 @@
 | 의사결정·감사 | 🇰🇷 **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
 | 최종 판단 | 👷 **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
 
-> **현재 검증 범위:** Fledge Sinusoid, 호주 DKASC, 영국 PV_Live와 EU JRC PVGIS의 계약·E2E 검증을 완료했습니다. 프랑스 RTE éCO2mix는 사전계약과 오프라인 테스트를 완료했지만 실 API E2E 전이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
+> **현재 검증 범위:** Fledge Sinusoid와 Solar Data Tools 기반 호주 DKASC, 영국 PV_Live, EU JRC PVGIS, 프랑스 Enedis의 계약·E2E 검증을 완료했습니다. Météo-France는 별도의 관측 기상 맥락으로 검증했으며 SDT 전력 입력으로 사용하지 않습니다. 프랑스 RTE éCO2mix는 사전계약과 오프라인 테스트를 완료했지만 실 API E2E 전이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
 
 <details>
 <summary><strong>현재 범위 밖의 국가별 후속 후보 보기</strong></summary>
@@ -140,7 +157,7 @@
 | 국가 | 우선 검토 후보군 | 독립적 검토 목적 | 현재 판정 |
 |---|---|---|---|
 | 🇺🇸 미국 | **공개 로봇 운영·이상 데이터 후보군** | 로봇 telemetry·고장/이상 탐지 계약 검토 | 공식 데이터셋·원출처·라이선스 확정 전 조사 후보 |
-| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | RTE 사전계약 완료·실 API E2E 대기; Enedis·Météo-France 별도 감사 |
+| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | Enedis·Météo-France E2E 완료; RTE 사전계약 완료·실 API E2E 대기 |
 | 🇩🇪 독일 | **SMARD · 전력/산업 · 공개 로봇 운영 데이터 후보군** | 계통 투명성과 제조·로봇 운영 비교 | 로봇 데이터 원출처·신호·라이선스 확인 전 조사 후보 |
 | 🇪🇸 스페인 | **REE/ESIOS · 자가소비 통계 후보군** | 고태양광 계통운영과 분산형 자가소비 비교 | 시계열 해상도·라이선스 확인 전 조사 후보 |
 | 🇮🇹 이탈리아 | **Terna · GSE 공개 통계/설비 후보군** | 발전·설비 등록·지역 차이를 연결 가능한지 검토 | 원자료 접근성과 재배포 조건 확인 전 조사 후보 |
@@ -199,10 +216,12 @@
 - 사전 승인·SHA-256에 결합된 독립 데이터에 재학습 없이 점수를 내는 잠금 평가 runner
 - Fledge의 읽기 전용 asset REST API에서 데이터를 가져와 오류격리·중복방지·드리프트 경계로 전달하는 연결기
 - WSL2의 실제 Fledge v3.1.0에서 Sinusoid 수집·인증 REST pull·재시작 복구·중복격리를 로컬 검증
+- SMT 웹 실행을 LOT·Unit·장비·Run·Recipe·규격 버전이 있는 합성 Fledge 이벤트로 내보내고, Frozen SPC 우선검토 큐와 사람의 판정·보류 감사 로그로 연결하는 오프라인 슬라이스([계약과 재현](docs/MANUFACTURING_REVIEW_SLICE.md))
 - Frictionless Data v5.19.0 fail-closed 계약과 Solar Data Tools v2.1.5 합성 PV 11,520행 실행 검증
 - 호주 DKASC Alice Springs 2025 관측값을 재현 가능한 정규화기로 105,120개 5분 슬롯으로 변환하고 Frictionless→SDT E2E 검증 완료([보고서](results/dkasc-alice-springs-2025/report.json) · [정규화 감사](results/dkasc-alice-springs-2025/normalization_audit.json))
 - 영국 Sheffield Solar PV_Live 2025 국가 추정값 17,520개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvlive-gb-national-2025/report.json) · [수집 감사](results/pvlive-gb-national-2025/fetch_audit.json))
 - EU JRC PVGIS Brussels 2020 기준값 8,784개 시간 구간을 공식 API에서 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvgis-brussels-2020/report.json) · [수집 감사](results/pvgis-brussels-2020/fetch_audit.json))
+- 프랑스 Enedis 2024 국가 태양광 추정값 17,568개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/enedis-france-national-solar-2024/report.json) · [수집 감사](results/enedis-france-national-solar-2024/fetch_audit.json))
 - 프랑스 RTE éCO2mix의 통합·확정 수정상태, MW 단위, CET/CEST→UTC 변환과 30분 연속성을 검사하는 fail-closed 사전계약 및 오프라인 테스트 구현; 실 API E2E는 대기
 
 ### 아직 구현하거나 검증하지 않음
@@ -221,7 +240,7 @@
 - 개발 중 홀드아웃이 먼저 노출된 이력은 [TEST_EXPOSURE.md](docs/TEST_EXPOSURE.md)에 공개했습니다.
 - 현장 효과는 단순 전후 비교로 주장하지 않고, 무작위·단계적 도입 또는 조건에 맞는 준실험 설계를 검토합니다.
 
-자세한 실험 조건은 [실험계약](EXPERIMENT_CONTRACT.md), 현장 검증 계획은 [인과효과 검증 계획](docs/CAUSAL_FIELD_VALIDATION.md)에서 확인할 수 있습니다.
+자세한 실험 조건은 [실험계약](docs/validation/EXPERIMENT_CONTRACT.md), 현장 검증 계획은 [인과효과 검증 계획](docs/CAUSAL_FIELD_VALIDATION.md)에서 확인할 수 있습니다.
 
 <details>
 <summary><strong>Open engineering & collaboration</strong> — 재현·검토·기여 경로 보기</summary>
@@ -230,11 +249,11 @@ FabGuard is a reviewable industrial-AI prototype rather than a black-box demo. E
 
 | Engineering signal | Where to review it |
 |---|---|
-| Leakage-aware preprocessing and temporal holdout | [Experiment contract](EXPERIMENT_CONTRACT.md) |
-| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](REPRODUCIBILITY.md) |
+| Leakage-aware preprocessing and temporal holdout | [Experiment contract](docs/validation/EXPERIMENT_CONTRACT.md) |
+| Reproducible commands, artifacts, and raw-data hashes | [Reproducibility guide](docs/validation/REPRODUCIBILITY.md) |
 | Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
-| Boundary between prototype evidence and factory claims | [Dataset card](DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
-| Staged path to external industrial open source | [Roadmap](ROADMAP.md) |
+| Boundary between prototype evidence and factory claims | [Dataset card](docs/validation/DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
+| Staged path to external industrial open source | [Roadmap](docs/project/ROADMAP.md) |
 | Frozen Train-only model artifact and trust boundary | [Locked model export](docs/LOCKED_MODEL_EXPORT.md) |
 
 Focused issues and reviewable pull requests are welcome, especially for validation design, data-contract tests, drift diagnostics, calibration, documentation, and contract-preserving adapters.
@@ -269,48 +288,24 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 | 경로 | 역할 |
 |---|---|
 | `src/fabguard/` | 데이터 처리·학습·평가·보고 코드 |
-| `web/` | 일반 사용자용 정적 웹 데모 |
+| [web/](web/README.md) | 정적 웹 데모의 화면별 코드·데이터·검증 안내 |
 | `results/v1/` | 정본 실험 결과와 우선점검 목록 |
 | `tests/` | 데이터 계약과 파이프라인 검증 |
-| `docs/` | 운영 설계·화면·검증·직무 연계 문서 |
+| [docs/](docs/README.md) | 목적별 문서 지도와 권장 읽기 순서 |
 | `evals/` | 완료 기준과 평가 사례 |
 
 ## 문서 안내
 
-### 먼저 읽기
+전체 문서는 [문서 지도](docs/README.md)에서 목적별로 찾을 수 있습니다. 첫 방문에는 아래 순서로 확인하세요.
 
-| 문서 | 내용 |
+| 확인할 내용 | 문서 |
 |---|---|
-| [결과 요약](results/v1/RESULTS_SUMMARY.md) | 모델별 성능과 Top-K 결과 |
-| [데이터셋 카드](DATASET_CARD.md) | 데이터 출처·구성·사용 한계 |
-| [실험계약](EXPERIMENT_CONTRACT.md) | 분할·전처리·평가 불변조건 |
-| [International collaboration brief](docs/MELBOURNE_COLLABORATION.md) | English overview, evidence boundary, reproducibility and focused review requests |
-
-### 재현·기술 검토
-
-| 문서 | 내용 |
-|---|---|
-| [재현성 가이드](REPRODUCIBILITY.md) | 환경·명령·산출물 재현 절차 |
-| [Phase 1 고급 검증](docs/PHASE1_ADVANCED_VALIDATION.md) | 비용 기반 Top-K·불확실성·드리프트·walk-forward·확률 보정 |
-| [잠금 평가 준비 계약](docs/LOCKED_EVALUATION_CONTRACT.md) | 외부 데이터·잠금 모델·사전 승인 SHA-256 결합과 무실행 검증 게이트 |
-| [잠금 독립 평가 계약](docs/LOCKED_SCORING_CONTRACT.md) | 승인된 데이터·모델 바이트의 재검증, 무재학습 scoring과 통계 산출물 |
-| [AI 활용·기여](AI_USAGE.md) · [기여 구분](CONTRIBUTIONS.md) | 사람·AI 협업 원칙과 작업 주체 |
-
-### 현장·확장 설계
-
-| 문서 | 내용 |
-|---|---|
-| [프로젝트 로드맵](ROADMAP.md) | FabGuard → Fledge → Solar Data Tools 단계적 확장과 진입 조건 |
-| [Fledge 운영 검증](docs/FLEDGE_OPERATIONAL_VALIDATION.md) | 실제 Fledge v3.1.0 REST·재시작·중복격리 로컬 검증과 현장 미검증 경계 |
-| [독립 데이터 검증](docs/INDEPENDENT_DATA_VALIDATION.md) | 외부 제조 CSV의 출처·스키마·라벨·시간·품질 검사와 모델 성능 미검증 경계 |
-| [Industrial AI 운영 설계](docs/INDUSTRIAL_AI_DESIGN.md) | 확률모델·가드레일·인간 검토 구조 |
-| [스마트팩토리 연계](docs/SMART_FACTORY_INTEGRATION.md) | MES·FDC 목표 구조와 KPI 경계 |
-| [현장 인과효과 검증](docs/CAUSAL_FIELD_VALIDATION.md) | RCT·단계적 도입·준실험 검증 계획 |
-| [1개 라인·2주 최소 파일럿](docs/MINIMUM_PILOT.md) | 기존 절차 병행 shadow mode, 시작·중단 조건과 feasibility 지표 초안 |
-| [도메인 전문가 검토](docs/DOMAIN_EXPERT_REVIEW.md) | Top-K 큐 인수인계, 엔지니어 체크리스트, 기록·권한·에스컬레이션 초안 |
-| [실패 대응·책임·롤백](docs/FAILURE_GOVERNANCE.md) | 미탐·오경보·데이터/모델 장애 시 기본 동작, 역할과 재개 조건 |
-| [반도체 검토·검증 흐름](docs/SEMICONDUCTOR_REVIEW_WORKFLOW.md) | 공정·PE·품질 사용 사례와 데이터·승인 요구사항; 설계 문서, 현장 미검증 |
-| [직무 연계](docs/ROLE_ALIGNMENT.md) | 구현 증거와 반도체 직무 연결 |
+| 결과와 평가 한계 | [정본 결과](results/v1/RESULTS_SUMMARY.md) · [홀드아웃 노출 기록](docs/TEST_EXPOSURE.md) |
+| 데이터와 평가 기준 | [데이터셋 카드](docs/validation/DATASET_CARD.md) · [실험계약](docs/validation/EXPERIMENT_CONTRACT.md) |
+| 직접 재현하기 | [재현 가이드](docs/validation/REPRODUCIBILITY.md) · [웹 코드 안내](web/README.md) |
+| 앞으로의 계획 | [현재 로드맵](docs/project/ROADMAP.md) · [초기 14일 계획](docs/project/PLAN.md) |
+| 작업 참여와 기여 구분 | [작업 참여 안내](CONTRIBUTING.md) · [기여 기록](docs/governance/CONTRIBUTIONS.md) · [AI 사용 기록](docs/governance/AI_USAGE.md) |
+| 변경 이력 | [Changelog](CHANGELOG.md) |
 
 ## 기술 구성
 

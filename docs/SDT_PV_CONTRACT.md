@@ -1,6 +1,6 @@
 # Solar Data Tools integration contract
 
-Status: **synthetic Frictionless-to-SDT path implemented; public PV data and field validation not yet performed**
+Status: **synthetic and four public-data Frictionless-to-SDT paths implemented; field validation not yet performed**
 
 This optional integration sends a declared PV power time series through a Frictionless structural
 gate and Solar Data Tools (SDT), then records a versioned, JSON-safe quality report. It is a separate
@@ -74,14 +74,28 @@ filled matrices after the corrected CSV passed Frictionless. The corrected input
 The result reported quality score 1.0 and clearness score 0.9916666667. These values describe a
 deliberately clean synthetic fixture only.
 
+The same versioned boundary has also been executed on four public-data paths. Their canonical
+reports retain source role, row count, normalized-input SHA-256, Frictionless status, SDT version,
+matrix shape, and claim boundary:
+
+| Source | Role | Rows | SDT quality score | Canonical report |
+|---|---|---:|---:|---|
+| DKASC Alice Springs 2025 | `observed` | 105,120 | 0.9863013699 | [`results/dkasc-alice-springs-2025/report.json`](../results/dkasc-alice-springs-2025/report.json) |
+| Sheffield Solar PV_Live 2025 | `estimated` | 17,520 | 0.9918032787 | [`results/pvlive-gb-national-2025/report.json`](../results/pvlive-gb-national-2025/report.json) |
+| JRC PVGIS Brussels 2020 | `reference` | 8,784 | 0.5710382514 | [`results/pvgis-brussels-2020/report.json`](../results/pvgis-brussels-2020/report.json) |
+| Enedis France national solar 2024 | `estimated` | 17,568 | 0.9562841530 | [`results/enedis-france-national-solar-2024/report.json`](../results/enedis-france-national-solar-2024/report.json) |
+
+These runs establish reproducible data-contract and SDT compatibility evidence for the declared
+inputs. They do not convert estimated or reference series into field observations, and they do not
+validate operational benefit.
+
 This integration does **not** establish:
 
 - external validation of the SECOM model;
 - PV forecasting or anomaly-detection accuracy;
-- compatibility with DKASC, PV_Live, or PVGIS before their adapters are tested;
 - performance on a physical sensor, solar farm, or production system;
 - yield, reliability, cost, or energy improvements.
 
-Before adding a public source, record its license/citation terms, retrieval time, stable URL or
-dataset version, original checksum, timezone, unit, observed/estimated/reference semantics, and
-redistribution decision.
+For every public source, record its license/citation terms, retrieval time, stable URL or dataset
+version, original checksum, timezone, unit, observed/estimated/reference semantics, and
+redistribution decision before treating its report as canonical evidence.
