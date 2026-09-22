@@ -4,6 +4,9 @@
 
 ## 목적에 맞게 시작하기
 
+최근 점검과 미완료 작업은 [작업 상태·다음 검증](project/WORK_STATUS.md)에서 확인한다.
+날짜가 있는 점검 기록이며, 작업 시작 시 원격 상태를 다시 확인한다.
+
 | 읽는 목적 | 권장 순서 |
 |---|---|
 | 프로젝트를 빠르게 이해 | [README](../README.md) → [정본 결과](../results/v1/RESULTS_SUMMARY.md) → [검증 한계](TEST_EXPOSURE.md) |
