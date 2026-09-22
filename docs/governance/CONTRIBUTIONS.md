@@ -25,6 +25,12 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 ## PR별 구현 기록
 
+### 2026-09-22 저장소 상태와 PR 정리
+
+- **최희찬 (`heechan9`)**: 기존 기능·데이터를 보존하는 정리 작업과 검증 우선순위 요청.
+- **Codex (OpenAI)**: 최신 main·PR·CI 대조, Python·웹 테스트 재실행, 공개 파일 배포 및 제한된 실제 브라우저 동작 확인, 연구 PR 차이 보존과 작업 상태 문서 작성.
+- 확인한 범위와 남은 검사는 [작업 상태](../project/WORK_STATUS.md)에 기록. 새 모델 실험·현장 성능이나 사용자 직접 코딩 성과로 표현하지 않음.
+
 ### Manufacturing event-to-review audit slice
 
 - **Codex (OpenAI)**: SMT 합성 실행을 Fledge 호환 reading과 LOT·Unit·장비·Run·Recipe·규격 버전 계약으로 내보내고, Frozen SPC 우선검토 큐 및 사람의 판정·보류 감사 로그로 연결하는 CLI·예시·회귀 테스트 구현
