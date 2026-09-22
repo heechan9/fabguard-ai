@@ -40,3 +40,7 @@
 .tour-roles summary{font-weight:600;min-height:44px;overflow-wrap:anywhere}
 .tour-section summary:focus-visible{outline:3px solid #35caba;outline-offset:3px}
 @media(max-width:700px){.tour-grid,.tour-state{grid-template-columns:1fr}.tour-grid article,.tour-demo{padding:16px}}
+/* Keep demo identifiers and anchor headings readable below the wrapping navigation. */
+.tour-demo .evidence-tag{white-space:normal;overflow-wrap:anywhere}
+#fab-tour{scroll-margin-top:120px}
+@media(max-width:900px){#fab-tour,.tour-section [id]{scroll-margin-top:240px}}

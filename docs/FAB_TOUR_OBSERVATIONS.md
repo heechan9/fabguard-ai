@@ -246,3 +246,24 @@ All 35 web tests pass. Static checks confirm eight labelled SVGs, four valid
 tour anchors, four measurement rows, unique IDs, valid labelled-by references,
 and balanced structural elements. `git diff --check` passes. The browser
 limitation recorded above still applies.
+
+## Integration verification — 2026-09-22
+
+Integrated with main `f70a7a1` without replacing the existing SECOM evidence,
+SMT event export, or NVIDIA preparation section. Local web suite: 48 passed.
+Python suite in the declared optional PV environment: 177 total, 176 passed,
+1 skipped because the official SECOM raw data was unavailable.
+
+Actual cloud Chrome checks on the PR preview:
+- Desktop (1363px): solution/maintenance selection, acknowledgement, independent
+  recovery, case reset, and empty-history reset passed.
+- A separate preview-only 390×844 iframe exercised the real SECOM page at a
+  narrow CSS viewport (375px content after scrollbar), not a physical phone.
+  Scenario selection, acknowledgement and recovery passed without horizontal
+  document overflow. The viewport harness is not part of production.
+- The narrow screenshot exposed a nowrap demo-ID badge; scoped wrapping and
+  extra narrow-screen anchor clearance were added. Existing page design retained.
+- Real equipment behaviour and physical iOS/Android testing are not established.
+
+Human scope: Choi Heechan requested completion of the pending feature.
+Codex: main integration, browser interaction checks, narrow-layout correction.
