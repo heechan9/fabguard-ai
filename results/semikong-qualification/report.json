@@ -1,0 +1,2137 @@
+{
+  "schema_version": "fabguard-semikong-qualification/v1",
+  "fabguard_base_revision": "3ade67d81ce425f12f1db9811c122bb578d89bfd",
+  "python": "3.12.14",
+  "rdflib": "7.1.4",
+  "packages": {
+    "rdflib": "7.1.4",
+    "pyparsing": "3.3.2",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3"
+  },
+  "seed": null,
+  "determinism": "No randomized operations or learned model",
+  "audit": {
+    "upstream_revision": "3228caf0a2963c4b912aa6b85fe6be4fa20e4961",
+    "files": [
+      {
+        "path": "ontology/ontology/00-physics/01-bandstructure/ontology.ttl",
+        "sha256": "e2cc20488d9c48f2545f1a6c64e240e225ac39d974cc522a1190b6bf3fe98dee"
+      },
+      {
+        "path": "ontology/ontology/00-physics/02-carriers/ontology.ttl",
+        "sha256": "d8de24f3730ea68d1cbbc04cb510c7b42a9ed425f55bbacccbabb1230138e10f"
+      },
+      {
+        "path": "ontology/ontology/00-physics/ontology.ttl",
+        "sha256": "91ab93e0efc835351fa8ab1f99a8e0ce437d6ee794c43d422a2c94f58a2515e4"
+      },
+      {
+        "path": "ontology/ontology/00-shared/00-common-technologies/00-ai-ml-integration/ontology.ttl",
+        "sha256": "d61cf940edaa8523a5cd6ae345d99766c365e9552c87d2fb1a70695414f5d803"
+      },
+      {
+        "path": "ontology/ontology/00-shared/00-common-technologies/01-interconnect-standards/ontology.ttl",
+        "sha256": "8efeffbac70d7cfc0bc31361bd3428c8e5b68620dd2a6f760b57a0bacdc8c8bc"
+      },
+      {
+        "path": "ontology/ontology/00-shared/00-common-technologies/02-security-protocols/ontology.ttl",
+        "sha256": "27c4983c641bf72a75fbda027627e0240817b83fe3d27e61ad1a3b8be39c0d2c"
+      },
+      {
+        "path": "ontology/ontology/00-shared/00-common-technologies/ontology.ttl",
+        "sha256": "49a7647bfad322e1451de4ce934a72520b4a0e0473566cf9ba676e78afc609e8"
+      },
+      {
+        "path": "ontology/ontology/00-shared/01-data-models/00-cim/ontology.ttl",
+        "sha256": "6c6b3f2be6167a25c13942616667ca0060b279a670ed11b34289a8924ed1b815"
+      },
+      {
+        "path": "ontology/ontology/00-shared/01-data-models/01-json-ld/ontology.ttl",
+        "sha256": "1294751c3cc7c417ef4a7975411a5d9648bbdff32e0ead7a861e122675744bea"
+      },
+      {
+        "path": "ontology/ontology/00-shared/01-data-models/02-owl-ontologies/ontology.ttl",
+        "sha256": "6683ee95f3c2e368292aad95b1da9dff5b5c09ca2e83f1d7e1df62483792ea18"
+      },
+      {
+        "path": "ontology/ontology/00-shared/01-data-models/03-rdf-schemas/ontology.ttl",
+        "sha256": "742564317b55f746060d0a9596ea27c4cc78a8de0fe8f93fb321ccec20d8cd6b"
+      },
+      {
+        "path": "ontology/ontology/00-shared/01-data-models/ontology.ttl",
+        "sha256": "11176381c993123c1ac6a48fb6c07bb10295ec06716dc98c87b5edd39a050135"
+      },
+      {
+        "path": "ontology/ontology/00-shared/02-industry-associations/00-esia/ontology.ttl",
+        "sha256": "3f6d840cf85ace15867d5c49a42f5e487bd417574f0df1f76ae26348d64352fb"
+      },
+      {
+        "path": "ontology/ontology/00-shared/02-industry-associations/01-gsa/ontology.ttl",
+        "sha256": "d1b6a93e9a3d54041397e221d737ad797bee6b2bbcf2b8a457de9fa37aa508b4"
+      },
+      {
+        "path": "ontology/ontology/00-shared/02-industry-associations/02-semi/ontology.ttl",
+        "sha256": "e9beaa48ab607474045dea6b591659a6a75d3e02a54c3b0f4822df71cebfb0f9"
+      },
+      {
+        "path": "ontology/ontology/00-shared/02-industry-associations/03-sia/ontology.ttl",
+        "sha256": "e73eff2602eb71dce95b395df83f7807dd603fe060cd74546e180ba2b928dbee"
+      },
+      {
+        "path": "ontology/ontology/00-shared/02-industry-associations/04-wsts/ontology.ttl",
+        "sha256": "37068f98acc43bb69b4c09e92d37b3fb354aec337c03f5134c40f47d7a452dbf"
+      },
+      {
+        "path": "ontology/ontology/00-shared/02-industry-associations/ontology.ttl",
+        "sha256": "1bb7087ac1dce60e5969ffde83c3ce79bf1ffacab54d1df5a0076dc55ffb8f7d"
+      },
+      {
+        "path": "ontology/ontology/00-shared/03-intellectual-property-rights/00-licensing-models/ontology.ttl",
+        "sha256": "501b051ad0de3f611decc8545b1e7625cfbc31f000c39b9910020fb9fda06491"
+      },
+      {
+        "path": "ontology/ontology/00-shared/03-intellectual-property-rights/01-patent-pools/ontology.ttl",
+        "sha256": "a901eb1836b1b0adf5b46763ab3db8909c28dea9a30d6c31852fad0e92a5b242"
+      },
+      {
+        "path": "ontology/ontology/00-shared/03-intellectual-property-rights/02-trade-secrets/ontology.ttl",
+        "sha256": "ade2a91e410c2c01f10c47161df0be24ee1d11156cf41889238910416930ff77"
+      },
+      {
+        "path": "ontology/ontology/00-shared/03-intellectual-property-rights/ontology.ttl",
+        "sha256": "d473d21ff7835317e99ea6c6d0dc2ced5d955dd4fa74dd8b14cfc1fe8e420571"
+      },
+      {
+        "path": "ontology/ontology/00-shared/04-regulations/00-environmental-compliance/ontology.ttl",
+        "sha256": "4d7d3b8c25c9a4e1676966689c5d0b9dfc05fba1da6eb21bb6b5f9447d990d51"
+      },
+      {
+        "path": "ontology/ontology/00-shared/04-regulations/01-export-controls/ontology.ttl",
+        "sha256": "66bddb6a44dd18fd8ef4df2baf23bcfcb4090c28220156899c5e96d4de39957b"
+      },
+      {
+        "path": "ontology/ontology/00-shared/04-regulations/02-safety-standards/ontology.ttl",
+        "sha256": "628c3aea1194543f249bb353638bc78e8834206c3ccc571f25c8537a5a63dfb6"
+      },
+      {
+        "path": "ontology/ontology/00-shared/04-regulations/ontology.ttl",
+        "sha256": "55db0283b38252201a9009ff417404604837bda1f07a285332d65022941298ec"
+      },
+      {
+        "path": "ontology/ontology/00-shared/05-shared-resources/00-benchmarks/ontology.ttl",
+        "sha256": "b05650ac17c3a59375ba257c025623f46b6e9047cfbc745606a63b63e45d8e87"
+      },
+      {
+        "path": "ontology/ontology/00-shared/05-shared-resources/01-datasets/ontology.ttl",
+        "sha256": "8a45e08cdb425a2e02cffef9184c7e01d7688c47091bcc3bd14b05669ea123f6"
+      },
+      {
+        "path": "ontology/ontology/00-shared/05-shared-resources/02-open-source-tools/ontology.ttl",
+        "sha256": "7a8864c35e2bb660e6f1417baa6551cf0a8b5078b241ef9c36fb3643dee48d33"
+      },
+      {
+        "path": "ontology/ontology/00-shared/05-shared-resources/ontology.ttl",
+        "sha256": "d545e98cea42156cc472ba3633d4430d1d94154f8105b88192e3195eec5a1484"
+      },
+      {
+        "path": "ontology/ontology/00-shared/06-standards/00-astm/ontology.ttl",
+        "sha256": "dfecb12cd096110e87384e744a0caf19c989e7eb610588c320a886d290b3a5e2"
+      },
+      {
+        "path": "ontology/ontology/00-shared/06-standards/01-ipc/ontology.ttl",
+        "sha256": "872993d8c756233bac86469ef6fa36e746ba9cfc931f65877dced51c588eedc7"
+      },
+      {
+        "path": "ontology/ontology/00-shared/06-standards/02-iso/ontology.ttl",
+        "sha256": "e2dd92e3a7156fa5b40e08406474dff44ba69019e526b81e70400f2d8d591d7a"
+      },
+      {
+        "path": "ontology/ontology/00-shared/06-standards/03-jedec/ontology.ttl",
+        "sha256": "0753f62c99fca0091e42693477a6fe8b2530e8cecb0bb60f3aa89c5af76d5625"
+      },
+      {
+        "path": "ontology/ontology/00-shared/06-standards/04-semi/ontology.ttl",
+        "sha256": "5cece8b443b4ca62c280fb9bd239bb69831ba8122798787b1362594e5bdaea1f"
+      },
+      {
+        "path": "ontology/ontology/00-shared/06-standards/ontology.ttl",
+        "sha256": "c30baf46aa78a2ce5640ce5921fe5f7fe89f6613a761943070c090b720dae42b"
+      },
+      {
+        "path": "ontology/ontology/00-shared/07-sustainability-metrics/00-carbon-footprint/ontology.ttl",
+        "sha256": "569090cff3c714237db77462de92e24ede9d1a4fb7a83a84168fc0f39699dd5a"
+      },
+      {
+        "path": "ontology/ontology/00-shared/07-sustainability-metrics/01-energy-efficiency/ontology.ttl",
+        "sha256": "da0a3b41ff4eef196e9ed2950bd41e4bbc0691c1940d910fca7b1351b67d04cc"
+      },
+      {
+        "path": "ontology/ontology/00-shared/07-sustainability-metrics/02-lifecycle-assessment/ontology.ttl",
+        "sha256": "d29e849185988399075ecb6fc45d50c996dbc91f0fbed3d40b5f10586c82b291"
+      },
+      {
+        "path": "ontology/ontology/00-shared/07-sustainability-metrics/03-waste-management/ontology.ttl",
+        "sha256": "296fb42fa866650b8a117eabbe4baf905b2c0b27bc7cb2ffea82ba7b82b07121"
+      },
+      {
+        "path": "ontology/ontology/00-shared/07-sustainability-metrics/04-water-usage/ontology.ttl",
+        "sha256": "4732463a1b7f615bf56b0a90246e1d5d7ea1ba5828beb0f8a561afff040a0a59"
+      },
+      {
+        "path": "ontology/ontology/00-shared/07-sustainability-metrics/ontology.ttl",
+        "sha256": "360efe536be0ed414dfec25a64f96ad5621973aa5c6f4c1b2e93ead27ac6fe53"
+      },
+      {
+        "path": "ontology/ontology/00-shared/ontology.ttl",
+        "sha256": "3508c7e631ad44cd6d176d4233ff32eebd6ca49154ff8821f2a4dbe35aa45e6e"
+      },
+      {
+        "path": "ontology/ontology/01-devices/ontology.ttl",
+        "sha256": "58065331f8b58695a978eb1bb772b48e9f59deea240a3fa9dab99817aee1bfe1"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/00-customization-services/00-co-design/ontology.ttl",
+        "sha256": "b08944053827e9fc3aa302b01163bd0e81f4f6496426323c687a596f314f95d5"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/00-customization-services/01-hardware-tweaks/ontology.ttl",
+        "sha256": "85c3b365c0b09d9a2627ffb42177dc5222d8c56de2183341f41d6656e5386d4b"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/00-customization-services/02-software-integration/ontology.ttl",
+        "sha256": "c3887ad5eda64911a55774808f77521ae66cfbac0ab5cac6ab86313657d6f641"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/00-customization-services/ontology.ttl",
+        "sha256": "df2a6d5e7f0c5dab39e94b386d2b7db7cf26378fba635767a61110687b26723c"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/01-end-use-applications/00-automotive/ontology.ttl",
+        "sha256": "736ea16a55829b02a47b8d78aabe6fb6bb5903899299f32fdd234295d8b3a638"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/01-end-use-applications/01-consumer-electronics/ontology.ttl",
+        "sha256": "32b1ba481969a351482ba1a2a5c02e84ca5767ef98a0e45a59ce5d8a26e6eca0"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/01-end-use-applications/02-data-centers/ontology.ttl",
+        "sha256": "3eba7a7378d99dc99386125acea21be54018d6c92e7526cc6e00dbc8681a9240"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/01-end-use-applications/03-industrial/ontology.ttl",
+        "sha256": "823cf24bf7340da0e15610faacf18ed2eff96779d0fb7d53bb0460197da57ff1"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/01-end-use-applications/ontology.ttl",
+        "sha256": "1bfea9a97e3878e8ba1c2d801b51828bc95dc304306c360f973606ae23a007c1"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/02-market-segments/00-5g-6g/ontology.ttl",
+        "sha256": "c1e08a6fb6c66538ffa5d9954328041c0dae8c240dddf5352a331d2de11d50a3"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/02-market-segments/01-ai-hardware/ontology.ttl",
+        "sha256": "086affbf95151fa53ad736f970138d7561141ab8c56c6f6df0118cb542149c3c"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/02-market-segments/02-edge-computing/ontology.ttl",
+        "sha256": "b102821b9ad29bfcb956666d40aa295540d8d1454ca340bd8220037112661316"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/02-market-segments/03-iot/ontology.ttl",
+        "sha256": "0b40c73e01b3b44dca04b5db15de22aa9ca49a1bef4f7bccdc23af2655927983"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/02-market-segments/04-medical-devices/ontology.ttl",
+        "sha256": "c11cdcb493315ed91a71cbd3650396eaf55c1896f002a989deb52d8b94245dc1"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/02-market-segments/ontology.ttl",
+        "sha256": "664611befc1c876ba874c527052bbee4e33906a4a517cbaedd314fd2db7be316"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/03-module-assembly/00-enclosure-integration/ontology.ttl",
+        "sha256": "2d65a9667a22b7c2df44efc54d0754dfde95200fc2822c7eac447f6054d602d3"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/03-module-assembly/01-pcb-design/ontology.ttl",
+        "sha256": "dd3afd57de61059f13d2ce4c4fcad423cdd60873bb0416824447eea28729fec9"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/03-module-assembly/02-system-on-module/ontology.ttl",
+        "sha256": "ef2e58d1e5a0f38b10c75a3a0751a6e26dae30e588b9824a7a9e5cd5ae796000"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/03-module-assembly/ontology.ttl",
+        "sha256": "9ff05078e0b9bb5826a3fc9c1be36aee34449f48f839f7ba7008c74539eaed40"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/04-system-integrators/00-ems/ontology.ttl",
+        "sha256": "c79bf4667aeec2e8568c99e4a033134fb3f9a764203e37ec790697f8759f298f"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/04-system-integrators/01-odms/ontology.ttl",
+        "sha256": "26deac6f486bf09bdbf7ec0468c7370e35ed4eb97a34565d8bed70ab8be23f81"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/04-system-integrators/02-siems/ontology.ttl",
+        "sha256": "855b841fb263b9c22e290ac504a02abad9fe0ac610ffbdc757310806a828c741"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/04-system-integrators/ontology.ttl",
+        "sha256": "0bfb0c2606c5237b65f685692817be6afc3c5bc5c8dfbb425bdf9498756a7977"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/05-testing-and-validation/00-certification/ontology.ttl",
+        "sha256": "c7f58ca891d162bc14a0e480f82adae6882fd04e874c2bc6e92953ad822c3c94"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/05-testing-and-validation/01-functional-testing/ontology.ttl",
+        "sha256": "fb7892246757db30df04c3d94383fe9371cbdc393148bb960da6fc14c070dce3"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/05-testing-and-validation/02-reliability-testing/ontology.ttl",
+        "sha256": "760a43cf0580c6256fe6feecabfc543decd6369c2882f076fa349f52c9945ddc"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/05-testing-and-validation/ontology.ttl",
+        "sha256": "423ba2bb06d5c4258084a4f36cda5e6d1195a267c4a943006fbbcaef8dd4d301"
+      },
+      {
+        "path": "ontology/ontology/01-integrators/ontology.ttl",
+        "sha256": "3e448c9d77c80479168f702d702750ca8c412eeee4fe2a154a4d456ca329d40c"
+      },
+      {
+        "path": "ontology/ontology/01-standards-reference/ontology.ttl",
+        "sha256": "8b8f8ced8b905e9094a226706ddbe76103515d8745ea55d7ccde6f3b5ea43061"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/00-analog-mixed-signal-ips/00-adcs/ontology.ttl",
+        "sha256": "657a7be215e57b9acd5fca5eab816c4dc4e9cf3cba30c612c2a7330a43327f56"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/00-analog-mixed-signal-ips/01-dacs/ontology.ttl",
+        "sha256": "7f54e6a3f85531cf694ba4104bdfdac3074642178b002f5bf4b400002cc6126f"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/00-analog-mixed-signal-ips/02-plls/ontology.ttl",
+        "sha256": "5d2844507b0c94151f57440117e4c656e2da71e4d15575e8bc9123ff61d2c8f3"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/00-analog-mixed-signal-ips/03-power-management/ontology.ttl",
+        "sha256": "53208c726389d99b7d4feafd39599188d71dc3e816bc8334992bd6b3aef7e9a7"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/00-analog-mixed-signal-ips/04-serializers-deserializers/ontology.ttl",
+        "sha256": "48e25fc2bceff8b611b6577e8e59b8b2a88710665553f708c641dddc0133f0e0"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/00-analog-mixed-signal-ips/ontology.ttl",
+        "sha256": "257e725053dc132d749933328f5f8e0c169c4c60db3792b841e4458ef4b1aed9"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/01-interface-ips/00-ddr/ontology.ttl",
+        "sha256": "c551bdb4807139596651f494029180032776642bc49763c6b7e804cbde9b5a66"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/01-interface-ips/01-ethernet/ontology.ttl",
+        "sha256": "8a5ec7dd55dd9338caf6b7255da184347427e8fa1bc6c8f5a9ed494f0b2f956b"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/01-interface-ips/02-hdmi/ontology.ttl",
+        "sha256": "e1ef211ad076c63e89f301f0def06e0c1e90057e0314068607298442e4070153"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/01-interface-ips/03-pcie/ontology.ttl",
+        "sha256": "5c81dbb29d440a3ffadbdf830e1dc5c1f1bf0b4265067ac1f0f7037238294892"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/01-interface-ips/04-usb/ontology.ttl",
+        "sha256": "52a1dd0617f99b95d749dde721311221c617869d0853c761eed25209c02f6cbd"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/01-interface-ips/ontology.ttl",
+        "sha256": "61c2f27a326bae9680579d11d8bbca79a93f7039e7fb1d51cb9014468b2c36ad"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/02-ip-cores/00-dsp-cores/ontology.ttl",
+        "sha256": "cef99447f85d52736445062ebe15e9eec50680b922cc1cff00c0e377009ca4b8"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/02-ip-cores/01-gpu-cores/ontology.ttl",
+        "sha256": "b0b4ad1a3ea278146593873a003f5778e8ec423d97fbbfa3e75d311117f51de2"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/02-ip-cores/02-processor-cores/ontology.ttl",
+        "sha256": "a02cd434575dafc03dd07cc80fa24632af7d7b5040bf3fc7c7fd0ae1841915d1"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/02-ip-cores/ontology.ttl",
+        "sha256": "ad31bdd47779b720937e032ca7ee210d0a5e1425749d93bb6d1d81016858d78d"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/03-libraries/00-io-libraries/ontology.ttl",
+        "sha256": "5a2e01c5020dce48fd68a62cc902265267c9faad5640d26abca98efd8d67de80"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/03-libraries/01-memory-compilers/ontology.ttl",
+        "sha256": "dd498b010a030fc37de30592024f9fe3050a6194b72b9c289e5c71395b82ca88"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/03-libraries/02-standard-cells/ontology.ttl",
+        "sha256": "54bc6ae206087ca5b36475802e4f19e0ffb32527bd363b6ab0220948f6b80ccb"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/03-libraries/ontology.ttl",
+        "sha256": "dfc4ed430860f13275941d99f11c174512ef096e66f405b55f9e610b62b73f3d"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/04-licensing-models/00-open-source/ontology.ttl",
+        "sha256": "feaf2bfa56dd208c2e7d4fc265e48749df48e6da767a60254a1f411fe94127db"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/04-licensing-models/01-perpetual/ontology.ttl",
+        "sha256": "c9c12cb4d265b1c7e066adcc6a55b72c366fdda7fc503aceca8648dec4422914"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/04-licensing-models/02-royalty-based/ontology.ttl",
+        "sha256": "d449b3c2b671c7c9fb9192d7a4d7f28b555bd87ea3afc20329fba7e40b0b3bfa"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/04-licensing-models/03-subscription/ontology.ttl",
+        "sha256": "ebef475078c72834257aa194317b6b1168e168819827955eb7a65892dce7b263"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/04-licensing-models/ontology.ttl",
+        "sha256": "e6020c89939d8898b793d68246af2d51b3718ea30348e01afed565fba5268ee7"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/05-providers/00-cpu-architecture-providers/ontology.ttl",
+        "sha256": "d556d9ff0fb6770eeaafc8ce5314d362879be80924fb30f78184e15817e7cce8"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/05-providers/01-dsp-ai-ip-providers/ontology.ttl",
+        "sha256": "7d1ada8d019fd1cf3987eb98db477011432d5a9d40e918b51fa8110b203159c9"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/05-providers/02-gpu-ip-providers/ontology.ttl",
+        "sha256": "40b3aa927db4492e6f9623621943abccdbead7c4907a7ace47dd5fe063b9960c"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/05-providers/03-interface-ip-portfolio-providers/ontology.ttl",
+        "sha256": "b4e10148145308101b2b1ec7a83d6cb01ee5bc826db82e8672062021f118a432"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/05-providers/ontology.ttl",
+        "sha256": "04a7d19c561a975fe9e8c3346d233494f44f5b14d107d231945138abbbfe1d9c"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/06-verification-ips/00-protocol-checkers/ontology.ttl",
+        "sha256": "b598f52aec2109de7c76df891cf530e568ba13c792968d9404c909b63226b933"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/06-verification-ips/01-testbenches/ontology.ttl",
+        "sha256": "820b59012d04e1249545d7314592dca7c46fb596596307afb067f1f3324d147f"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/06-verification-ips/02-uvm-models/ontology.ttl",
+        "sha256": "8b67d94d76aa985a67f3bd105c54539ce9fa67bf632a835a5d5671592c555279"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/06-verification-ips/ontology.ttl",
+        "sha256": "134847d33be3f4326012b1735c0608006ea65d76cb26a84ff3f23060230424ba"
+      },
+      {
+        "path": "ontology/ontology/02-ip-providers/ontology.ttl",
+        "sha256": "b557e72806dc35baea90373e1a8c9c184cdd7367012ec07cebc06b4171e19792"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/00-chip-design-companies/00-compute-platform-fabless/ontology.ttl",
+        "sha256": "29ce4448e054f1fc71a89a6c606308738a798ad62354706458ea86b879721fff"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/00-chip-design-companies/01-networking-fabless/ontology.ttl",
+        "sha256": "9ca1a340c01dc9c95352f12600697659ec7ad8b21e6f6709e67aee2874e8969e"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/00-chip-design-companies/02-mobile-soc-fabless/ontology.ttl",
+        "sha256": "79a56c9605bcf8a4a5f9ae8596392b0888a7bde0d8b338d3eeda6c356eead867"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/00-chip-design-companies/03-accelerator-fabless/ontology.ttl",
+        "sha256": "b1793fc62ad51de285a7760f97baf63a9fd939f5ea3dd7605447d02abff0b27f"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/00-chip-design-companies/04-wireless-fabless/ontology.ttl",
+        "sha256": "e5dfe4de68172c22e92a6f1d9097b305ea82672b370b0ae31dc3b423c12fc26c"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/00-chip-design-companies/ontology.ttl",
+        "sha256": "3e18e822ee670ee2a1c8e63b157a94d14f778aa4b3af648baefd40fa710c2752"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/01-collaboration-tools/00-cloud-design-platforms/ontology.ttl",
+        "sha256": "5253602676915075afe771966263eff7b7d081160fcdb7163932612ef275215e"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/01-collaboration-tools/01-pdks/ontology.ttl",
+        "sha256": "726866dc51363af308b1b9cc0ede34917a40899ac820d29ba21acddaabca6567"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/01-collaboration-tools/02-version-control/ontology.ttl",
+        "sha256": "6789e94764f580169830f0223fa9c339d5a2b070931858e64986cd97e8f34b0f"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/01-collaboration-tools/ontology.ttl",
+        "sha256": "de0f3c569f8b2a899affbe7fd331180ed640ba5c774f5e41e6a8c9957428de30"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/02-design-methodologies/00-behavioral-modeling/ontology.ttl",
+        "sha256": "c63693799bfc9fd030f61cdbf50d0eb99cb979833802c235ad1e3d3547d411c1"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/02-design-methodologies/01-high-level-synthesis/ontology.ttl",
+        "sha256": "0dec1fc0031a421b6e4c1c80abc96e8c51653c62287cfb2f0d67f72c8144a190"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/02-design-methodologies/02-rtl-design/ontology.ttl",
+        "sha256": "b8cec1242280226b063df46e251124651ec5276b3a133283eedb20729db7b1be"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/02-design-methodologies/ontology.ttl",
+        "sha256": "f638bd55848e846f3f5df96e871607574af9402146d4dbfa5776d44863151830"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/03-process-nodes/00-10nm/ontology.ttl",
+        "sha256": "90f4729b90ff5400f261c54d6258dc64926e9aad4aede49c83fe295d41fb5388"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/03-process-nodes/01-3nm/ontology.ttl",
+        "sha256": "1a121b59379c892a997769244a5c202adb60d0b9f56c48ad8143b9eff09ca522"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/03-process-nodes/02-5nm/ontology.ttl",
+        "sha256": "de485ebf6bab088dd3527d6fd108e91125c10106f0443276ae4b6982e3e586ee"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/03-process-nodes/03-7nm/ontology.ttl",
+        "sha256": "651438263b9757dc84e03ce2cfd785a48237afb0d82f6c2229644dea72c78285"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/03-process-nodes/04-advanced-nodes/ontology.ttl",
+        "sha256": "50074bdf0f18d5eb0e21630a712849c93b367bd18baa5e6954ac9bcf3b9f82b5"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/03-process-nodes/ontology.ttl",
+        "sha256": "978040113fb69867ccb74a8a84669eecee787b1fbe8f22a765d43680b18ead3e"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/04-product-types/00-analog-ics/ontology.ttl",
+        "sha256": "e1d0f5ecffeb48feb26a25dd6b7f4ce20c494062c2849713ebbe9960fa9abf4e"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/04-product-types/01-asics/ontology.ttl",
+        "sha256": "280d7e410f853d3320f7584a8e92dbfea8916c97eee330bcf9867b3a5c955363"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/04-product-types/02-fpgas/ontology.ttl",
+        "sha256": "da50295322288a9077656d71c479b4860a2aaaa29013d84472bd434ea82d3de3"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/04-product-types/03-memory-chips/ontology.ttl",
+        "sha256": "cafda875ba329db51607932f9f732132e841e48f8bc2ac75b59729462dd15612"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/04-product-types/04-socs/ontology.ttl",
+        "sha256": "2abf1b6164a6484e7370e82d05153fef80ab30756d49993cc6030ccaa3e75b26"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/04-product-types/ontology.ttl",
+        "sha256": "08149d943c9aad317abd2f78ebbdee9f5a4c0df83bd19cf510d00f7c25e7d4f9"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/05-verification-processes/00-emulation/ontology.ttl",
+        "sha256": "640a29f7282985ed71dbfe5af87a22cc5169b253828e7053166e4534b8038981"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/05-verification-processes/01-formal-verification/ontology.ttl",
+        "sha256": "a370fb7c178623693efdea68537968402dcadab4a33bb890e4e213a5abb330aa"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/05-verification-processes/02-simulation/ontology.ttl",
+        "sha256": "2adc292c9363596bb7762103438e4adfcdd35704fa0e60847a5b6f598c17a678"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/05-verification-processes/ontology.ttl",
+        "sha256": "9dea55ea2b71ed6c5dd0785dda169e6ae937ef26b49229a1440e0f5e648a6426"
+      },
+      {
+        "path": "ontology/ontology/03-fabless/ontology.ttl",
+        "sha256": "23cdf952ea3c56310d0e0dce0a94c44551746e02b6cdc9a764f956988951908c"
+      },
+      {
+        "path": "ontology/ontology/04-eda/00-automation-scripts/00-perl/ontology.ttl",
+        "sha256": "fa6e28965e80a86e11191b7ec4043b642eef9d1626c26621e22fe57a354bffbe"
+      },
+      {
+        "path": "ontology/ontology/04-eda/00-automation-scripts/01-python-integrations/ontology.ttl",
+        "sha256": "cd2b1d5bc45b7e1994f04db085609a680dd1ec8e0bdcf72767fc034d44337c42"
+      },
+      {
+        "path": "ontology/ontology/04-eda/00-automation-scripts/02-tcl/ontology.ttl",
+        "sha256": "9d21c1e9b082aa51dd47d261a7a2f2644281454c1c4ff753c1010d1a2e6583a8"
+      },
+      {
+        "path": "ontology/ontology/04-eda/00-automation-scripts/ontology.ttl",
+        "sha256": "2d38b8b3272f9a746cb788070b67292595ea477589623fe439cdef6428bba2f4"
+      },
+      {
+        "path": "ontology/ontology/04-eda/01-design-tools/00-logic-equivalence-checking/ontology.ttl",
+        "sha256": "ca00965effa55967e2fe1249e7c5d837910d0f00bab86f007624e053518ecbe1"
+      },
+      {
+        "path": "ontology/ontology/04-eda/01-design-tools/01-place-and-route/ontology.ttl",
+        "sha256": "5877fcf0d74a6d2ac5bd369cb507d77509450cd89ace82bffd3211d8d0888121"
+      },
+      {
+        "path": "ontology/ontology/04-eda/01-design-tools/02-synthesis/ontology.ttl",
+        "sha256": "8993b79161b0adefb543bef0d6f968917398581c2b076a2662391dc946bf272b"
+      },
+      {
+        "path": "ontology/ontology/04-eda/01-design-tools/ontology.ttl",
+        "sha256": "5dba92093209655d00df7c0d38aa06b23cae2b8974cf440be4ed156bdf9e7ac9"
+      },
+      {
+        "path": "ontology/ontology/04-eda/02-physical-design/00-floorplanning/ontology.ttl",
+        "sha256": "cd8a7e671b69a1c4ea59e5e27eca999f03c1a483b8692c729c2327d4d91a7500"
+      },
+      {
+        "path": "ontology/ontology/04-eda/02-physical-design/01-power-analysis/ontology.ttl",
+        "sha256": "c7d417fb9b79d81cfcae6eb67803cf8fb3c6b753909793f31175dacecfe1602d"
+      },
+      {
+        "path": "ontology/ontology/04-eda/02-physical-design/02-timing-closure/ontology.ttl",
+        "sha256": "9c1f54df965c248c4f49f6d9ef1fe53325f40d7e7cc0ae3fc999ed3dd16e463d"
+      },
+      {
+        "path": "ontology/ontology/04-eda/02-physical-design/ontology.ttl",
+        "sha256": "96c92989b42acf518906afaed3559de5086546219d167bdbc350db36d7247b74"
+      },
+      {
+        "path": "ontology/ontology/04-eda/03-simulation-software/00-mixed-signal/ontology.ttl",
+        "sha256": "bb0e2269d6cf909d72610ad44fdd34e6c6b1dc788689b45b76ab5353674e9b4c"
+      },
+      {
+        "path": "ontology/ontology/04-eda/03-simulation-software/01-spice/ontology.ttl",
+        "sha256": "21892ae726caca30000ba3cbee018562ff01d509575880486b33d10dac233c4c"
+      },
+      {
+        "path": "ontology/ontology/04-eda/03-simulation-software/02-verilog-simulators/ontology.ttl",
+        "sha256": "32b60903fbee57b8090b373ded9a1fb468ae33088423eb603c911a882dc6038a"
+      },
+      {
+        "path": "ontology/ontology/04-eda/03-simulation-software/ontology.ttl",
+        "sha256": "b86061b8b7edeec89ecef20ac5ecc0f67ee543230d8d35ac8421198a6e2ff18b"
+      },
+      {
+        "path": "ontology/ontology/04-eda/04-vendors/00-multiphysics-vendors/ontology.ttl",
+        "sha256": "10f1ea0f33c028eaaf63bfc27e72a1bbe66960dad502bb899083eb2a82c6609c"
+      },
+      {
+        "path": "ontology/ontology/04-eda/04-vendors/01-design-implementation-vendors/ontology.ttl",
+        "sha256": "14a4f068731759a568b0895b4fe756ab8fede20f9b50effdab48d4ff57c5841c"
+      },
+      {
+        "path": "ontology/ontology/04-eda/04-vendors/02-verification-simulation-vendors/ontology.ttl",
+        "sha256": "3fabf64a3efc2a9c719c77dc79ff393b7014b7feb4093b43a9eb3f54bb1cba88"
+      },
+      {
+        "path": "ontology/ontology/04-eda/04-vendors/03-signoff-analysis-vendors/ontology.ttl",
+        "sha256": "0ea287806213a50d9aa5bbd928dea526c4964107e89cd7e58af1d44d10a9da1b"
+      },
+      {
+        "path": "ontology/ontology/04-eda/04-vendors/ontology.ttl",
+        "sha256": "50a106520da55492cb723b20f71b41c1eab61d906610eae3801e0aa950ae0e4e"
+      },
+      {
+        "path": "ontology/ontology/04-eda/05-verification-tools/00-assertion-based/ontology.ttl",
+        "sha256": "9a2a3505ae797710cf7e5bd238a4ce2debc503513756ee5da91f11f8fc89e3dc"
+      },
+      {
+        "path": "ontology/ontology/04-eda/05-verification-tools/01-coverage-analysis/ontology.ttl",
+        "sha256": "0a8f191aeb2ea486edb424248b8de33adcb79ba9524aa3e9e8bf325c0fe5f20d"
+      },
+      {
+        "path": "ontology/ontology/04-eda/05-verification-tools/02-formal-verification/ontology.ttl",
+        "sha256": "8b5a15bb8c5c58b2197d307561fdebb53dc0477d6ffdeaa4b791cdb70b9ead8b"
+      },
+      {
+        "path": "ontology/ontology/04-eda/05-verification-tools/ontology.ttl",
+        "sha256": "b4a86a8368d5e2321950734895ecedcbc8e301a6e50228075f91d633b0dbb0f1"
+      },
+      {
+        "path": "ontology/ontology/04-eda/ontology.ttl",
+        "sha256": "1d788cf9a53bba198ed908cc1a0ca059c6440dba170eb16989e78dbf027ea90c"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/00-capacity-management/00-allocation/ontology.ttl",
+        "sha256": "d96f3f07e982a5522ea517637881512bded9a3401b1fd0763452da3ecf8349a4"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/00-capacity-management/01-expansion-plans/ontology.ttl",
+        "sha256": "1f5cc718484dddac34c1da4a0b7dc87f37282385a7581a11ea71e983af5863d1"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/00-capacity-management/02-fab-utilization/ontology.ttl",
+        "sha256": "ec46aca70574a2550667a61605678c91c767832fbcd58709d25b8bdc8636bfa6"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/00-capacity-management/ontology.ttl",
+        "sha256": "7ea8351d98cbbc599510ce462cd7bebb43732062d2a7fe50bae333f785820acf"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/01-foundry-services/00-multi-project-wafer/ontology.ttl",
+        "sha256": "ac0b4d7a810783e2aa5cd819aad34ef9418bcd3f57a6e294fcf1494b175cead9"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/01-foundry-services/01-pure-play/ontology.ttl",
+        "sha256": "9255a7424a91ed7e89805fa8c7b8e7802f33bfa32a99f6a7f22c18f0d8a7fab0"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/01-foundry-services/02-specialty-foundry-services/ontology.ttl",
+        "sha256": "122f21a3531f2ad11db6594c35e51af7f65febe6a28d8f4118dd51a15484b662"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/01-foundry-services/03-turnkey-manufacturing-services/ontology.ttl",
+        "sha256": "a87efdee4e5922395e1b2bddc7a3e08ca678a79190e3e62215cb4129068100cb"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/01-foundry-services/ontology.ttl",
+        "sha256": "7773e34e73faef9d913ae87a09ff91541ffea089a388180d467e90da6181e6a9"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/02-idm-operations/00-hybrid-models/ontology.ttl",
+        "sha256": "c21fc72cef6ae85070e1cf670a7eddf5849fd9d00e9d4fb51ea1f0e81e94df34"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/02-idm-operations/01-integrated/ontology.ttl",
+        "sha256": "d31de7ef5e454e38edbccca74892a72acb61760f64e2eb7e9670146f8e821791"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/02-idm-operations/02-fabless-idm-collaboration/ontology.ttl",
+        "sha256": "043ec3f49c5438079264516fd27c2abbe30613a29bc857748e4937ef14683467"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/02-idm-operations/03-captive-manufacturing/ontology.ttl",
+        "sha256": "bcda21c1cd7ce2b5ae26d53a27ef1cd0f8b336460005beb9a28cad0c0b994479"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/02-idm-operations/ontology.ttl",
+        "sha256": "5f0830ae7f4af538cdd63e0c029a15f8f8265b34ea4ea2e1d56c9805265343a4"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/00-entities/00-die/ontology.ttl",
+        "sha256": "8ed44349aad01519e1f0e96391e313e9147f7eea745a39a3b231bd76a0956773"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/00-entities/01-lot/ontology.ttl",
+        "sha256": "e259f9ef88a6be2ad2c6d2a6886bf26bd0f4cb0e6c0bb9aa115c0fbff49a7c7e"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/00-entities/02-reticle/ontology.ttl",
+        "sha256": "73e8819508bc0d9bcd42960f6280325a64a6064c65cc25f15ca8df8a1147f9f0"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/00-entities/03-wafer/ontology.ttl",
+        "sha256": "428924c42e3e403380d0727dc66c2ccb73e2500daa283f171dfa843e109fd1c2"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/00-entities/ontology.ttl",
+        "sha256": "238fc24e00e7e1a2c3765764dbd3081ed9c43243634ce781ef87fd427a13efb2"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/01-events/00-hold-release/ontology.ttl",
+        "sha256": "18a8f6e96035d045eb88a43792f86b16f51632188e6480adc92d37d8262ce515"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/01-events/01-merge/ontology.ttl",
+        "sha256": "a56977a6d849b14c9666b3991668d914f3593b49fc26d0a69b98e76c17867903"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/01-events/02-rework/ontology.ttl",
+        "sha256": "492fe457d47e7cd37afa78e98cfd1b1de3c6729f0f4c3b319e4ad3280aadebdd"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/01-events/03-split/ontology.ttl",
+        "sha256": "2226fa008021be9560080a348e338bfeabb2562f54dcf50db763775b0b162547"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/01-events/ontology.ttl",
+        "sha256": "d645926c8c6ad01b50d52355b29e88bddf67aa67854fb9fe0837cf5beabb77f7"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/02-traceability-links/00-material-lineage/ontology.ttl",
+        "sha256": "596d43f10d9abbc1afdd3cf52cfc9d73e26ae7e3a34aa8b312f7bc0bda29165f"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/02-traceability-links/01-process-lineage/ontology.ttl",
+        "sha256": "58e04ccb5f97e15246830abc95588cd0aebb789c19260e75285816c89977eb84"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/02-traceability-links/02-tool-lineage/ontology.ttl",
+        "sha256": "15d770dad00346a25395c6c777fadd83d5917f8642304e12b2156daa8daa7b59"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/02-traceability-links/ontology.ttl",
+        "sha256": "9a5cc852aabf2475f772431bd0012bd3efc3ff3810e82de6cc5b68cefea90cdd"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/03-lot-genealogy/ontology.ttl",
+        "sha256": "e82c0ede99f884ab1c59d5481ca4fff713bbaec3690be60f59596c3c8b5814eb"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/04-process-technologies/00-finfet/ontology.ttl",
+        "sha256": "1420b596a325736dba162c39d5ca38cfd92e373948e594df2d41e5f2f29029f8"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/04-process-technologies/01-gaa/ontology.ttl",
+        "sha256": "f48131aaa4e4ccd16e98ba3905d9763fb0d440217121b4b0a99c8ec5370e8612"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/04-process-technologies/02-high-k-metal-gate/ontology.ttl",
+        "sha256": "a58e54980702143b1bf92593d59717d89286780af9c1dff2134a26ae6eed4ab6"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/04-process-technologies/03-soi/ontology.ttl",
+        "sha256": "bd5f96405dd48a234ed3b753bf1fb12e55762e4144ade0d969e6823ad63a19ea"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/04-process-technologies/ontology.ttl",
+        "sha256": "07bbc7a26164bbaad281acc0e06fdd67623caa540ae9d9221b21d1541f523996"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/00-ald/00-plasma-enhanced-ald/ontology.ttl",
+        "sha256": "c9c4b14fb3fdf1275d3fa9c43cc324dfde090d28599f46b821b1c502db224275"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/00-ald/01-thermal-ald/ontology.ttl",
+        "sha256": "cd2a77706be8d14ccc5a0bd484b5534dd055e83b7e83c3800bd441580e8fba76"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/00-ald/ontology.ttl",
+        "sha256": "f1aba8eb52be316d62277cfc55d06b0a607ae63d37b722e0fe59237bfdd13302"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/01-cvd/00-hdp-cvd/ontology.ttl",
+        "sha256": "21e241730d17fed3d82dece004c911b42c546cbace357fca2845064a3badc0d9"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/01-cvd/01-lpcvd/ontology.ttl",
+        "sha256": "a399ed2a617fa6468921fb1e5a0f32ee1bd5dd35d7ee62e48dd62b5ffee7486a"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/01-cvd/02-pecvd/ontology.ttl",
+        "sha256": "4beda839178f0de949ae4415a14b14336062ebea3ed1de9c18fae26d6bc10e8e"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/01-cvd/ontology.ttl",
+        "sha256": "f48dde41cac9a7641e9ad5a86a32d4ff33802c55d8bd2c38068b07f59299c139"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/02-epitaxy/00-selective-epi/ontology.ttl",
+        "sha256": "50b50c318231d7e63b98b2e112c48a64d5732599d61d25c0d70620cf5c5c9da0"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/02-epitaxy/01-si-epi/ontology.ttl",
+        "sha256": "ac387dbfd974ac740fe66bbe9eebcd49010d89ebfd87dcc71dcd277b4526b158"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/02-epitaxy/02-sige-epi/ontology.ttl",
+        "sha256": "0d6fc762eff8976951d5d5a23d71b42c49413820d4c87073fbec47fc72d5e83e"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/02-epitaxy/ontology.ttl",
+        "sha256": "d2d25e0bb38fa288303569c59451f575012b014698d5fafef2857121b5e12bbf"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/03-pvd/00-evaporation/ontology.ttl",
+        "sha256": "48ef5948e62b419f84b5bbafc45f6d50fb9ea6392d1498f23e5ae2406ca36c6f"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/03-pvd/01-ionized-pvd/ontology.ttl",
+        "sha256": "4a81177bdcc7e9bd618dbad29bf63524fcaa09afe12e9480408c7616549689bf"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/03-pvd/02-sputtering/ontology.ttl",
+        "sha256": "2750de67bffe5a4e4bed485d941b70592be1c8b06c52ebd3b83a677c9e42027a"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/03-pvd/ontology.ttl",
+        "sha256": "04617c0c8d42577781414c22b42e1187c3d937867a220a5273b04b4ab04b3bb6"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/00-deposition/ontology.ttl",
+        "sha256": "ec8cd50d42ecb4ae3f56da5bc96e0ac1a47970f8c0895d9a1bfcf7fd3f74efdf"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/00-atomic-layer-etch/00-plasma-ale/ontology.ttl",
+        "sha256": "0eb7a906c9b767b071e7c895709d8b23d7c60ad603f43340090b5729680893b2"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/00-atomic-layer-etch/01-thermal-ale/ontology.ttl",
+        "sha256": "eb888b90385f8be749ecb7d65e87f275741b27cb73b56acebb9f2f6077f19513"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/00-atomic-layer-etch/ontology.ttl",
+        "sha256": "aaf1842c95d54a61fda64171ff263a9a1408dcb89e4ff292cdc583e81344a9c0"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/01-dry-etch/00-deep-reactive-ion-etch/ontology.ttl",
+        "sha256": "3b4db2c75cd8005d42aa8bf4fb216c360c10fb08564bede3b8e142174fc5218a"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/01-dry-etch/01-inductively-coupled-plasma/ontology.ttl",
+        "sha256": "9d8e62fd5663aa128ede3f67e0deaeb114cbf8ee0dc0839edb0751bcc4e3e64e"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/01-dry-etch/02-reactive-ion-etch/ontology.ttl",
+        "sha256": "1ed154159d68fa6fbffb51ea9560b6d3ba9ece0da18230d4b7b5a1abe7a5d7e2"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/01-dry-etch/ontology.ttl",
+        "sha256": "5bdd968edf8550b8d1b35edafa791391632094ec1cbaa140661f9ceaf9c333f2"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/02-wet-etch/00-anisotropic-wet-etch/ontology.ttl",
+        "sha256": "d350772ab551752d23235191df3aa8297127dd63ea48a6b8a043f70b6970d699"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/02-wet-etch/01-isotropic-wet-etch/ontology.ttl",
+        "sha256": "4e3a0fe1e3a089c02e9e03927ad063d19383992062b5ef2e5b7b666e665e1624"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/02-wet-etch/02-selective-wet-etch/ontology.ttl",
+        "sha256": "6cebcebac40ed388aeae12beb906226f44aee707613a6f720b5b01f15b501064"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/02-wet-etch/ontology.ttl",
+        "sha256": "5d4d5286d9e3426e2614b51d22de5098c18b7e1255a98ec33501c9c6f70fe0df"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/ontology.ttl",
+        "sha256": "f14a6da6bf9797937ddc5ae215d0be3ae4749f1178b14808ed57b4f91d71ff09"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/00-development/00-puddle-develop/ontology.ttl",
+        "sha256": "0b19abf87e8b5886a3d5cca4fd5e0701a1da7b68521423e11d938cadd9426d14"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/00-development/01-tmah-develop/ontology.ttl",
+        "sha256": "3a0757bb65c26a65cb88015a4931d161ffee5d72dcb6036a5709c05318a2cdab"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/00-development/ontology.ttl",
+        "sha256": "ebead559c8b386a0c0ab02ca4b6e7d3f2f8ca041b9e3c03126f08013709eaeca"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/01-exposure/00-duv-exposure/ontology.ttl",
+        "sha256": "9439628ef54f8b5c20706a76842cfd3647d703499a73dd5944e875eadc6e819c"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/01-exposure/01-euv-exposure/ontology.ttl",
+        "sha256": "6c0a760a9080d5e9005d208ecb166ef78e1444ce2fa1dd3a1c34454985f4a60a"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/01-exposure/02-multi-patterning/ontology.ttl",
+        "sha256": "8515056bf7838c8ca57c41c42af1ecc33407e2e83476ea662907f1178029e5fc"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/01-exposure/ontology.ttl",
+        "sha256": "f603abd8bd4531978e23067c367c14aed4075d2242f6bd72cb292eba9508816a"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/02-pattern-transfer/00-hardmask-open/ontology.ttl",
+        "sha256": "2bac26d96b3f11b72d901c500d11bfb98a8168cded324eac045c603683b7d07e"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/02-pattern-transfer/01-resist-trim/ontology.ttl",
+        "sha256": "d59ee176c5d56d5b0fcab2c515967f1e15c1b849a35edbf7c2688bd1ae16ab63"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/02-pattern-transfer/ontology.ttl",
+        "sha256": "feee84966c59dcf4a6fd9408ab365a4040f41ad287d10f9037ffd5fe5cab961d"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/03-resist-coating/00-edge-bead-removal/ontology.ttl",
+        "sha256": "a2113f9ac018c7f8fe0ff75f9f31038973d4d6007450d32ecec983c9463e93a7"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/03-resist-coating/01-spin-coating/ontology.ttl",
+        "sha256": "489fdb771db935d0a7a168025ef0295508d015a44e14c6fc114489248bd3dda3"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/03-resist-coating/ontology.ttl",
+        "sha256": "25124507d49166cd4b68b08caa4d3f8341a8bbc9973d9e614e24e510bb8f61b6"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/02-photolithography/ontology.ttl",
+        "sha256": "2bd0430582cd4f80106e3af55ced6039c0c4d7ca20351336c99e7d856d29ddd2"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/ontology.ttl",
+        "sha256": "326eb195e4fde92494e996b202e59bd9db55030ada9772349ea5a542723a2413"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/06-yield-optimization/00-defect-analysis/ontology.ttl",
+        "sha256": "e65d77e2eff094e0f767874cd555e16be1e12139fc36bb54f190366cf03efb1a"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/06-yield-optimization/01-process-control/ontology.ttl",
+        "sha256": "3a224185e238e09d3653320ca20651b18f2932e803e4440bc961ac23a8ea5bc0"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/06-yield-optimization/02-statistical-process-control/ontology.ttl",
+        "sha256": "c44e32a724cab663850720d5ee47011b3bca82b7c0b12a0af29ec003044f7a14"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/06-yield-optimization/ontology.ttl",
+        "sha256": "7c7a1ef931a7810c18866e8417c421e6cf2d351a761260bf620099a2378c1eab"
+      },
+      {
+        "path": "ontology/ontology/05-foundry-idm/ontology.ttl",
+        "sha256": "58a4f98e2105c55c2b2c6b4d2b6da4040b15f110b9efbcf9974b1ba7d8ef7bef"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/00-epoxy-attach/ontology.ttl",
+        "sha256": "f10a273d713197252ca24191e4989baf726f9919b750bea8af5bb4154a5ed2ff"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/01-eutectic-attach/ontology.ttl",
+        "sha256": "38ace2a51cfb872eafdf8bc066beb97e98c949e37e11d41295b115c83cf506db"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/02-sinter-attach/ontology.ttl",
+        "sha256": "a3e6e08372ca9454b1eff236d50b783970e46dd76e2a206ce5451bd84739903f"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/ontology.ttl",
+        "sha256": "e5c9dd92cf0cd72a421ed4c944f0a8c66f6f193bde1b4e4de78bf20c61bd89f3"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/01-encapsulation/ontology.ttl",
+        "sha256": "d3680c98321983bfb7f5506ba8e484062ec2bf91287fae1c75c59fffb94fd9a3"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/02-molding/ontology.ttl",
+        "sha256": "1acaff51c09b878ef6e4fe5a0cd6d3a03748a24eeef2d5a38a1d8253f99cc3f7"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/00-assembly-processes/ontology.ttl",
+        "sha256": "66a83159682f3780c786810128532a9ce53b1a23ff980d06fe200da46f623206"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/00-2-5d-3d/00-hybrid-bonded/ontology.ttl",
+        "sha256": "ef1adf6cc6a00a4df94cc2879d3fd71cfca975eeb083a0ae6088eba35fcf04ab"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/00-2-5d-3d/01-interposer-based/ontology.ttl",
+        "sha256": "18606a1b12a06451be1b131300ac31ac38fa9e583381304623df4fbf8dca96e0"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/00-2-5d-3d/02-stacked-die/ontology.ttl",
+        "sha256": "039fe4b2886081a5440661c3f32dbda7ec02d5c11271f7a3604de104bc6480a5"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/00-2-5d-3d/ontology.ttl",
+        "sha256": "51e07eef6a3c8af5cbbac93489e422195ce38898540ebb8f67f698eb523cda7e"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/01-fan-out/ontology.ttl",
+        "sha256": "f2c05920f2082a8868cfd0d95cf358752f6eedacdb2085db7db075b4e6ee040d"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/02-flip-chip/ontology.ttl",
+        "sha256": "9fd6f9eb2f6efc7cf5c504e68f0f7e3666ea9149ddb3a0bfb3f4da55f82f5f2d"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/03-sip/ontology.ttl",
+        "sha256": "4923c0782eaba3ae9bf57bf71c70eb923e1149cb3eaefd806ab2c24031779192"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/04-wire-bonding/ontology.ttl",
+        "sha256": "ae77f3fd92ae8441e68e14c07d8a049f2f1c92425614c79ccdcc4d49281e76f1"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/01-packaging-types/ontology.ttl",
+        "sha256": "15735b7a163d4b3de7cdbcf0c44e50987043d5538aa4d6a7bdb586a2e1212d1a"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/00-final-test/00-binning/ontology.ttl",
+        "sha256": "3b0a37beafb260c31d99b6b2de7e012ed9d57d142223a4998a4e36d2aa948f27"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/00-final-test/01-functional-test/ontology.ttl",
+        "sha256": "0c8d073d89fec2ce8e24f026d05ef1339dbdfe26c1a0b1895c86c50ee99ebefb"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/00-final-test/02-parametric-test/ontology.ttl",
+        "sha256": "b900ab70230dfea2939354a1d44a62614cb6234ec41da73b8c938024164351fb"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/00-final-test/ontology.ttl",
+        "sha256": "0ec8d07871dfbfc5a07846f06bc67ac1fd387441fc010ceadaf375e18b2f3314"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/01-system-level-test/ontology.ttl",
+        "sha256": "0403761c60c67147e8c9a31abef74b55aa0f64563a7c8aab7a6c1ced3d5ad607"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/02-wafer-probe/ontology.ttl",
+        "sha256": "d81d660b928e1739a33a0c67b5abeeff7232553e0d4d9a26e98a101ee64689f3"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/02-testing-services/ontology.ttl",
+        "sha256": "9f1d3a69ce602c0786729da983e6246d7dc052e92d514d5318b9ad152848c0ec"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/00-burn-in/ontology.ttl",
+        "sha256": "6458ddc48f2a1a2815b6a1026beb4f8727716b8b4e9519bd08609956cca79681"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/01-hast/ontology.ttl",
+        "sha256": "16d847286ca9dadca801aee90d51ef443563d1be7f2676c94251d11d6bb119a5"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/02-htol/ontology.ttl",
+        "sha256": "90517f39f66f72194e0c6d55773478c0cf672b20dd70c3ac83d388b00660f16d"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/03-humidity-testing/ontology.ttl",
+        "sha256": "342596e61e5ed8b166bd5108fa7f681c92d57305701e91271a5afba0f40dd8ea"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/04-temperature-cycling/ontology.ttl",
+        "sha256": "224813eb3fc59f43c0bbdf3d59e6c3dc68a71a429b094773e7c51981b717a9bb"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/05-thermal-cycling/ontology.ttl",
+        "sha256": "9d20f4847dcd9231334ed931795c37e5a1b04fd6fc271b010bf88ad07d1366b4"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/06-unbiased-hast/ontology.ttl",
+        "sha256": "602beb94c5697bc73794fc6e4692342fb8801c4dc1f67e2051d1458b3862ba8b"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/03-reliability-testing/ontology.ttl",
+        "sha256": "6919cd070bacdfe55901f5de34facdb66cad98ad6168f89fc6854a5c0c1473b4"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/00-acoustic-microscopy/ontology.ttl",
+        "sha256": "f7588a445741f31fb068c74980cb2b32798dbff72576427a60ac512447d4cb13"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/01-fib/ontology.ttl",
+        "sha256": "ba196416de139d1e862ed0adebe5b14c9ee4132bccbd8cb39ecc608f08a39899"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/02-sem/00-cross-section-sem/ontology.ttl",
+        "sha256": "34e8a797a84a890230d047a41055f6f6282f89463782f8ee1da26fb9b1a0f27a"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/02-sem/01-top-down-sem/ontology.ttl",
+        "sha256": "967f51d7222f3e3680261aa244d5d8fc9631d8e7388efb9bfd6b28dd4ed2d398"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/02-sem/02-voltage-contrast-sem/ontology.ttl",
+        "sha256": "b4caa91393251e3a7e7f147720b5eb9997f00fef7480df3c8a999da4ce1ad9a1"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/02-sem/ontology.ttl",
+        "sha256": "6909bbcf81efd084b9be54d113a28a1208a0cfeb5aae7c967462270951d259a7"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/03-x-ray/ontology.ttl",
+        "sha256": "b49f46dc876a685e2d0483c66e3d431ad2130c507454b373d735f44a49ae3537"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/04-failure-analysis/ontology.ttl",
+        "sha256": "4b9118ef8be6e6bf42b29f8e214748ace7850cc3a60fc68503e06c89d231d779"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/05-osat-providers/00-global-osat-providers/ontology.ttl",
+        "sha256": "0e5ee5f3721e488f1b939bc02c194400b106844972ea073fa8cde96a3d2f24b1"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/05-osat-providers/01-advanced-packaging-osat-providers/ontology.ttl",
+        "sha256": "ea8ca25d2319bac0ac970b00face8d4e1ed18b0a6a303429c094e0bf81cb3ad5"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/05-osat-providers/02-mainstream-osat-providers/ontology.ttl",
+        "sha256": "0bf3b72511c32fde7d0ec47e1c22f05f2928386e15e248201315105e1ded58a1"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/05-osat-providers/03-regional-osat-providers/ontology.ttl",
+        "sha256": "ecfac6b350e7c3accb2be89384308ab3696001f0e00a6f65ed982326d6fcd6ea"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/05-osat-providers/04-specialty-test-osat-providers/ontology.ttl",
+        "sha256": "b90dddbdfa3d0faba05a0c4402379bb0042818f9a60d3d0d0960758c89ebe653"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/05-osat-providers/ontology.ttl",
+        "sha256": "1900671b5d9c83e760fa472c56cf5232b98392cb3a1d015d30d1a570e9dde6d2"
+      },
+      {
+        "path": "ontology/ontology/06-osat-packaging-test/ontology.ttl",
+        "sha256": "946851f20587162b5ff852cbaa43cebf2e46300598209cae1e48920d5c201280"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/00-wafer-handling-automation/00-efem/ontology.ttl",
+        "sha256": "19247894d3155ff9a30daf1664d95880bc038d00906245c0ce78a60cab956e9e"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/00-wafer-handling-automation/01-load-ports/ontology.ttl",
+        "sha256": "d2fda29adfcfa747097910f66e1b98f1ff315d676e60370623d418831a0d406c"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/00-wafer-handling-automation/02-robots/ontology.ttl",
+        "sha256": "5822c44bee715790290448923fa978dbdb737ccb97359516360992ca11669c5d"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/00-wafer-handling-automation/ontology.ttl",
+        "sha256": "75feee5382df4fab9a2c5e7031326cccc2dd06572987367ff9de6256e0bb75bd"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/01-oxidation-systems/00-dry-oxidation/ontology.ttl",
+        "sha256": "8258f38b9eb057824123f041cc9c27ad69ba54ef1daecbd4292b4472f94a7187"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/01-oxidation-systems/01-wet-oxidation/ontology.ttl",
+        "sha256": "765c8672a12dbd1c1bf0873c6dc3e42c9e8df5d4f23c73500f301a62a659f631"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/01-oxidation-systems/ontology.ttl",
+        "sha256": "17b0ef035685d38e50dd06833e815ef30ab008294283f86b8b58732cc11c5e98"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/00-cvd/00-lpcvd/ontology.ttl",
+        "sha256": "39a8137e82c35c3ed86b598d61af0926be4dcd1d547eb3a3889bd889aace6fb8"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/00-cvd/01-pecvd/ontology.ttl",
+        "sha256": "5469bbdfb3a44849d2917108d4dd1ec9a902917f9805a4c38707873b20446a4e"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/00-cvd/02-uhv-cvd/ontology.ttl",
+        "sha256": "1cbbdc5ca6be209a9020241eb4c7cfe880fda7a54623f39c874e104b52ab5b2d"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/00-cvd/ontology.ttl",
+        "sha256": "ff6a6fd5dbfbbc2febb9dcc6aadd9a75f1df1bfd4b48d6a7a627e0b21186c05a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/01-epitaxial-growth/ontology.ttl",
+        "sha256": "b9e402131d7122a71545213806a719aa69e72e75c0e9e6cfff4ddd8c822353e9"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/02-pvd/ontology.ttl",
+        "sha256": "65e4f67e047aa3843b6182132770e96a272b5ce4a77a9056a8dce335c3a730c4"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/02-deposition-tools/ontology.ttl",
+        "sha256": "03ead6d6dbb2b977903bdb3f3fc1f5b2ec9a1c7ac2f57d3092d8a579d3566ccb"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/03-photoresist-processing/00-coaters/ontology.ttl",
+        "sha256": "f15d8b9589cfa731c5ec2107bbd826fec0d22dd01c380290294072aff31681bb"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/03-photoresist-processing/01-developers/ontology.ttl",
+        "sha256": "a586d40c7c7efb32e9d579b6cdba79f650dea79cd79c2da832f8248b4160b83f"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/03-photoresist-processing/02-track-systems/ontology.ttl",
+        "sha256": "bfe691cde84c6341f5c7202e945013d6d9a5ff76448aabba20f7330c01aa2e51"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/03-photoresist-processing/ontology.ttl",
+        "sha256": "fc6ed50fe5c4a9b70991d3d5304ea80ca3a182d0e9599b737a7aaeeb0b38ad89"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/00-duv/ontology.ttl",
+        "sha256": "d1fc4f067a8c87fe68e8c6feb2c755c68fa1707c004e323213dc7664cdd7bd16"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/01-euv/00-0-33na-euv/ontology.ttl",
+        "sha256": "ae0d541579af57a0aa4d8e04475e37ff6e0695b8c27139d9f371e6f1b89f4961"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/01-euv/01-high-na-euv/ontology.ttl",
+        "sha256": "0951985b7f415fac0f3ee8613ea0a4ca26877183af90f92279212f076d2e7ff8"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/01-euv/02-source-mask-optimization/ontology.ttl",
+        "sha256": "83ace6e4cd6e94a78328ebae3161702207706ed64db62254b0f7939f5ee84c41"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/01-euv/ontology.ttl",
+        "sha256": "6b46912d754a4660805bcf6f3fba7f9cadfc615b2341e550ce7d3d2ee1192928"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/02-immersion/ontology.ttl",
+        "sha256": "db8de5f82ca43d897ac77b22592acdb905f2a9c66f0f0e7cf5b5c1846b03beb6"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/03-multi-patterning/ontology.ttl",
+        "sha256": "a2ed2d7309d12d8e6948ec1f1314e06aed6d29d38fcc59f649a9558db782e06f"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/04-lithography-equipment/ontology.ttl",
+        "sha256": "ea3c99b530a31bcccee8336f24000e85ad0a2383f5521c634f1b20fb16bd30ad"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/05-ion-implantation/00-high-energy/ontology.ttl",
+        "sha256": "4f8dc0cc23a6871efb5fddd592282ff975873cdaea2883af5e992ecca7a133d5"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/05-ion-implantation/01-medium-current/ontology.ttl",
+        "sha256": "578e69be2a27595593eaff7e7a2e5e7dc349bf88041228e183530fd201251547"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/05-ion-implantation/02-plasma-doping/ontology.ttl",
+        "sha256": "45ae68856520c3dd46b1644ab3787dfe317ea45d6625cdcb3061c955ae41640b"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/05-ion-implantation/ontology.ttl",
+        "sha256": "9fe245680fd67554254d922a72f57ba0cb62957d93b72cca5174327e319ebed8"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/00-atomic-layer-etch/ontology.ttl",
+        "sha256": "bc1e10943e0f7e2bce041d6890140f1ae9cd0df2e2cb58ca482c2404c270202a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/01-plasma-etch/00-metal-etch/ontology.ttl",
+        "sha256": "c1a0e415cea8e21ee2732e584341255ddafb8260026b94a3823ffce84b091583"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/01-plasma-etch/01-nitride-etch/ontology.ttl",
+        "sha256": "377e754f2d1df5d4bcd08834339233c2f955007be9de98f3ff2ed69449c9aac0"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/01-plasma-etch/02-oxide-etch/ontology.ttl",
+        "sha256": "c3a7c915d5220cd08cee77f4b9fd7a1e6efc787609930224f6b7aec231a0541c"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/01-plasma-etch/03-poly-etch/ontology.ttl",
+        "sha256": "55ff09b990d9baeddfc752eee96f8a911d641d2407819a18593bc9bed3e82172"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/01-plasma-etch/ontology.ttl",
+        "sha256": "b84dc158ad89d338572ba85c030bc750db0a696d66345e2746b9b298f626f528"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/02-wet-etch/ontology.ttl",
+        "sha256": "2751778c0e4ac3cd4b8b1c42ed7c3aff779d443d09d83b3d6939cb4d865b2739"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/06-etch-systems/ontology.ttl",
+        "sha256": "13574aaf3309a6e4e514f54a6379dd914a65a172205d09ade47a0ee10cfafd66"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/07-chemical-mechanical-planarization/00-metal-cmp/ontology.ttl",
+        "sha256": "47b06a623a9e304dded243bb6a2327a825113974a8b1f42030f71c122229785a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/07-chemical-mechanical-planarization/01-oxide-cmp/ontology.ttl",
+        "sha256": "9d119884e4d659e753f6e0e3576be3c9b8af875f9c3ecc3b90a84f48eaa5c294"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/07-chemical-mechanical-planarization/02-slurries/ontology.ttl",
+        "sha256": "cc46e714405c968e9e566f9d57deb6f0cc4f4a9238eaff2c74bacede6b210dab"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/07-chemical-mechanical-planarization/ontology.ttl",
+        "sha256": "56c2dea3352b5d17a45574e50d85ce500b5c9bc94e4815d94a4e0dd99f504706"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/00-dry-strip/00-oxygen-ash/ontology.ttl",
+        "sha256": "216c0433d1f3ce71bd98d4a11a16535193dc58d9795d813dbc6cd293f923f36e"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/00-dry-strip/01-hydrogen-strip/ontology.ttl",
+        "sha256": "bacd05718860e0239cfdb2bc04cd16195bb157d8b9f99a40108d4ee844a3ce2c"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/00-dry-strip/02-downstream-plasma-clean/ontology.ttl",
+        "sha256": "7569c221b8b0a7534cfc287c00bc0fc39233b107b9f37316b2412c6d360e029a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/00-dry-strip/ontology.ttl",
+        "sha256": "b9e893652f3e4d566d2dd96a7f067bfa849393354a96a589df9acaf6d8ee5e56"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/00-rca-clean/ontology.ttl",
+        "sha256": "71b8ec68e7afb8b7baae8ac237084c2c68b94512741c2cdb01eab10e6198ca7d"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/01-sc1-clean/ontology.ttl",
+        "sha256": "ea2fd9f2bd2b5a100a3834131a7a880c0fa50cd5f3b6953717cad624cadbb6e1"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/02-sc2-clean/ontology.ttl",
+        "sha256": "6523adfbd69c49b18bc0bee521c78331b3aa4afb27453a203d4047ed447add54"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/ontology.ttl",
+        "sha256": "fb7d8a602bf1191eeef6b62fd5061caa55c8d4702bac6dc6891f8f675c1d3207"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/08-clean-strip-tools/ontology.ttl",
+        "sha256": "9a3113c9dc16998f489e557143985f932c81584b0e78cbac50c492462f9dec57"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/00-diffusion-furnaces/00-predeposition-diffusion/ontology.ttl",
+        "sha256": "2de1c6263222d2cfae53639bb152e7037568b2de54b34cef53d176289aec4c5f"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/00-diffusion-furnaces/01-drive-in-diffusion/ontology.ttl",
+        "sha256": "b03e03f42eb8dd066f38dfa21668f21394fcbbd36c009a5146499fa15f5911f5"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/00-diffusion-furnaces/ontology.ttl",
+        "sha256": "974315bc9a847780c71e90e5c45511f619e6f4cc413e15c7abad342cdc6f17a1"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/01-ion-implanters/00-high-current-implanters/ontology.ttl",
+        "sha256": "e4167dca2c4f9a88b7d5eae697edce6b265e337ae333a21160b896f999a938a6"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/01-ion-implanters/01-medium-current-implanters/ontology.ttl",
+        "sha256": "b8777cee138a8ff7f26a82aa4cd8d561d5c5ce8e4ff457ea64ce97fbd58a77f2"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/01-ion-implanters/02-high-energy-implanters/ontology.ttl",
+        "sha256": "20923f36c5ecad7b170385fd499dee2871486eb99e3d743a0778c68bbeef3aaf"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/01-ion-implanters/ontology.ttl",
+        "sha256": "e21226984567bbde2e1b83f7cf22c26adbe2f477df44a2bf9a6de55090440a41"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/02-plasma-doping-tools/ontology.ttl",
+        "sha256": "e679250232e2d1dc54c17d2db6447f8b5e6efaadfafe07e45c7342706344459f"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/09-doping-equipment/ontology.ttl",
+        "sha256": "7000ade3125b97b6315fd3dbecef31703eaba4ab77d5d1cdcad16f889128f348"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/10-thermal-processing/00-laser-anneal/ontology.ttl",
+        "sha256": "dac0523c9aa66121e7c8e652d49a405aad28686d70e1c32c3760111fd935e050"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/10-thermal-processing/01-rapid-thermal-anneal/ontology.ttl",
+        "sha256": "343f5a41f7017fa8fe4a945f1ec497559a44c007cbd12ae9898d12c1e8e8c842"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/10-thermal-processing/02-spike-anneal/ontology.ttl",
+        "sha256": "5f54588d2b800ce6549905eac1b40a7c41850f030feac5ba58b5629ed8d40fec"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/10-thermal-processing/ontology.ttl",
+        "sha256": "c28eac4a05a002ff65c80f25e7422706d77ae82d71161c8dff41ef79022f911a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/00-horizontal-furnaces/00-forming-gas-anneal/ontology.ttl",
+        "sha256": "28f70fbcbb23f2fdceb2913888a48d55cba0598b1d81a1da5bbe4a5687f0c6a1"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/00-horizontal-furnaces/01-reduction-anneal/ontology.ttl",
+        "sha256": "daa331a91736b79d549285a14644897e5496afe4232ff189905e465670afa19a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/00-horizontal-furnaces/ontology.ttl",
+        "sha256": "5aed5eda8723691bd69ec1e1795fe1cbdde779f23d03bf1fcb6ea7297515b4af"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/01-vertical-furnaces/00-oxidation-vertical-anneal/ontology.ttl",
+        "sha256": "42c1525f4d6ff40d4bf61833c37bc21a2a58bac78ac926031f5e21807e77bf01"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/01-vertical-furnaces/01-nitridation-vertical-anneal/ontology.ttl",
+        "sha256": "4db4926d1347210f9505ff5b7efde5bcec96e7af3e68d6ba55c3fe402027d768"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/01-vertical-furnaces/ontology.ttl",
+        "sha256": "6a615a86db11f02ddb960bda37de3133e9ce392163905a5148615cb9594ada7c"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/02-rapid-batch-annealing-furnaces/ontology.ttl",
+        "sha256": "f794c89a1b19a2d1e0cac281899ae8d9a8e05c7ee55f4eaec3279f177a596637"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/11-annealing-furnaces/ontology.ttl",
+        "sha256": "9828e796781ea52d20f72669b0fe7803da585c8d21e81c2adf16217ca02a9072"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/00-cd-sem/ontology.ttl",
+        "sha256": "cbbff64e197900219c6de24c684f86f83e94d6a2704c08e55d655671fec4f067"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/01-defect-inspection/00-brightfield-optical/ontology.ttl",
+        "sha256": "89b5fc80f352d29b378ef738347ce5d2206030b20202c183ff10466c1c98037c"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/01-defect-inspection/01-darkfield-optical/ontology.ttl",
+        "sha256": "fd0186a6e2a8da9fee454d565983e3f374b69ebdc4fff44dc8d52b82538db018"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/01-defect-inspection/02-ebeam-inspection/ontology.ttl",
+        "sha256": "3e2f8ce2ac3ef430c958e914df51e34304c66b301d2eeb263bfa2e95cf62fa99"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/01-defect-inspection/ontology.ttl",
+        "sha256": "78beda93e88be357df70caabde3dc5e47b3849033509b784e13e11a13638933f"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/02-overlay/ontology.ttl",
+        "sha256": "f4ad7f60c9e17cf94fca968f1dcc211c9a7b60b2139050ee1563fefaba5c3ca8"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/12-metrology-inspection/ontology.ttl",
+        "sha256": "4a9e329b1a424fa8c7c01f5ab621c540fa1400c44ea45f06f9c32934d8b9277c"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/13-inspection-tools/00-afm/ontology.ttl",
+        "sha256": "9f8386464f7b9d8b5ee261e4284e5bccc7bc2ea2f71ff51e384c0480f0ac307e"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/13-inspection-tools/01-optical-microscopes/ontology.ttl",
+        "sha256": "b64f577071dd6b57bc2069ce2469eaafa93635b274f3cc9672c7caacc7d2625b"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/13-inspection-tools/02-tem/ontology.ttl",
+        "sha256": "a110763f1692baa0b84123448330a675d34c42c9228a13f7a9a3515a98a56370"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/13-inspection-tools/ontology.ttl",
+        "sha256": "f2a8f484f97adadb4d832df379b96b6061f720e9445d7c102338116fbd1c224b"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/00-deposition-equipment-suppliers/ontology.ttl",
+        "sha256": "697c7d72f4d1649f110351592aad222723b3bbcb9fcb919313d30116c3aac65a"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/01-lithography-equipment-suppliers/ontology.ttl",
+        "sha256": "44e6eeda83bb7d36e3aacbd8c71703fec1bbf740f3029ee591a3747f14328dea"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/02-field-service/ontology.ttl",
+        "sha256": "ac508e537f79f41b448c0eb4a93ab0e81a8afdeacb10006084bdcf4a50c23426"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/03-metrology-inspection-suppliers/ontology.ttl",
+        "sha256": "c67b65ce31ab613a4aa5e8ccf7a39941af17e8f4cc8b437d8539d9568f8f5215"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/04-etch-equipment-suppliers/ontology.ttl",
+        "sha256": "bea36a74417155a752906d83c9ac50eaf72f42c9214dec3f995e0ba0784a2e28"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/05-spare-parts/ontology.ttl",
+        "sha256": "c3bcaa25be8bf2a5c9e7eb71a6429337dba277fb2e4c3cc31ff45d6699e59c7d"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/06-coater-developer-suppliers/ontology.ttl",
+        "sha256": "243440a97f05cb4af13ba8bddebb16b85d7830e872ec74a7648ba120135ef259"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/14-suppliers-and-maintenance/ontology.ttl",
+        "sha256": "c23c384e3b1a751c91de1dc798a5fc7385752df63ff5e2058ef6ca572cabf195"
+      },
+      {
+        "path": "ontology/ontology/07-wfe/ontology.ttl",
+        "sha256": "d63fa4a8d644ff27861a95c9122f714e1dab5fd2f07cc735b9e55c1422c82e8c"
+      },
+      {
+        "path": "ontology/ontology/08-materials/00-advanced-materials/00-2d-materials/ontology.ttl",
+        "sha256": "f838a8ea42b03753fe841d809ac55730bdbff5cef343c1b03667d559c81e739f"
+      },
+      {
+        "path": "ontology/ontology/08-materials/00-advanced-materials/01-euv-pellicles/ontology.ttl",
+        "sha256": "25e985383808c5905fddaaefae4a862e69baa5bb6a9426fa8a83696dba5ae242"
+      },
+      {
+        "path": "ontology/ontology/08-materials/00-advanced-materials/02-high-k-gate/ontology.ttl",
+        "sha256": "65651902405c9e40323133629fd989348b415e968781c4b08ba65bc5b713b457"
+      },
+      {
+        "path": "ontology/ontology/08-materials/00-advanced-materials/03-low-k-dielectrics/ontology.ttl",
+        "sha256": "ea02b954080f4e094e3f03dc0db6cc05b4441fec1cb09cde8bd1c4726b0301a6"
+      },
+      {
+        "path": "ontology/ontology/08-materials/00-advanced-materials/ontology.ttl",
+        "sha256": "aabdc37f8a66a91b0b4ed8af9d9250a4d993cee4e46982ab1a50fb747e02a840"
+      },
+      {
+        "path": "ontology/ontology/08-materials/01-chemicals/00-developers/ontology.ttl",
+        "sha256": "99b4e11eb0ea553b276f62cff6157b324458b8a9c2618263055f91bda5f4f497"
+      },
+      {
+        "path": "ontology/ontology/08-materials/01-chemicals/01-etchants/ontology.ttl",
+        "sha256": "52e72f9d4ca4f2d5639af300420d664db70670fdc8efc9e6f93a5cca422d461c"
+      },
+      {
+        "path": "ontology/ontology/08-materials/01-chemicals/02-photoresists/ontology.ttl",
+        "sha256": "73a78762118fa2b0748ef23b23f65fa66af68b263fe0a5299bc185c8a0cba209"
+      },
+      {
+        "path": "ontology/ontology/08-materials/01-chemicals/ontology.ttl",
+        "sha256": "5c400c40b0b5bcaa65cb05ff91983426f546e2f6ca5a6ba16befd1781701e11a"
+      },
+      {
+        "path": "ontology/ontology/08-materials/02-gases/00-precursors/ontology.ttl",
+        "sha256": "f653e9e0eeca4562e7518165e6b39cb5797db44301cb7e6b0540b8c1ce9a9731"
+      },
+      {
+        "path": "ontology/ontology/08-materials/02-gases/01-specialty-gases/ontology.ttl",
+        "sha256": "0a5ce98e8aeaf9235d211be53be3cd57825aa58d6f2903eaad3970d982463960"
+      },
+      {
+        "path": "ontology/ontology/08-materials/02-gases/ontology.ttl",
+        "sha256": "9161e89d0954413706c0099c7496d4c70f7605f8f19435360169d0bd17402bd9"
+      },
+      {
+        "path": "ontology/ontology/08-materials/03-metals-targets/00-aluminum/ontology.ttl",
+        "sha256": "c629b0b89762ed2e92dffd10f2da729b8c747f92be5a892da6c5de7bf9246796"
+      },
+      {
+        "path": "ontology/ontology/08-materials/03-metals-targets/01-copper/ontology.ttl",
+        "sha256": "932aa8a60572984e68f3855297a44f9eb7288d14a6d1373908509989849e40a9"
+      },
+      {
+        "path": "ontology/ontology/08-materials/03-metals-targets/02-sputtering-targets/ontology.ttl",
+        "sha256": "40ad43fd3ed96186c628dc73261df37f5f76d1f013bca758555e2e4c6d37d07f"
+      },
+      {
+        "path": "ontology/ontology/08-materials/03-metals-targets/03-tungsten/ontology.ttl",
+        "sha256": "2ac111d928aa6f6abe982f9b992ec12f912a6969e4f258abe70fa71e6b522205"
+      },
+      {
+        "path": "ontology/ontology/08-materials/03-metals-targets/ontology.ttl",
+        "sha256": "af19215a2fd65f66697e75bfeba63b690d00f5be1f10b60f158010cd358a2d91"
+      },
+      {
+        "path": "ontology/ontology/08-materials/04-quality-control/00-certifications/ontology.ttl",
+        "sha256": "d394c230e4d702da633becb623bba0dc10e28e1c9c5a1afafea97e27053d52c5"
+      },
+      {
+        "path": "ontology/ontology/08-materials/04-quality-control/01-purity-levels/ontology.ttl",
+        "sha256": "22cb94d1149384ef9e394253da26a1610478841630ca79f0e973ee81dc8b8a26"
+      },
+      {
+        "path": "ontology/ontology/08-materials/04-quality-control/02-testing-methods/ontology.ttl",
+        "sha256": "cc8073283c0947234b2d0b4b1d8b78b5a0fdd651aace55d26671e3c2f7f81ebd"
+      },
+      {
+        "path": "ontology/ontology/08-materials/04-quality-control/ontology.ttl",
+        "sha256": "94c8ee6d2b2e23aafea80b68dced0d3cb675f9fcec5ada1c27bf11343a3f60fc"
+      },
+      {
+        "path": "ontology/ontology/08-materials/05-substrate-materials/00-gan/ontology.ttl",
+        "sha256": "b1046881538abe8d051d48841a5fd07387af9a5eda798048031cb72a2818fa92"
+      },
+      {
+        "path": "ontology/ontology/08-materials/05-substrate-materials/01-sic/ontology.ttl",
+        "sha256": "af64e8a9ef1ed2e5c12643520cfe6fad9a7ad4e3fd17faaedb2426db20f1c1c3"
+      },
+      {
+        "path": "ontology/ontology/08-materials/05-substrate-materials/02-silicon-wafers/ontology.ttl",
+        "sha256": "61ec04d5dcd29739e411a063e284d87bc124065f06caffba191b7ecf740baafc"
+      },
+      {
+        "path": "ontology/ontology/08-materials/05-substrate-materials/03-soi/ontology.ttl",
+        "sha256": "a87591ecc639b1642df53828836ff13ffc5b1f22abd45b0574f3c919e5af0d65"
+      },
+      {
+        "path": "ontology/ontology/08-materials/05-substrate-materials/ontology.ttl",
+        "sha256": "2c41540537a61f2a5f7d3a3ec8ec26e3663723fe1892a44b2bdfff204d69abfd"
+      },
+      {
+        "path": "ontology/ontology/08-materials/06-suppliers/00-chemicals-suppliers/ontology.ttl",
+        "sha256": "66b43e0cea011c8f7b309fcba385f051e9e1ed1a9c851ba8d9d583c965e66db3"
+      },
+      {
+        "path": "ontology/ontology/08-materials/06-suppliers/01-gas-suppliers/ontology.ttl",
+        "sha256": "4108193f32604b48766b35dfb10df4545e8054a335d1553e8cb4f4e8d56ab6fa"
+      },
+      {
+        "path": "ontology/ontology/08-materials/06-suppliers/02-substrate-suppliers/ontology.ttl",
+        "sha256": "f9ad706a568f22c3a79bdcaa791bc6d1c34b9734b7edff954e4719cd8a6de320"
+      },
+      {
+        "path": "ontology/ontology/08-materials/06-suppliers/03-metals-targets-suppliers/ontology.ttl",
+        "sha256": "6d6476ed545dfbf66899f9d27e77a95cb5d33521461d571902afbb9696aa1003"
+      },
+      {
+        "path": "ontology/ontology/08-materials/06-suppliers/04-specialty-materials-suppliers/ontology.ttl",
+        "sha256": "000add3ba7f1bf35504d4a0d4eabd8ffaa8412140363073e42a9bcb346b0c58f"
+      },
+      {
+        "path": "ontology/ontology/08-materials/06-suppliers/ontology.ttl",
+        "sha256": "a369292a83ffeabd520df11585b59ebbbb32e43f500f54811b704cabe59f4c87"
+      },
+      {
+        "path": "ontology/ontology/08-materials/ontology.ttl",
+        "sha256": "28543e430c3e1ec66dc7c6dc8cdfe0c47cdeeaa03de2bfaf23a418f967403ca6"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/00-demand-forecasting/00-ai-models/ontology.ttl",
+        "sha256": "620cf0b502a7e202f4cd3a14526a428c821e5c4dc8ca0ffe21bf6af52f94ff22"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/00-demand-forecasting/01-historical-data/ontology.ttl",
+        "sha256": "933055a150c490b03b7190227b1237248fd8d00fd0c9e09f676acc59de60680a"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/00-demand-forecasting/02-market-analysis/ontology.ttl",
+        "sha256": "594d3cb1679aa50a66f402f4e88ab2f77e735ca087af7dd5a4fad514ddd6d2c1"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/00-demand-forecasting/ontology.ttl",
+        "sha256": "f6671693fefa2c2fc352321431b49be7952a5a5ddae63c8cfa2ee262b0603f4d"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/01-inventory-management/00-jit/ontology.ttl",
+        "sha256": "2a5c71191448d768e24ee2a0ac3d1b83a766f12a3feb6e0a4fd78edbffb2aec6"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/01-inventory-management/01-safety-stock/ontology.ttl",
+        "sha256": "d11e6e86732a141403d3e340e028ff39e48abcc15e0374210c16e99740b2edc5"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/01-inventory-management/02-vmi/ontology.ttl",
+        "sha256": "ec9aeff207cb8af85a5ff5dcfcfa7f71c24054b2e7015a410da7570a46f5d814"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/01-inventory-management/ontology.ttl",
+        "sha256": "f62a299f45e819eb702050ef79c6161f24894a8f243493fedb24d08575dfb445"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/02-logistics-providers/00-freight/ontology.ttl",
+        "sha256": "6e6bb5f7ab018fb33ef1e724f0aaf49de6776bf190661b86170ed61e3b68581c"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/02-logistics-providers/01-warehousing/ontology.ttl",
+        "sha256": "3c63d5c3351af981b8f84c8a23965c79f342b8bbc46db1146d7b7ef560167df8"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/02-logistics-providers/ontology.ttl",
+        "sha256": "c9f7ae9a2b0a398976e96333ea61a0e0e0ec5786ffa9d5f3f3e09ad86b12726c"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/03-risk-assessment/00-geopolitical/ontology.ttl",
+        "sha256": "d0722efcf13342c8d69e1161422224900d074d18723b3b7cdd3965d1f146f4dc"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/03-risk-assessment/01-natural-disasters/ontology.ttl",
+        "sha256": "cabb720e92c2c524bbf52fd56157a5af341e7b9a0be9fdd4bfdebe2d320b43cb"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/03-risk-assessment/02-supply-shortages/ontology.ttl",
+        "sha256": "3ce053974f89d2a082c75db121b4afb6d8284aef978fe6b574a80012563500a1"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/03-risk-assessment/ontology.ttl",
+        "sha256": "58d8b4aa1d2de50ea1c32d459e1ba960604a14e31fb28efb3a6da83949a9fa41"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/04-supplier-relationships/00-contracts/ontology.ttl",
+        "sha256": "451718a96d1e7a4492768e297f90450365037c3303013db2cbfa60764559f209"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/04-supplier-relationships/01-tier-1-suppliers/ontology.ttl",
+        "sha256": "0b212f68e1fcc9cdafc6f786faa209ca33f6647745a3c3bbedb2f46ef69f4b8c"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/04-supplier-relationships/02-tier-2-suppliers/ontology.ttl",
+        "sha256": "08df788c509b7a5fc048273a83e42e9f9a70f92e0efc97497ac072dec401418b"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/04-supplier-relationships/ontology.ttl",
+        "sha256": "2d20f6bfb2f8996a7a2f69142b74def463614c9676f89e3b83590b67daa8e1ad"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/05-sustainability-in-supply/00-ethical-sourcing/ontology.ttl",
+        "sha256": "1ebcf68cd2d76157013f03ab716c57c78403c9a8e917682633586ec85a66bb78"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/05-sustainability-in-supply/01-green-logistics/ontology.ttl",
+        "sha256": "c11b7e443f2a32705b937c0f44222eca55921bd954c6a14724220f3804290bd5"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/05-sustainability-in-supply/02-recycling-programs/ontology.ttl",
+        "sha256": "10818f80e3c568c6129bbe6e7d5e60540a0f78ba8343f4b022ad0f58eeb4646f"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/05-sustainability-in-supply/ontology.ttl",
+        "sha256": "2ac274d881f86f8d7f1731780de65881d42a908a2ed2335651b714089685079f"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/06-traceability-systems/00-blockchain/ontology.ttl",
+        "sha256": "437a3d9c3ea65f3c10ec21657ff741f8ec91b796a3c76475fda209c93983892a"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/06-traceability-systems/01-erp-integration/ontology.ttl",
+        "sha256": "e5ad599606886173221b5cc56d6c8509fe5898e99b630e1a3e997f77936227ad"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/06-traceability-systems/02-rfid/ontology.ttl",
+        "sha256": "daf2bec08810801c312003b97f1a11dbfe3d862612bcf41655334b176ac8420e"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/06-traceability-systems/ontology.ttl",
+        "sha256": "3f937a37d9902036f095dc7293442741507f39d1cce8ef39ad43ecbe820fa7e1"
+      },
+      {
+        "path": "ontology/ontology/09-supply-chain/ontology.ttl",
+        "sha256": "a97922a2b9be54d794c37c3b66f3e990a7ff4fe4c9f02ff78ea4e91cac5a76df"
+      }
+    ],
+    "parse_errors": [
+      {
+        "path": "ontology/ontology/07-wfe/00-wafer-handling-automation/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 166 of <>:\nBad syntax (newline found in string literal) at ^ in:\n\"...b'build> ;\\n    prov:generatedAtTime \"2026-03-10\"^^xsd:date .\"}'^b'\\n\\n\\n\\n'\""
+      },
+      {
+        "path": "ontology/ontology/08-materials/01-chemicals/00-developers/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 227 of <>:\nBad syntax (Prefix \"semicont-standards:\" not bound) at ^ in:\n\"...b'emicont-08-materials-chemicals-developers:TMAH rdfs:seeAlso '^b'semicont-standards:SEMI_C1 ;\\n    rdfs:seeAlso <https://pubch'...\""
+      },
+      {
+        "path": "ontology/ontology/08-materials/01-chemicals/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 239 of <>:\nBad syntax (objectList expected) at ^ in:\n\"...b'erials-chemicals:ProcessChemical ;\\n    owl:SymmetricProperty'^b' ;\\n    rdfs:isDefinedBy semicont-08-materials-chemicals: ;\\n '...\""
+      },
+      {
+        "path": "ontology/ontology/08-materials/02-gases/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 178 of <>:\nBad syntax (expected '.' or '}' or ']' at end of statement) at ^ in:\n\"...b'ation\" ;\\n    rdfs:comment \"Purity in nines notation (e.g., \"'^b'5N5\" for 99.9995%)\" ;\\n    rdfs:domain semicont-08-materials-'...\""
+      },
+      {
+        "path": "ontology/ontology/08-materials/03-metals-targets/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 202 of <>:\nBad syntax (Prefix \"semicont-08-materials-gases:\" not bound) at ^ in:\n\"...b'.99 ;\\n    semicont-08-materials:hasNinesNotation \"4N\" ;\\n    '^b'semicont-08-materials-gases:hasCASNumber \"7429-90-5\" ;\\n    p'...\""
+      },
+      {
+        "path": "ontology/ontology/08-materials/05-substrate-materials/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 44 of <>:\nBad syntax (Prefix \"semicont-00-physics:\" not bound) at ^ in:\n\"...b'Of semicont-08-materials:SiliconWafer ;\\n    rdfs:subClassOf '^b'semicont-00-physics:IntrinsicSemiconductor ;\\n    rdfs:isDefi'...\""
+      },
+      {
+        "path": "ontology/ontology/08-materials/ontology.ttl",
+        "error": "BadSyntax",
+        "detail": "at line 185 of <>:\nBad syntax (expected '.' or '}' or ']' at end of statement) at ^ in:\n\"...b'ation\" ;\\n    rdfs:comment \"Purity in nines notation (e.g., \"'^b'5N\" for 99.999%\" ;\\n    rdfs:domain semicont-08-materials:Pur'...\""
+      }
+    ],
+    "files_parsed": 439,
+    "triples": 11240,
+    "owl_classes": 705,
+    "label_records": 705,
+    "placeholder_label_records": 58,
+    "label_records_with_class_dc_source": 208,
+    "ambiguous_labels": [
+      "afm",
+      "cd sem",
+      "cvd",
+      "deposition process",
+      "dry oxidation",
+      "evaporation",
+      "formal verification",
+      "forming gas anneal",
+      "foundation entity",
+      "lpcvd",
+      "metal cmp",
+      "multi patterning",
+      "nitridation vertical anneal",
+      "oxidation vertical anneal",
+      "oxide cmp",
+      "pecvd",
+      "process step",
+      "pvd",
+      "rapid thermal anneal",
+      "rca clean",
+      "reduction anneal",
+      "semi",
+      "soi",
+      "spike anneal",
+      "sputtering",
+      "tem",
+      "wafer",
+      "wet oxidation"
+    ],
+    "unresolved_local_superclasses": [
+      "https://semicont.org/ontology/00-shared#Method",
+      "https://semicont.org/ontology/00-shared#Organization",
+      "https://semicont.org/ontology/00-shared#Parameter",
+      "https://semicont.org/ontology/00-shared#Process",
+      "https://semicont.org/ontology/00-shared#Product",
+      "https://semicont.org/ontology/00-shared/00-common-technologies/#CommonTechnologiesConcept",
+      "https://semicont.org/ontology/00-shared/01-data-models/#DataModelsConcept",
+      "https://semicont.org/ontology/00-shared/02-industry-associations/#IndustryAssociationsConcept",
+      "https://semicont.org/ontology/00-shared/03-intellectual-property-rights/#IntellectualPropertyRightsConcept",
+      "https://semicont.org/ontology/00-shared/04-regulations/#RegulationsConcept",
+      "https://semicont.org/ontology/00-shared/05-shared-resources/#SharedResourcesConcept",
+      "https://semicont.org/ontology/00-shared/06-standards/#StandardsConcept",
+      "https://semicont.org/ontology/00-shared/07-sustainability-metrics/#SustainabilityMetricsConcept",
+      "https://semicont.org/ontology/01-integrators/00-customization-services/#CustomizationServicesConcept",
+      "https://semicont.org/ontology/01-integrators/01-end-use-applications/#EndUseApplicationsConcept",
+      "https://semicont.org/ontology/01-integrators/02-market-segments/#MarketSegmentsConcept",
+      "https://semicont.org/ontology/01-integrators/03-module-assembly/#ModuleAssemblyConcept",
+      "https://semicont.org/ontology/01-integrators/04-system-integrators/#SystemIntegratorsConcept",
+      "https://semicont.org/ontology/01-integrators/05-testing-and-validation/#TestingAndValidationConcept",
+      "https://semicont.org/ontology/02-ip-providers/00-analog-mixed-signal-ips/#AnalogMixedSignalIpsConcept",
+      "https://semicont.org/ontology/02-ip-providers/01-interface-ips/#InterfaceIpsConcept",
+      "https://semicont.org/ontology/02-ip-providers/02-ip-cores/#IpCoresConcept",
+      "https://semicont.org/ontology/02-ip-providers/03-libraries/#LibrariesConcept",
+      "https://semicont.org/ontology/02-ip-providers/04-licensing-models/#LicensingModelsConcept",
+      "https://semicont.org/ontology/02-ip-providers/05-providers/#ProvidersConcept",
+      "https://semicont.org/ontology/02-ip-providers/06-verification-ips/#VerificationIpsConcept",
+      "https://semicont.org/ontology/03-fabless/00-chip-design-companies/#ChipDesignCompaniesConcept",
+      "https://semicont.org/ontology/03-fabless/01-collaboration-tools/#CollaborationToolsConcept",
+      "https://semicont.org/ontology/03-fabless/02-design-methodologies/#DesignMethodologiesConcept",
+      "https://semicont.org/ontology/03-fabless/03-process-nodes/#ProcessNodesConcept",
+      "https://semicont.org/ontology/03-fabless/04-product-types/#ProductTypesConcept",
+      "https://semicont.org/ontology/03-fabless/05-verification-processes/#VerificationProcessesConcept",
+      "https://semicont.org/ontology/04-eda/00-automation-scripts/#AutomationScriptsConcept",
+      "https://semicont.org/ontology/04-eda/01-design-tools/#DesignToolsConcept",
+      "https://semicont.org/ontology/04-eda/02-physical-design/#PhysicalDesignConcept",
+      "https://semicont.org/ontology/04-eda/03-simulation-software/#SimulationSoftwareConcept",
+      "https://semicont.org/ontology/04-eda/04-vendors/#VendorsConcept",
+      "https://semicont.org/ontology/04-eda/05-verification-tools/#VerificationToolsConcept",
+      "https://semicont.org/ontology/05-foundry-idm/00-capacity-management/#CapacityManagementConcept",
+      "https://semicont.org/ontology/05-foundry-idm/01-foundry-services/#FoundryServicesConcept",
+      "https://semicont.org/ontology/05-foundry-idm/02-idm-operations/#IdmOperationsConcept",
+      "https://semicont.org/ontology/05-foundry-idm/03-lot-genealogy#LotGenealogyConcept",
+      "https://semicont.org/ontology/05-foundry-idm/04-process-technologies/#ProcessTechnologiesConcept",
+      "https://semicont.org/ontology/05-foundry-idm/06-yield-optimization/#YieldOptimizationConcept",
+      "https://semicont.org/ontology/06-osat-packaging-test/00-assembly-processes/#AssemblyProcess",
+      "https://semicont.org/ontology/06-osat-packaging-test/00-assembly-processes/#AssemblyProcessesConcept",
+      "https://semicont.org/ontology/06-osat-packaging-test/01-packaging-types/#PackagingType",
+      "https://semicont.org/ontology/06-osat-packaging-test/01-packaging-types/#PackagingTypesConcept",
+      "https://semicont.org/ontology/06-osat-packaging-test/02-testing-services/#TestingService",
+      "https://semicont.org/ontology/06-osat-packaging-test/02-testing-services/#TestingServicesConcept",
+      "https://semicont.org/ontology/06-osat-packaging-test/03-reliability-testing/#ReliabilityTestingConcept",
+      "https://semicont.org/ontology/06-osat-packaging-test/03-reliability-testing/#ReliabilityTestingProcess",
+      "https://semicont.org/ontology/06-osat-packaging-test/04-failure-analysis/#FailureAnalysisConcept",
+      "https://semicont.org/ontology/06-osat-packaging-test/04-failure-analysis/#FailureAnalysisMethod",
+      "https://semicont.org/ontology/06-osat-packaging-test/05-osat-providers/#OsatProvidersConcept",
+      "https://semicont.org/ontology/07-wfe/00-wafer-handling-automation/#WaferHandlingAutomationConcept",
+      "https://semicont.org/ontology/07-wfe/01-oxidation-systems/#OxidationSystemsConcept",
+      "https://semicont.org/ontology/07-wfe/02-deposition-tools/#DepositionToolProcess",
+      "https://semicont.org/ontology/07-wfe/02-deposition-tools/#DepositionToolsConcept",
+      "https://semicont.org/ontology/07-wfe/03-photoresist-processing/#PhotoresistProcessingConcept",
+      "https://semicont.org/ontology/07-wfe/04-lithography-equipment/#LithographyEquipmentConcept",
+      "https://semicont.org/ontology/07-wfe/04-lithography-equipment/#LithographyProcess",
+      "https://semicont.org/ontology/07-wfe/05-ion-implantation/#IonImplantationConcept",
+      "https://semicont.org/ontology/07-wfe/07-chemical-mechanical-planarization/#ChemicalMechanicalPlanarizationConcept",
+      "https://semicont.org/ontology/07-wfe/08-clean-strip-tools/#CleanStripProcess",
+      "https://semicont.org/ontology/07-wfe/08-clean-strip-tools/#CleanStripToolsConcept",
+      "https://semicont.org/ontology/07-wfe/09-doping-equipment/#DopingEquipmentConcept",
+      "https://semicont.org/ontology/07-wfe/10-thermal-processing/#ThermalProcessingConcept",
+      "https://semicont.org/ontology/07-wfe/11-annealing-furnaces/#AnnealingFurnacesConcept",
+      "https://semicont.org/ontology/07-wfe/12-metrology-inspection/#MetrologyInspectionConcept",
+      "https://semicont.org/ontology/07-wfe/12-metrology-inspection/#MetrologyInspectionProcess",
+      "https://semicont.org/ontology/07-wfe/13-inspection-tools/#InspectionToolsConcept",
+      "https://semicont.org/ontology/07-wfe/14-suppliers-and-maintenance/#SuppliersAndMaintenanceConcept",
+      "https://semicont.org/ontology/08-materials/#MaterialSupplier",
+      "https://semicont.org/ontology/08-materials/00-advanced-materials/#AdvancedMaterialsConcept",
+      "https://semicont.org/ontology/08-materials/01-chemicals#Acid",
+      "https://semicont.org/ontology/08-materials/01-chemicals#Etchant",
+      "https://semicont.org/ontology/08-materials/01-chemicals#PhotoresistChemical",
+      "https://semicont.org/ontology/08-materials/01-chemicals#ProcessChemical",
+      "https://semicont.org/ontology/08-materials/01-chemicals#Solvent",
+      "https://semicont.org/ontology/08-materials/02-gases#DopantGas",
+      "https://semicont.org/ontology/08-materials/02-gases#EtchGas",
+      "https://semicont.org/ontology/08-materials/02-gases#InertGas",
+      "https://semicont.org/ontology/08-materials/02-gases#PrecursorGas",
+      "https://semicont.org/ontology/08-materials/03-metals-targets/#MetalsTargetsConcept",
+      "https://semicont.org/ontology/08-materials/04-quality-control/#QualityControlConcept",
+      "https://semicont.org/ontology/08-materials/05-substrate-materials/#SubstrateMaterialsConcept",
+      "https://semicont.org/ontology/08-materials/06-suppliers/#SuppliersConcept",
+      "https://semicont.org/ontology/09-supply-chain/00-demand-forecasting/#DemandForecastingConcept",
+      "https://semicont.org/ontology/09-supply-chain/01-inventory-management/#InventoryManagementConcept",
+      "https://semicont.org/ontology/09-supply-chain/02-logistics-providers/#LogisticsProvidersConcept",
+      "https://semicont.org/ontology/09-supply-chain/03-risk-assessment/#RiskAssessmentConcept",
+      "https://semicont.org/ontology/09-supply-chain/04-supplier-relationships/#SupplierRelationshipsConcept",
+      "https://semicont.org/ontology/09-supply-chain/05-sustainability-in-supply/#SustainabilityInSupplyConcept",
+      "https://semicont.org/ontology/09-supply-chain/06-traceability-systems/#TraceabilitySystemsConcept"
+    ],
+    "unresolved_note": "Relative to the local parsed graph, not proof of OWL inconsistency; imports not resolved."
+  },
+  "smoke_queries": [
+    {
+      "query": "dry etch",
+      "status": "candidate_exact_label",
+      "matches": [
+        {
+          "uri": "https://semicont.org/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/01-dry-etch/#DryEtchProcess",
+          "label": "dry etch",
+          "placeholder": false,
+          "source_url": "https://github.com/aitomatic/semikong/blob/3228caf0a2963c4b912aa6b85fe6be4fa20e4961/ontology/ontology/05-foundry-idm/05-wafer-fabrication-processes/01-etching/01-dry-etch/ontology.ttl",
+          "source_sha256": "5bdd968edf8550b8d1b35edafa791391632094ec1cbaa140661f9ceaf9c333f2",
+          "module_sources": [
+            "Industry-general knowledge of 05 foundry idm 05 wafer fabrication processes 01 etching 01 dry etch"
+          ],
+          "class_sources": []
+        }
+      ],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "wet clean",
+      "status": "candidate_exact_label",
+      "matches": [
+        {
+          "uri": "https://semicont.org/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/#WetCleanProcess",
+          "label": "wet clean",
+          "placeholder": false,
+          "source_url": "https://github.com/aitomatic/semikong/blob/3228caf0a2963c4b912aa6b85fe6be4fa20e4961/ontology/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/ontology.ttl",
+          "source_sha256": "fb7d8a602bf1191eeef6b62fd5061caa55c8d4702bac6dc6891f8f675c1d3207",
+          "module_sources": [
+            "Industry-general knowledge of wafer fab equipment and processes"
+          ],
+          "class_sources": []
+        }
+      ],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "die attach",
+      "status": "candidate_exact_label",
+      "matches": [
+        {
+          "uri": "https://semicont.org/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/#DieAttachProcess",
+          "label": "die attach",
+          "placeholder": false,
+          "source_url": "https://github.com/aitomatic/semikong/blob/3228caf0a2963c4b912aa6b85fe6be4fa20e4961/ontology/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/ontology.ttl",
+          "source_sha256": "e5c9dd92cf0cd72a421ed4c944f0a8c66f6f193bde1b4e4de78bf20c61bd89f3",
+          "module_sources": [
+            "Industry-general knowledge of 06 osat packaging test 00 assembly processes 00 die attach"
+          ],
+          "class_sources": []
+        }
+      ],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "solder paste inspection",
+      "status": "abstain_no_exact_label",
+      "matches": [],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "recipe version",
+      "status": "abstain_no_exact_label",
+      "matches": [],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "SECOM feature_001",
+      "status": "abstain_anonymous",
+      "matches": []
+    },
+    {
+      "query": "invented unicorn process",
+      "status": "abstain_no_exact_label",
+      "matches": [],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    }
+  ],
+  "normalization_probes": [
+    {
+      "query": "WET_CLEAN",
+      "status": "candidate_exact_label",
+      "matches": [
+        {
+          "uri": "https://semicont.org/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/#WetCleanProcess",
+          "label": "wet clean",
+          "placeholder": false,
+          "source_url": "https://github.com/aitomatic/semikong/blob/3228caf0a2963c4b912aa6b85fe6be4fa20e4961/ontology/ontology/07-wfe/08-clean-strip-tools/01-wet-clean/ontology.ttl",
+          "source_sha256": "fb7d8a602bf1191eeef6b62fd5061caa55c8d4702bac6dc6891f8f675c1d3207",
+          "module_sources": [
+            "Industry-general knowledge of wafer fab equipment and processes"
+          ],
+          "class_sources": []
+        }
+      ],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "die-attach",
+      "status": "candidate_exact_label",
+      "matches": [
+        {
+          "uri": "https://semicont.org/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/#DieAttachProcess",
+          "label": "die attach",
+          "placeholder": false,
+          "source_url": "https://github.com/aitomatic/semikong/blob/3228caf0a2963c4b912aa6b85fe6be4fa20e4961/ontology/ontology/06-osat-packaging-test/00-assembly-processes/00-die-attach/ontology.ttl",
+          "source_sha256": "e5c9dd92cf0cd72a421ed4c944f0a8c66f6f193bde1b4e4de78bf20c61bd89f3",
+          "module_sources": [
+            "Industry-general knowledge of 06 osat packaging test 00 assembly processes 00 die attach"
+          ],
+          "class_sources": []
+        }
+      ],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    },
+    {
+      "query": "습식 세정",
+      "status": "abstain_no_exact_label",
+      "matches": [],
+      "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+    }
+  ],
+  "source_input_sha256": "a8f95ae540f538f2f52ffa5e45c70f1ab5bb7439c16c96a5110b7ae9a3139617",
+  "synthetic_review_items": 2,
+  "queue_unchanged": true,
+  "sidecar": {
+    "schema_version": "fabguard-semikong-sidecar-experiment/v1",
+    "queue_sha256": "4e09ccde605bec55485aac4da919a054d8cfc199901aedfcea74a003a01bee14",
+    "items": [
+      {
+        "review_id": "e6fb7d4abb34307995c50755",
+        "process_context": {
+          "query": "solder_paste_inspection",
+          "status": "abstain_no_exact_label",
+          "matches": [],
+          "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+        }
+      },
+      {
+        "review_id": "c9d732da79e0bb7abddff50f",
+        "process_context": {
+          "query": "solder_paste_inspection",
+          "status": "abstain_no_exact_label",
+          "matches": [],
+          "claim_boundary": "Vocabulary candidate only; not a validated process mapping, diagnosis or command."
+        }
+      }
+    ]
+  },
+  "parse_seconds": 1.56836096799816,
+  "smoke_lookup_seconds": 2.36369960475713e-05,
+  "llm_inference_executed": false,
+  "production_approved": false,
+  "upstream_syntax_gate": "failed",
+  "limitations": [
+    "No manufacturing accuracy or yield evidence",
+    "No Korean alias dictionary",
+    "No SHACL validation or OWL reasoning",
+    "No full-model inference or QA evaluation",
+    "Source links identify repository provenance, not independent scientific validation"
+  ],
+  "decision": "research_only_pending_domain_review"
+}

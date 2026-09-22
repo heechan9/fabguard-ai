@@ -1,0 +1,2 @@
+# Optional experiment parser; no change to FabGuard runtime dependencies.
+rdflib==7.1.4
