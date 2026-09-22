@@ -15,6 +15,19 @@ export const STATIONS=[
 export const FAULTS={paste:'납 도포량 부족',heat:'리플로우 과열',missing:'SPI 센서 데이터 누락'};
 export const TOTAL=STATIONS.reduce((sum,s)=>sum+s.duration,0);
 const starts=STATIONS.map((_,i)=>STATIONS.slice(0,i).reduce((sum,s)=>sum+s.duration,0));
+export function manufacturingEvents(snapshot){
+ if(!snapshot||snapshot.schema_version!=='fabguard-smt-synthetic/v1'||!Array.isArray(snapshot.boards))throw new Error('지원하지 않는 SMT 스냅샷입니다.');
+ if(snapshot.boards.length!==12||snapshot.boards.some(board=>!board.done))throw new Error('12개 기판이 완료된 뒤 검토용 이벤트를 저장할 수 있습니다.');
+ return {
+  schema_version:'fabguard-manufacturing-events/v1',source_id:'fabguard-smt-3d-synthetic',data_role:'synthetic',
+  measurement:{name:'solder_paste_volume_pct',unit:'percent'},
+  readings:snapshot.boards.map((board,index)=>({
+   asset_code:'SPI-SYNTHETIC-01',user_ts:new Date(Date.UTC(2026,8,1,0,index+1)).toISOString(),
+   reading:{solder_paste_volume_pct:board.volume},
+   manufacturing:{lot_id:board.lot_id,unit_id:board.id,equipment_id:'SPI-SYNTHETIC-01',process_step:'solder_paste_inspection',run_id:'SMT-SYNTHETIC-SEED-42',recipe_id:'DEMO-SPI',recipe_version:'v1',spec_version:'demo-v1',units:{solder_paste_volume_pct:'percent'}}
+  }))
+ };
+}
 export function assess(b){
  if(b.stage<2)return {status:'측정 대기',level:'normal',reason:'SPI 측정을 기다리는 중입니다.'};
  if(b.aoi==='NG')return {status:'가상 AOI NG',level:'danger',reason:b.volume<80?'도포량 부족 규칙으로 생성된 NG입니다. 실제 불량 판정이 아닙니다.':'과열 규칙으로 생성된 NG입니다. 실제 불량 판정이 아닙니다.'};

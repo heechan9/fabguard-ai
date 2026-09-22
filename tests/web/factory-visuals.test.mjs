@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from '../../web/smt/vendor/three.module.js';
-import {detailMachine,dressFloor} from '../../web/smt/factory-visuals.mjs';
+import {detailMachine,dressFloor,shouldAutoRevealInterior} from '../../web/smt/factory-visuals.mjs';
 
 // Construct real Three.js geometry without requiring a GPU or WebGL canvas.
 const box=(parent,w,h,d,x,y,z,color)=>{
@@ -30,6 +30,8 @@ test('all added station and floor geometry has finite transformed vertices and v
 
 test('added reflow cover stays clear of the bare PCB swept volume in three dimensions',()=>{
  const {group,cover}=machine(6);
+ assert.equal(shouldAutoRevealInterior(6),true,'focused reflow should open its explanatory cutaway');
+ assert.equal(shouldAutoRevealInterior(5),false,'open work table should not force interior mode');
  // Current app: PCB .67 x .07 x .79, center y=1.11 and z=0.
  // Sweep through the entire station, including entry and exit.
  const path=new THREE.Box3(new THREE.Vector3(-3,1.075,-.395),new THREE.Vector3(3,1.145,.395));

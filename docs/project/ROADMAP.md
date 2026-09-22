@@ -1,5 +1,8 @@
 # FabGuard AI 로드맵
 
+현재 구현·검증·배포의 구분과 PR 정리는 [작업 상태](WORK_STATUS.md)를 참고한다.
+아래 단계별 계획은 완료 증거를 대신하지 않는다.
+
 FabGuard의 우선순위는 반도체 제조 위험탐지 본체의 완성도와 검증이다. 외부 오픈소스 연계는
 본체를 대체하는 새 프로젝트가 아니라, FabGuard에서 검증한 산업 데이터 기술을 다른 운영환경과
 도메인에 단계적으로 이전하는 과정으로 정의한다.
@@ -87,9 +90,9 @@ Solar Data Tools 패키지를 import하지 않으며, 외부 연계가 V1의 데
 현재 준비 상태: **WSL2의 로컬 Fledge v3.1.0에서 인증된 asset REST pull, Sinusoid South
 service, 재시작 후 수집 재개, 중복 격리와 토큰 비기록 검증을 완료했다. 현장·생산 검증과
 in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
-[`docs/FLEDGE_ADAPTER_CONTRACT.md`](docs/FLEDGE_ADAPTER_CONTRACT.md)에 기록한다. 공식 커뮤니티
+[`docs/FLEDGE_ADAPTER_CONTRACT.md`](../FLEDGE_ADAPTER_CONTRACT.md)에 기록한다. 공식 커뮤니티
 접촉 전 후보 범위와 기여 절차는
-[`docs/FLEDGE_UPSTREAM_READINESS.md`](docs/FLEDGE_UPSTREAM_READINESS.md)를 따른다.
+[`docs/FLEDGE_UPSTREAM_READINESS.md`](../FLEDGE_UPSTREAM_READINESS.md)를 따른다.
 
 ### 확정사항
 
@@ -115,7 +118,7 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
   계층과 Fledge 수명주기를 분리한다.
 - 이 코드는 연계 가능성을 검증하는 독자 구현이며 Fledge 호환 또는 현장 배포 완료를 뜻하지 않는다.
 - 로컬 운영 검증 하니스의 오류 격리, 재시작 상태, 지연·단절, 부하 측정, 드리프트·알림 계약은
-  [`docs/FLEDGE_OPERATIONAL_VALIDATION.md`](docs/FLEDGE_OPERATIONAL_VALIDATION.md)에 기록한다.
+  [`docs/FLEDGE_OPERATIONAL_VALIDATION.md`](../FLEDGE_OPERATIONAL_VALIDATION.md)에 기록한다.
 
 ### 진입 조건
 
@@ -128,8 +131,9 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
 
 ### 확정사항
 
-- 출국 전인 **2027년 2월까지** 공개 PV 시계열 재현·데이터 계약·결측/드리프트 비교 실험과
-  영문 재현 패키지를 준비한다. 공식 upstream 병합 시점은 maintainer 검토에 따른다.
+- 공개 PV 시계열 재현과 데이터 계약은 호주 DKASC, 영국 PV_Live, EU PVGIS, 프랑스 Enedis까지
+  완료했다. 출국 전인 **2027년 2월까지** 정본 증거를 동결하고 결측/드리프트 비교 실험과 영문
+  재현 패키지를 보강한다. 공식 upstream 병합 시점은 maintainer 검토에 따른다.
 - Solar Data Tools 2.1.5와 Frictionless 5.19.0은 선택적 `pv` 종속성으로 격리했으며, SECOM V1 코어에는 전이되지 않는다.
 - FabGuard/Fledge에서 축적한 결측 처리, 데이터 품질검사, 이상탐지, 드리프트 감지,
   테스트·재현성 기술을 태양광 발전 시계열 문제로 이전할 수 있도록 모듈 경계를 유지한다.
@@ -160,22 +164,29 @@ in-process filter plugin은 아직 수행하지 않았다.** 자세한 경계는
 
 ## 공개 PV 데이터 실행 게이트
 
-현재 실제 외부 PV 데이터 E2E 통과 건수는 **1건**이다. 영국 PV_Live는 아직 그 수에 포함하지 않으며, [사전 입력 계약](docs/PVLIVE_ADAPTER_CONTRACT.md)만 구현된 상태다. 호주 DKASC Alice Springs 2025
-`observed` 데이터의 정규화·계약검사·SDT 실행을 완료했으며, 원본 대용량 CSV는 저장소에
-재배포하지 않고 출처·조회일·원본 및 정규화 SHA-256·변환 규칙·결과 JSON만 기록한다.
+현재 실제 외부 PV 데이터 E2E 통과 건수는 **4건**이다. 호주 DKASC `observed`, 영국 PV_Live
+`estimated`, EU JRC PVGIS `reference`, 프랑스 Enedis `estimated`가 정규화·계약검사·SDT 실행을
+완료했다. 원본 대용량 CSV는 저장소에 재배포하지 않고 출처·조회일·원본 및 정규화 SHA-256·변환
+규칙·결과 JSON을 기록한다.
 
-1. **완료:** DKASC `observed` 관측값을 최초 실데이터 검증원으로 통과시켰다.
-2. **진행 중:** PV_Live `estimated`의 사전 입력 계약을 구현했다. 공식 v4 실 API에서 GB 국가 집계 48개 구간과 updated_gmt 스키마를 확인하고 원응답 해시를 기록했다. 원자료 재배포 조건과 DST 분석시계 확인 후 Frictionless→SDT E2E를 실행한다.
-3. **다음:** JRC PVGIS `reference`를 검증한다.
-4. Fledge Sinusoid `synthetic`을 포함한 네 유형의 결과와 라이선스·조회시각·SHA-256을 고정한 뒤 1차 범위를 동결한다.
-5. 동결 이후 프랑스 후보를 우선 사전감사하고, 다른 국가 후보는 독립적인 연구가치와 데이터 자격을 통과한 경우에만 순차 승격한다.
-6. 잠정·통합·확정 상태는 새 source type이 아니라 `revision_status`라는 직교 필드로 설계한다.
+1. **완료:** DKASC Alice Springs 2025 관측값 105,120개 5분 슬롯.
+2. **완료:** PV_Live 2025 국가 추정값 17,520개 30분 슬롯.
+3. **완료:** JRC PVGIS Brussels 2020 기준값 8,784개 시간 슬롯.
+4. **완료:** Enedis France 2024 국가 태양광 추정값 17,568개 30분 슬롯.
+5. 합성 PV fixture와 네 공개 데이터 결과의 라이선스·조회시각·SHA-256을 유지하고, 변경 시
+   정본 보고서와 웹 요약의 일치를 회귀 테스트한다.
+6. RTE éCO2mix 실 API E2E와 다른 국가 후보는 독립적인 연구가치와 데이터 자격을 통과한 경우에만
+   순차 승격한다.
+7. 잠정·통합·확정 상태는 새 source type이 아니라 `revision_status`라는 직교 필드로 설계한다.
 
-프랑스 후보는 API 호출 예산, 라이선스·재배포 조건, CET/CEST 경계, 잠정값의 확정 종료조건을 모두 확인하기 전에는 구현하거나 확정했다고 표현하지 않는다. 다른 국가 후보에도 같은 fail-closed 원칙을 적용한다.
+남은 프랑스 RTE 경로는 API 호출 예산, 라이선스·재배포 조건, CET/CEST 경계, 잠정값의 확정
+종료조건을 모두 확인하기 전에는 구현하거나 확정했다고 표현하지 않는다. 다른 국가 후보에도 같은
+fail-closed 원칙을 적용한다.
 
 ## 국제 데이터 후보 레지스트리
 
-아래 목록은 구현 약속이나 연결 성공 주장이 아니다. 영국 PV_Live와 EU PVGIS로 1차 데이터 역할을 완주한 뒤, 각 후보를 `조사 → 사전감사 → 작은 fixture → E2E 검증` 순서로 승격한다.
+아래 목록은 구현 약속이나 연결 성공 주장이 아니다. 완료된 네 공개 데이터 이후의 추가 후보는
+`조사 → 사전감사 → 작은 fixture → E2E 검증` 순서로 승격한다.
 
 | 국가 | 후보군 | 검증하려는 새 축 | 승격 전 필수 조건 |
 |---|---|---|---|

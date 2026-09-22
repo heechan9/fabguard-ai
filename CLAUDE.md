@@ -4,7 +4,7 @@ FabGuard AI는 UCI SECOM 데이터에서 Fail 위험 생산 건을 우선순위�
 
 # 규칙
 
-- `AGENTS.md`, `PRD.md`, `PLAN.md`를 먼저 읽는다.
+- `AGENTS.md`, `docs/project/PRD.md`, `docs/project/PLAN.md`를 먼저 읽는다.
 - 한 번에 한 수직 슬라이스만 구현한다.
 - 새 의존성·데이터 분할·평가 정의 변경 전에는 멈추고 이유를 알린다.
 - 테스트를 먼저 만들고 실패를 확인한 뒤 구현한다.
@@ -22,4 +22,3 @@ FabGuard AI는 UCI SECOM 데이터에서 Fail 위험 생산 건을 우선순위�
 - 검증되지 않은 성능·비용·수율 개선 주장
 - 요청하지 않은 대형 UI와 리팩터링
 - 테스트 skip 또는 평가 기준 완화
-

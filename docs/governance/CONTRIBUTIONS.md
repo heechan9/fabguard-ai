@@ -25,10 +25,28 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 ## PR별 구현 기록
 
+### 2026-09-22 저장소 상태와 PR 정리
+
+- **최희찬 (`heechan9`)**: 기존 기능·데이터를 보존하는 정리 작업과 검증 우선순위 요청.
+- **Codex (OpenAI)**: 최신 main·PR·CI 대조, Python·웹 테스트 재실행, 공개 파일 배포 및 제한된 실제 브라우저 동작 확인, 연구 PR 차이 보존과 작업 상태 문서 작성.
+- 확인한 범위와 남은 검사는 [작업 상태](../project/WORK_STATUS.md)에 기록. 새 모델 실험·현장 성능이나 사용자 직접 코딩 성과로 표현하지 않음.
+
+### Manufacturing event-to-review audit slice
+
+- **Codex (OpenAI)**: SMT 합성 실행을 Fledge 호환 reading과 LOT·Unit·장비·Run·Recipe·규격 버전 계약으로 내보내고, Frozen SPC 우선검토 큐 및 사람의 판정·보류 감사 로그로 연결하는 CLI·예시·회귀 테스트 구현
+- **최희찬 (`heechan9`)**: 기존 Fledge·SPC·SMT 기능을 하나의 제조 의사결정 흐름으로 연결하는 우선순위와 공개·병합 범위 결정
+- **경계**: 합성 오프라인 검증이며 실제 MES/FDC/APC, 물리 장비, 불량 판정, 자동 재학습 또는 현장 개선 실적이 아님
+
+### Repository document structure cleanup
+
+- **Codex (OpenAI)**: 루트 문서를 프로젝트·검증·거버넌스 폴더로 재분류하고 README, 웹 링크, 문서 지도와 경로 회귀 테스트를 함께 갱신
+- **최희찬 (`heechan9`)**: GitHub 첫 화면의 파일 과밀 문제를 제기하고 정리 작업 및 병합을 요청
+
 ### PR #14 - Phase 1 고급 검증
 
 - **Codex (OpenAI)**: 비용 기반 Top-K, bootstrap 신뢰구간, PSI 드리프트, walk-forward 평가, 확률 보정 코드와 단위·회귀 테스트 및 실험계약 문서를 직접 구현
 - **최희찬 (`heechan9`)**: 연구 문제와 우선순위 설정, 활용 범위·수용 기준 결정, 결과 검토 및 병합·공개 여부 최종 승인
+- **Claude 감사 → Codex 구현 (2026-09-18)**: V1 연구질문, V2 독립 확인, 외부 데이터 자격, 관련 연구 문서와 global-section 가독성·데이터 유형·후보 레지스트리 시각 계약을 정리했다. SMT reflow 간격은 기존 3D 교차판정 테스트가 충족하므로 형상을 변경하지 않았다.
 - GitHub Contents API를 통한 업로드 특성상 커밋 업로더 계정과 실제 파일 작성 주체가 다를 수 있으므로 이 기록과 PR 설명을 기여 근거로 사용합니다.
 
 ### Global collaboration README and Phase 1 result interpretation
@@ -150,5 +168,21 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 - **Codex (OpenAI)**: 미국·호주·영국·EU/벨기에·프랑스 정본 증거를 국가→출처→역할 구조로 탐색하는 JSON 카탈로그와 문서·회귀 테스트를 구현하고, 기존 경로를 유지해 링크 파손과 증거 복제를 방지
 - **최희찬 (`heechan9`)**: 국가별 데이터 분류 방향과 적용 범위를 결정하고 공개·병합을 승인
+
+### Portfolio evidence and repository documentation organization
+
+- **Codex (OpenAI)**: 포트폴리오 판단·근거 카드와 검증 코드 구현, 문서 지도·웹 코드 안내·작업 참여 안내·PR 양식 작성, 상대 링크와 탐색 테스트 확인, README 중복 안내 축소와 초기 계획의 기록 성격 명시
+- **최희찬 (`heechan9`)**: 교육자료 원칙의 팹가드 적용과 GitHub 정리 방향 요청, 공개 및 병합 승인
+- 구현과 병합 이력: [#112](https://github.com/heechan9/fabguard-ai/pull/112), [#113](https://github.com/heechan9/fabguard-ai/pull/113), [#114](https://github.com/heechan9/fabguard-ai/pull/114)
+
+### Result-to-evidence portfolio flow
+
+- **Codex (OpenAI)**: 수업의 결과·근거·계산 검증·연락 구조를 실제 V1 증거에 맞춰 웹에 구현하고, lift 산식과 원자료가 불일치하면 표시를 중단하는 회귀 검증 추가
+- **최희찬 (`heechan9`)**: 추가 수업 화면을 제공하고 FabGuard 적용을 요청했으며, 없는 공정 전후 성과는 만들지 않는 기존 주장 경계를 유지
+
+### NVIDIA TAO AOI preflight contract
+
+- **Codex (OpenAI)**: NVIDIA 공식 Optical Inspection 스킬의 TAO 7.1.0 실행 요구사항을 검토하고, 기존 SECOM 결과와 분리된 AOI 데이터·GPU·누출 방지·평가·주장 계약, 시뮬레이션 준비 패널과 회귀 테스트 구현
+- **최희찬 (`heechan9`)**: NVIDIA 플러그인 활용 방향을 승인하고 FabGuard의 후속 시각검사 준비 작업을 요청
 
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
