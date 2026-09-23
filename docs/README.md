@@ -46,6 +46,8 @@
 
 ## 모델 평가·재현·한계
 
+- [RTE 2024 연간 수집·SDT 실행 증거 — 품질 경고 포함](../results/rte-france-national-solar-2024/README.md)
+
 - [FabGuard 핵심 연구질문](../RESEARCH_QUESTION.md)
 - [FabGuard 관련 연구와 차별점](../RELATED_WORK.md)
 - [FabGuard V2 독립 확인 프로토콜](V2_PROTOCOL.md)

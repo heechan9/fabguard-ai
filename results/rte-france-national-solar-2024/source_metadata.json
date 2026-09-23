@@ -1,0 +1,13 @@
+{
+  "url": "https://odre.opendatasoft.com/api/explore/v2.1/catalog/datasets/eco2mix-national-cons-def",
+  "retrieved_at": "2026-09-23T11:52:10.164863+00:00",
+  "sha256": "f37a4e9e37fe6a41a6cd20e53bae524fe3ad3ef758e860478e534e15f491f35e",
+  "publisher": "RTE",
+  "license": "Licence Ouverte v2.0 (Etalab)",
+  "license_url": "https://www.etalab.gouv.fr/wp-content/uploads/2017/04/ETALAB-Licence-Ouverte-v2.0.pdf",
+  "dataset_id": "eco2mix-national-cons-def",
+  "dataset_url": "https://odre.opendatasoft.com/explore/dataset/eco2mix-national-cons-def/",
+  "dataset_modified": "2026-07-30T09:38:06+00:00",
+  "dataset_data_processed": "2026-09-22T22:05:46+00:00",
+  "attribution": "RTE via ODRÉ; source data processing timestamp as recorded above. FabGuard is an independent reuse, not endorsed by RTE."
+}
