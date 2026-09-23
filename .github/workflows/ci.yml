@@ -34,6 +34,11 @@ jobs:
       - name: Check web JavaScript syntax
         run: node --check web/app.js
 
+      - name: Independently recompute persisted evidence
+        run: |
+          python verification/recompute_v1.py
+          python verification/source_clarifications.py
+
       - name: Check shared evidence and SMT simulation
         run: |
           python scripts/build_web_evidence.py --check

@@ -197,3 +197,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **최희찬 (`heechan9`)**: NVIDIA 플러그인 활용 방향을 승인하고 FabGuard의 후속 시각검사 준비 작업을 요청
 
 최종 책임과 공개 여부에 관한 결정은 프로젝트 소유자에게 있습니다.
+
+### Persisted evidence recomputation and source clarification contracts
+
+- **최희찬 (`heechan9`)**: Bunkering·Adversarial AI 프로젝트에서 재사용할 검증 원칙의 검토와 FabGuard 적용·병합을 요청하고 승인.
+- **Codex (OpenAI)**: 표준 라이브러리 기반의 독립 계산 구현, 저장된 V1 예측과 정본 지표 대조, 해시에 연결된 자료 의미 정정 기록 검증, 변조 테스트와 CI 연결 및 오래된 scoring 상태 문서 정정.
+- 독립 **코드 경로**를 추가한 것이며 독립 **외부 검토자**가 검증했다는 뜻은 아님. 실제 제공자 정정 기록은 없고 합성 사례는 테스트에만 존재. [범위와 출처](../INDEPENDENT_EVIDENCE_AUDIT.md).
