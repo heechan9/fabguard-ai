@@ -1,8 +1,8 @@
 {
   "schema_version": "fabguard-smt-evidence/v1",
   "repository": "heechan9/fabguard-ai",
-  "revision": "d62f00e19ad34f7c7c59a56678083ae21f294a69",
-  "checked_at": "2026-09-14",
+  "revision": "220bd5c0bbd9ea22928ba9cec27e2c0c04e87967",
+  "checked_at": "2026-09-23",
   "mode": "repository-generated-analysis-snapshot",
   "raw_data_recomputed": false,
   "smt_model_connected": false,
@@ -899,7 +899,7 @@
     },
     "results/catalog.json": {
       "schema_version": "fabguard-evidence-catalog/v1",
-      "updated_at": "2026-09-09",
+      "updated_at": "2026-09-23",
       "layout_policy": "country -> source -> canonical evidence",
       "migration_policy": "Existing canonical paths remain stable; new integrations declare a country_code and source_id before evidence is admitted.",
       "countries": {
@@ -967,6 +967,13 @@
               "status": "resource_contract_validated",
               "canonical_paths": [
                 "results/meteo-france-paris-montsouris-2024"
+              ]
+            },
+            "rte-france-national-solar-2024": {
+              "role": "national aggregate estimated PV",
+              "status": "e2e_validated_with_quality_warning",
+              "canonical_paths": [
+                "results/rte-france-national-solar-2024"
               ]
             }
           }

@@ -1,8 +1,8 @@
 {
   "schema_version": "fabguard-smt-evidence/v1",
   "repository": "heechan9/fabguard-ai",
-  "revision": "d62f00e19ad34f7c7c59a56678083ae21f294a69",
-  "checked_at": "2026-09-14",
+  "revision": "220bd5c0bbd9ea22928ba9cec27e2c0c04e87967",
+  "checked_at": "2026-09-23",
   "mode": "repository-generated-analysis-snapshot",
   "raw_data_recomputed": false,
   "smt_model_connected": false,
@@ -21,7 +21,7 @@
     "web/data/summary.json": "de7978da9de867a14809c537ad5dd8f766bd0bf4",
     "web/data/phase1_summary.json": "968c93e122e28f08a3f90b5789c306915366e02f",
     "web/data/global_e2e_summary.json": "aa6636e4b24ae580bc21a51c5084e0470e056367",
-    "results/catalog.json": "6c8c7951a27aa014a7f76eb4a405482a3309e31a",
+    "results/catalog.json": "93ded949071b1fa8be72fe8d7becd77012ec96d9",
     "results/v1/test_metrics.csv": "a57b0a703b2ed6b8af9223426326cab7ce93a060",
     "results/v1/top_k_test.csv": "e780dca3f39be8c732c573489b9c60aab68159ed",
     "results/phase1/inspection_cost_scenarios.csv": "c2d1513f4ba5b64c52b28e344c0cd0864977c71a"
