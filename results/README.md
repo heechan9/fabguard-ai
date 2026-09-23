@@ -14,6 +14,7 @@ The machine-readable index is [`results/catalog.json`](catalog.json).
 | 🇪🇺/🇧🇪 EU / Belgium | JRC PVGIS Brussels 2020 | Modelled PV reference | E2E validated | [Evidence](pvgis-brussels-2020/) |
 | 🇫🇷 France | Enedis 2024 | Distribution-grid estimated PV | E2E validated | [Evidence](enedis-france-national-solar-2024/) |
 | 🇫🇷 France | Météo-France Paris 2024 | Observed weather context | Resource contract validated | [Evidence](meteo-france-paris-montsouris-2024/) |
+| 🇫🇷 France | RTE éCO2mix 2024 | National aggregate estimated PV | E2E validated; quality warning retained | [Evidence](rte-france-national-solar-2024/) |
 
 ## Admission rule
 
