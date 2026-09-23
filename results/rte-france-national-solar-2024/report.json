@@ -1,0 +1,57 @@
+{
+  "schema_version": "fabguard-pv-sdt/v1",
+  "status": "sdt_contract_validated",
+  "source": {
+    "source_id": "rte-france-national-solar-2024",
+    "source_type": "estimated",
+    "input_file": "rte-2024.csv",
+    "input_sha256": "1d9ead57da2a081c99adb8c8043194115d46b61bc90fc0163dbfc0dc06ce08e4",
+    "input_rows": 17568,
+    "timezone_declared": "UTC",
+    "normalized_timezone": "UTC",
+    "sdt_analysis_clock": "declared source local wall time",
+    "input_power_unit": "MW",
+    "normalized_power_unit": "kW",
+    "sdt_input_power_unit": "W",
+    "observed_at": "2026-09-23T12:07:58.081623+00:00"
+  },
+  "validation": {
+    "frictionless": {
+      "valid": true,
+      "version": "5.19.0",
+      "resource_path": "rte-2024.csv",
+      "error_count": 0
+    }
+  },
+  "runtime": {
+    "solar_data_tools_version": "2.1.5",
+    "frictionless_version": "5.19.0",
+    "python_version": "3.12.14",
+    "solver": "CLARABEL"
+  },
+  "matrix": {
+    "raw_shape": [
+      48,
+      366
+    ],
+    "filled_shape": [
+      48,
+      366
+    ]
+  },
+  "sdt_report": {
+    "schema_version": "fabguard-sdt-report/v1",
+    "length": 1.0027397260273974,
+    "capacity": 11292750.0,
+    "sampling": 30.0,
+    "quality score": 0.9890710382513661,
+    "clearness score": 0.08469945355191257,
+    "clipped fraction": 0.0273224043715847,
+    "time zone correction": 0.0,
+    "inverter clipping": true,
+    "capacity change": false,
+    "data quality warning": true,
+    "time shift correction": false
+  },
+  "claim_boundary": "Engineering data-quality validation only; not SECOM external validation, field validation, production capacity evidence, or proof of PV performance."
+}

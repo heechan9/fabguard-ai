@@ -1,0 +1,43 @@
+{
+  "schema_version": "fabguard-rte-annual-verification/v1",
+  "base_commit": "1c7979c3ce296db799afacc849f2d2bd57611961",
+  "verified_at": "2026-09-23T12:07:58.081623Z",
+  "raw_files_verified": 366,
+  "input_rows": 17568,
+  "normalized_sha256": "1d9ead57da2a081c99adb8c8043194115d46b61bc90fc0163dbfc0dc06ce08e4",
+  "sdt_input_hash_matches": true,
+  "sdt_input_rows_match": true,
+  "grid": "17568 unique continuous UTC half-hour timestamps",
+  "raw_and_filled_matrix_shape": {
+    "raw_shape": [
+      48,
+      366
+    ],
+    "filled_shape": [
+      48,
+      366
+    ]
+  },
+  "missing_power_timestamps": [
+    "2024-10-27T00:00:00Z",
+    "2024-10-27T00:30:00Z"
+  ],
+  "consolidated_timestamps": [
+    "2024-12-31T23:00:00Z",
+    "2024-12-31T23:30:00Z"
+  ],
+  "source_revisions_not_promoted": true,
+  "raw_files_published": false,
+  "frictionless": {
+    "valid": true,
+    "version": "5.19.0",
+    "resource_path": "rte-2024.csv",
+    "error_count": 0
+  },
+  "sdt_quality_warning": true,
+  "tests": {
+    "rte_contract_and_collection": 22,
+    "sdt_contract_and_frictionless": 6
+  },
+  "scope": "Engineering data-contract verification, not physical PV diagnosis or manufacturing performance."
+}

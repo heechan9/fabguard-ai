@@ -25,6 +25,12 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 
 ## PR별 구현 기록
 
+### 2026-09-23 RTE annual verification
+
+- **최희찬**: RTE 연간 수집·검증 완료 요청 및 범위 결정.
+- **Codex**: 체크포인트 재개, 원자료 366일 수집, 기존 계약·Frictionless·SDT 실제 실행, 해시 대조 및 [결과 기록](../../results/rte-france-national-solar-2024/README.md). 현장 성능·외부 전문가 검증 또는 공식 upstream 기여를 주장하지 않음.
+
+
 ### 2026-09-22 저장소 상태와 PR 정리
 
 - **최희찬 (`heechan9`)**: 기존 기능·데이터를 보존하는 정리 작업과 검증 우선순위 요청.
