@@ -46,6 +46,8 @@
 
 ## 모델 평가·재현·한계
 
+- [Mistral 근거 설명 smoke 실험 — 실행 준비, 모델 추론 미실행](../experiments/mistral_evidence/README.md)
+
 - [FabGuard 핵심 연구질문](../RESEARCH_QUESTION.md)
 - [FabGuard 관련 연구와 차별점](../RELATED_WORK.md)
 - [FabGuard V2 독립 확인 프로토콜](V2_PROTOCOL.md)
