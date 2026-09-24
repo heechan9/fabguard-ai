@@ -10,6 +10,7 @@ function renderCard(root, snapshot, id) {
   if(id === 'pvlive') warnings.push('전력망 집계 추정값입니다. SDT의 클리핑·용량 변화 신호를 개별 인버터 고장으로 해석할 수 없습니다.');
   if(id === 'pvgis') warnings.push(`입력 가정: PVGIS-SARAH3, 설비 ${audit.request_params.peakpower} kWp, 손실 ${audit.request_params.loss}%. 해당 좌표·과거 기상 조건의 기준 계산이며 실제 공장 발전량이나 미래 예측이 아닙니다.`);
   if(id === 'enedis') warnings.push(`수집 감사의 품질 경고 있음: 에너지 결측 ${audit.missing_energy_rows}개를 0으로 채우지 않고 보존했습니다. SDT 자체의 품질 경고가 '${yesNo(sdt['data quality warning'])}'이어도 이 수집 경고는 유지합니다.`);
+  if(id === 'rte') warnings.push(`수집 ${num(audit.chunks)}일 · 원본 ${num(audit.raw_rows)}행. 결측 전력 ${audit.missing_power_rows}개와 consolidated 상태 ${audit.revision_status_counts.consolidated}개를 보존했습니다. 국가 집계 추정값의 SDT 신호를 개별 설비 고장으로 해석하지 않습니다.`);
   if(id === 'meteo') warnings.push('Frictionless 통과는 저장소 웹 요약에 기록되어 있습니다. 동봉된 개별 감사는 자원 계약·변환·해시를 담고 있으며, 별도 SDT 보고서는 없습니다.');
   if(sdt?.['data quality warning']) warnings.push('SDT 품질 경고가 기록되어 있습니다. 구조검사 통과가 모든 관측값의 정확성을 보장하지는 않습니다.');
   const takeaways = {
@@ -17,6 +18,7 @@ function renderCard(root, snapshot, id) {
     pvlive:'영국 전체 태양광 발전을 추정한 자료입니다. 개별 설비를 직접 측정한 값은 아니에요.',
     pvgis:'특정 위치와 설비 조건을 넣어 계산한 기준 자료입니다. 실제 발전량이나 미래 예측이 아니에요.',
     enedis:'프랑스 배전망의 태양광 집계 추정값입니다. 에너지 값이 없는 기록 207개가 남아 있어요.',
+    rte:'프랑스 국가 단위 태양광 추정값입니다. 연간 분석은 완료됐지만 결측과 자료 품질 경고가 남아 있어요.',
     meteo:'파리의 한 관측소에서 측정한 날씨 자료입니다. 태양광 발전량 자료는 아니에요.'
   };
   root.querySelector('#dataset-card').innerHTML = `
@@ -43,7 +45,6 @@ export async function mountEvidence(root = document.querySelector('#country-evid
       <p class="evidence-intro">국가를 선택하면 확보한 기간과 검사 결과를 볼 수 있어요. 태양광·날씨 자료를 정리한 화면이며, SMT 기판의 불량을 예측하는 자료는 아닙니다. 연도와 조건이 달라 국가별 순위는 매기지 않아요.</p>
       <div class="reading-key"><span><b>관측값</b> 실제로 측정</span><span><b>추정값</b> 여러 자료로 추산</span><span><b>기준값</b> 가정을 넣어 계산</span></div><div class="evidence-picks" aria-label="분석 자료 선택">${DATASETS.map(d=>`<button type="button" data-evidence-source="${d.id}" aria-pressed="false" aria-controls="dataset-card">${esc(d.label)}<small>${d.year}</small></button>`).join('')}</div>
       <article id="dataset-card" class="evidence-card" aria-live="polite" aria-atomic="true"></article>
-      <p class="evidence-note"><b>프랑스 RTE 자료는 아직 연결 대기 중이에요.</b><br>2024년 연간 보고서와 수집 기록이 저장소에 함께 등록되면 확인 후 표시합니다.</p>
       <details class="evidence-details"><summary>SMT에 지금 연결되는 것과 추가로 필요한 것</summary><div class="evidence-table-wrap"><table class="evidence-table"><thead><tr><th scope="col">항목</th><th scope="col">현재 연결</th><th scope="col">실제 SMT 적용에 필요한 자료</th></tr></thead><tbody>
       <tr><th scope="row">국가별 PV·기상</th><td>저장된 품질검사·분석 근거 열람</td><td>공장 위치·동일 기간·계량기·설비 부하가 있어야 에너지 분석과 연결 가능</td></tr>
       <tr><th scope="row">SECOM 예측모델</th><td><a href="/secom/">별도 반도체 분석 화면</a>에서 과거 평가 열람</td><td>SMT용 모델 별도 학습·시간 분리 평가·독립 검증. SECOM의 익명 590개 변수와 SPI 값은 호환되지 않음</td></tr>

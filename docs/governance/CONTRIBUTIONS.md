@@ -215,3 +215,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **최희찬**: TriGuard의 일반 CSV 방어 원칙을 FabGuard에 적용하도록 요청.
 - **Codex**: 파싱 도중 행·열 한도, 대표 바이너리 시그니처·제어문자 차단, 엄격한 UTF-8과 바이트 제한, 경계·정상 CSV 회귀 검증 구현.
 - [TriGuard 일반 통계 도구](https://github.com/heechan9/triguard-ai/blob/main/public-statistics/statistics-tools.js)와 [업로드 방어](https://github.com/heechan9/triguard-ai/blob/main/modules/upload_security.py)의 일반 입력 방어 원칙을 참고해 브라우저용으로 적용. 군사 도메인 로직·위험 점수는 이식하지 않음.
+
+## 2026-09-24 — 배포 화면 점검과 표시/접근성 수정
+
+- 최희찬이 전체 화면·주요 동작 점검 및 발견 문제 수정을 요청했다.
+- Codex가 Cloud Chrome에서 주요 페이지를 탐색하고 CSV·교육·SMT 대체 동작을 확인했다. RTE 완료 근거의 화면 누락과 본문 건너뛰기 경로 오류를 수정하고 테스트를 갱신했다.
+- 확인 범위와 WebGL·모바일·네트워크 오류 주입의 미검증 경계: [화면 점검 기록](../review/UI_REVIEW_20260924.md).
