@@ -1,6 +1,11 @@
 # Locked independent-evaluation readiness contract
 
-Status: **implemented integrity and approval gate; model scoring remains unimplemented**
+Status: **implemented integrity and approval gate; separate locked scoring runner implemented**
+
+The scoring implementation and trusted-loading policy are documented in
+[Locked scoring contract](LOCKED_SCORING_CONTRACT.md) and
+[`locked_scoring.py`](../src/fabguard/locked_scoring.py). Implementation is not evidence of a
+completed evaluation on genuinely independent manufacturing data.
 
 This gate is the step after independent data schema/provenance validation. It prevents accidental
 scoring, tuning, or result publication until a frozen model bundle and a pre-declared evaluation
@@ -47,13 +52,15 @@ does not mean the model was loaded, run, or independently validated.
 - absent, malformed, unnamed, or non-independent evaluation approval
 - approval that permits further tuning
 
-## Deliberately deferred
+## Implemented separately; still awaiting real independent evidence
 
-- model serialization format and trusted loading policy
-- prediction interface and score output schema
-- independent performance metrics and confidence intervals
-- model card update based on actual external results
-- production, yield, cost, uptime, or causal process claims
+The separate scoring runner defines serialization/trusted loading, the prediction interface,
+score outputs, metrics, and confidence intervals. The readiness gate above still never loads or
+runs a model. See the scoring contract for the explicit trust flag and immutable output rules.
+
+Still outstanding are an approved real independent dataset and frozen model execution, review of
+those results, and any model-card update justified by them. Production, yield, cost, uptime, and
+causal process claims remain unsupported by implementation or synthetic tests alone.
 
 No example approval is committed because approval must identify a real reviewer and bind real,
 final artifacts. Tests construct synthetic temporary bundles only.
