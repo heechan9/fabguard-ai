@@ -48,8 +48,10 @@ PV CSVs and private data are not republished.
   of an individual Météo-France SDT report remain visible.
 - Hash/row checks compare declarations in committed artifacts; this work does not
   re-fetch upstream data, rehash raw CSVs or rerun SDT.
-- RTE annual report/audit files are absent from the audited source revision and
-  remain pending despite the earlier local success message.
+- RTE annual report and 366-day collection audit are admitted: 17,568 half-hour
+  intervals with matching SHA-256. Validation is complete, with two missing power
+  values, two consolidated intervals, and collection/SDT quality warnings retained.
+  See `results/rte-france-national-solar-2024/{report,fetch_audit}.json`.
 - SECOM is historical, provisional model evaluation, not a new online prediction.
   Its anonymous features never map to SMT sensors. The Phase 1 cost calculator
   uses Phase 1 counts, separate from V1, with explicit hypothetical cost units.
