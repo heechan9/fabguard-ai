@@ -4,8 +4,8 @@ import {readFileSync} from 'node:fs';
 import {DATASETS,datasetEvidence,secomEvidence,scenarioCost,csvRows,sourceUrl} from '../../web/smt/evidence-model.mjs';
 const snapshot = JSON.parse(readFileSync(new URL('../../web/data/evidence_snapshot.json',import.meta.url),'utf8'));
 test('each PV source binds its report to audit rows/hash and correct source type',()=>{
-  assert.equal(DATASETS.length,5);
-  const kinds={dkasc:'observed',pvlive:'estimated',pvgis:'reference',enedis:'estimated',meteo:'observed'};
+  assert.equal(DATASETS.length,6);
+  const kinds={dkasc:'observed',pvlive:'estimated',pvgis:'reference',enedis:'estimated',meteo:'observed',rte:'estimated'};
   for(const meta of DATASETS){
     const d=datasetEvidence(snapshot,meta.id);
     assert.ok(d.lineageMatches,meta.id);
@@ -26,12 +26,21 @@ test('collection warnings survive successful structural and SDT checks',()=>{
   assert.equal(au.audit.negative_values_clipped_for_sdt,53817);
   assert.equal(au.audit.power_unit_status,'inferred_kW_pending_direct_schema_confirmation');
 });
-test('weather stays resource-only and RTE stays absent',()=>{
+test('weather stays resource-only while RTE admits annual evidence',()=>{
   const weather=datasetEvidence(snapshot,'meteo');
   assert.equal(weather.sdt,null);
   assert.equal(weather.report,undefined);
   assert.equal(weather.reportPath,'web/data/global_e2e_summary.json');
-  assert.ok(!Object.keys(snapshot.files).some(p=>p.includes('rte-france-national-solar-2024')));
+  const rte=datasetEvidence(snapshot,'rte');
+  assert.equal(rte.rows,17568);
+  assert.equal(rte.audit.chunks,366);
+  assert.equal(rte.audit.raw_rows,35136);
+  assert.equal(rte.audit.missing_power_rows,2);
+  assert.equal(rte.audit.revision_status_counts.consolidated,2);
+  assert.equal(rte.audit.data_quality_warning,true);
+  assert.equal(rte.sdt['data quality warning'],true);
+  assert.equal(rte.frictionless,true);
+  assert.equal(rte.report.runtime.solar_data_tools_version,'2.1.5');
   assert.equal(snapshot.smt_model_connected,false);
   assert.equal(snapshot.raw_data_recomputed,false);
 });
