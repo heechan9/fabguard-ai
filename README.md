@@ -133,7 +133,7 @@
 | 🇦🇺 호주 | **DKASC** | 태양광 설비의 실제 관측값 | ✅ Alice Springs 2025 E2E 검증 완료 |
 | 🇬🇧 영국 | **Sheffield Solar PV_Live** | GB 국가 태양광 발전량 추정값 | ✅ 2025년 17,520개 구간 E2E 검증 완료 |
 | 🇪🇺 유럽연합 | **JRC PVGIS** | 기상·일사량 기반 기준·모델값 | ✅ Brussels 2020년 8,784개 구간 E2E 검증 완료 |
-| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis · Météo-France** | 수정 이력·배전망 태양광·관측 기상 | 🟡 Enedis 17,568구간·Météo-France 8,784시간 E2E 검증 완료, RTE 연간 실행 대기 |
+| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis · Météo-France** | 수정 이력·배전망 태양광·관측 기상 | 🟡 Enedis 17,568구간·Météo-France 8,784시간 E2E 검증 완료, RTE 연간 17,568구간 E2E 완료·품질 경고 유지 |
 
 <a id="tool-roles"></a>
 
@@ -149,7 +149,7 @@
 | 의사결정·감사 | 🇰🇷 **FabGuard AI** | 우선점검 결과와 출처·버전·해시·판단 경계를 기록 |
 | 최종 판단 | 👷 **현장 엔지니어** | 실제 설비·공정 맥락을 확인하고 조치를 결정 |
 
-> **현재 검증 범위:** Fledge Sinusoid와 Solar Data Tools 기반 호주 DKASC, 영국 PV_Live, EU JRC PVGIS, 프랑스 Enedis의 계약·E2E 검증을 완료했습니다. Météo-France는 별도의 관측 기상 맥락으로 검증했으며 SDT 전력 입력으로 사용하지 않습니다. 프랑스 RTE éCO2mix는 사전계약과 오프라인 테스트를 완료했지만 실 API E2E 전이며, 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
+> **현재 검증 범위:** Fledge Sinusoid와 Solar Data Tools 기반 호주 DKASC, 영국 PV_Live, EU JRC PVGIS, 프랑스 Enedis의 계약·E2E 검증을 완료했습니다. Météo-France는 별도의 관측 기상 맥락으로 검증했으며 SDT 전력 입력으로 사용하지 않습니다. 프랑스 RTE éCO2mix도 2024년 366일 수집·연간 SDT E2E를 완료했습니다(17,568구간, 결측 전력 2개·consolidated 2개·수집 및 SDT 품질 경고 유지). 그 밖의 국가는 조사 후보입니다. 후보 등록은 연결 완료나 구현 약속을 뜻하지 않으며 출처·접근성·라이선스·스키마·단위·시간대·독립적 연구가치를 다시 심사합니다.
 
 <details>
 <summary><strong>현재 범위 밖의 국가별 후속 후보 보기</strong></summary>
@@ -157,7 +157,7 @@
 | 국가 | 우선 검토 후보군 | 독립적 검토 목적 | 현재 판정 |
 |---|---|---|---|
 | 🇺🇸 미국 | **공개 로봇 운영·이상 데이터 후보군** | 로봇 telemetry·고장/이상 탐지 계약 검토 | 공식 데이터셋·원출처·라이선스 확정 전 조사 후보 |
-| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | Enedis·Météo-France E2E 완료; RTE 사전계약 완료·실 API E2E 대기 |
+| 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | Enedis·Météo-France E2E 완료; RTE 연간 E2E 완료·결측 2개/통합 상태 2개·품질 경고 유지 |
 | 🇩🇪 독일 | **SMARD · 전력/산업 · 공개 로봇 운영 데이터 후보군** | 계통 투명성과 제조·로봇 운영 비교 | 로봇 데이터 원출처·신호·라이선스 확인 전 조사 후보 |
 | 🇪🇸 스페인 | **REE/ESIOS · 자가소비 통계 후보군** | 고태양광 계통운영과 분산형 자가소비 비교 | 시계열 해상도·라이선스 확인 전 조사 후보 |
 | 🇮🇹 이탈리아 | **Terna · GSE 공개 통계/설비 후보군** | 발전·설비 등록·지역 차이를 연결 가능한지 검토 | 원자료 접근성과 재배포 조건 확인 전 조사 후보 |
@@ -197,7 +197,7 @@
 | 상위 10% 불량 포착률 | 평균 20.1%, 95% CI 6.2–36.8% | bootstrap 2,000회, 불확실성 큼 |
 | 상위 20% 시나리오 비용 | 399 | 무점검 480 대비 81 감소; 점검 1·미탐 20 가정 |
 | Walk-forward PR-AUC | 0.054–0.280 | 시간구간별 변동이 커 지속 모니터링 필요 |
-| RF vs Logistic paired 비교 | RF 5/5 repeat 우세, 평균 AP 차이 +0.0382, exact p=0.0625 | 방향은 일관됐지만 5% 기준 통계적 유의성은 확인되지 않음 |
+| RF vs Logistic paired 비교 | 학습 CV에서 RF 5/5 repeat 우세, 평균 AP 차이 +0.0382, exact p=0.0625 | 학습 CV 비교이며 후기 RF 우위 근거 아님; 5% 유의성 미확인 |
 
 희소 불량 구간에서는 최소 클래스 표본이 5-fold보다 적다는 경고가 발생했습니다. 실행 실패는 아니지만, 이 결과를 확정 성능이나 현장 효과로 해석하지 않는 근거입니다.
 
@@ -222,7 +222,7 @@
 - 영국 Sheffield Solar PV_Live 2025 국가 추정값 17,520개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvlive-gb-national-2025/report.json) · [수집 감사](results/pvlive-gb-national-2025/fetch_audit.json))
 - EU JRC PVGIS Brussels 2020 기준값 8,784개 시간 구간을 공식 API에서 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/pvgis-brussels-2020/report.json) · [수집 감사](results/pvgis-brussels-2020/fetch_audit.json))
 - 프랑스 Enedis 2024 국가 태양광 추정값 17,568개 30분 구간을 수집하고 Frictionless→SDT E2E 검증 완료([보고서](results/enedis-france-national-solar-2024/report.json) · [수집 감사](results/enedis-france-national-solar-2024/fetch_audit.json))
-- 프랑스 RTE éCO2mix의 통합·확정 수정상태, MW 단위, CET/CEST→UTC 변환과 30분 연속성을 검사하는 fail-closed 사전계약 및 오프라인 테스트 구현; 실 API E2E는 대기
+- 프랑스 RTE éCO2mix의 통합·확정 수정상태, MW 단위, CET/CEST→UTC 변환과 30분 연속성을 검사하는 fail-closed 사전계약 및 오프라인 테스트 구현; 실 API 연간 E2E 완료(17,568구간), 결측 2개·consolidated 2개와 수집/SDT 품질 경고 유지
 
 ### 아직 구현하거나 검증하지 않음
 
@@ -331,3 +331,7 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 **AI는 점검 순서를 제안하고, 최종 판단은 엔지니어가 합니다.**
 
 </div>
+
+### 동일 조건 성능 비교와 검증 한계
+
+[비교 성적표](docs/review/PERFORMANCE_EVIDENCE_20260925.md): V1 후기 AP는 Logistic 0.094692, RF 0.093477입니다. RF가 후기 평가에서 우수하다고 결론내리지 않습니다. RF 상위 40건은 불량 24건 중 5건을 포착하고 임계값 0.5 재현율은 0입니다. Phase1은 축소 학습·별도 보정 결과로 구분합니다. 후속 SECOM 실험은 노출된 홀드아웃의 탐색적 평가이며 독립 검증이 아닙니다.

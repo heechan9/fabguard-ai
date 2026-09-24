@@ -45,3 +45,48 @@ contract fixture, not semiconductor production evidence.
 - No independent performance metric exists until an approved compatible dataset and frozen model are supplied.
 - No sensor or process cause is inferred from anonymous variables.
 - No yield, cost, uptime, lead-time or factory-integration outcome is claimed.
+
+## Available-data review (base 6275429, 2026-09-25)
+
+| Available repository data | Independent SECOM evaluation eligibility |
+|---|---|
+| Official SECOM V1 and Phase1, including re-download | No: same already-exposed historical population |
+| DKASC / PV_Live / PVGIS / RTE / Enedis / Météo-France | No: generation/weather contracts, different inputs and targets |
+| `examples/independent_validation/sample_manufacturing.csv` | No: synthetic schema fixture |
+| `examples/spc_synthetic.csv`, SMT template/synthetic example and simulation | No: synthetic measurements/rules, no independently observed production labels |
+
+No compatible independent manufacturing evaluation set was found among these
+available repository assets. This is an inventory finding, not a claim that no
+such data exists elsewhere. No other KAMP process dataset has been admitted here.
+
+## Acquisition and release gates
+
+1. Obtain an authorized, de-identified production export and written rights to
+   analyze and publish derived metrics. Record provider, process/site, collection
+   dates, version, raw SHA-256 and provenance; keep restricted raw data outside git.
+2. Supply a data dictionary: each input's measurement meaning, unit, sampling and
+   process stage, instrument/calibration changes, missing-value codes, lot/wafer
+   grouping, event timestamps/timezone, and feature availability at prediction time.
+3. Supply independently observed pass/fail labels with definition, measurement
+   method, delay and adjudication. Prevent post-inspection features leaking labels;
+   identify repeated lots and duplicates across development/evaluation partitions.
+4. For the frozen SECOM model, establish a defensible one-to-one mapping to every
+   required measurement, ordering, units and timing. Matching 590 anonymous names
+   is insufficient. Public SECOM anonymity may make this mapping impossible:
+   reject model transfer if semantics cannot be established.
+5. For another KAMP process, build a separate dataset/version and model experiment
+   with a process-specific target and budget. Freeze chronological/group-aware
+   development splits, preprocessing, candidate selection and thresholds before
+   sealing a later/site-independent evaluation set. Do not combine its metrics
+   with SECOM or use PV/SMT success as external semiconductor performance.
+6. Before evaluation, record frozen model/code/environment hashes, AP and fixed
+   inspection budgets, required number of failures and uncertainty precision,
+   false-alarm constraints, minimum acceptable gain and a one-time release rule.
+   Determine sample size from the intended precision and prevalence; no universal
+   minimum is assumed. Keep evaluation labels inaccessible during selection.
+7. Run the schema/provenance gate, review semantic compatibility, then score once
+   without tuning. Publish denominators, uncertainty, temporal/site slices and
+   negative findings. If used for tuning, obtain another untouched evaluation set.
+
+Until these gates pass, keep the operational demonstration model unchanged and
+label all follow-up SECOM measurements exploratory.

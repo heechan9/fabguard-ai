@@ -2,7 +2,9 @@
 
 ## Status
 
-**Priority France preflight prepared; no live RTE result has been admitted.**
+**2024 annual collection and SDT E2E validation completed; quality warnings retained.**
+
+Canonical evidence: [SDT report](../results/rte-france-national-solar-2024/report.json) and [collection audit](../results/rte-france-national-solar-2024/fetch_audit.json). The 366 daily chunks produce 17,568 half-hour intervals; report/audit SHA-256 match (`1d9ead57da2a081c99adb8c8043194115d46b61bc90fc0163dbfc0dc06ce08e4`). Frictionless structure validation passed; SDT 2.1.5 / CLARABEL completed. Two power values remain missing, two intervals remain consolidated (17,564 definitive), and both collection and SDT quality warnings remain true. Completion does not mean warning-free data.
 
 This is France slice 1 of 3. RTE, Enedis and Météo-France remain separate
 contracts because revision lineage, distribution assets and weather have
@@ -89,7 +91,7 @@ A single run is limited to 366 days. The range is half-open (`start` included, `
 
 ## PC execution gate
 
-Before promotion to “live API audited”:
+The completed run followed these gates; retain them for any new run:
 
 1. query a small definitive 2024 window from the official records API;
 2. preserve raw JSON outside git;
@@ -100,13 +102,9 @@ Before promotion to “live API audited”:
 7. publish only permitted derived evidence after confirming attribution and
    redistribution terms.
 
-## Remaining France slices
+## Other France contracts
 
-- Enedis: distribution/installed-capacity contract; Open Licence 2.0 has been
-  identified on candidate datasets, but a specific dataset and schema must be
-  frozen before implementation.
-- Météo-France: weather join contract; API access, applicable product licence,
-  station/grid identity and redistribution must be audited first.
+Enedis annual E2E (17,568 intervals) and Météo-France observed-weather collection (8,784 hours) are complete in their respective canonical result directories. Weather remains contextual data, not SDT power input. Their schemas, licences and evidentiary meanings remain separate.
 
 ## Claim boundary
 
