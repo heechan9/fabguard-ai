@@ -46,6 +46,11 @@
 - [FabGuard 직무 연계와 인터뷰 가이드](ROLE_ALIGNMENT.md)
 - [FabGuard AI — International Review and Collaboration Brief](MELBOURNE_COLLABORATION.md)
 
+## 외부 검토 준비
+
+- [외부 검토 요약·질문 5개](review/EXTERNAL_REVIEW_BRIEF.md)
+- [검토 답변·후속 처리 양식](review/REVIEW_RESPONSE_TEMPLATE.md)
+
 ## 모델 평가·재현·한계
 
 - [RTE 2024 연간 수집·SDT 실행 증거 — 품질 경고 포함](../results/rte-france-national-solar-2024/README.md)
