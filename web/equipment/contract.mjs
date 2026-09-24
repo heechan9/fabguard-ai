@@ -1,6 +1,41 @@
+export const CSV_LIMITS = Object.freeze({bytes: 5 * 1024 * 1024, rows: 20000, columns: 200});
+const binaryMessage = '압축·바이너리 파일 대신 UTF-8 CSV를 선택하세요.';
+export function decodeCSVBytes(buffer) {
+  const bytes = new Uint8Array(buffer);
+  if (bytes.byteLength > CSV_LIMITS.bytes) throw Error('5MB 이하 CSV만 지원합니다.');
+  const signatures = [
+    [0x50,0x4b,0x03,0x04], [0x50,0x4b,0x05,0x06], [0x50,0x4b,0x07,0x08],
+    [0x1f,0x8b], [0x25,0x50,0x44,0x46,0x2d], [0xd0,0xcf,0x11,0xe0],
+    [0x37,0x7a,0xbc,0xaf,0x27,0x1c], [0x52,0x61,0x72,0x21]
+  ];
+  const offset = bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf ? 3 : 0;
+  if (signatures.some(sig => sig.every((byte, i) => bytes[offset + i] === byte)) ||
+      bytes.some(byte => byte < 32 && ![9,10,13].includes(byte) || byte === 127)) {
+    throw Error(binaryMessage);
+  }
+  let text;
+  try { text = new TextDecoder('utf-8', {fatal: true}).decode(bytes); }
+  catch { throw Error('UTF-8 인코딩의 CSV를 선택하세요.'); }
+  if (!text.trim()) throw Error('빈 CSV 파일은 지원하지 않습니다.');
+  return text;
+}
 export const fields = ['board_id', 'pad_id', 'value'];
 export function parseCSV(text) {
+  if (typeof text !== 'string') throw Error('CSV 텍스트가 필요합니다.');
+  if (text.length > CSV_LIMITS.bytes || new TextEncoder().encode(text).byteLength > CSV_LIMITS.bytes) throw Error('5MB 이하 CSV만 지원합니다.');
+  if (/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(text)) throw Error(binaryMessage);
   const rows = []; let row = [], cell = '', quoted = false, closed = false;
+  const pushCell = () => {
+    if (row.length >= CSV_LIMITS.columns) throw Error('최대 200열을 지원합니다.');
+    row.push(cell); cell = ''; closed = false;
+  };
+  const pushRow = () => {
+    if (row.some(v => v !== '')) {
+      if (rows.length >= CSV_LIMITS.rows + 1) throw Error('최대 20,000개 측정 행을 지원합니다.');
+      rows.push(row);
+    }
+    row = [];
+  };
   text = text.replace(/^\uFEFF/, '');
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
@@ -9,17 +44,16 @@ export function parseCSV(text) {
       else if (c === '"') { quoted = false; closed = true; }
       else cell += c;
     } else if (c === ',' || c === '\n' || c === '\r') {
-      row.push(cell); cell = ''; closed = false;
-      if (c !== ',') { if (row.some(v => v !== '')) rows.push(row); row = []; if (c === '\r' && text[i+1] === '\n') i++; }
+      pushCell();
+      if (c !== ',') { pushRow(); if (c === '\r' && text[i+1] === '\n') i++; }
     } else if (c === '"' && cell === '' && !closed) quoted = true;
     else { if (closed || c === '"') throw Error('CSV 따옴표 형식 오류'); cell += c; }
   }
   if (quoted) throw Error('닫히지 않은 CSV 따옴표');
-  row.push(cell); if (row.some(v => v !== '')) rows.push(row);
+  pushCell(); pushRow();
   if (rows.length < 2) throw Error('헤더와 측정 행이 필요합니다.');
   const headers = rows.shift().map(v => v.trim());
   if (headers.some(v => !v) || new Set(headers).size !== headers.length) throw Error('비어 있거나 중복된 열 이름');
-  if (rows.length > 20000) throw Error('최대 20,000개 측정 행을 지원합니다.');
   return {headers, rows};
 }
 export function validateCSV(data, mapping, context) {

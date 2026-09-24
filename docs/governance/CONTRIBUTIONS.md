@@ -209,3 +209,9 @@ FabGuard AI는 사람의 문제 정의와 검토, AI 보조 구현을 구분해 
 - **최희찬**: 완료/미완료 상태 정리와 외부 검토 자료 준비를 요청.
 - **Codex**: main·PR·정본 근거 대조, 과거 인수인계 기록 보존, 현재 상태표와 외부 검토 요약·질문·답변 양식 작성.
 - 자료 준비이며 실제 발송·전문가 회신·외부 승인 또는 새 모델 실험을 수행한 기록이 아님.
+
+### 2026-09-24 장비 CSV 입력 방어 보완
+
+- **최희찬**: TriGuard의 일반 CSV 방어 원칙을 FabGuard에 적용하도록 요청.
+- **Codex**: 파싱 도중 행·열 한도, 대표 바이너리 시그니처·제어문자 차단, 엄격한 UTF-8과 바이트 제한, 경계·정상 CSV 회귀 검증 구현.
+- [TriGuard 일반 통계 도구](https://github.com/heechan9/triguard-ai/blob/main/public-statistics/statistics-tools.js)와 [업로드 방어](https://github.com/heechan9/triguard-ai/blob/main/modules/upload_security.py)의 일반 입력 방어 원칙을 참고해 브라우저용으로 적용. 군사 도메인 로직·위험 점수는 이식하지 않음.
