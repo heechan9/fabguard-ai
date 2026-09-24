@@ -39,3 +39,14 @@ python scripts/build_web_evidence.py --check
 ```
 
 `evidence_snapshot.json`은 입력 자료와 생성기를 통해 갱신한다. 표시 수치를 임의로 수정하지 않는다. SECOM 오프라인 결과, SMT 합성 시뮬레이션, PV 연동 검증은 각각의 증거 범위를 유지한다.
+
+## 장비 CSV 입력 제한
+
+장비 입력 화면은 UTF-8 CSV 최대 5MiB(화면 표기는 5MB), 측정 20,000행(헤더 제외), 200열을 지원한다.
+행·열 한도는 파싱 도중 확인하며, 초과하면 후속 텍스트 처리를 중단한다. 200열은 SPI 입력 화면의
+브라우저 처리·열 선택 UI 제한으로 SECOM 원본 590개 변수 계약과 무관하다.
+파일 읽기 전 크기 검사, 읽은 바이트 재검사, 대표 압축/PDF/OLE/7z/RAR 시그니처와 제어문자 검사,
+엄격한 UTF-8 디코딩을 수행한다. BOM·탭·인용된 줄바꿈은 허용한다.
+모든 바이너리 형식이나 악성 파일을 탐지하는 백신은 아니며, 메모리 사용량 전체를 제한하지 않는다.
+입력 검사는 기존 [contract.mjs](equipment/contract.mjs), 회귀 검사는
+[equipment-input.test.mjs](../tests/web/equipment-input.test.mjs)에 있다.

@@ -1,4 +1,4 @@
-import {parseCSV,validateCSV,fields} from './contract.mjs';
+import {parseCSV,validateCSV,fields,decodeCSVBytes,CSV_LIMITS} from './contract.mjs';
 const $=id=>document.getElementById(id);
 let data=null, generation=0, example=false;
 function reset(){generation++;data=null;example=false;$('file').value='';$('mapping').replaceChildren();$('preview').textContent='';$('result').replaceChildren();$('file-status').textContent='';$('mapping-panel').hidden=true;$('equipment').value='';$('role').value='';$('role').disabled=false;}
@@ -7,7 +7,7 @@ function load(text,name,isExample=false){data=parseCSV(text);example=isExample;$
   for(const f of fields){const label=document.createElement('label');label.textContent=labels[f];const select=document.createElement('select');select.id=`map-${f}`;select.add(new Option('열 선택',''));data.headers.forEach((h,i)=>select.add(new Option(h,String(i))));const match=data.headers.indexOf(f);if(match>=0)select.value=String(match);label.append(select);$('mapping').append(label);}
   $('role').value=example?'synthetic':'';$('role').disabled=example;if(example)$('equipment').value='SYNTHETIC-SPI';
 }
-$('file').addEventListener('change',async()=>{const file=$('file').files[0];reset();if(!file)return;const token=generation;try{if(!/\.csv$/i.test(file.name)||file.size>5*1024*1024)throw Error('5MB 이하 CSV만 지원합니다.');const bytes=await file.arrayBuffer();if(token!==generation)return;load(new TextDecoder('utf-8',{fatal:true}).decode(bytes),file.name);}catch(e){if(token===generation)$('file-status').textContent=e.message;}});
+$('file').addEventListener('change',async()=>{const file=$('file').files[0];reset();if(!file)return;const token=generation;try{if(!/\.csv$/i.test(file.name)||file.size>CSV_LIMITS.bytes)throw Error('5MB 이하 CSV만 지원합니다.');const bytes=await file.arrayBuffer();if(token!==generation)return;load(decodeCSVBytes(bytes),file.name);}catch(e){if(token===generation)$('file-status').textContent=e.message;}});
 $('example').addEventListener('click',()=>{reset();load('board_id,pad_id,value\nDEMO-001,P01,120\nDEMO-001,P02,\nDEMO-002,P01,118','합성 예제',true);});
 $('clear').addEventListener('click',reset);
 $('mapping-panel').addEventListener('change',()=>{$('result').replaceChildren();});
