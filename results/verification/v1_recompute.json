@@ -1,0 +1,69 @@
+{
+  "schema": "fabguard.persisted-evidence-audit.v1",
+  "status": "consistent",
+  "scope": "persisted selected-model predictions; no model inference or external validation",
+  "evaluation_status": "provisional_due_to_prior_engineering_smoke_test_exposure",
+  "model": "random_forest_depth_none_leaf_8",
+  "sample_count": 392,
+  "python": "3.12.14",
+  "metrics": {
+    "threshold": 0.5,
+    "pr_auc_average_precision": 0.09347718147533737,
+    "fail_recall": 0.0,
+    "precision": 0.0,
+    "f1": 0.0,
+    "balanced_accuracy": 0.5,
+    "false_alarm_rate": 0.0,
+    "accuracy": 0.9387755102040817,
+    "tn": 368,
+    "fp": 0,
+    "fn": 24,
+    "tp": 0
+  },
+  "top_k": [
+    {
+      "k_fraction": 0.05,
+      "inspection_count": 20,
+      "captured_fail": 4,
+      "total_fail": 24,
+      "fail_capture_rate": 0.16666666666666666,
+      "false_inspections": 16,
+      "precision": 0.2,
+      "inspection_burden": 0.05102040816326531,
+      "lift": 3.266666666666667
+    },
+    {
+      "k_fraction": 0.1,
+      "inspection_count": 40,
+      "captured_fail": 5,
+      "total_fail": 24,
+      "fail_capture_rate": 0.20833333333333334,
+      "false_inspections": 35,
+      "precision": 0.125,
+      "inspection_burden": 0.10204081632653061,
+      "lift": 2.0416666666666665
+    },
+    {
+      "k_fraction": 0.2,
+      "inspection_count": 79,
+      "captured_fail": 7,
+      "total_fail": 24,
+      "fail_capture_rate": 0.2916666666666667,
+      "false_inspections": 72,
+      "precision": 0.08860759493670886,
+      "inspection_burden": 0.20153061224489796,
+      "lift": 1.4472573839662448
+    }
+  ],
+  "input_sha256": {
+    "manifest.json": "d82685043bc160ce5dd07e9a5c43d77ba719f9e4c990d15877aee39bd64040e9",
+    "config.json": "65246b5cc1437f7986a73690829326c41b9a7a6a6eae1c579cfae921474fef54",
+    "test_split.csv": "dac1a8c2e4fbdd3479df60177ddbf7f5d0f987608043e2dd80cae657f3f685c2",
+    "priority_table.csv": "73a14b4a64a257f32ddef5924d79f3e6729ba9db6f0c402acdfe0c1708d6c563",
+    "test_metrics.csv": "a420aa3d3132d899daefdcb9c219f430f83588e829a559cc2c89a5a0ede25224",
+    "top_k_test.csv": "d6dfabb5dbfeb0d4407164ef77b493375fbc6c9b2bc5a4dbc9abf6f6c9fb0baf"
+  },
+  "source_commit": "16578c342f3ca3d4516793d6a237c52c296fd0bb",
+  "command": "python verification/recompute_v1.py",
+  "recorded_date": "2026-09-24"
+}
