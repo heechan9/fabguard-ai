@@ -1,0 +1,11 @@
+{
+  "selected": "rf_no_product",
+  "thresholds": {
+    "product_prior": 0.04248777753876727,
+    "logistic": 0.8556284641050879,
+    "rf": 0.07864694609612657,
+    "clipped_logistic": 0.8631222640930315,
+    "rf_no_product": 0.08665797162822352
+  },
+  "scope": "development only; OOF alerts <=ceil10% constraint"
+}
