@@ -56,6 +56,8 @@ PYTHONPATH=src python -m fabguard.spc --input examples/spc_synthetic.csv --basel
 - 기준 구간에 한계 이탈이 있으면 모든 후기 상태를 `baseline_review_required`로 보류한다. 그렇지 않으면 후기 한계 이탈을 원본 행·시각·LOT·기판·패드와 함께 `pending` 점검 목록으로 보여준다. 현재 화면에서는 사람의 판단·승인을 기록하지 않는다.
 - JSON 내보내기는 원본 파일 **바이트** SHA-256과 목록 전체를 저장한다. 이것은 사용자 파일과 계산의 연결 증거이지, 출처 인증이나 제품 불량 판정이 아니다. 파일 내용은 서버로 전송하지 않는다.
 
+브라우저와 Python의 교차검증은 공통 **개별값 관리한계 계산 함수**(`individuals` / `individuals_report`)에 한정된다. 웹의 열 매핑·입력 계약은 Python SPC CLI의 `timestamp,value` 2열 계약과 다르며, 신규 CSV 파이프라인 전체의 Python 교차검증을 수행했다는 뜻이 아니다.
+
 이 경로는 브라우저 내 오프라인 선별이며 Python `manufacturing_review`의 Fledge 이벤트 계약·결정 감사와 별개다. 현장 장비 연동, 관리도 기준 안정성 검증, 제품 규격 판정, 검사 성능 평가를 완료한 것으로 표시하지 않는다.
 
 ## 웹 합성 체험
