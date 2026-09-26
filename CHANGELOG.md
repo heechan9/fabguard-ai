@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-26 — Equipment CSV screening
+
+- Connected validated, time-ordered single-pad/Recipe SPI CSV input to an offline frozen-baseline SPC pending-review list and a JSON export bound to the original file bytes by SHA-256 ([#144](https://github.com/heechan9/fabguard-ai/pull/144)); no equipment connection, defect verdict, or human decision audit is claimed.
+
 - Connected completed synthetic SMT runs to a strict manufacturing-event contract, frozen-baseline SPC review queue, and explicit human decision audit; this remains offline synthetic evidence without MES/FDC or equipment control.
 - Fixed the SMT reflow close-up so selecting station 07 automatically reveals the explanatory interior instead of letting the roof obscure the PCB path; the existing Interior View control can still restore the exterior.
 
