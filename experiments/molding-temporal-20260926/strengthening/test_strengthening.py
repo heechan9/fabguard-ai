@@ -48,8 +48,7 @@ class StrengtheningTest(unittest.TestCase):
         manifest=json.loads((Path(__file__).parent/'results/manifest.json').read_text())
         for path,digest in manifest['original_artifact_hashes'].items():
             p=Path(path)
-            if p.is_absolute():
-                p=Path('experiments')/str(p).split('/experiments/',1)[1]
+            self.assertFalse(p.is_absolute(),path)
             self.assertEqual(m.v1.digest(p),digest,str(p))
 
 if __name__=='__main__':unittest.main()

@@ -44,7 +44,8 @@ def rank_metrics(d,p,fraction=.1):
 def run(archive):
     if v1.digest(archive)!=v1.ZIP_HASH:raise ValueError('Wrong input hash')
     out=ROOT/'results';out.mkdir(exist_ok=True)
-    protected={str(p):v1.digest(p) for folder in [v1.ROOT/'results',Path('results/v1'),Path('results/phase1')] for p in folder.rglob('*') if p.is_file()}
+    repo_root=Path.cwd().resolve()
+    protected={p.resolve().relative_to(repo_root).as_posix():v1.digest(p) for folder in [v1.ROOT/'results',Path('results/v1'),Path('results/phase1')] for p in folder.rglob('*') if p.is_file()}
     with zipfile.ZipFile(archive) as z:d,features,audit=v1.prepare(pd.read_csv(io.BytesIO(z.read('dataset/labeled_data.csv'))))
     fit=d[d.day<'2020-10-29'];later=d[d.day>='2020-10-29'];v1.check_separation(fit,later,features)
     cv=[];thresholds={};fitted={}
@@ -112,7 +113,7 @@ def run(archive):
                 lo,hi=np.nanquantile(a[:,j],[.025,.975]);dl,dh=np.nanquantile(delta[:,j],[.025,.975])
                 intervals.append(dict(candidate=name,reference=ref,metric=metric,point=point[j],low=lo,high=hi,delta=dp[j],delta_low=dl,delta_high=dh,valid=int(np.isfinite(a[:,j]).sum())))
     pd.DataFrame(intervals).to_csv(out/'paired_uncertainty.csv',index=False)
-    assert protected=={p:v1.digest(p) for p in protected}
+    assert protected=={p:v1.digest(repo_root/p) for p in protected}
     v1.write_json(out/'manifest.json',dict(code_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),zip_sha256=v1.ZIP_HASH,seed=v1.SEED,python=v1.platform.python_version(),sklearn=v1.sklearn.__version__,numpy=np.__version__,pandas=pd.__version__,original_artifact_hashes=protected,originals_unchanged=True,independent_validation=False,original_model_ap_reproduced=True,command='PYTHONPATH=src python experiments/molding-temporal-20260926/strengthening/run.py --archive AUTHORIZED_ZIP'))
     print('development selection:',winner);print(pd.DataFrame(tops).query('k_fraction==0.1').to_string(index=False));print(totals.to_string(index=False))
 
