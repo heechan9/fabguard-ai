@@ -33,7 +33,6 @@ jobs:
           # Repository admin: install the Claude GitHub App and add this secret
           # under Settings > Secrets and variables > Actions.
           # Generate a token locally with `claude setup-token` (Claude Pro/Max).
-          show_full_output: true
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
             --permission-mode plan
