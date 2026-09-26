@@ -1,0 +1,126 @@
+{
+  "archive_sha256": "69294087889a52791c296734051d6b21b30847c2859613e4178074182150c491",
+  "n": 829,
+  "runs": [
+    {
+      "Versuch": 20,
+      "train_n": 156,
+      "holdout_n": 67,
+      "train_counter": [
+        20627,
+        20814
+      ],
+      "holdout_counter": [
+        20815,
+        20897
+      ],
+      "dropped_all_missing_train_columns": {
+        "scalar": [
+          "Twkz"
+        ],
+        "scalar_plus_curve_summary": [
+          "Twkz"
+        ]
+      }
+    },
+    {
+      "Versuch": 23,
+      "train_n": 212,
+      "holdout_n": 91,
+      "train_counter": [
+        20933,
+        21144
+      ],
+      "holdout_counter": [
+        21145,
+        21235
+      ],
+      "dropped_all_missing_train_columns": {
+        "scalar": [
+          "mittlerer Feuchtegehalt"
+        ],
+        "scalar_plus_curve_summary": [
+          "mittlerer Feuchtegehalt"
+        ]
+      }
+    },
+    {
+      "Versuch": 15,
+      "train_n": 212,
+      "holdout_n": 91,
+      "train_counter": [
+        20191,
+        20429
+      ],
+      "holdout_counter": [
+        20430,
+        20528
+      ],
+      "dropped_all_missing_train_columns": {
+        "scalar": [
+          "Twkz"
+        ],
+        "scalar_plus_curve_summary": [
+          "Twkz"
+        ]
+      }
+    }
+  ],
+  "targets": [
+    "weight",
+    "GE-GE002*",
+    "GERADEHEIT-L*",
+    "PT-PT002L*"
+  ],
+  "scalar_features": [
+    "mittlerer Feuchtegehalt",
+    "Twkz",
+    "cycle_time",
+    "Max. Spritzdruck",
+    "Umschaltspritzdruck",
+    "staudruck_ist",
+    "einspritzzeit",
+    "Massepolster",
+    "dosierzeit",
+    "zylinderheizzone_1",
+    "zylinderheizzone_2",
+    "zylinderheizzone_3",
+    "zylinderheizzone_4",
+    "zylinderheizzone_5",
+    "zylinderheizzone_6",
+    "zylinderheizzone_7",
+    "zylinderheizzone_8",
+    "werkzeugheizkreis_1",
+    "integral_idx_0_werkzeuginnendruck_ist_state_1",
+    "integral_idx_0_werkzeuginnendruck_ist_state_2",
+    "integral_idx_0_werkzeuginnendruck_ist_state_8",
+    "integral_idx_0_messgrafik_state_1",
+    "integral_idx_0_messgrafik_state_2",
+    "integral_idx_0_messgrafik_state_8",
+    "integral_idx_1_messgrafik_state_1",
+    "integral_idx_1_messgrafik_state_2",
+    "integral_idx_1_messgrafik_state_8",
+    "integral_idx_0_einspritzdruck_ist_state_1",
+    "integral_idx_0_einspritzdruck_ist_state_2",
+    "integral_idx_0_einspritzdruck_ist_state_8",
+    "integral_idx_0_einspritzstrom_ist_state_1",
+    "integral_idx_0_einspritzstrom_ist_state_2",
+    "integral_idx_0_einspritzstrom_ist_state_8"
+  ],
+  "curve_features": [
+    "injectionflow_mean",
+    "injectionflow_max",
+    "injectionflow_std",
+    "injectionpressure_mean",
+    "injectionpressure_max",
+    "injectionpressure_std"
+  ],
+  "split": "first 70 percent train within each Versuch, remaining 30 percent holdout; independent model per run",
+  "seed": 20260926,
+  "python": "3.12.14",
+  "numpy": "2.5.3",
+  "pandas": "2.2.3",
+  "sklearn": "1.8.0",
+  "h5py": "3.16.0",
+  "prediction_time": "after injection cycle, before quality measurement"
+}
