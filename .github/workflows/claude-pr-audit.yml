@@ -1,0 +1,37 @@
+name: Claude PR audit requests
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  claude-audit:
+    # Only the repository owner's @claude comments on PRs can start a run.
+    if: >-
+      github.event.issue.pull_request != null &&
+      github.event.comment.user.login == 'heechan9' &&
+      contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Review PR with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          # Repository admin: install the Claude GitHub App and add this secret
+          # under Settings > Secrets and variables > Actions.
+          # Generate a token locally with `claude setup-token` (Claude Pro/Max).
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: |
+            --max-turns 20
+            --append-system-prompt "For FabGuard PR audits, inspect only. Do not edit files, commit, push, open or merge PRs. Report findings with file paths, lines, evidence, and unverified limits in the PR."
