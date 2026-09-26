@@ -1,5 +1,55 @@
 # FabGuard 작업 상태와 다음 검증
 
+## 2026-09-26 갱신 — 확인 근거와 현재 상태
+
+점검일: **2026-09-26**. 확인 기준 main: [`b807b4a`](https://github.com/heechan9/fabguard-ai/commit/b807b4ad335f6abfde699650d72e359c3147790e)
+(`docs: clarify equipment SPC audit scope (#145)`). GitHub API로 PR 상태·CI를 직접 조회하고,
+로컬에서 테스트를 다시 실행해 확인했다. 아래는 이 커밋 기준 상태이며, 다음 작업 전에
+원격 main·PR·CI를 다시 확인한다.
+
+### 병합된 최근 PR
+
+- [#143](https://github.com/heechan9/fabguard-ai/pull/143) `docs: 실험 현황과 로봇 기능 방향 README 반영` — merged 2026-09-26 12:29 UTC
+- [#144](https://github.com/heechan9/fabguard-ai/pull/144) `feat: 장비 CSV를 오프라인 SPC 점검 목록에 연결` — merged 2026-09-26 12:58 UTC
+- [#145](https://github.com/heechan9/fabguard-ai/pull/145) `docs: 반영된 장비 CSV 점검 범위와 감사 경계 명확화` — merged 2026-09-26 13:44 UTC
+
+### 열려 있는 Draft PR (병합되지 않음)
+
+- [#137](https://github.com/heechan9/fabguard-ai/pull/137) — SECOM 시간순 순위 개선 가설 2개의 부정적 결과 보존 기록. `main`의 대표 V1 성능·모델·임계값·웹 표시는 바꾸지 않음. 노출된 홀드아웃 재사용 탐색 결과이며 독립 성능 확증으로 인용하지 않음.
+- [#140](https://github.com/heechan9/fabguard-ai/pull/140) — KAMP S14/CN7/RG3 시간순 사출 불량 실험. 제품명 제외 RF가 후기 Top221 중 6/8건을 포착했으나 날짜별 Top10%(총 225건)에서는 0/8건. 운영 효과로 인용하지 않음.
+- [#142](https://github.com/heechan9/fabguard-ai/pull/142) — SCATIM 공개 사출 데이터의 별도 외부 공정 품질 회귀 실험. #137·#140과 코드·결과를 공유하지 않으며 세 실험의 성능을 합산하지 않음.
+
+세 PR 모두 GitHub API 조회 결과 `state: open`, `draft: true`이며 각 PR 본문이 위 경계를 자체적으로 명시한다.
+README·CHANGELOG에서 완료 기능이나 독립 검증으로 소개된 곳은 확인되지 않았다.
+
+### CI·테스트 재확인
+
+- 기준 커밋의 GitHub Actions 체크: [`test` 성공](https://github.com/heechan9/fabguard-ai/actions/runs/36246175641/job/108415684427).
+- 로컬 재실행(이 점검에서 직접 수행): `node --test 'tests/web/*.test.mjs'` **65/65 통과**,
+  `PYTHONPATH=src python -m pytest tests/` **194 통과·3 skip·217 서브테스트 통과**.
+
+### 장비 CSV → 오프라인 SPC 점검 (PR #144/#145) 경계 재확인
+
+`/equipment/`의 CSV→SPC 점검 목록은 **오프라인 통계적 선별**이다. 사용자가 선언한 출처의
+동일 장비·Recipe·패드 위치·시간순 측정값에서 고정 기준(베이스라인) 대비 이탈을
+`pending` 상태로만 표시한다. 다음은 이 기능이 **의미하지 않는 것**이다.
+
+- 사람의 검토·승인 결정이 기록된 것이 아니다 (`review_status`는 항상 `pending`).
+- 실장비 연결이나 실제 장비 데이터 진위가 검증된 것이 아니다.
+- 제품 불량 여부나 규격 합격/불합격이 판정된 것이 아니다.
+- JSON 내보내기의 SHA-256은 사용자 파일과 계산 결과의 연결 증거일 뿐, 출처 인증이 아니다.
+
+브라우저에서 파일 선택 → 분석 → JSON 저장까지 이어지는 실제 DOM 상호작용(E2E)은
+이번 점검에서도 **미검증으로 남긴다** — `screenEquipmentCSV`/`parseCSV` 등 순수 함수 단위
+테스트와 다운로드 가능한 합성 CSV의 종단 계산 테스트는 통과했지만, 실제 브라우저 클릭
+흐름을 구동하는 자동 테스트나 수동 확인 기록은 저장소에 없다.
+
+---
+
+아래는 **2026-09-24 UTC 시점 기록이며 원문 그대로 보존한다.** 이후 절의 "현재 확인된 범위"·
+"최근 검증 근거"·"다음 작업"은 위 2026-09-26 갱신 내용으로 덮어쓰지 않았다 — 당시 시점의
+기록으로 읽는다.
+
 점검일: **2026-09-24 UTC**. 확인 기준 main: [`20f1baf`](https://github.com/heechan9/fabguard-ai/commit/20f1baf3c81a7aec05567a5681063586aa40a635).
 아래는 해당 커밋 기준 상태다. 다음 작업 전에 원격 main·PR·CI를 다시 확인한다.
 
