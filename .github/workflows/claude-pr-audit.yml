@@ -33,5 +33,6 @@ jobs:
           # Generate a token locally with `claude setup-token` (Claude Pro/Max).
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
+            --permission-mode plan
             --max-turns 20
             --append-system-prompt "For FabGuard PR audits, inspect only. Do not edit files, commit, push, open or merge PRs. Report findings with file paths, lines, evidence, and unverified limits in the PR."
