@@ -43,6 +43,17 @@ jobs:
             echo "::warning::Secret contains leading/trailing whitespace or a newline character (raw_length != trimmed_length). Re-copy the token value without extra whitespace and re-save the secret."
           fi
 
+          FIRST_BYTES_HEX="$(printf '%s' "$TOKEN_VALUE" | head -c 3 | od -An -tx1 | tr -d ' \n')"
+          if [ "$FIRST_BYTES_HEX" = "efbbbf" ]; then
+            echo "::warning::Secret begins with a UTF-8 BOM (EF BB BF). This is commonly added by Windows PowerShell redirection (> file.txt) or Notepad when saving as UTF-8. Re-copy the token directly from the terminal (not via a file) and re-save the secret."
+          fi
+
+          NON_ASCII_COUNT="$(printf '%s' "$TOKEN_VALUE" | LC_ALL=C grep -o '[^ -~]' | wc -l | tr -d ' ')"
+          echo "non_printable_ascii_char_count=$NON_ASCII_COUNT"
+          if [ "$NON_ASCII_COUNT" != "0" ]; then
+            echo "::warning::Secret contains $NON_ASCII_COUNT character(s) outside the printable ASCII range (0x20-0x7E). This can be a BOM, smart quote, non-breaking space, zero-width space, or stray CR, none of which are caught by whitespace-only trimming. Re-copy the token without going through a text editor or a file redirect, then re-save the secret."
+          fi
+
       - name: Review PR with Claude
         uses: anthropics/claude-code-action@v1
         with:
