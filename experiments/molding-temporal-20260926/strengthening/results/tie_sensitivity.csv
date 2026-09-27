@@ -1,0 +1,6 @@
+candidate,replicates,k,captured_min,captured_median,captured_max
+product_prior,200,221,2,2.0,2
+logistic,200,221,0,1.0,4
+rf,200,221,2,2.0,2
+clipped_logistic,200,221,2,2.0,2
+rf_no_product,200,221,6,6.0,6

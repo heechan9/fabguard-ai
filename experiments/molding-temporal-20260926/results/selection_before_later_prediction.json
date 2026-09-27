@@ -1,0 +1,9 @@
+{
+  "selected": "rf",
+  "thresholds": {
+    "dummy": 0.013147718484145398,
+    "logistic": 0.40583696941270153,
+    "rf": 0.07013130798618143
+  },
+  "selection_scope": "development chronological CV only"
+}
