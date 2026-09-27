@@ -27,6 +27,22 @@ jobs:
           ref: refs/pull/${{ github.event.issue.number }}/head
           fetch-depth: 0
 
+      - name: Diagnose OAuth secret (never prints the value)
+        env:
+          TOKEN_VALUE: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN_VALUE" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN is empty or unset for this workflow. Check that it is a REPOSITORY secret (Settings > Secrets and variables > Actions), not an Environment secret, since this job declares no 'environment:'."
+            exit 1
+          fi
+          RAW_LEN=${#TOKEN_VALUE}
+          TRIMMED="$(printf '%s' "$TOKEN_VALUE" | tr -d '[:space:]')"
+          TRIMMED_LEN=${#TRIMMED}
+          echo "Secret is set. raw_length=$RAW_LEN trimmed_length=$TRIMMED_LEN"
+          if [ "$RAW_LEN" != "$TRIMMED_LEN" ]; then
+            echo "::warning::Secret contains leading/trailing whitespace or a newline character (raw_length != trimmed_length). Re-copy the token value without extra whitespace and re-save the secret."
+          fi
+
       - name: Review PR with Claude
         uses: anthropics/claude-code-action@v1
         with:
