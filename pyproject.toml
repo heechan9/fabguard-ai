@@ -18,6 +18,7 @@ pv = [
 ]
 
 [project.scripts]
+fabguard-steel-audit = "fabguard.steel_reference_audit:main"
 fabguard-audit = "fabguard.data:main"
 fabguard-run = "fabguard.experiment:main"
 fabguard-report = "fabguard.reporting:main"

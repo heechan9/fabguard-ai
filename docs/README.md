@@ -53,6 +53,8 @@
 
 ## 모델 평가·재현·한계
 
+- [강의 참고자료 적용: Steel 구조 감사와 한계](validation/LECTURE_REFERENCE_APPLICATION.md)
+
 - [RTE 2024 연간 수집·SDT 실행 증거 — 품질 경고 포함](../results/rte-france-national-solar-2024/README.md)
 
 - [FabGuard 핵심 연구질문](../RESEARCH_QUESTION.md)
