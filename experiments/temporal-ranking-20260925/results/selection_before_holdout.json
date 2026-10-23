@@ -1,0 +1,12 @@
+{
+  "selected": "h2_rf_f40",
+  "thresholds": {
+    "dummy_prior": 0.08556832694763729,
+    "l1_logistic_c_0.01": 0.5000952588851288,
+    "random_forest_depth_none_leaf_8": 0.14096071686801617,
+    "h1_l2_c_0.1": 0.1848544088257463,
+    "h2_rf_f40": 0.11831746753286036
+  },
+  "rule": "train temporal mean AP, then capture; holdout excluded",
+  "exploratory": true
+}
