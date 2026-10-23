@@ -81,6 +81,7 @@
 
 ## 수집·연동 계약과 별도 도메인 검증
 
+- [로봇 판단 보류·입력 품질 점검 설계와 테스트 사례 (구현 전)](ROBOT_SCREENING_GATES_DESIGN.md)
 - [Fledge 연계 준비 계약](FLEDGE_ADAPTER_CONTRACT.md)
 - [Fledge operational validation slice](FLEDGE_OPERATIONAL_VALIDATION.md)
 - [Fledge upstream contribution readiness](FLEDGE_UPSTREAM_READINESS.md)
