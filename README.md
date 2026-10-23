@@ -93,6 +93,7 @@
 | **구현·재현 확인** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모. 성능 수치는 홀드아웃 노출 이력이 있는 잠정 결과 |
 | **도구 검증 완료** | Fledge v3.1.0 실연동, Frictionless v5.19.0 계약, Solar Data Tools v2.1.5 합성·관측 PV 실행, 합성 SMT 이벤트→Frozen SPC→사람 검토 감사 슬라이스 |
 | **장비 CSV 오프라인 점검** | [SPI CSV 입력·SPC 점검 화면](https://fabguard-ai.vercel.app/equipment/)에서 동일 패드·Recipe의 시간순 측정값을 고정 기준으로 선별해 `pending` 목록과 원본 바이트 SHA-256 연결 JSON을 저장. 현장 성능·사람 검토 완료 증거는 아님 |
+| **로봇 원본 시계열 실험** | [IMAD-DS 로봇 암 학습·평가](docs/ROBOT_IMAD_BENCHMARK.md)는 실험실 센서 구간 2,303개를 사용한 별도 오프라인 벤치마크. 대상 조건의 세션 분리 AUROC 0.479로 운영 적용 근거가 없음 |
 | **실데이터 시스템 데모** | 호주 DKASC Alice Springs 2025 관측값 105,120개 슬롯을 정규화하고 Frictionless→SDT 경로로 검증 완료 |
 | **후속 시스템 데모** | 영국 PV_Live 2025 추정값 17,520개 구간과 EU PVGIS Brussels 2020 기준값 8,784개 구간을 Frictionless→SDT로 검증 완료 |
 | **미검증** | 실제 MES/FDC 연동, 독립 반도체 공장 데이터 성능, 실제 현장 KPI 개선 |

@@ -53,6 +53,7 @@
 
 ## 모델 평가·재현·한계
 
+- [IMAD-DS 로봇 암 오프라인 학습·성능 측정](ROBOT_IMAD_BENCHMARK.md) — 별도 로봇 실험, 세션 분리 및 대상 조건 실패 포함
 - [RTE 2024 연간 수집·SDT 실행 증거 — 품질 경고 포함](../results/rte-france-national-solar-2024/README.md)
 
 - [FabGuard 핵심 연구질문](../RESEARCH_QUESTION.md)
