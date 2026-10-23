@@ -103,4 +103,3 @@ Canonical invalid values are encoded as explicit strings only when hashing JSON;
 the monitoring function receives actual None/NaN/infinity and treats all unknown.
 Quantiles use statistics.quantiles(..., method='inclusive'); one detection has
 identical quartiles. Rates pooled over seeds use summed numerator/denominator.
-
