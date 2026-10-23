@@ -64,8 +64,9 @@ class ResultsContractTest(unittest.TestCase):
         walk_forward = pd.read_csv(Path("results/phase1/walk_forward_metrics.csv"))
         self.assertEqual(phase1["status"], "scenario_and_provisional_validation")
         self.assertFalse(phase1["test_split_changed"])
-        self.assertEqual(phase1["ece"]["before"], calibration.loc[calibration["variant"] == "uncalibrated", "expected_calibration_error"].iloc[0])
-        self.assertEqual(phase1["ece"]["after"], calibration.loc[calibration["variant"] == "sigmoid_train_tail", "expected_calibration_error"].iloc[0])
+        # JSON and CSV parsers can differ by one representable float after round-trip.
+        self.assertAlmostEqual(phase1["ece"]["before"], calibration.loc[calibration["variant"] == "uncalibrated", "expected_calibration_error"].iloc[0], delta=1e-12)
+        self.assertAlmostEqual(phase1["ece"]["after"], calibration.loc[calibration["variant"] == "sigmoid_train_tail", "expected_calibration_error"].iloc[0], delta=1e-12)
         self.assertEqual(phase1["ece"]["populated_bins"], int(calibration.loc[calibration["variant"] == "sigmoid_train_tail", "populated_bins"].iloc[0]))
         best_cost = costs.loc[costs["scenario_total_cost"].idxmin()]
         self.assertEqual(phase1["best_cost"]["k_fraction"], best_cost["k_fraction"])
