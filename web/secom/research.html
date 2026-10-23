@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101b25">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>FabGuard · SECOM 전처리 비교 연구 기록</title>
+<meta name="description" content="FabGuard 본체 SECOM 반도체 데이터의 학습 구간 전용 전처리 비교(Draft #170) 결과와 강의 적용 범위. 개선 미입증, 운영 모델 변경 없음.">
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/navigation.css"><link rel="stylesheet" href="/readability.css"><link rel="stylesheet" href="./research/research.css"></head>
+<body class="secom-research"><a class="skip-link" href="#research-main">본문으로 건너뛰기</a><div class="ambient" aria-hidden="true"></div>
+<header class="topbar"><a class="brand" href="/#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a><nav aria-label="주요 화면"><a href="/#summary">프로젝트 소개</a><a href="/secom/">반도체 분석</a><a href="/#limitations">검증과 한계</a></nav></header>
+<main id="research-main" class="research-main" tabindex="-1">
+<p class="track-banner"><b>FabGuard 플랫폼 · SECOM 모델 평가 연구 기록 (플랫폼의 일부)</b> FabGuard는 반도체·제조 데이터 전처리, 공정 품질, 모델 평가, 기존 장비 데이터 점검 기능을 포함하는 플랫폼이며, 이 화면은 그중 SECOM 전처리·모델 평가 실험 하나만 다룹니다. 기존 <a href="/secom/">반도체 분석 화면</a>을 바꾸지 않는 별도 연구 기록입니다. 화면의 수치는 미병합 Draft <a href="https://github.com/heechan9/fabguard-ai/pull/170">PR #170</a>의 고정 head <code id="head-short">e7cdc47b</code> 산출물을 그대로 옮긴 것이며, 이 화면을 만들며 실험을 다시 실행하지 않았습니다.</p>
+<section class="r-hero" aria-labelledby="r-title">
+<p class="eyebrow">SECOM · TRAINING-ONLY DEVELOPMENT EXPERIMENT</p>
+<h1 id="r-title">학습 구간 안에서 전처리를 비교했지만, 개선은 입증되지 않았습니다</h1>
+<p class="lead">결측 처리 방식 4가지와 고정 모델 3개(+기준 Dummy)를 학습 구간의 날짜 블록 폴드에서만 비교했습니다. 운영·데모 모델은 바꾸지 않았고, 이후 392행 시험 구간은 읽지도 점수 내지도 않았습니다.</p>
+<div id="bottom-line" class="bottom-line" role="note"></div>
+</section>
+
+<section class="panel r-step" aria-labelledby="design-title">
+<h2 id="design-title">실험 설계 — 결과를 보기 전에 고정</h2>
+<dl id="design-facts" class="r-facts"></dl>
+<div class="table-wrap"><table id="fold-table"><caption>폴드별 학습·검증 크기와 검토 예산 (날짜가 겹치지 않는 확장형 블록)</caption>
+<thead><tr><th scope="col">폴드</th><th scope="col">학습 행 / 불량</th><th scope="col">검증 행 / 불량</th><th scope="col">검증 기간</th><th scope="col">상위 10% 검토 수</th></tr></thead><tbody></tbody></table></div>
+<p class="caption">검토 예산은 폴드마다 <code>ceil(0.10 × 검증 행)</code>입니다. 포착 분모는 그 폴드 검증 구간의 모든 불량입니다. 세 폴드는 학습 구간이 겹치는 종속 폴드라 표준편차는 신뢰구간이 아닙니다. 날짜 블록은 LOT·장비 분리를 대신하지 못합니다(해당 ID가 SECOM에 없음).</p>
+</section>
+
+<section class="panel r-step" aria-labelledby="modes-title">
+<h2 id="modes-title">비교한 결측 처리 4가지</h2>
+<div class="mode-grid">
+<article><h3><code>impute_only</code></h3><p>590개 열 전체, 학습 폴드 중앙값 대치만. 지시변수·필터 없음.</p></article>
+<article><h3><code>filter_only</code></h3><p>학습 폴드 기준 결측 50% 초과·관측값 1종 이하·완전 중복 열 제거 후 중앙값 대치.</p></article>
+<article><h3><code>current</code></h3><p>위 필터 + 중앙값 대치 + 결측 지시변수. 현재 전처리 기준선이며 V1 모델 선택의 재현이 아닙니다.</p></article>
+<article><h3><code>current_plus_row_missing</code></h3><p><code>current</code>에 행마다 원본 590열의 결측 개수를 더한 새 특징.</p></article>
+</div>
+<p class="caption">모델: L1 로지스틱(C=0.1), 랜덤 포레스트(120 trees, depth 8), HistGradientBoosting(100 iterations, lr 0.05), 기준선 Dummy(prior). 튜닝·탐색 없음. 특징은 익명 측정변수이며 이 화면은 특정 공정 변수 이름을 붙이지 않습니다.</p>
+</section>
+
+<section class="panel r-step" aria-labelledby="results-title">
+<h2 id="results-title">13개 후보 결과 — 모두 표시</h2>
+<label class="r-filter">모델 보기 <select id="family-filter"><option value="all">전체</option><option value="l1_logistic">L1 로지스틱</option><option value="random_forest">랜덤 포레스트</option><option value="hist_gradient_boosting">HistGradientBoosting</option><option value="dummy">Dummy</option></select></label>
+<div class="table-wrap"><table id="summary-table"><caption>세 폴드 결과 (AP 평균 ± 표본표준편차, 포착은 세 폴드 예산의 합산)</caption>
+<thead><tr><th scope="col">모델</th><th scope="col">결측 처리</th><th scope="col">AP 평균 ± SD</th><th scope="col">AP 최소–최대</th><th scope="col">포착 / 불량</th><th scope="col">폴드별 포착</th><th scope="col">합산 포착률</th></tr></thead><tbody></tbody></table></div>
+<figure class="r-figure"><svg id="capture-chart" role="img" viewBox="0 0 760 360"></svg><figcaption>후보별 포착한 불량 수 (분모는 세 폴드 검증 불량 전체, 검토 수 합계는 고정). 막대 옆 숫자가 실제 값입니다.</figcaption></figure>
+<p class="caption">AP는 scikit-learn average precision입니다. 평균 AP가 높은 후보가 같은 검토 예산의 포착에서도 앞서지는 않습니다. Dummy는 동점 정렬이 임의라서 포착 범위와 무작위 동점 기대값을 함께 봐야 합니다.</p>
+<p id="dummy-note" class="caption"></p>
+</section>
+
+<section class="panel r-step" aria-labelledby="contrast-title">
+<h2 id="contrast-title">미리 정한 비교 — 같은 모델 안에서만</h2>
+<div class="table-wrap"><table id="contrast-table"><caption>평균 AP 변화와 포착 수 변화 (같은 폴드·같은 예산)</caption>
+<thead><tr><th scope="col">모델</th><th scope="col">비교</th><th scope="col">평균 AP 변화</th><th scope="col">포착 변화</th><th scope="col">읽는 법</th></tr></thead><tbody></tbody></table></div>
+<p class="caption">후기 폴드는 불량이 11건뿐이라 포착 1건이 재현율을 약 9%p 움직입니다. 이 차이들은 모델 교체나 품질 필터 제거의 근거가 아닙니다.</p>
+</section>
+
+<section class="panel r-step" aria-labelledby="lecture-title">
+<h2 id="lecture-title">오늘 강의 내용과 FabGuard SECOM의 대응</h2>
+<p>강의 자료는 이 저장소나 화면에 올리지 않았습니다. 아래는 주제만 요약한 것이며, 교재 예시 수치는 FabGuard 결과가 아닙니다. 강의 내용 전체를 적용했거나 플랫폼을 업그레이드했다는 뜻이 아닙니다. “구현함”은 이 화면이 실제로 보여 주는 것만 가리킵니다.</p>
+<div class="table-wrap"><table id="lecture-table"><caption>강의 주제별 적용 판단과 이 화면의 실제 구현 범위</caption>
+<thead><tr><th scope="col">쪽</th><th scope="col">강의 주제</th><th scope="col">SECOM 적용 판단</th><th scope="col">이유</th><th scope="col">이 화면에서</th></tr></thead>
+<tbody>
+<tr><th scope="row">5</th><td>결측·이상치·정규화</td><td><span class="tag tag-yes">적용</span></td><td>#170의 4가지 결측 처리가 바로 이 주제. 결측을 정보로 다루는 지시변수·행 결측 수 비교. 이상치 행 삭제 없음, 스케일링은 학습 폴드에만 적합</td><td>결과 표시 (구현함)</td></tr>
+<tr><th scope="row">7</th><td>관리도, 관리한계 ≠ 규격한계</td><td><span class="tag tag-yes">적용</span></td><td>저장소의 범용 오프라인 I-MR 점검 도구(<code>spc.py</code>)가 있으나 SECOM 순위 모델과 연결되어 있지 않음. EWMA/CUSUM 비교는 별도 합성 실험(Draft #172). 측정변수별 시계열 관리도는 향후 과제</td><td>설명만 (이 화면은 관리도를 그리지 않음)</td></tr>
+<tr><th scope="row">12</th><td>수율·불량 예측</td><td><span class="tag tag-yes">적용</span></td><td>FabGuard의 Fail 위험 생산 건 순위화가 이 범주. 단 여기 결과는 학습 구간 개발 실험</td><td>설명만</td></tr>
+<tr><th scope="row">11</th><td>업무 흐름 (이슈 → 분류 → 상관)</td><td><span class="tag tag-cond">조건부</span></td><td>①~③단계와 겹침. 웨이퍼맵·DOE 검증 단계는 자료가 없음</td><td>설명만</td></tr>
+<tr><th scope="row">3</th><td>t-test, p-value</td><td><span class="tag tag-cond">조건부</span></td><td>Pass/Fail 간 변수별 비교는 가능하나 590개 동시 검정이라 다중검정 보정이 필요하고 학습 폴드 안에서만. 유의성은 원인이 아님</td><td>구현 안 함</td></tr>
+<tr><th scope="row">9</th><td>Pareto</td><td><span class="tag tag-cond">조건부</span></td><td>상위 위험 건의 기술 통계 정리용. 익명 변수라 원인 순위로 읽을 수 없음</td><td>구현 안 함</td></tr>
+<tr><th scope="row">14–18</th><td>데이터 생태계, MES, LOT 추적</td><td><span class="tag tag-cond">조건부</span></td><td>SECOM에는 시각만 있고 LOT·장비 ID가 없음. 그래서 날짜 블록 폴드로 대신했고 그룹 독립성은 주장하지 않음</td><td>날짜 블록 표시 (구현함)</td></tr>
+<tr><th scope="row">4</th><td>ANOVA 챔버 매칭</td><td><span class="tag tag-no">자료 없음</span></td><td>챔버·장비 식별자가 없음</td><td>구현 안 함</td></tr>
+<tr><th scope="row">8</th><td>RCA·6M</td><td><span class="tag tag-no">자료 없음</span></td><td>특징이 익명이라 장비·재료 등 범주로 연결할 수 없고, 중요도는 원인이 아님</td><td>구현 안 함</td></tr>
+<tr><th scope="row">10</th><td>DOE</td><td><span class="tag tag-no">자료 없음</span></td><td>통제한 실험 요인이 없는 관측 자료</td><td>구현 안 함</td></tr>
+<tr><th scope="row">13, 27</th><td>Cp·Cpk</td><td><span class="tag tag-no">자료 없음</span></td><td>규격 한계(USL/LSL)가 공개되지 않음</td><td>구현 안 함</td></tr>
+<tr><th scope="row">6, 19</th><td>수율 손실·경제 효과</td><td><span class="tag tag-no">자료 없음</span></td><td>수율·비용 자료가 없어 주장하지 않음</td><td>구현 안 함</td></tr>
+<tr><th scope="row">20–26</th><td>공정별 데이터 (포토·식각·증착 등)</td><td><span class="tag tag-no">자료 없음</span></td><td>익명 특징을 특정 공정 변수로 이름 붙이지 않음. 면접·도메인 이해용 배경</td><td>구현 안 함</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="panel r-step limits" aria-labelledby="limits-title">
+<h2 id="limits-title">이 결과로 말하지 않는 것</h2>
+<ul id="limits-list">
+<li>운영·데모 모델의 개선, 실시간 성능, 수율 향상, 비용 절감을 주장하지 않습니다.</li>
+<li>어떤 후보도 선정·승격·전체 학습 재적합하지 않았고, 이후 392행 시험 구간은 사용하지 않았습니다.</li>
+<li>익명 측정변수의 중요도를 실제 공정 원인으로 표현하지 않습니다.</li>
+</ul>
+<h3>출처와 재현</h3>
+<dl id="provenance" class="r-facts"></dl>
+<p class="caption">로봇 진동 변화감지는 기존 플랫폼 기능을 대체하지 않는 별도 추가 기능으로, <a href="/robot/">확장 실험 화면</a>에 있습니다.</p>
+</section>
+</main>
+<script type="module" src="./research/research.mjs"></script></body></html>
