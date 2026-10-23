@@ -175,13 +175,19 @@ def run():
             center, scale = fit_reference(reference)
         except ValueError as exc:
             for method in METHODS:
-                calibration.append(dict(seed=seed, method=method, error=str(exc)))
+                calibration.append(dict(seed=seed, method=method, error=str(exc),
+                                        reference_total=len(reference),
+                                        reference_valid=sum(valid(x) for x in reference),
+                                        reference_invalid=sum(not valid(x) for x in reference)))
                 for name in SCENARIOS:
                     rows.append(dict(seed=seed, scenario=name, method=method, available=False))
             continue
         for method in METHODS:
             threshold, count = calibrate(stable, center, scale, method)
             calibration.append(dict(seed=seed, method=method, center=center, scale=scale,
+                                    reference_total=len(reference),
+                                    reference_valid=sum(valid(x) for x in reference),
+                                    reference_invalid=sum(not valid(x) for x in reference),
                                     threshold=threshold, alarms=count, ticks=len(stable)))
             for name, values in series.items():
                 row = dict(seed=seed, scenario=name, method=method, available=threshold is not None)

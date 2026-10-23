@@ -103,6 +103,19 @@ class StudyTests(unittest.TestCase):
         self.assertEqual(len(seen), 3)
         self.assertTrue(all(x == s.normal(20000, 30) for x in seen))
         self.assertEqual(len(result['per_seed']), 21)
+        self.assertTrue(all(r['reference_total'] == 20 and r['reference_valid'] == 20
+                            and r['reference_invalid'] == 0 for r in result['calibration']))
+
+    def test_persisted_invalid_reference_counts(self):
+        original = s.normal
+        def generated(seed, n):
+            return [0, 2, None, float('nan')] if seed == 10000 else original(seed, n)
+        with patch.dict(s.CONFIG, seeds=[0], reference_n=4, calibration_n=30), \
+             patch.object(s, 'normal', side_effect=generated), \
+             patch.object(s, 'calibrate', return_value=(3, 0)):
+            result = s.run()
+        self.assertTrue(all(r['reference_total'] == 4 and r['reference_valid'] == 2
+                            and r['reference_invalid'] == 2 for r in result['calibration']))
 
     def test_unavailable_and_conditional_summary(self):
         base = dict(seed=0, scenario='step_up', method='cusum', available=True,
