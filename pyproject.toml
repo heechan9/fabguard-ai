@@ -16,6 +16,10 @@ pv = [
   "solar-data-tools==2.1.5",
   "frictionless==5.19.0",
 ]
+robot = [
+  "pyarrow>=15",
+  "py7zr>=1.1,<2",
+]
 
 [project.scripts]
 fabguard-audit = "fabguard.data:main"
@@ -38,6 +42,7 @@ fabguard-locked-evaluation-check = "fabguard.locked_evaluation:main"
 fabguard-model-export = "fabguard.model_export:main"
 fabguard-locked-score = "fabguard.locked_scoring:main"
 fabguard-manufacturing-review = "fabguard.manufacturing_review:main"
+fabguard-robot-benchmark = "fabguard.robot_benchmark:main"
 
 
 [tool.pytest.ini_options]

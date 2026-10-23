@@ -9,6 +9,7 @@ The machine-readable index is [`results/catalog.json`](catalog.json).
 | Scope | Source | Role | Status | Canonical evidence |
 |---|---|---|---|---|
 | 🇺🇸 United States | UCI SECOM | Manufacturing risk-ranking evidence | Validated | [V1](v1/) · [Phase 1](phase1/) |
+| 🌐 Research dataset | IMAD-DS v2 RoboticArm | Bench-scale robot condition screening | Offline benchmark only; target shift failure | [Evidence](robot-imad-2026/) |
 | 🇦🇺 Australia | DKASC Alice Springs 2025 | Observed PV | E2E validated | [Evidence](dkasc-alice-springs-2025/) |
 | 🇬🇧 Great Britain | PV_Live 2025 | Estimated PV | E2E validated | [Evidence](pvlive-gb-national-2025/) |
 | 🇪🇺/🇧🇪 EU / Belgium | JRC PVGIS Brussels 2020 | Modelled PV reference | E2E validated | [Evidence](pvgis-brussels-2020/) |

@@ -25,3 +25,7 @@ results/*
 !results/enedis-france-national-solar-2024/
 !results/enedis-france-national-solar-2024/fetch_audit.json
 !results/enedis-france-national-solar-2024/report.json
+!results/robot-imad-2026/
+results/robot-imad-2026/*
+!results/robot-imad-2026/README.md
+!results/robot-imad-2026/*.json

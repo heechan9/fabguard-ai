@@ -1,0 +1,92 @@
+[
+  {
+    "protocol": "published_split",
+    "domain": "source",
+    "segments": 232,
+    "anomalies": 116,
+    "auroc": 0.682372175980975,
+    "average_precision": 0.6668252672340897,
+    "top_10_percent": {
+      "inspected": 24,
+      "captured": 19,
+      "total_anomalies": 116,
+      "recall": 0.16379310344827586,
+      "false_alarms": 5
+    }
+  },
+  {
+    "protocol": "published_split",
+    "domain": "target",
+    "segments": 232,
+    "anomalies": 116,
+    "auroc": 0.5204369797859691,
+    "average_precision": 0.4619428863451408,
+    "top_10_percent": {
+      "inspected": 24,
+      "captured": 0,
+      "total_anomalies": 116,
+      "recall": 0.0,
+      "false_alarms": 24
+    }
+  },
+  {
+    "protocol": "published_split",
+    "domain": "combined",
+    "segments": 464,
+    "anomalies": 232,
+    "auroc": 0.6019433709869204,
+    "average_precision": 0.531288992452239,
+    "top_10_percent": {
+      "inspected": 47,
+      "captured": 18,
+      "total_anomalies": 232,
+      "recall": 0.07758620689655173,
+      "false_alarms": 29
+    }
+  },
+  {
+    "protocol": "disjoint_recording_groups",
+    "domain": "source",
+    "segments": 232,
+    "anomalies": 116,
+    "auroc": 0.6557669441141498,
+    "average_precision": 0.5881236527678033,
+    "top_10_percent": {
+      "inspected": 24,
+      "captured": 9,
+      "total_anomalies": 116,
+      "recall": 0.07758620689655173,
+      "false_alarms": 15
+    }
+  },
+  {
+    "protocol": "disjoint_recording_groups",
+    "domain": "target",
+    "segments": 232,
+    "anomalies": 116,
+    "auroc": 0.47934007134363854,
+    "average_precision": 0.4417404196813473,
+    "top_10_percent": {
+      "inspected": 24,
+      "captured": 1,
+      "total_anomalies": 116,
+      "recall": 0.008620689655172414,
+      "false_alarms": 23
+    }
+  },
+  {
+    "protocol": "disjoint_recording_groups",
+    "domain": "combined",
+    "segments": 464,
+    "anomalies": 232,
+    "auroc": 0.565825653983353,
+    "average_precision": 0.5017276675033764,
+    "top_10_percent": {
+      "inspected": 47,
+      "captured": 11,
+      "total_anomalies": 232,
+      "recall": 0.04741379310344827,
+      "false_alarms": 36
+    }
+  }
+]
