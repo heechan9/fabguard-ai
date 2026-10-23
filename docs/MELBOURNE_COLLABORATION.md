@@ -24,7 +24,11 @@ Random Forest exceeded Logistic Regression in all five repeat-level paired compa
 
 All figures above are provisional public-data results. Canonical artifacts and their interpretation boundaries are documented in [`results/v1/RESULTS_SUMMARY.md`](../results/v1/RESULTS_SUMMARY.md), [`PHASE1_ADVANCED_VALIDATION.md`](PHASE1_ADVANCED_VALIDATION.md) and the [experiment contract](validation/EXPERIMENT_CONTRACT.md).
 
-The separate [IMAD-DS scaled robotic-arm benchmark](ROBOT_IMAD_BENCHMARK.md) used 2,303 recorded segments and 42 summary features. On the target condition with recording-session-disjoint training, AUROC was **0.4793**; reviewing the top 24 of 232 segments captured **1 of 116** induced loose-screw anomalies, with 23 false alarms. This is a negative result for operational screening, not evidence of semiconductor equipment performance. The source archive was rerun by the author; independent follow-up checked retraining and metrics from saved features, but did not rerun the raw 7z archive. The [condition-coverage audit](ROBOT_VALIDATION_READINESS.md) details gaps in load/background coverage. Input-quality and abstention gates remain an unimplemented [Draft proposal](https://github.com/heechan9/fabguard-ai/pull/164).
+The separate [IMAD-DS scaled robotic-arm benchmark](ROBOT_IMAD_BENCHMARK.md) used 2,303 recorded segments and 42 summary features. On the target condition with recording-session-disjoint training, AUROC was **0.4793**; reviewing the top 24 of 232 segments captured **1 of 116** induced loose-screw anomalies, with 23 false alarms. This is a negative result for operational screening, not evidence of semiconductor equipment performance.
+
+An earlier independent check reproduced training and metrics from saved features. A subsequent desktop execution report states that a replay from the official raw archive verified the archive hash and 6,915-member manifest, regenerated 2,303 segments with 42 features, and matched all six metric rows. The newer report files and derived CSVs have not yet been received for this documentation review. Feature and prediction CSV byte hashes reportedly differ from the baseline, and elementwise comparison remains pending; full artifact equivalence is not established. This is report-level evidence, not direct artifact verification by this review. Replaying the same recorded dataset supplies no new independent evaluation data or evidence of operational performance.
+
+The [condition-coverage audit](ROBOT_VALIDATION_READINESS.md) details gaps in load/background coverage. Input-quality and abstention gates remain an unimplemented [Draft proposal](https://github.com/heechan9/fabguard-ai/pull/164).
 
 ## Reproduce the review surface
 
@@ -50,7 +54,11 @@ Feedback is most useful when it addresses one bounded question and cites a file,
 
 Please open a [focused GitHub issue](https://github.com/heechan9/fabguard-ai/issues) with the relevant file or evidence boundary. No private production data should be attached or pasted into a public issue.
 
+The proposed [locked robot evaluation contract](review/ROBOT_LOCKED_EVALUATION_CONTRACT.md) separates physical recording groups, training/development/final-test access, label custody, and full-cohort abstention accounting. It is a template with unresolved decisions, not an approved or executed study.
+
 For a first conversation, we ask for **one bounded technical review**: what independently recorded conditions, sensor-health evidence, and human-review workload would be required to evaluate an abstaining offline robot screening queue? A useful response can identify a flawed assumption or suggest a feasible recording protocol; data or equipment access is not presumed. Existing test labels and scores must not be used to tune a new method and then presented as independent confirmation.
+
+A concrete first request is written feedback on one flaw in a two-page protocol extract: session separation, sensor-quality assumptions, or treatment of withheld cases. Data, equipment access, endorsement and a pilot are not requested. Scope, effort and any attribution should be agreed before further work; the proposed wording is recorded in the contract and has not been sent.
 
 ## Small collaboration entry points
 
