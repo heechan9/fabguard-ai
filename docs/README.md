@@ -95,6 +95,7 @@
 
 ## 감사·연구 참고
 
+- [국제 검증 협력 계획 (호주·북미·유럽, 접촉 전)](review/INTERNATIONAL_VALIDATION_PLAN.md)
 - [Fledge 병합 후 감사](audits/FLEDGE_POST_MERGE_JULES_AUDIT.md)
 - [중동 PV 스트레스 연구 노트](research/MIDDLE_EAST_PV_STRESS_NOTES.md)
 
