@@ -12,7 +12,8 @@ import importlib.metadata
 import json
 import math
 import platform
-from pathlib import Path
+import zlib
+from pathlib import Path, PurePosixPath
 
 import joblib
 import numpy as np
@@ -56,6 +57,52 @@ def recording_group(segment_id: str) -> str:
     return segment_id.rsplit("_dataLog_", 1)[0]
 
 
+def verify_archive_members(root: Path, archive: Path) -> dict[str, object]:
+    """Bind each extracted input byte to a member of the pinned 7z archive."""
+    import py7zr
+
+    if root.is_symlink() or root.name != "RoboticArm" or not root.is_dir():
+        raise ValueError("data directory must be a real extracted RoboticArm folder")
+    expected: dict[Path, object] = {}
+    with py7zr.SevenZipFile(archive, "r") as source:
+        for member in source.list():
+            path = PurePosixPath(member.filename)
+            if (path.is_absolute() or ".." in path.parts or "." in path.parts
+                    or not path.parts or path.parts[0] != root.name):
+                raise ValueError(f"unsafe archive member: {member.filename}")
+            if member.is_directory:
+                continue
+            if len(path.parts) != 3 or path.parts[1] not in {"train", "test"}:
+                raise ValueError(f"unexpected archive member: {member.filename}")
+            relative = Path(*path.parts[1:])
+            if relative in expected or member.crc32 is None or member.uncompressed is None:
+                raise ValueError(f"duplicate or unverifiable archive member: {member.filename}")
+            expected[relative] = member
+    actual = set()
+    for path in root.rglob("*"):
+        if path.is_symlink():
+            raise ValueError(f"symlink in extracted data: {path}")
+        if path.is_file():
+            actual.add(path.relative_to(root))
+    if actual != set(expected):
+        raise ValueError(f"archive/extracted file list differs: missing={len(set(expected) - actual)}, extra={len(actual - set(expected))}")
+    manifest = hashlib.sha256()
+    for relative, member in sorted(expected.items()):
+        path = root / relative
+        crc = 0
+        sha = hashlib.sha256()
+        size = 0
+        with path.open("rb") as stream:
+            for block in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+                size += len(block)
+                crc = zlib.crc32(block, crc)
+                sha.update(block)
+        if size != member.uncompressed or crc != member.crc32:
+            raise ValueError(f"archive/extracted member differs: {relative}")
+        manifest.update(f"{relative.as_posix()}\t{size}\t{sha.hexdigest()}\n".encode())
+    return {"members_verified": len(expected), "member_manifest_sha256": manifest.hexdigest()}
+
+
 def load_mapping(root: Path) -> pd.DataFrame:
     rows = []
     for name, (count, label) in SPLITS.items():
@@ -74,13 +121,19 @@ def load_mapping(root: Path) -> pd.DataFrame:
         frame["label"] = label
         frame["recording_group"] = frame["segment_id"].map(recording_group)
         for sensor in SENSORS:
-            for value in frame[sensor]:
-                if Path(value).name != value or not (root / folder / value).is_file():
+            if frame[sensor].duplicated().any():
+                raise ValueError(f"reused sensor file in {path}: {sensor}")
+            for segment_id, value in zip(frame["segment_id"], frame[sensor]):
+                if (Path(value).name != value or value != f"{sensor}_{segment_id}.parquet"
+                        or not (root / folder / value).is_file()):
                     raise ValueError(f"unsafe or missing sensor file: {value}")
         rows.append(frame)
     result = pd.concat(rows, ignore_index=True)
     if result["segment_id"].duplicated().any():
         raise ValueError("segment ID appears in multiple splits")
+    for sensor in SENSORS:
+        if result[sensor].duplicated().any():
+            raise ValueError(f"sensor file appears in multiple splits: {sensor}")
     return result
 
 
@@ -88,8 +141,10 @@ def channel_features(values: np.ndarray, prefix: str) -> dict[str, float]:
     values = np.asarray(values, dtype=np.float64)
     valid = values[np.isfinite(values)]
     if not len(valid):
-        return {f"{prefix}_{name}": float("nan") for name in
-                ("mean", "std", "rms", "abs_p95", "diff_rms", "valid_fraction")}
+        result = {f"{prefix}_{name}": float("nan") for name in
+                  ("mean", "std", "rms", "abs_p95", "diff_rms")}
+        result[f"{prefix}_valid_fraction"] = 0.0
+        return result
     delta = np.diff(values)
     delta = delta[np.isfinite(delta)]
     return {
@@ -185,6 +240,7 @@ def run(root: Path, archive: Path, output: Path) -> dict[str, object]:
     archive_md5 = digest(archive, "md5")
     if archive_md5 != EXPECTED_MD5:
         raise ValueError(f"wrong IMAD-DS archive MD5: {archive_md5}")
+    archive_members = verify_archive_members(root, archive)
     output.mkdir(parents=True, exist_ok=True)
     mapping = load_mapping(root)
     features = extract_features(root, mapping)
@@ -236,6 +292,7 @@ def run(root: Path, archive: Path, output: Path) -> dict[str, object]:
         "status": "offline_benchmark_only",
         "dataset": "IMAD-DS v2 RoboticArm",
         "archive_md5": archive_md5, "archive_sha256": digest(archive),
+        "archive_member_verification": archive_members,
         "mapping_segment_counts": mapping.groupby("split").size().to_dict(),
         "train_segments": {name: len(ids) for name, ids in protocols.items()},
         "train_recording_groups": {name: int(source.loc[source["segment_id"].isin(ids),
