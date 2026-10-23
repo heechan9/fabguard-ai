@@ -96,6 +96,11 @@ This integration does **not** establish:
 - performance on a physical sensor, solar farm, or production system;
 - yield, reliability, cost, or energy improvements.
 
+For the separate Australian solar O&M field hand-off questions, see
+[`AU_SOLAR_FIELD_HANDOFF.md`](AU_SOLAR_FIELD_HANDOFF.md). SDT quality scores alone cannot be
+promoted to fault labels or maintenance work orders; site-specific asset IDs, operating events,
+authorized review, and safety procedures would need their own validated contract.
+
 For every public source, record its license/citation terms, retrieval time, stable URL or dataset
 version, original checksum, timezone, unit, observed/estimated/reference semantics, and
 redistribution decision before treating its report as canonical evidence.
