@@ -44,6 +44,7 @@
 - [SMT lab within the FabGuard web demo](SMT_WEB_INTEGRATION.md)
 - [SMT 추가 검사실: 가상 시나리오](SMT_INSPECTION_SCENARIOS.md)
 - [FabGuard 직무 연계와 인터뷰 가이드](ROLE_ALIGNMENT.md)
+- [산업별 교육자료 검토·적용 기록 (2026-10-23)](EDUCATION_MATERIAL_REVIEW_20261023.md)
 - [FabGuard AI — International Review and Collaboration Brief](MELBOURNE_COLLABORATION.md)
 
 ## 외부 검토 준비
@@ -84,6 +85,7 @@
 - [Fledge operational validation slice](FLEDGE_OPERATIONAL_VALIDATION.md)
 - [Fledge upstream contribution readiness](FLEDGE_UPSTREAM_READINESS.md)
 - [Solar Data Tools integration contract](SDT_PV_CONTRACT.md)
+- [호주 솔라팜 자료의 현장 인계 적용 범위](AU_SOLAR_FIELD_HANDOFF.md)
 - [Sheffield Solar PV_Live pre-ingestion contract](PVLIVE_ADAPTER_CONTRACT.md)
 - [PV_Live local E2E replay](PVLIVE_LOCAL_E2E.md)
 - [JRC PVGIS pre-ingestion contract](PVGIS_ADAPTER_CONTRACT.md)
