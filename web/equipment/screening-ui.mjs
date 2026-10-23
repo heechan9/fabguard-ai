@@ -1,4 +1,5 @@
 import {screenEquipmentCSV} from './screening.mjs';
+import {compareScreeningResults} from './replay.mjs';
 
 function add(parent,tag,value){
   const element=document.createElement(tag);
@@ -25,18 +26,39 @@ export function renderEquipmentScreening(root,data,mapping,context,count,sourceB
     for(const value of [item.record,item.timestamp,`${item.lot_id} / ${item.board_id} / ${item.pad_id}`,item.value,item.screening_status,item.review_status])add(row,'td',value);
   }
   if(report.queue.length>100)add(root,'p','화면은 첫 100건만 표시합니다. 전체 목록은 JSON으로 저장하세요.');
+  async function currentPayload(){
+    const digest=await crypto.subtle.digest('SHA-256',sourceBytes);
+    if(!isCurrent())return null;
+    const source_sha256=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+    return {schema_version:'fabguard-equipment-csv-screening/v1',source_sha256,...report,
+      claim_boundary:'Offline statistical screening of user-declared input; no authenticated reviewer, equipment connection, defect diagnosis or control action'};
+  }
   const button=add(root,'button','점검 목록 JSON 저장');button.type='button';
   button.addEventListener('click',async()=>{
     if(!isCurrent())return;
     try{
-      const digest=await crypto.subtle.digest('SHA-256',sourceBytes);
-      if(!isCurrent())return;
-      const source_sha256=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
-      const payload={schema_version:'fabguard-equipment-csv-screening/v1',source_sha256,...report,
-        claim_boundary:'Offline statistical screening of user-declared input; no authenticated reviewer, equipment connection, defect diagnosis or control action'};
+      const payload=await currentPayload();if(!payload)return;
       const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)+'\n'],{type:'application/json'}));
       const link=document.createElement('a');link.href=url;link.download='fabguard-equipment-screening.json';link.click();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
     }catch{button.textContent='저장 실패 · 다시 시도';}
+  });
+  const label=add(root,'label','이전 점검 결과 JSON과 재실행 대조');
+  const prior=add(label,'input','');prior.type='file';prior.accept='.json,application/json';
+  const outcome=add(root,'p','같은 원본 CSV와 설정으로 저장한 결과만 대조합니다. 결과 파일의 진위나 사람의 검토는 인증하지 않습니다.');
+  outcome.setAttribute('role','status');
+  prior.addEventListener('change',async()=>{
+    if(!isCurrent())return;
+    const file=prior.files?.[0];if(!file)return;
+    outcome.textContent='이전 결과와 대조 중…';
+    try{
+      if(file.size>10*1024*1024)throw Error('이전 결과 JSON은 10MB 이하만 지원합니다.');
+      const previous=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(await file.arrayBuffer()));
+      const payload=await currentPayload();if(!payload)return;
+      const result=compareScreeningResults(previous,payload);
+      if(result.status==='NOT_COMPARABLE')outcome.textContent=`비교 불가: 원본 또는 설정이 다릅니다 (${result.changed_inputs.join(', ')}).`;
+      else if(result.status==='OUTPUT_CHANGED')outcome.textContent=`결과 변경: 계산·상태 항목 ${result.changed_measures.join(', ')||'없음'}, 점검 목록 변경 ${result.changed_record_count}행${result.changed_record_count?` (원본 행 ${result.changed_records_preview.join(', ')}${result.changed_record_count>100?' 등':''})`:''}. 사람이 원인을 확인해야 합니다.`;
+      else outcome.textContent='대조 항목 일치. 같은 입력의 저장 결과와 현재 출력이 일치하며, 파일 진위·현장 정확성·사람 검토 완료는 뜻하지 않습니다.';
+    }catch(e){if(isCurrent())outcome.textContent=`대조 실패: ${e instanceof SyntaxError?'올바른 JSON 파일이 아닙니다.':e.message}`;}
   });
 }
