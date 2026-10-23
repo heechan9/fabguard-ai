@@ -58,7 +58,7 @@ def recording_group(segment_id: str) -> str:
 
 
 def verify_archive_members(root: Path, archive: Path) -> dict[str, object]:
-    """Bind each extracted input byte to a member of the pinned 7z archive."""
+    """Check extracted members by name, size and CRC32; record SHA-256 hashes."""
     import py7zr
 
     if root.is_symlink() or root.name != "RoboticArm" or not root.is_dir():
