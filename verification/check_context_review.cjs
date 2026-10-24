@@ -15,7 +15,7 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  await page.screenshot({path:path.join(output,width+'-timeline.png'),fullPage:true});
  const p=JSON.parse(fs.readFileSync('web/equipment/data/maintenance-synthetic.json','utf8'));
  await page.locator('#review-target').selectOption(p.observations[1].review_id);
- assert.equal(await page.locator('#review-action option[value=release]').isDisabled(),true);assert.equal(await page.locator('#review-outcome option[value=false_alarm]').isDisabled(),true);
+ assert.equal(await page.locator('#review-action option[value=release]').evaluate(e=>e.disabled),true);assert.equal(await page.locator('#review-outcome option[value=false_alarm]').evaluate(e=>e.disabled),true);
  await page.locator('#review-role').fill('합성 검사 역할');await page.locator('#review-time').fill('2026-09-01T00:21:00Z');
  await page.locator('#review-add').press('Enter');assert.match(await page.locator('#context-error').innerText(),/이유/);assert.equal(await page.locator('#review-export').isDisabled(),true);assert.equal(await page.evaluate(()=>document.activeElement.id),'context-error');
  await page.locator('#review-reason').fill('합성 정비 이후 기준선 확인 전까지 보류');await page.locator('#review-add').press('Enter');assert.match(await page.locator('#review-count').innerText(),/초안 1건.*pending 2건/);
