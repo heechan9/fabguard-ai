@@ -1,0 +1,43 @@
+name: Synthetic robot sorting UI
+on:
+  push:
+    branches: [feat/synthetic-robot-sort-cell]
+    paths: ['web/smt/**', 'verification/check_robot_sort_cell.cjs', '.github/workflows/robot-sort-ui.yml']
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing Chrome and Korean font support
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Isolated test driver (no browser download)
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/robot-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Loopback browser verification
+        env:
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/robot-sort-ui
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/robot-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" node verification/check_robot_sort_cell.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: robot-sort-ui-${{ github.sha }}
+          path: ${{ runner.temp }}/robot-sort-ui
+          retention-days: 14
