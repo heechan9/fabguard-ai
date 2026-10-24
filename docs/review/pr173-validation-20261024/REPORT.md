@@ -1,6 +1,30 @@
 # #173 후속 검증과 병합 준비도 — 2026-10-24
 
-## 최신: 로컬 Playwright 승인 후 실행 준비·환경 실패 (2026-10-24)
+## 최신: 설치된 CI 브라우저로 수정본 검증 완료 범위 (2026-10-24)
+
+**검증한 커밋:** `be404aae4e15716560722e9657799a322aae67c0`. 기존 GitHub Actions의 사전 설치 Chrome 155.0.8059.39를 사용했고 Chromium 설치를 재시도하지 않았다. Playwright 1.62.1은 테스트 드라이버로만 격리 설치했으며, 한글 스크린샷을 위해 테스트 환경에 fonts-noto-cjk를 설치했다. 서버는 127.0.0.1에만 바인딩하고 외부 페이지 요청은 차단했다. 공유 링크·접근 권한 확대·병합·운영 배포는 없다.
+
+| CSS 화면 크기 | 동작 검사 | 결과 |
+| --- | --- | --- |
+| 1366×900 | 19 | 모두 통과 |
+| 390×844 | 19 | 모두 통과 |
+| 360×800 | 19 | 모두 통과 |
+
+총 57/57, pageerror 0. 빈 값·최소 표본·tolerance/gap 오류와 aria-invalid, 첫 오류 초점, 고정 후 unlock 초점, Enter 해제 후 period 초점, 합성 계산과 성능 null, 해시 불일치·기준 파일 중복 시각 거부, 사용자 CSV 역할 부족·열/시각/UTF-8/5MB/20,000행 제한, 초기화, skip-link, SECOM 필터·Tab, 연구 화면 및 가로 넘침을 검사했다. 결과 원문은 local_ui/results.json, 화면별 SHA-256은 local_ui/file_hashes.json.
+
+**화면 확인과 수정:** 첫 CI는 한글 글꼴이 없어 시각 판정에서 제외했다. 한글 글꼴을 갖춘 다음 화면에서 긴 오류 코드 때문에 모바일 계약 그리드가 카드 밖으로 밀리는 문제를 발견했다. 같은 회귀 검사를 수정 전 `b96dab97398a4ffb8a289227b32dfc268dacb92a`에 실행해 390px(field right 386 > card right 374.390625), 360px(384.8125 > 345.59375) 실패를 확인했다. 오류 문자열의 어디서든 줄바꿈과 minmax(0,1fr) 그리드로 수정 후 같은 검사가 통과했다. 테스트를 완화하지 않았다.
+
+최종 스크린샷 15개 중 PC 초기·계산 결과, 모바일 390/360 오류 입력, 360 초기·SECOM 필터, 390 연구 화면 7개를 직접 열어 한글 표시·입력 초점 테두리·카드 내부 배치를 확인했다. SECOM 넓은 표는 내부 가로 스크롤 영역으로 표시되며 Tab으로 초점을 받을 수 있다. 캡처 위치 밖의 모든 화면을 시각 점검했다고 주장하지 않는다.
+
+- 브라우저 실행: https://github.com/heechan9/fabguard-ai/actions/runs/40081768795
+- 동일 커밋 기존 CI(test, robot-extra) success: https://github.com/heechan9/fabguard-ai/actions/runs/40081880104
+- 수정 전 회귀 실패: https://github.com/heechan9/fabguard-ai/actions/runs/40081767082
+- 화면 15개·결과 JSON·서버 로그 원본 ZIP은 기존 Drive 폴더에 보존: https://drive.google.com/file/d/1BK90BvGiSFhabhSm8Ie_iaXPfUakh-NK/view
+- ZIP SHA-256: `de0b1d0e9344de67b6c1ccb0a4c8b06347f93820313340a060645650f14ad9df` (GitHub artifact digest와 다운로드 바이트 일치).
+
+**판정 경계:** 수정된 코드의 위 로컬 브라우저 검증 범위는 통과. 실제 iOS/Android 단말·화면 낭독기·배포 서버 접근/인증·전체 탐색 화면은 미검증. 외부 웹폰트는 차단하고 Noto CJK fallback을 썼다. SPC 실제 실행은 별도 결과이며 이상 탐지 성능은 미평가다. 경보 9·0·3이나 EWMA 0건으로 우열·이상 탐지 성공을 주장하지 않는다. dot 검토·사용자 승인 전 병합·운영 배포 금지는 유지한다.
+
+## 이전 이력: 로컬 Playwright 승인 후 실행 준비·환경 실패 (2026-10-24)
 
 사용자는 #174 로컬 Playwright 검증을 명시 승인했다. 외부 공유 링크·권한 확대·main 병합·운영 배포 없이 127.0.0.1에만 서버를 준비했다. 비교 대상 원격 head는 `bf8221462a1d7a7d532ed12dd6e08bc91b28336b`, 로컬 head는 `956983c5f29e80a5559303061ee995e15bceda9a`이며 두 tracked tree의 diff는 0이었다.
 
