@@ -46,3 +46,30 @@ jobs:
           node --check web/smt/evidence.mjs
           node --check web/secom/secom.mjs
           node --test tests/web/*.test.mjs
+
+  # Optional robot extra (pyarrow, py7zr). The core job above installs `pip install .`
+  # only; there the real-Parquet robot tests skip with an explicit reason and the
+  # dependency contract tests still run. This job installs the extra and sets
+  # FABGUARD_REQUIRE_ROBOT_EXTRA=1 so those Parquet tests cannot be skipped here.
+  robot-extra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install project with the optional robot extra
+        run: python -m pip install ".[robot]"
+
+      - name: Robot tests with the optional engine required
+        env:
+          PYTHONPATH: src
+          FABGUARD_REQUIRE_ROBOT_EXTRA: "1"
+        run: python -m unittest tests.test_robot_window_spc tests.test_robot_benchmark -v

@@ -12,6 +12,8 @@
 | 소개 화면의 판단·근거 카드 | [portfolio-story.mjs](portfolio-story.mjs), [portfolio-story.css](portfolio-story.css) | [설계 근거](../docs/AX_PORTFOLIO_APPLICATION.md) |
 | SMT 3D 실험실 | [smt/index.html](smt/index.html), [smt/app.mjs](smt/app.mjs) | [구현 문서](../docs/SMT_WEB_INTEGRATION.md), [합성 시나리오](../docs/SMT_INSPECTION_SCENARIOS.md), [제조 검토 슬라이스](../docs/MANUFACTURING_REVIEW_SLICE.md) |
 | 반도체 분석 화면 | [secom/index.html](secom/index.html), [secom/secom.mjs](secom/secom.mjs) | [정본 결과](../results/v1/RESULTS_SUMMARY.md) |
+| SECOM 전처리 비교 기록 | [secom/research.html](secom/research.html) | #170 고정 head e7cdc47b, 개선 미입증 |
+| 로봇 확장 시연 | [robot/index.html](robot/index.html) | 별도 합성/사용자 CSV 프로토타입, Python API 호출 아님 |
 | 화면에 표시할 데이터 | [data/](data/) | [증거 스냅샷 생성기](../scripts/build_web_evidence.py), [입력 목록](../scripts/web_evidence_sources.json) |
 | 이미지·아이콘 | [assets/](assets/) | 출처와 라이선스를 함께 확인 |
 | 웹 동작 검증 | [tests/web/](../tests/web/) | [CI 정의](../.github/workflows/ci.yml) |
@@ -50,3 +52,9 @@ python scripts/build_web_evidence.py --check
 모든 바이너리 형식이나 악성 파일을 탐지하는 백신은 아니며, 메모리 사용량 전체를 제한하지 않는다.
 입력 검사는 기존 [contract.mjs](equipment/contract.mjs), 회귀 검사는
 [equipment-input.test.mjs](../tests/web/equipment-input.test.mjs)에 있다.
+
+## 2026-10-23 연구 근거 화면
+
+`/research/`는 고정 커밋의 공개 보고서를 요약한 정적 근거 화면이다. #168/#170/#171/#172의 실험·감사·프로토타입과 미실행 작업을 구분한다. 새 모델 추론이나 SPC 계산을 제공하지 않으며 기존 정본 데이터는 바꾸지 않는다. 링크된 PR 상태는 확인 시각의 스냅샷이다.
+
+로봇 시연은 최대 20,000행의 CSV 조각을 처리합니다. 6.7kHz라면 약 2.99초에 불과하므로 안정 정상 기준의 충분성을 입증하지 않습니다. 사용자 CSV는 선택한 바이트를 해시하고 같은 바이트를 디코딩합니다. 해시는 출처 인증이 아니며 Python의 legacy 배열 API와도 별개입니다. 실제 로봇 SPC 실험은 미실행입니다.

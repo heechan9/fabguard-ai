@@ -1,0 +1,44 @@
+/* Scoped to web/secom/research.html (.secom-research). Shared site CSS stays authoritative. */
+.secom-research{--ink:#d6e2ea}
+.secom-research .skip-link{position:absolute;left:-9999px;top:8px;z-index:50;padding:10px 14px;background:#0d141a;color:var(--text);border:1px solid var(--cyan)}
+.secom-research .skip-link:focus{left:12px}
+.research-main{padding:28px 0 90px;outline:none}
+.secom-research .track-banner{border:1px solid rgba(57,214,196,.5);background:rgba(57,214,196,.07);color:var(--ink);padding:14px 18px;border-radius:var(--radius);line-height:1.7;margin:0 0 28px}
+.secom-research .track-banner b{color:var(--cyan);margin-right:8px}
+.secom-research a{color:var(--cyan)}
+.r-hero{padding:10px 0 26px}
+.r-hero h1{font-size:clamp(28px,4vw,48px);line-height:1.25;margin:8px 0 14px;letter-spacing:-.03em;max-width:24ch}
+.secom-research .eyebrow{color:var(--cyan);font-size:12px;letter-spacing:.14em;font-weight:700;margin:0}
+.secom-research .lead{color:var(--reader-muted,#b0bdc8);font-size:17px;line-height:1.8;max-width:72ch}
+.bottom-line{border:1px solid var(--amber);background:rgba(228,168,61,.08);border-radius:var(--radius);padding:14px 18px;margin-top:18px;color:var(--ink);line-height:1.75}
+.bottom-line p,.bottom-line li{margin:4px 0;color:var(--ink)}.bottom-line b{color:var(--amber)}
+.r-step{border:1px solid var(--line);background:rgba(13,20,26,.82);border-radius:var(--radius);padding:26px;margin:0 0 26px}
+.r-step h2{font-size:clamp(21px,2.4vw,28px);margin:0 0 12px;line-height:1.35}
+.r-step h3{font-size:17px;margin:18px 0 8px}
+.r-step p,.r-step li{color:var(--reader-muted,#b0bdc8);line-height:1.75;font-size:15px}
+.secom-research code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;color:#cfe9e4;overflow-wrap:anywhere}
+.r-facts{margin:0 0 14px}.r-facts>div{display:grid;grid-template-columns:180px 1fr;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.r-facts dt{color:var(--muted);font-size:14px}.r-facts dd{margin:0;color:var(--ink);font-size:14px;overflow-wrap:anywhere}
+.r-facts ul{margin:0;padding-left:18px}
+.mode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mode-grid article{border:1px solid var(--line);border-radius:var(--radius);padding:14px;background:rgba(7,11,15,.5)}
+.mode-grid h3{margin:0 0 6px;font-size:15px}.mode-grid p{font-size:14px;margin:0}
+.table-wrap{overflow-x:auto;margin:14px 0}.table-wrap:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.secom-research table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+.secom-research caption{text-align:left;color:var(--ink);font-weight:700;padding:6px 0 10px}
+.secom-research th,.secom-research td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top;color:var(--ink)}
+.secom-research thead th{color:var(--muted);font-weight:600}
+.dummy-row th,.dummy-row td{color:var(--muted)}
+.r-filter{display:inline-flex;gap:10px;align-items:center;color:var(--ink);font-size:14px}
+.r-filter select{min-height:44px;background:#081017;color:var(--text);border:1px solid rgba(190,210,220,.32);border-radius:6px;padding:8px 10px;font:inherit}
+.secom-research select:focus-visible,.secom-research a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.r-figure{margin:18px 0 6px}.r-figure svg{width:100%;height:auto;display:block}
+.r-figure figcaption{color:var(--muted);font-size:13px;margin-top:6px}
+.c-label,.c-value{fill:#c6d3dc;font-size:12px}.c-axis{stroke:rgba(190,210,220,.3)}
+.c-bar{fill:var(--cyan)}.c-random_forest{fill:var(--blue)}.c-hist_gradient_boosting{fill:#7fc6a4}.c-dummy{fill:#5b6b78}
+.tag{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:700;border:1px solid;white-space:nowrap}
+.tag-yes{color:var(--cyan);border-color:var(--cyan)}.tag-cond{color:var(--amber);border-color:var(--amber)}.tag-no{color:#a9b6c0;border-color:#5b6b78}
+.caption{font-size:13px!important;color:var(--muted)!important}
+.hash{font-size:12px}
+@media(max-width:900px){.mode-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.r-step{padding:18px 14px}.mode-grid{grid-template-columns:1fr}.r-facts>div{grid-template-columns:1fr;gap:2px}.secom-research .lead{font-size:16px}}

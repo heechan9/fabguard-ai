@@ -1,0 +1,4 @@
+a8b5d5eebdaa1fa04a2eefbc27cc6df198874984 2026-10-24T11:51:31+03:00 test: reject incomplete or differently scoped range receipts before archive access
+b27ac539d4668701f3dc2ae99d0190b93eaf935b 2026-10-24T11:51:02+03:00 verification: freeze range-source robot SPC runner before decoding
+b3d37e5852f6e5ad38516a4333a344a750f1c6d3 2026-10-24T11:50:22+03:00 docs: freeze partial-archive acquisition boundary before robot decoding
+c70b2b8c3166b08729d5356ba2145c3873608c19 2026-10-24T11:44:36+03:00 docs: record approved live PR173 browser checks and remaining mobile gap

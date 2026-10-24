@@ -1,0 +1,86 @@
+{
+  "status": "blocked_raw_input_unavailable_not_executed",
+  "evaluated_commit": "966981b77ecd3a68385a818c4f6b65e6ec2abe48",
+  "metadata_sha256": "6d810ca6c3dcb9fabdc0487fc567eb31698aeeaec512c7d6a886f34d0edaa9d9",
+  "metadata_scope": "5 metadata columns only; no saved feature values or predictions used",
+  "selection_rule": "first four lexicographically sorted recording groups in normal_source_train / weight15 / BckgA; all matching training segments in each group",
+  "config_sha256": "55794547c6d4355a6f407a049bf973abd4e0a34d01a0c1e208477f4d34aef1ce",
+  "nominal_period_basis": "reciprocal of published nominal accelerometer 6700 Hz; reject incompatible cadence without tuning",
+  "expected_groups": {
+    "reference": 1,
+    "calibration": 1,
+    "evaluation": 2
+  },
+  "groups": [
+    {
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "segment_ids": [
+        "20240405_10_45_40_dataLog_0",
+        "20240405_10_45_40_dataLog_12",
+        "20240405_10_45_40_dataLog_16",
+        "20240405_10_45_40_dataLog_17",
+        "20240405_10_45_40_dataLog_20",
+        "20240405_10_45_40_dataLog_24",
+        "20240405_10_45_40_dataLog_27",
+        "20240405_10_45_40_dataLog_30",
+        "20240405_10_45_40_dataLog_36",
+        "20240405_10_45_40_dataLog_40",
+        "20240405_10_45_40_dataLog_41",
+        "20240405_10_45_40_dataLog_6"
+      ]
+    },
+    {
+      "recording_group": "20240405_10_54_03_corr83",
+      "role": "calibration",
+      "segment_ids": [
+        "20240405_10_54_03_corr83_dataLog_6"
+      ]
+    },
+    {
+      "recording_group": "20240405_11_02_26_corr300",
+      "role": "evaluation",
+      "segment_ids": [
+        "20240405_11_02_26_corr300_dataLog_14",
+        "20240405_11_02_26_corr300_dataLog_19",
+        "20240405_11_02_26_corr300_dataLog_2",
+        "20240405_11_02_26_corr300_dataLog_27"
+      ]
+    },
+    {
+      "recording_group": "20240405_11_10_50",
+      "role": "evaluation",
+      "segment_ids": [
+        "20240405_11_10_50_dataLog_11",
+        "20240405_11_10_50_dataLog_13",
+        "20240405_11_10_50_dataLog_15"
+      ]
+    }
+  ],
+  "protocol_status": "prespecified",
+  "holdout_status": "reused_development_data",
+  "input_manifest_status": "pending_complete_raw_file_hashes_before_decode",
+  "archive": {
+    "name": "RoboticArm.7z",
+    "bytes": 3545453763,
+    "official_md5": "a64498b7dcc297946a7fb8366e38ba33",
+    "prior_report_sha256": "2d224895a083c9d1a12d9ad5817422e8a7428d0ee92b304929717595ead63b65",
+    "current_archive_verified": false
+  },
+  "metrics_allowed": [
+    "raw_alarms",
+    "episodes",
+    "alarm_activity_per_evaluable_window",
+    "windows_evaluable",
+    "windows_excluded",
+    "duration_evaluable_s"
+  ],
+  "metrics_unavailable": {
+    "detection_delay": null,
+    "anomaly_recall": null,
+    "miss_rate": null,
+    "false_alarm_rate": null
+  },
+  "real_robot_performance_verdict": "not_evaluable_no_execution",
+  "operational_use": "not_approved"
+}
