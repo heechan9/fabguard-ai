@@ -1,0 +1,67 @@
+name: PR175 copy layout verification
+on:
+  push:
+    branches: [codex/verify-pr175-copy-layout]
+permissions:
+  contents: read
+jobs:
+  layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d5437db2e135157308a927f8c43dffcab7f0096b
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Use existing browser and Korean fonts
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Install test driver only
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/copy-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Verify exact reviewed HTML locally
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/copy-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          export NODE_PATH="$RUNNER_TEMP/copy-driver/node_modules"
+          export OUTPUT="$RUNNER_TEMP/copy-layout"
+          mkdir -p "$OUTPUT"
+          node <<'JS'
+          const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),crypto=require('crypto'),{execFileSync}=require('child_process');
+          (async()=>{
+            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true});
+            const checks=[],errors=[],shots=[];
+            for(const width of [1366,390,360]){
+              const context=await browser.newContext({viewport:{width,height:width===1366?900:844},isMobile:width<500,hasTouch:width<500});
+              const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+              await page.route('**/*',r=>new URL(r.request().url()).origin==='http://127.0.0.1:8764'?r.continue():r.abort());
+              for(const [name,url,selector] of [['research','/research/','#pending'],['robot','/robot/','.limits']]){
+                await page.goto('http://127.0.0.1:8764'+url);
+                const section=page.locator(selector);await section.waitFor();
+                const geometry=await section.evaluate(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width,client:el.clientWidth,scroll:el.scrollWidth,viewport:innerWidth,document:document.documentElement.scrollWidth,text:el.innerText};});
+                const pass=geometry.right<=width+1&&geometry.left>=0&&geometry.scroll<=geometry.client+1&&geometry.document<=width;
+                checks.push({name,width,pass,geometry});
+                const initial=width+'-'+name+'-initial.png';await page.screenshot({path:path.join(process.env.OUTPUT,initial)});shots.push(initial);
+                const file=width+'-'+name+'-updated-copy.png';await section.screenshot({path:path.join(process.env.OUTPUT,file)});shots.push(file);
+                console.log(JSON.stringify({name,width,pass,geometry}));
+              }await context.close();
+            }
+            const hashes=Object.fromEntries(shots.map(f=>[f,crypto.createHash('sha256').update(fs.readFileSync(path.join(process.env.OUTPUT,f))).digest('hex')]));
+            fs.writeFileSync(path.join(process.env.OUTPUT,'results.json'),JSON.stringify({commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),browser:browser.version(),checks,errors,hashes,network:'loopback only; external fonts blocked; Noto CJK fallback',scope:'copy layout only; mobile emulation, not physical phones or screen reader'},null,2));
+            await browser.close();if(errors.length||checks.some(c=>!c.pass))process.exitCode=1;
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr175-copy-layout-d5437db2
+          path: ${{ runner.temp }}/copy-layout
+          retention-days: 14
