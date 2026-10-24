@@ -1,5 +1,34 @@
 # #173 후속 검증과 병합 준비도 — 2026-10-24
 
+## 추가: 실제 로봇 원본 train 멤버 SPC 실행 (2026-10-24)
+
+이 절은 아래 과거 이력의 ‘실측 SPC 미실행’을 갱신한다. 설정·그룹 선택은 그대로 유지했다. 전체 다운로드 대신 공식 HTTP range로 train solid 블록 1,030,328,865 bytes와 7z 헤더를 취득했다. 취득 방식 변경은 신호 디코딩 전에 SOURCE_ACQUISITION_AMENDMENT.md와 로컬 commit b3d37e5로 고정했고, 실행기/가드 테스트는 a8b5d5e까지 고정했다. 아래 결과를 보고 설정을 바꾸거나 다시 실행하지 않았다.
+
+**입력 검증:** 선택한 원시 가속도 Parquet 20개의 멤버명·비압축 크기·CRC32를 확인하고 파일별 SHA-256을 manifest_before_decode.json에 저장한 다음, run_protocol_from_bytes(decoder='parquet')가 같은 바이트를 디코딩했다. 원본/추출 데이터·모델은 Git에 포함하지 않는다. `whole_archive_hash_verified=false`: test 압축 블록을 받지 않은 희소 파일이므로 공식 전체 MD5/SHA-256 일치나 기존 전체 원본 재현을 주장하지 않는다. CRC32는 암호학적 진위 인증이 아니다.
+
+| 구분 | 실제 결과 |
+| --- | --- |
+| reference | 정상 학습 1기록 그룹·12파일·1,788창, 중심 1.0182701273 g·표본 척도 0.0161708914 g |
+| calibration | 정상 학습 1기록 그룹·1파일·149창, 사전 grid 첫 통과 임계값 3 / 3 / 4 |
+| evaluation | 정상 개발 2기록 그룹·7파일, 완전/평가 가능 1,043/1,043창·52.15초 |
+| Shewhart | raw alarm 9, episode 6 |
+| EWMA | raw alarm 0, episode 0 |
+| 양측 CUSUM | raw alarm 3, episode 2 |
+| 종결 상태 | exploratory_alarm_activity_only; reasons=[] |
+| 플래그 | near_boundary_timestamps_present, stability_unverified, reused_development_data |
+
+**판정:** 숫자 신호를 처리하고 사전 계약대로 경보 활동을 계산하는 경로는 이 입력에서 실행됐다. 정상 개발 자료만 사용했으므로 ‘이상을 얼마나 잘 잡는가’는 평가하지 않았다. EWMA 0경보가 우수하다는 뜻도 아니다. 정상 라벨은 안정 정상을 입증하지 않으므로 오탐률·재현율·놓침률·검출 지연은 모두 null을 유지한다. 기록 그룹 2개·서로 겹치지 않는 창은 독립 장비/독립 현장 성능 근거가 아니다. 현재 로봇 모델의 낮은 target 성능과 운영 불승인 판정은 바뀌지 않는다.
+
+실행 코드: verification/run_robot_spc_ranges.py. 원격 게시 전 로컬 실행 이력은 LOCAL_PREEXECUTION_COMMITS.txt, 입력 매니페스트·선택 멤버 체크·취득 영수증·보고서·실행 코드 해시는 robot_spc_results/에 있다. 재현 명령:
+
+```bash
+PYTHONPATH=src python verification/run_robot_spc_ranges.py --archive /path/to/train-only.sparse.7z --acquisition /path/to/range_acquisition.json --output-dir /path/to/private/output
+```
+
+추가 가드 2개를 포함한 전체 Python 271 tests OK (기존 3 skips), Node 112/112 통과. 기존 코드·모델·웹 시제품·SPC 설정은 변경하지 않았다. main 병합·운영 배포는 하지 않았다.
+
+**화면 작업의 현재 차단:** #174 별도 임시 접근 링크는 자동 승인 검토에서 거절됐다. 앞서 #173에 부여한 승인이 다른 배포의 링크 보유자 접근 확대까지 포함하지 않는다는 이유다. 모바일 viewport 변경도 현재 브라우저 API에서 지원되지 않는다. 더 안전한 대안은 공개 Git 소스의 정확한 수정 tree를 로컬에서만 띄워 별도 Playwright로 390px/데스크톱·사용자 CSV를 검증하는 것이나, 현재 브라우저 도구 규칙은 그 별도 자동화에 사용자 명시 지시를 요구한다. 이 검증은 아직 수행하지 않았다. 보호 설정을 바꾸거나 새 공개 배포를 만들지 않았다.
+
 ## 추가: 승인 후 실제 브라우저 점검 (2026-10-24)
 
 아래 최초 보고의 프리뷰 접근 차단은 사용자가 임시 링크 생성을 명시 승인한 뒤 해소됐다. #173의 같은 고정 head를 1363×936 CSS px 브라우저에서 직접 조작했다. 임시 토큰 URL은 Git·Drive에 저장하지 않는다.
