@@ -1,0 +1,264 @@
+[
+  {
+    "n": 173,
+    "total": 27,
+    "already_main": [],
+    "remaining": [
+      ".github/workflows/ci.yml",
+      "docs/ROBOT_WINDOW_SPC_PROTOCOL.md",
+      "src/fabguard/robot_window_spc.py",
+      "tests/test_robot_window_spc.py",
+      "tests/web/fixtures/robot-window-parity.json",
+      "tests/web/research-evidence.test.mjs",
+      "tests/web/robot-ui-logic.test.mjs",
+      "tests/web/robot-window.test.mjs",
+      "tests/web/secom-research.test.mjs",
+      "web/README.md",
+      "web/equipment/index.html",
+      "web/index.html",
+      "web/research/index.html",
+      "web/research/style.css",
+      "web/robot/app.mjs",
+      "web/robot/index.html",
+      "web/robot/load-session.mjs",
+      "web/robot/report-view.mjs",
+      "web/robot/style.css",
+      "web/robot/synthetic.mjs",
+      "web/robot/window-core.mjs",
+      "web/secom/index.html",
+      "web/secom/research.html",
+      "web/secom/research/data.mjs",
+      "web/secom/research/model.mjs",
+      "web/secom/research/research.css",
+      "web/secom/research/research.mjs"
+    ]
+  },
+  {
+    "n": 172,
+    "total": 7,
+    "already_main": [],
+    "remaining": [
+      "experiments/synthetic-spc-20261023/PROTOCOL.md",
+      "experiments/synthetic-spc-20261023/REPORT.md",
+      "experiments/synthetic-spc-20261023/REPRODUCIBILITY.json",
+      "experiments/synthetic-spc-20261023/environment.json",
+      "experiments/synthetic-spc-20261023/results.json",
+      "experiments/synthetic-spc-20261023/study.py",
+      "experiments/synthetic-spc-20261023/test_study.py"
+    ]
+  },
+  {
+    "n": 171,
+    "total": 4,
+    "already_main": [],
+    "remaining": [
+      "docs/ROBOT_INDEPENDENT_FILE_COMPARISON.md",
+      "results/robot-imad-2026/independent_file_comparison.json",
+      "tests/test_robot_file_comparison.py",
+      "verification/compare_robot_files.py"
+    ]
+  },
+  {
+    "n": 170,
+    "total": 8,
+    "already_main": [],
+    "remaining": [
+      "docs/README.md",
+      "experiments/secom-train-only-20261023/PROTOCOL.md",
+      "experiments/secom-train-only-20261023/REPORT.md",
+      "experiments/secom-train-only-20261023/results/fold_metrics.csv",
+      "experiments/secom-train-only-20261023/results/manifest.json",
+      "experiments/secom-train-only-20261023/results/summary.csv",
+      "src/fabguard/secom_comparison.py",
+      "tests/test_secom_comparison.py"
+    ]
+  },
+  {
+    "n": 169,
+    "total": 8,
+    "already_main": [],
+    "remaining": [
+      "docs/validation/SECOM_MISSINGNESS_PILOT.md",
+      "docs/validation/secom_missingness_pilot/README.md",
+      "docs/validation/secom_missingness_pilot/fold_metrics.csv",
+      "docs/validation/secom_missingness_pilot/manifest.json",
+      "docs/validation/secom_missingness_pilot/splits.csv",
+      "docs/validation/secom_missingness_pilot/summary.csv",
+      "src/fabguard/missingness_pilot.py",
+      "tests/test_missingness_pilot.py"
+    ]
+  },
+  {
+    "n": 168,
+    "total": 4,
+    "already_main": [],
+    "remaining": [
+      "docs/README.md",
+      "docs/ROBOT_SCREENING_GATES.md",
+      "src/fabguard/robot_screening.py",
+      "tests/test_robot_screening.py"
+    ]
+  },
+  {
+    "n": 167,
+    "total": 3,
+    "already_main": [],
+    "remaining": [
+      "docs/MELBOURNE_COLLABORATION.md",
+      "docs/review/INTERNATIONAL_VALIDATION_PLAN.md",
+      "docs/review/ROBOT_LOCKED_EVALUATION_CONTRACT.md"
+    ]
+  },
+  {
+    "n": 165,
+    "total": 4,
+    "already_main": [],
+    "remaining": [
+      "README.md",
+      "docs/MELBOURNE_COLLABORATION.md",
+      "docs/README.md",
+      "docs/review/INTERNATIONAL_VALIDATION_PLAN.md"
+    ]
+  },
+  {
+    "n": 164,
+    "total": 2,
+    "already_main": [],
+    "remaining": [
+      "docs/README.md",
+      "docs/ROBOT_SCREENING_GATES_DESIGN.md"
+    ]
+  },
+  {
+    "n": 161,
+    "total": 1,
+    "already_main": [],
+    "remaining": [
+      "results/dkasc-alice-springs-2025/SOURCE_RECHECK_20261023.md"
+    ]
+  },
+  {
+    "n": 160,
+    "total": 6,
+    "already_main": [
+      "tests/test_results_contract.py"
+    ],
+    "remaining": [
+      "README.md",
+      "docs/SPC_SCREENING.md",
+      "tests/web/equipment-replay.test.mjs",
+      "web/equipment/replay.mjs",
+      "web/equipment/screening-ui.mjs"
+    ]
+  },
+  {
+    "n": 159,
+    "total": 1,
+    "already_main": [
+      "tests/test_results_contract.py"
+    ],
+    "remaining": []
+  },
+  {
+    "n": 156,
+    "total": 6,
+    "already_main": [
+      "tests/test_results_contract.py"
+    ],
+    "remaining": [
+      "README.md",
+      "docs/SPC_SCREENING.md",
+      "tests/web/equipment-replay.test.mjs",
+      "web/equipment/replay.mjs",
+      "web/equipment/screening-ui.mjs"
+    ]
+  },
+  {
+    "n": 154,
+    "total": 6,
+    "already_main": [],
+    "remaining": [
+      "docs/README.md",
+      "docs/governance/AI_USAGE.md",
+      "docs/validation/LECTURE_REFERENCE_APPLICATION.md",
+      "pyproject.toml",
+      "src/fabguard/steel_reference_audit.py",
+      "tests/test_steel_reference_audit.py"
+    ]
+  },
+  {
+    "n": 142,
+    "total": 7,
+    "already_main": [],
+    "remaining": [
+      "experiments/scatim-external-20260926/REPORT.md",
+      "experiments/scatim-external-20260926/results/audit.json",
+      "experiments/scatim-external-20260926/results/dataset2_audit.json",
+      "experiments/scatim-external-20260926/results/dataset2_within_run.csv",
+      "experiments/scatim-external-20260926/results/ordered_holdout.csv",
+      "experiments/scatim-external-20260926/run.py",
+      "experiments/scatim-external-20260926/run_dataset2.py"
+    ]
+  },
+  {
+    "n": 140,
+    "total": 34,
+    "already_main": [],
+    "remaining": [
+      "experiments/molding-temporal-20260926/AUDIT_REPORT.md",
+      "experiments/molding-temporal-20260926/LOCAL_COMMIT_HISTORY.txt",
+      "experiments/molding-temporal-20260926/PROTOCOL.md",
+      "experiments/molding-temporal-20260926/REPORT.md",
+      "experiments/molding-temporal-20260926/REVIEW_20260926.md",
+      "experiments/molding-temporal-20260926/results/audit.json",
+      "experiments/molding-temporal-20260926/results/manifest.json",
+      "experiments/molding-temporal-20260926/results/selection_before_later_prediction.json",
+      "experiments/molding-temporal-20260926/results/slices.csv",
+      "experiments/molding-temporal-20260926/results/threshold_metrics.csv",
+      "experiments/molding-temporal-20260926/results/top_k.csv",
+      "experiments/molding-temporal-20260926/results/train_cv.csv",
+      "experiments/molding-temporal-20260926/results/uncertainty.csv",
+      "experiments/molding-temporal-20260926/run.py",
+      "experiments/molding-temporal-20260926/strengthening/LOCAL_COMMIT_HISTORY.txt",
+      "experiments/molding-temporal-20260926/strengthening/PROTOCOL.md",
+      "experiments/molding-temporal-20260926/strengthening/REPORT.md",
+      "experiments/molding-temporal-20260926/strengthening/results/daily_budget_detail.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/daily_budget_totals.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/development_cv.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/feature_range_diagnostics.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/leave_one_day_out.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/linear_diagnostics.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/manifest.json",
+      "experiments/molding-temporal-20260926/strengthening/results/paired_uncertainty.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/probability_diagnostics.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/selection_before_prediction.json",
+      "experiments/molding-temporal-20260926/strengthening/results/slices.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/thresholds.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/tie_sensitivity.csv",
+      "experiments/molding-temporal-20260926/strengthening/results/top_k.csv",
+      "experiments/molding-temporal-20260926/strengthening/run.py",
+      "experiments/molding-temporal-20260926/strengthening/test_strengthening.py",
+      "experiments/molding-temporal-20260926/test_study.py"
+    ]
+  },
+  {
+    "n": 137,
+    "total": 13,
+    "already_main": [],
+    "remaining": [
+      "experiments/temporal-ranking-20260925/LOCAL_COMMIT_HISTORY.txt",
+      "experiments/temporal-ranking-20260925/PROTOCOL.md",
+      "experiments/temporal-ranking-20260925/REPORT.md",
+      "experiments/temporal-ranking-20260925/results/bootstrap.csv",
+      "experiments/temporal-ranking-20260925/results/manifest.json",
+      "experiments/temporal-ranking-20260925/results/predictions.csv",
+      "experiments/temporal-ranking-20260925/results/selection_before_holdout.json",
+      "experiments/temporal-ranking-20260925/results/temporal_variability.csv",
+      "experiments/temporal-ranking-20260925/results/threshold_metrics.csv",
+      "experiments/temporal-ranking-20260925/results/top_k.csv",
+      "experiments/temporal-ranking-20260925/results/train_temporal_cv.csv",
+      "experiments/temporal-ranking-20260925/run.py",
+      "experiments/temporal-ranking-20260925/test_study.py"
+    ]
+  }
+]
