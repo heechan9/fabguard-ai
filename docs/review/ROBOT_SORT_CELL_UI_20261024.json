@@ -1,0 +1,117 @@
+{
+  "tested_commit": "175326a078066765d7036e287fe31711f7f376e5",
+  "viewport_height": 900,
+  "results": [
+    {
+      "commit": "175326a078066765d7036e287fe31711f7f376e5",
+      "browser": "155.0.8059.39",
+      "checks": [
+        {
+          "width": 1366,
+          "status": "pass",
+          "assertions": "WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow"
+        }
+      ],
+      "errors": [],
+      "scope": "synthetic robot cell UI only; no detection performance or equipment control"
+    },
+    {
+      "commit": "175326a078066765d7036e287fe31711f7f376e5",
+      "browser": "155.0.8059.39",
+      "checks": [
+        {
+          "width": 390,
+          "status": "pass",
+          "assertions": "WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow"
+        }
+      ],
+      "errors": [],
+      "scope": "synthetic robot cell UI only; no detection performance or equipment control"
+    },
+    {
+      "commit": "175326a078066765d7036e287fe31711f7f376e5",
+      "browser": "155.0.8059.39",
+      "checks": [
+        {
+          "width": 360,
+          "status": "pass",
+          "assertions": "WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow"
+        }
+      ],
+      "errors": [],
+      "scope": "synthetic robot cell UI only; no detection performance or equipment control"
+    }
+  ],
+  "screenshots_sha256": {
+    "1366/1366-robot-description.png": "9fb54fc811bb5c84a1a46e3a1b384bee639770723aa98349718bdf832ac39b85",
+    "1366/1366-robot-initial.png": "880026ad79ec94e2f8fe785f71d5209d0e573c4d9e1dc60f2257b8a52e6d8563",
+    "1366/1366-robot-ng.png": "9aba2ad7dbbd0b50fb03471887a57d771d4752417ac6619c5075fad8d39b7279",
+    "1366/1366-robot-pick.png": "9612259c86358d936b1723d0bf7a2ea1640ce9ea1b8023c6fc25cc131f3587da",
+    "1366/1366-robot-place.png": "8ebccc8018dfdc20821dd80936ecee717265907f1e04af378b226ac8bca98a34",
+    "1366/1366-robot-transfer.png": "beb142812cd3b8e343302bc045ae5de7fbb042afea393d066847de7445d085ec",
+    "360/360-robot-description.png": "1b30eea0e4557562f8ca497b5e0b5043c5072ebc7e9dfaf1fe28ef8f0b3fd62d",
+    "360/360-robot-initial.png": "7572cebbe190b4a3ff61e5f4d82ae2131c2cfaeed1387f80dd7bf692be8a1b0f",
+    "360/360-robot-ng.png": "2110bb0fd1e0999da125052e63d9e2242cae546cc9852206968e92ab05dd7b98",
+    "360/360-robot-pick.png": "8e6d7ccc4461865d86af4e3c8bedd185712b0b32b0548b531f6af70fdb17d872",
+    "360/360-robot-place.png": "a2966f48d9641c8611f7ff50543e0a6a398a400f995a8c876dd50bbac8a2ceda",
+    "360/360-robot-transfer.png": "d5e561b070572526274699aad00b1275dec5aef47204354e6b8f5f8729422398",
+    "390/390-robot-description.png": "8b2fce7b096db06fae4dd0103410fc5cc74276e6696689acd6e4b4cdda7ee0c0",
+    "390/390-robot-initial.png": "798760745bd140ac3d5af74d27c6da6f497624689ebfc9f7e34bda11cd72c1b0",
+    "390/390-robot-ng.png": "1f2ba76f2a8bbe1ecfe92029a2b01194b7437f39cdc8e91b9963ce134fe152eb",
+    "390/390-robot-pick.png": "42050b4869df624d843e8a077a93f3073b771a54db12d0a5aad2e57f16d8ed30",
+    "390/390-robot-place.png": "8b4d21818764486ccc0a571aff62552d9c1a605f5da3aa1f0eee6db73a52f8e3",
+    "390/390-robot-transfer.png": "4e551c5ce66cab57c96046c7807a8e2a5c75c3dd47f8fe90a9d0236a281de1ff"
+  },
+  "node_tests": {
+    "passed": 115,
+    "failed": 0,
+    "skipped": 0
+  },
+  "python_robot_tests": {
+    "passed": 68,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 1.927
+  },
+  "detection_performance": "unverified; metrics remain null",
+  "browser_run": 40102027379,
+  "browser_ci_run": 40102031864,
+  "archive_artifacts": [
+    {
+      "id": 12563615674,
+      "name": "robot-sort-ui-1366-175326a078066765d7036e287fe31711f7f376e5",
+      "digest": "sha256:44470c2cf63e91afc058aaf9874e3367634cb859874c7861eb69a7f460dddb67"
+    },
+    {
+      "id": 12563029150,
+      "name": "robot-sort-ui-360-175326a078066765d7036e287fe31711f7f376e5",
+      "digest": "sha256:e4c6a1013f1eb8366245ce39deb3c49d62099cfdad7e4569a31f5ecaf430ca38"
+    },
+    {
+      "id": 12562753948,
+      "name": "robot-sort-ui-390-175326a078066765d7036e287fe31711f7f376e5",
+      "digest": "sha256:9e57fa48958e02ae88b68ff36e6ec125c8b7c323673aa0f15a839d9567bc7259"
+    }
+  ],
+  "bundle_sha256": "584ac40960700d1d49418a03a3dd648980d9dd1925df86d399c048b643f0f105",
+  "bundle_drive_url": "https://drive.google.com/file/d/18kLjXaR2h6y1EVTtZjPhMY9Xp2_qo0Ce/view?usp=drivesdk",
+  "manual_visual_review": [
+    "1366 initial/pick/transfer/place/description",
+    "390 initial",
+    "360 description/NG"
+  ],
+  "commands": [
+    "node --test tests/web/*.test.mjs",
+    "PYTHONPATH=src python -m unittest tests.test_robot_window_spc tests.test_robot_range_runner -v",
+    "node --check verification/check_robot_sort_cell.cjs",
+    "git diff --check",
+    "FABGUARD_UI_WIDTH=<1366|390|360> FABGUARD_BROWSER_PATH=/usr/bin/google-chrome FABGUARD_UI_OUTPUT=<dir> NODE_PATH=<isolated-playwright-1.62.1>/node_modules timeout 240s node verification/check_robot_sort_cell.cjs"
+  ],
+  "limits": [
+    "real phone and screen reader unverified",
+    "full source archive hash unverified",
+    "anomaly detection metrics null",
+    "no equipment control or constrained kinematics validation",
+    "separate synthetic inspection/intro checked for UI availability, not full recording codec compatibility"
+  ]
+}
