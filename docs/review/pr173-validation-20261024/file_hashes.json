@@ -1,12 +1,22 @@
 {
   "docs/review/pr173-validation-20261024/BROWSER_CHECKS.json": "acbb0765daafc14f555739e733c97924e3b4e554aae596a6989a7a8f48befec1",
-  "docs/review/pr173-validation-20261024/REPORT.md": "17938b9c1aa8851826de4a0857098b22c68dbf4448292c29ba2aaf379da1b714",
+  "docs/review/pr173-validation-20261024/LOCAL_PREEXECUTION_COMMITS.txt": "950b61eb4ee6f9f84f130d0c52122d9fefd9e9b4ee5ae1606e0793b5b4c7e8d9",
+  "docs/review/pr173-validation-20261024/REPORT.md": "261bea1b1e9667276c6aca9247862f3c965a7eb2a526d4b8114d117b4bc5a294",
+  "docs/review/pr173-validation-20261024/SOURCE_ACQUISITION_AMENDMENT.md": "993c9fdb9abcf167e505f0a869bfefae09119ecb572ce3bfd5925015132bc35f",
   "docs/review/pr173-validation-20261024/environment.json": "8110182388c05244f0feb744457424751f20a745e2cda0811a52eda882f90f6d",
   "docs/review/pr173-validation-20261024/main_blob_comparison.json": "13db75fcff197ed3a774857f78896d8ea4c929da47b0b255ea88bbc690ed41b6",
   "docs/review/pr173-validation-20261024/pr_snapshot.json": "7fc51c5f4422cc60fa150e312ca097b13d71f3f8684ed789fbbaf16985f1253a",
   "docs/review/pr173-validation-20261024/robot_config.json": "21f2f242c7f3a1d6ced01151c6f3d4d5e885f6cf07f43bbb73951d049d8176d0",
   "docs/review/pr173-validation-20261024/robot_plan.json": "cf3b100f920d8b0f32daf76bc1c21ca303be9f797d50fc8073ec947a6e65b673",
+  "docs/review/pr173-validation-20261024/robot_spc_results/execution_evidence.json": "b8d22f03f0d21f8d22e39c41a85620475ddafbdceda51ae65f34653760ce3104",
+  "docs/review/pr173-validation-20261024/robot_spc_results/manifest_before_decode.json": "102a06a7c9ad987378f117ce6d3cd3862908112741681d21d96ffa3d4c7369f4",
+  "docs/review/pr173-validation-20261024/robot_spc_results/member_checks.json": "c939e2823e635fb7504307433678bd792e99f5d116719fc96318efd4dc0198c1",
+  "docs/review/pr173-validation-20261024/robot_spc_results/range_acquisition.json": "3c6a5e81adbc2de090ae8aec34c0b289c7cdada96429d0462d189453e3845ae4",
+  "docs/review/pr173-validation-20261024/robot_spc_results/report.json": "9baf554ecf58ccde92747633ac39942aeacd7ebe6a7d4adca358f88d7724b9dc",
+  "docs/review/pr173-validation-20261024/robot_spc_results/summary.json": "c6ec44f970d07b635bbc2373013d6beafadcdbf06c12fdb389b502689f94d89c",
+  "tests/test_robot_range_runner.py": "aa6b3d6991c71c67d527822bf9b9337b72ca84822454174ea268bb82daac251b",
   "tests/web/robot-contract-feedback.test.mjs": "2e9ffca029f7f90adf89371f75a599a3fab11c635712a5c4559f51fd82483393",
+  "verification/run_robot_spc_ranges.py": "57d3372594f5ce790b504fc6c517f7a1cb5cf8600fba57c48f1c27af90915aa4",
   "web/robot/app.mjs": "136fe6d6550dc7a9216894f16ba8841c1a1895efedf69db0a530775be18b6004",
   "web/robot/contract-feedback.mjs": "b514b4a6343f4c61620b201fac95e408f01f8e189277b76173d5313c8002a4d3"
 }
