@@ -1,0 +1,28 @@
+{
+  "status": "environment_failed_before_ui_checks",
+  "tested_remote_commit": "bf8221462a1d7a7d532ed12dd6e08bc91b28336b",
+  "local_commit": "956983c5f29e80a5559303061ee995e15bceda9a",
+  "tracked_tree_equal": true,
+  "ui_checks_executed": 0,
+  "viewports_planned": [
+    [
+      1366,
+      900
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      360,
+      800
+    ]
+  ],
+  "launch_error": "Chromium executable missing",
+  "install_command": "node /opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/cli.js install chromium",
+  "install_error": "End of central directory record signature not found; Failed to install browsers",
+  "network_root_cause": "unconfirmed",
+  "script_validation": "node --check only; browser selectors and assertions unverified",
+  "no_share_or_access_expansion": true,
+  "no_merge_or_production_deploy": true
+}
