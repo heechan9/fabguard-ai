@@ -12,7 +12,7 @@ const root=path.resolve(__dirname,'..');
 const out=process.env.FABGUARD_UI_OUTPUT||path.join(root,'docs/review/pr173-validation-20261024/local_ui');
 fs.mkdirSync(out,{recursive:true});
 const checks=[], shots=[], pageErrors=[], externalRequests=[];
-const expectedHead='bf8221462a1d7a7d532ed12dd6e08bc91b28336b';
+const expectedHead=process.env.FABGUARD_TEST_COMMIT||execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
 const sourceFiles=['web/robot/app.mjs','web/robot/contract-feedback.mjs','web/robot/index.html','web/robot/style.css'];
 const testedBlobs=Object.fromEntries(sourceFiles.map(p=>[p,execFileSync('git',['hash-object',p],{cwd:root,encoding:'utf8'}).trim()]));
 async function check(name,fn){try{await fn();checks.push({name,status:'pass'});console.log('PASS',name)}catch(e){checks.push({name,status:'fail',error:e.message});console.log('FAIL',name,e.message)}}
@@ -23,11 +23,12 @@ async function fresh(page){await page.goto(base+'/robot/');await page.locator('#
 async function locked(page){await page.locator('#period').fill('0.001');await page.locator('#lock').click();}
 (async()=>{
  const {syntheticFiles,toCSV}=await import(pathToFileURL(path.join(root,'web/robot/synthetic.mjs')).href);
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.FABGUARD_BROWSER_PATH?{executablePath:process.env.FABGUARD_BROWSER_PATH}:{})});
  for(const viewport of [{width:1366,height:900},{width:390,height:844},{width:360,height:800}]){
   const tag=String(viewport.width);
   const context=await browser.newContext({viewport,deviceScaleFactor:1,hasTouch:viewport.width<500,isMobile:viewport.width<500});
   const page=await context.newPage();
+  page.setDefaultTimeout(10000);
   page.on('pageerror',e=>pageErrors.push({viewport:tag,message:e.message}));
   await page.route('**/*',route=>{const u=new URL(route.request().url());if(u.origin===new URL(base).origin)return route.continue();externalRequests.push({viewport:tag,origin:u.origin});return route.abort();});
   await fresh(page);
