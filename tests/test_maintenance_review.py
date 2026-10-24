@@ -110,6 +110,13 @@ class MaintenanceReviewTests(unittest.TestCase):
         with self.assertRaises(ManufacturingReviewError):
             build_context_review(self.events,b'{"schema_version":1,"schema_version":2}',10,as_of=self.cutoff)
 
+    def test_long_fields_and_nonfinite_json_are_rejected(self):
+        history = copy.deepcopy(self.history)
+        history['changes'][0]['description'] = 'x' * 2001
+        with self.assertRaises(ManufacturingReviewError): self.build(history)
+        with self.assertRaises(ManufacturingReviewError):
+            build_context_review(self.events,b'{"value":NaN}',10,as_of=self.cutoff)
+
     def test_record_reuses_existing_audit_and_keeps_unreviewed_items_pending(self):
         package = self.encode(self.build())
         audit = self.record(package,self.envelope(package))
