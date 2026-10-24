@@ -2,7 +2,7 @@ name: Local browser UI verification
 
 on:
   push:
-    branches: [codex/pr173-validation-followup]
+    branches: [codex/pr173-validation-followup, feat/reviewed-research-robot-demo-20261023]
     paths:
       - web/**
       - verification/local_ui_check.cjs
