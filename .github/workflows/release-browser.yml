@@ -1,0 +1,70 @@
+name: Released robot and context browser verification
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  production-assets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 verification/check_production_assets.py --output "$RUNNER_TEMP/release-assets.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-assets-${{ github.sha }}
+          path: ${{ runner.temp }}/release-assets.json
+          retention-days: 14
+  production-browser:
+    needs: production-assets
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [robot, context]
+        width: [1366, 390, 360]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Existing browser, project for local audit and Korean fonts
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          python -m pip install .
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Isolated browser driver without browser download
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/release-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Read-only production UI and local downloaded-decision audit
+        env:
+          FABGUARD_BASE_URL: https://fabguard-ai.vercel.app
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/release-ui
+          REVIEW_KIND: ${{ matrix.kind }}
+        run: |
+          if [ "$REVIEW_KIND" = robot ]; then
+            NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_robot_sort_cell.cjs
+          else
+            NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 180s node verification/check_context_review.cjs
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-${{ matrix.kind }}-${{ matrix.width }}-${{ github.sha }}
+          path: ${{ runner.temp }}/release-ui
+          retention-days: 14

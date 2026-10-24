@@ -1,0 +1,96 @@
+# 정비 이력·기준선·사람 검토 연결
+
+## 범위
+
+Photo 데이터·수율 분석 강의의 계측/정비 이력 대조, 반도체 데이터 분석 강의의 SPC/FDC 구분, 스마트공장 정보시스템 강의의 이력 추적 관점을 독자적인 입력·검토 계약으로 구현했다. 강의의 예시 수치·공정 원인 결론·그림은 사용하지 않는다. 실제 MES/FDC·정비 시스템을 연결하거나 사용자 권한을 인증한 것이 아니다.
+
+기존 `manufacturing_review`의 이벤트 검증·고정 SPC 계산·검토 감사 함수를 재사용한다. 제품 런타임에는 새 의존성을 추가하지 않는다. 실제 파일 선택·오류·키보드·좁은 화면·다운로드→CLI 연결을 확인하기 위해 CI에만 Playwright 1.62.1과 Noto CJK 글꼴을 격리 설치하며 이미 설치된 Chrome과 loopback 주소를 사용한다. 브라우저 다운로드·외부 공유·권한 확대는 하지 않는다. 모델 학습, SECOM/로봇 평가·임계값 변경이 없다. #176 로봇 3D 브랜치와 독립이며 웹 검토는 새 `equipment/context-review.html`에서만 실행한다. 기존 CSV 점검에는 안내 링크만 추가한다. #156 재실행 비교나 #168 로봇 특징 gate를 중복 구현하지 않는다.
+
+## 1. 정비·설정 변경 이력 대조
+
+기존 제조 이벤트 JSON과 별도 `fabguard-maintenance-history/v1` JSON을 입력한다. 이력에는 다음이 필요하다.
+
+- 출처 ID, observed/synthetic 역할, 해당 장비·공정, 묶음이 알려진 `available_at`.
+- `coverage.start/end/complete`: 제공자가 선언한 이력 조회 범위와 완전성. 실제 원본의 완전성·진위를 인증하지 않는다.
+- 변경별 고유 ID, 장비·공정, maintenance/calibration/recipe_change 종류, 효력 발생 시각, 알려진 시각, 설명.
+- 시각은 모두 시간대가 있는 ISO 형식. 다른 장비·공정 이력은 제외 목록에 남기며 임의 연결하지 않는다.
+
+`as_of`는 **이 배치 전체를 검토할 때 알고 있던 정보의 시점**이다. 모든 측정은 이 시점 이전이어야 하고, 이력 묶음도 그때 이용 가능해야 한다. 뒤늦게 알려진 정비를 포함한 최신 묶음을 과거 시점으로 제출하면 거부한다. 개별 측정 시각 당시의 실시간 판단을 재현하는 백테스트가 아니다. 미래로 예정된 변경은 이미 알려졌더라도 효력 발생 전 측정을 보류시키지 않는다.
+
+## 2. 기준선 적용 보류
+
+기존 관리한계는 그대로 계산해 참고값으로 보존한다. 새로운 이력에 맞춰 다시 fit하거나 이탈값을 제거하지 않는다. 이후 모든 측정을 별도 조건 검토 목록에 포함한다.
+
+| 상황 | 조건 검토 결과 |
+|---|---|
+| 이력 범위 부족 또는 complete=false | 모든 이후 측정 보류 |
+| 기준 구간 첫 시각~종료 시각에 변경 발생 | 모든 이후 측정 보류 |
+| 기준 종료 뒤 정비·교정·레시피 변경 | 그 효력 시각부터 보류 |
+| 통계 기준선 자체에 이탈 | 모든 이후 측정 보류 |
+| 측정값 없음 | 해당 측정 보류 |
+| 선언된 조건 충돌이 없음 | context_clear. 안정성·품질 합격 판정이 아님 |
+
+기준 구간보다 앞선 정비 이력은 보여주되 이 규칙만으로 새 기준선이 안정하다고 판정하지 않는다. 재기준선 설정·변경 승인·원인 규명은 별도 담당자 검증이 필요하다. 동일 장비·공정 전체 변경을 보수적으로 적용하며, 개별 부품·chamber 영향 범위 추론은 하지 않는다. 센서/변수 사전과 정비 원본이 없으면 적용 가능성을 확정할 수 없다.
+
+## 3. 웹에서 검토 초안 만들기
+
+`/equipment/context-review.html`에서 CLI가 만든 검토 묶음을 연다. 시계열 참고값·관리한계와 변경 시점, 변경 효력/가용 시각, 측정별 보류 사유를 표시한다. 현재 화면은 이후 측정 구간 그래프와 전체 이력 표를 제공한다. 입력 원본을 업로드하거나 실시간 시스템을 조회하지 않는다.
+
+대상·사용자 선언 역할·시간대가 있는 검토 시각·검토 결과·후속 제안·이유를 입력한다. 한 ID의 초안을 수정하거나 삭제할 수 있고, 미작성 항목은 pending으로 남는다. 파일 변경·지우기는 이전 초안을 없앤다. 브라우저 메모리에만 두며 새로고침하면 사라진다. 내려받은 JSON은 검토 묶음 **원본 바이트** SHA-256에 연결한다.
+
+판단 보류 항목은 insufficient_evidence + hold/equipment_check/reinspect만 허용한다. 이 화면이나 새 CLI를 통해 해제·조치 없음·해결로 덮어쓸 수 없다. context_clear라도 명시적인 사용자 판단은 필요하며 실제 출하·재가동 승인으로 작동하지 않는다. 웹의 파일 형식 검사는 원본 재계산·출처 인증이 아니다. 최종 감사 기록은 아래 새 CLI의 `record`로 생성해야 한다. 기존 별도 `manufacturing_review record`는 이 새 이력 계약을 검사하지 않으므로 대체 실행하면 이 기능을 검증한 것이 아니다.
+
+## 재현 명령
+
+```bash
+PYTHONPATH=src python -m fabguard.maintenance_review build \
+  --input examples/manufacturing/smt_synthetic_events.json \
+  --history examples/manufacturing/maintenance_history_synthetic.json \
+  --baseline-count 10 --as-of 2026-09-01T00:20:00Z \
+  --output /tmp/context-package.json
+
+# 웹에서 /tmp/context-package.json을 선택해 초안을 내려받은 뒤:
+PYTHONPATH=src python -m fabguard.maintenance_review record \
+  --input examples/manufacturing/smt_synthetic_events.json \
+  --history examples/manufacturing/maintenance_history_synthetic.json \
+  --package /tmp/context-package.json \
+  --decisions /tmp/context-review-decisions.json \
+  --recorded-at 2026-10-25T23:00:00+09:00 \
+  --output /tmp/context-review-audit.json
+```
+
+recorded-at는 예시이며 실제 기록 시각으로 바꾼다. 검토 시각은 묶음의 as_of 이상, recorded-at 이하여야 한다. CLI는 측정·이력 원본으로 묶음을 다시 계산해 변경·보류 상태 조작을 거부하고, 기존 검토 감사 함수로 ID·이벤트 증거·시각·pending을 재검사한다. 파일 해시는 위변조 대조용이며 원본의 진위나 검토자의 권한을 보증하지 않는다.
+
+합성 예제: 기준 10건, 이후 3건. 첫 측정은 참고 관리범위 안이며 선언된 조건 충돌 없음, 00:11:30 합성 정비 이후 2건은 보류(그 중 마지막은 결측). 이것은 성능 시험이 아니다. 브라우저/CLI 입력은 5MiB 이하로 제한한다. 20,000건 이내라도 검토 묶음 크기에 따라 더 작은 배치가 필요하다. 웹 날짜 표시는 밀리초 해상도이며 더 촘촘한 측정은 이 UI 대상이 아니다.
+
+## 검증과 미검증
+
+Python: 다른 장비/공정 제외, 기준 구간·종료 경계 변경, 정상 수치라도 변경 뒤 보류, 조회 범위 부족, 미래 지식·중복 ID·잘못된 형식 거부, 기존 관리한계 불변, 원본·묶음·초안 연결 및 보류 해제 차단. Node: Python 생성 예제 판독, 웹 입력·보류 제약, 파일 바이트 해시·중복 결정 검사. 실제 브라우저 화면·키보드·모바일·다운로드→CLI 검증도 아래 커밋·실행에서 완료했다. 이 실행 범위는 실제 휴대전화나 현장 검증과 구분한다.
+
+실제 정비 로그·센서 교정 이력, 독립 정상/이상 세션, 이상 시작 라벨, 실제 휴대전화·스크린리더·인증·사업장 승인·제어는 미검증이다. 로봇 경보9·0·3은 정상 개발자료 탐색 결과와 성능 지표 null을 유지한다. 연구용 검토 기능이며 원인·수율·비용·탐지 성능 개선 주장을 하지 않는다.
+
+
+## 실행 결과 — 2026-10-25 KST
+
+실제 브라우저 대상: `a990d1ea4923fde0df4e45de8493795a04aa93b0`. [브라우저 run 40106858345](https://github.com/heechan9/fabguard-ai/actions/runs/40106858345) 세 작업 성공, [같은 head 일반 CI 40106863153](https://github.com/heechan9/fabguard-ai/actions/runs/40106863153) 성공. 이후 커밋은 이 문서와 검사 JSON만 변경한다.
+
+| 화면 | 페이지 넘침 | 키보드·오류·초안 | 다운로드→원본 재계산 감사 |
+|---|---|---|---|
+| 1366×900 | 없음 | 통과 | 작성1·pending2 |
+| 390×900 | 없음 | 통과, 그래프 방향키 이동 | 작성1·pending2 |
+| 360×900 | 없음 | 통과, 그래프 방향키 이동 | 작성1·pending2 |
+
+Chrome 155.0.8059.39, preinstalled GitHub ubuntu-24.04, 격리 Playwright 1.62.1, loopback 서버. Enter/Tab, 보류 항목의 native option.disabled, DOM에서 해제 옵션을 강제로 켜도 validator가 거부하는 동작, 빈 이유와 오류 초점, 원본 불일치·잘못된 JSON·5MiB 초과 입력, 파일 교체 후 초안/역할 초기화, 지우기, 동작 줄이기 설정 변경 후 transition=0s를 확인했다. 내려받은 실제 JSON을 각 화면마다 새 CLI record에 넣어 원본 측정/이력으로 재계산하고 감사 결과를 확인했다.
+
+초기 `a8e85d63` 브라우저 하네스는 option의 일반 isDisabled 판정에서 실패했다. native disabled 속성을 직접 검사하고 강제 선택 시 모델의 거부까지 함께 확인하도록 수정했으며, 보류 항목의 해제 금지 조건을 완화하지 않았다. 일반 CI 성공과 이 초기 화면 검사 실패는 별개다.
+
+로컬 전체 회귀: Python **287건 중284통과·기존 환경생략3·실패0**(8.420초). 생략: 공식 SECOM 원본 미존재1, 선택 Frictionless 미설치2. 새 Python16건에는 생략 없음. Node **117통과·생략0·실패0**, 이 중 새 계약 검사5건. 신규 화면의 구문 검사와 diff check 통과. 기존 성능 데이터·평가를 다시 실행하거나 튜닝하지 않았다.
+
+PC 전체/검토, 390 전체, 360 검토 캡처를 직접 확인했다. 원본 GitHub ZIP3개 해시를 대조했고 캡처6장·화면별 초안/감사/결과·개별 해시를 보존했다.
+
+- [전체 캡처·초안·감사·해시 묶음](https://drive.google.com/file/d/1X5yTOqrxLHE1AAvfDkMJAAU2thgW9zfC/view?usp=drivesdk)
+- [360 검토 화면](https://drive.google.com/file/d/1kBuG38pBVY3rB6r831zl9mRF2rNO8RTM/view?usp=drivesdk)
+- 묶음 SHA-256: `059577690fa3bbc9ee48e0c63eb3ed68b470163696da495b5219745a73ab0c1c`
+- 실행 명령·원본 ZIP/파일 SHA-256: [검사 JSON](review/MAINTENANCE_CONTEXT_UI_20261025.json)
+
+세 기능의 합성 동작·화면 연결은 완료했지만, 실제 정비 로그에 대한 유효성·물리적 원인·운영 성능·권한 승인은 검증하지 않았다. Draft 검토 상태이며 main 병합·배포는 하지 않는다.

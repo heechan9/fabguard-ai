@@ -1,0 +1,215 @@
+{
+  "as_of": "2026-09-01T00:20:00+00:00",
+  "baseline_count": 10,
+  "baseline_end": "2026-09-01T00:10:00+00:00",
+  "data_role": "synthetic",
+  "excluded_other_stream_changes": [],
+  "history_coverage_verified_by_declaration": true,
+  "history_input_sha256": "fec9467c69968a7ae15f29b0fb8f323a682dcad9080a585a3526d17a623b0c69",
+  "limitations": [
+    "Declared batch review cutoff, not a historical performance backtest",
+    "History completeness and provenance are user declarations, not authenticated",
+    "Context clear does not prove stability, quality, causality or detection performance",
+    "No automatic rebaseline, release, equipment control or model update"
+  ],
+  "measurement": {
+    "name": "solder_paste_volume_pct",
+    "unit": "percent"
+  },
+  "observations": [
+    {
+      "context_state": "context_clear",
+      "event_time": "2026-09-01T00:11:00+00:00",
+      "measurement": "solder_paste_volume_pct",
+      "reasons": [],
+      "reference_status": "within_limits",
+      "related_changes": [],
+      "review_id": "50c8fe325e14caad66481f79",
+      "sample_id": "SPI-DEMO-01:2026-09-01T00:11:00+00:00",
+      "trace": {
+        "equipment_id": "SPI-DEMO-01",
+        "lot_id": "SMT-DEMO-L001",
+        "process_step": "solder_paste_inspection",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "run_id": "RUN-DEMO-001",
+        "spec_version": "demo-v1",
+        "unit_id": "PCB-011"
+      },
+      "unit": "percent",
+      "value": 100.0
+    },
+    {
+      "context_state": "withheld",
+      "event_time": "2026-09-01T00:12:00+00:00",
+      "measurement": "solder_paste_volume_pct",
+      "reasons": [
+        "change_after_baseline"
+      ],
+      "reference_status": "above_limit",
+      "related_changes": [
+        "PM-001"
+      ],
+      "review_id": "e6fb7d4abb34307995c50755",
+      "sample_id": "SPI-DEMO-01:2026-09-01T00:12:00+00:00",
+      "trace": {
+        "equipment_id": "SPI-DEMO-01",
+        "lot_id": "SMT-DEMO-L001",
+        "process_step": "solder_paste_inspection",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "run_id": "RUN-DEMO-001",
+        "spec_version": "demo-v1",
+        "unit_id": "PCB-012"
+      },
+      "unit": "percent",
+      "value": 130.0
+    },
+    {
+      "context_state": "withheld",
+      "event_time": "2026-09-01T00:13:00+00:00",
+      "measurement": "solder_paste_volume_pct",
+      "reasons": [
+        "change_after_baseline",
+        "measurement_missing"
+      ],
+      "reference_status": "unknown",
+      "related_changes": [
+        "PM-001"
+      ],
+      "review_id": "c9d732da79e0bb7abddff50f",
+      "sample_id": "SPI-DEMO-01:2026-09-01T00:13:00+00:00",
+      "trace": {
+        "equipment_id": "SPI-DEMO-01",
+        "lot_id": "SMT-DEMO-L001",
+        "process_step": "solder_paste_inspection",
+        "recipe_id": "DEMO-SPI",
+        "recipe_version": "v1",
+        "run_id": "RUN-DEMO-001",
+        "spec_version": "demo-v1",
+        "unit_id": "PCB-013"
+      },
+      "unit": "percent",
+      "value": null
+    }
+  ],
+  "queue": {
+    "data_role": "synthetic",
+    "items": [
+      {
+        "claim_boundary": "Reference statistic only; not product approval or a control command",
+        "event_evidence_sha256": "4d413f6a4d6bb24a9c6704cca1a9eae0cf38c35f26d53a464e5399fc3dea95c0",
+        "event_time": "2026-09-01T00:11:00+00:00",
+        "measurement": "solder_paste_volume_pct",
+        "priority_class": "P3_CONTEXT_REVIEW",
+        "review_id": "50c8fe325e14caad66481f79",
+        "sample_id": "SPI-DEMO-01:2026-09-01T00:11:00+00:00",
+        "screening_severity": null,
+        "screening_status": "within_limits",
+        "trace": {
+          "equipment_id": "SPI-DEMO-01",
+          "lot_id": "SMT-DEMO-L001",
+          "process_step": "solder_paste_inspection",
+          "recipe_id": "DEMO-SPI",
+          "recipe_version": "v1",
+          "run_id": "RUN-DEMO-001",
+          "spec_version": "demo-v1",
+          "unit_id": "PCB-011"
+        },
+        "unit": "percent",
+        "value": 100.0
+      },
+      {
+        "claim_boundary": "screening signal only; not a defect diagnosis or equipment command",
+        "event_evidence_sha256": "f9eb1d32254ea1bb518e5db684c1cf39fa0fc2a1fe779129a7fe2a4daebaccf9",
+        "event_time": "2026-09-01T00:12:00+00:00",
+        "measurement": "solder_paste_volume_pct",
+        "priority_class": "BLOCKED_CONTEXT",
+        "review_id": "e6fb7d4abb34307995c50755",
+        "sample_id": "SPI-DEMO-01:2026-09-01T00:12:00+00:00",
+        "screening_severity": null,
+        "screening_status": "above_limit",
+        "trace": {
+          "equipment_id": "SPI-DEMO-01",
+          "lot_id": "SMT-DEMO-L001",
+          "process_step": "solder_paste_inspection",
+          "recipe_id": "DEMO-SPI",
+          "recipe_version": "v1",
+          "run_id": "RUN-DEMO-001",
+          "spec_version": "demo-v1",
+          "unit_id": "PCB-012"
+        },
+        "unit": "percent",
+        "value": 130.0
+      },
+      {
+        "claim_boundary": "screening signal only; not a defect diagnosis or equipment command",
+        "event_evidence_sha256": "8a5d4f90c839b9d60c974f75c80e441c6a37f021fc5127564afcf159bb46bc12",
+        "event_time": "2026-09-01T00:13:00+00:00",
+        "measurement": "solder_paste_volume_pct",
+        "priority_class": "BLOCKED_CONTEXT",
+        "review_id": "c9d732da79e0bb7abddff50f",
+        "sample_id": "SPI-DEMO-01:2026-09-01T00:13:00+00:00",
+        "screening_severity": null,
+        "screening_status": "unknown",
+        "trace": {
+          "equipment_id": "SPI-DEMO-01",
+          "lot_id": "SMT-DEMO-L001",
+          "process_step": "solder_paste_inspection",
+          "recipe_id": "DEMO-SPI",
+          "recipe_version": "v1",
+          "run_id": "RUN-DEMO-001",
+          "spec_version": "demo-v1",
+          "unit_id": "PCB-013"
+        },
+        "unit": "percent",
+        "value": null
+      }
+    ],
+    "limitations": [
+      "Offline review queue only; no MES, FDC, APC or equipment-control integration",
+      "Control-limit signals are not product defects or specification failures",
+      "Synthetic input is not field evidence"
+    ],
+    "measurement": {
+      "name": "solder_paste_volume_pct",
+      "unit": "percent"
+    },
+    "schema_version": "fabguard-manufacturing-review-queue/v1",
+    "source_id": "fabguard-smt-3d-synthetic",
+    "source_input_sha256": "a8f95ae540f538f2f52ffa5e45c70f1ab5bb7439c16c96a5110b7ae9a3139617",
+    "stream_dimensions": {
+      "equipment_id": "SPI-DEMO-01",
+      "process_step": "solder_paste_inspection",
+      "recipe_id": "DEMO-SPI",
+      "recipe_version": "v1",
+      "spec_version": "demo-v1"
+    }
+  },
+  "reference_limits": {
+    "center": 100.0,
+    "lcl": 92.31678486997636,
+    "ucl": 107.68321513002364
+  },
+  "schema_version": "fabguard-context-review/v1",
+  "source_input_sha256": "a8f95ae540f538f2f52ffa5e45c70f1ab5bb7439c16c96a5110b7ae9a3139617",
+  "stream_dimensions": {
+    "equipment_id": "SPI-DEMO-01",
+    "process_step": "solder_paste_inspection",
+    "recipe_id": "DEMO-SPI",
+    "recipe_version": "v1",
+    "spec_version": "demo-v1"
+  },
+  "timeline": [
+    {
+      "available_at": "2026-09-01T00:15:00Z",
+      "change_id": "PM-001",
+      "description": "설명용 합성 정비",
+      "effective_at": "2026-09-01T00:11:30Z",
+      "equipment_id": "SPI-DEMO-01",
+      "kind": "maintenance",
+      "period": "monitoring",
+      "process_step": "solder_paste_inspection"
+    }
+  ]
+}

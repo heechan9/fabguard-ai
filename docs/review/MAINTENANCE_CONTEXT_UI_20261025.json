@@ -1,0 +1,150 @@
+{
+  "tested_commit": "a990d1ea4923fde0df4e45de8493795a04aa93b0",
+  "results": [
+    {
+      "commit": "a990d1ea4923fde0df4e45de8493795a04aa93b0",
+      "width": 1366,
+      "height": 900,
+      "browser": "155.0.8059.39",
+      "status": "pass",
+      "errors": [],
+      "checks": [
+        "actual page and chart",
+        "no document overflow",
+        "Enter/Tab and narrow-chart ArrowRight",
+        "reduced-motion preference and CSS change",
+        "held controls and validator",
+        "empty reason/error focus",
+        "draft count",
+        "download -> source-recomputed Python audit 1 decided / 2 pending",
+        "mismatched evidence invalidates old drafts",
+        "invalid JSON",
+        "oversized file",
+        "file replacement and reset"
+      ],
+      "scope": "synthetic local context review only; no field or detection performance"
+    },
+    {
+      "commit": "a990d1ea4923fde0df4e45de8493795a04aa93b0",
+      "width": 390,
+      "height": 900,
+      "browser": "155.0.8059.39",
+      "status": "pass",
+      "errors": [],
+      "checks": [
+        "actual page and chart",
+        "no document overflow",
+        "Enter/Tab and narrow-chart ArrowRight",
+        "reduced-motion preference and CSS change",
+        "held controls and validator",
+        "empty reason/error focus",
+        "draft count",
+        "download -> source-recomputed Python audit 1 decided / 2 pending",
+        "mismatched evidence invalidates old drafts",
+        "invalid JSON",
+        "oversized file",
+        "file replacement and reset"
+      ],
+      "scope": "synthetic local context review only; no field or detection performance"
+    },
+    {
+      "commit": "a990d1ea4923fde0df4e45de8493795a04aa93b0",
+      "width": 360,
+      "height": 900,
+      "browser": "155.0.8059.39",
+      "status": "pass",
+      "errors": [],
+      "checks": [
+        "actual page and chart",
+        "no document overflow",
+        "Enter/Tab and narrow-chart ArrowRight",
+        "reduced-motion preference and CSS change",
+        "held controls and validator",
+        "empty reason/error focus",
+        "draft count",
+        "download -> source-recomputed Python audit 1 decided / 2 pending",
+        "mismatched evidence invalidates old drafts",
+        "invalid JSON",
+        "oversized file",
+        "file replacement and reset"
+      ],
+      "scope": "synthetic local context review only; no field or detection performance"
+    }
+  ],
+  "files_sha256": {
+    "1366/1366-audit.json": "3279c8560c19a223e777e310a130bd49d23809ba1c19e9d3393f43b52ea8ecff",
+    "1366/1366-decisions.json": "49d0cb107211d15a1196163c96d5d5857356c8b4a30c98ab99970cc620bb8c81",
+    "1366/1366-review.png": "a828490d938326264aaf2732929e244509f92dad1928a8fc2f3277d32ab27e35",
+    "1366/1366-timeline.png": "bc0f246e178e07e04f7aacc7c790937b477e01a9fa502fc291f4e64b05f122ae",
+    "1366/results.json": "efea785b849d1cc374d3607980a23346b838afa7fe891d986953dcd9dd112804",
+    "360/360-audit.json": "3279c8560c19a223e777e310a130bd49d23809ba1c19e9d3393f43b52ea8ecff",
+    "360/360-decisions.json": "49d0cb107211d15a1196163c96d5d5857356c8b4a30c98ab99970cc620bb8c81",
+    "360/360-review.png": "f598a956981dfb6ef5716c7dba2ad56b6a5d5648a7e6b8e6ee861a2f015d2cef",
+    "360/360-timeline.png": "962403550f23530e14b40415ca6f4364e4b7ab42b334c6221a8db4f1657b8480",
+    "360/results.json": "33f77c13388c0b6ed1326e36286a6f3e68de5d32f8aed0cd71e36ca7eae9c212",
+    "390/390-audit.json": "3279c8560c19a223e777e310a130bd49d23809ba1c19e9d3393f43b52ea8ecff",
+    "390/390-decisions.json": "49d0cb107211d15a1196163c96d5d5857356c8b4a30c98ab99970cc620bb8c81",
+    "390/390-review.png": "0b46c2ee7432c6b033e062c94e7193ad3c1e9d65b82027e30b4f40393dd64bca",
+    "390/390-timeline.png": "340a0c0b02a10f9b145e953cf28ae09e4413f1e7eeb54e90e66be5959d29226b",
+    "390/results.json": "e639c2846ef90b792a3b3ca7a9e9da1a13d6c5b5ac60f7e540966c295cf7af77"
+  },
+  "local_python": {
+    "total": 287,
+    "passed": 284,
+    "skipped": 3,
+    "failures": 0,
+    "skip_reasons": [
+      "official SECOM data not present (1)",
+      "optional Frictionless not installed (2)"
+    ]
+  },
+  "new_python_tests": 16,
+  "web_node": {
+    "passed": 117,
+    "skipped": 0,
+    "failures": 0
+  },
+  "browser_run": 40106858345,
+  "tested_head_ci": 40106863153,
+  "scope": "synthetic batch review only; no anomaly/yield/control/authentication claim",
+  "artifacts": [
+    {
+      "id": 12564976401,
+      "name": "context-review-390-a990d1ea4923fde0df4e45de8493795a04aa93b0",
+      "digest": "sha256:0c2c5b35f4353b33e9c57e58ea1cfcb7a080d2a8e8b61bc90ec54479661c781a"
+    },
+    {
+      "id": 12564863076,
+      "name": "context-review-360-a990d1ea4923fde0df4e45de8493795a04aa93b0",
+      "digest": "sha256:a55a663930139bce53a4071f5cbe1865e254dcdbee31692475b5cb7fa58fe13c"
+    },
+    {
+      "id": 12564619404,
+      "name": "context-review-1366-a990d1ea4923fde0df4e45de8493795a04aa93b0",
+      "digest": "sha256:60ac46dd6e12d96211902b2579f3bd6e218b2b60a30b3be1516a5510c0e1a2a1"
+    }
+  ],
+  "bundle_sha256": "059577690fa3bbc9ee48e0c63eb3ed68b470163696da495b5219745a73ab0c1c",
+  "bundle_drive_url": "https://drive.google.com/file/d/1X5yTOqrxLHE1AAvfDkMJAAU2thgW9zfC/view?usp=drivesdk",
+  "manual_visual_review": [
+    "1366 timeline and review",
+    "390 timeline",
+    "360 review"
+  ],
+  "commands": [
+    "PYTHONPATH=src python -m unittest discover -s tests -v",
+    "node --test tests/web/*.test.mjs",
+    "node --check verification/check_context_review.cjs",
+    "git diff --check",
+    "PYTHONPATH=src python -m fabguard.maintenance_review build --input examples/manufacturing/smt_synthetic_events.json --history examples/manufacturing/maintenance_history_synthetic.json --baseline-count 10 --as-of 2026-09-01T00:20:00Z --output /tmp/context-package.json",
+    "FABGUARD_UI_WIDTH=<1366|390|360> FABGUARD_BROWSER_PATH=/usr/bin/google-chrome FABGUARD_UI_OUTPUT=<dir> NODE_PATH=<isolated-playwright-1.62.1>/node_modules timeout 180s node verification/check_context_review.cjs"
+  ],
+  "limitations": [
+    "synthetic source and history only",
+    "batch as-of review, not event-time performance backtest",
+    "no physical phone or screen reader test",
+    "no authenticated identity, authority, release or equipment control",
+    "no field causal/yield/cost/detection performance",
+    "existing raw SECOM/Frictionless environment skips remain explicit"
+  ]
+}
