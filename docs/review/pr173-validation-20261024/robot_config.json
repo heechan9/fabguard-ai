@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "window_s": "0.050",
+  "boundary": "left_closed_right_open",
+  "anchor": "file_first_timestamp",
+  "rms_mode": "vector",
+  "dc_handling": "none",
+  "time_unit": "s",
+  "value_unit": "g",
+  "axes": [
+    "A_x [g]",
+    "A_y [g]",
+    "A_z [g]"
+  ],
+  "nominal_period_s": "0.00014925373134328358",
+  "cadence_rel_tolerance": 0.05,
+  "gap_factor": 3.0,
+  "min_samples": 300,
+  "min_reference_windows": 10,
+  "ewma_lambda": 0.2,
+  "cusum_k": 0.5,
+  "reset_after_alarm": false,
+  "grids": {
+    "shewhart": [
+      3.0,
+      4.0,
+      5.0
+    ],
+    "ewma": [
+      3.0,
+      4.0,
+      5.0
+    ],
+    "cusum": [
+      4.0,
+      6.0,
+      8.0
+    ]
+  },
+  "max_raw_alarm_fraction": 0.05
+}
