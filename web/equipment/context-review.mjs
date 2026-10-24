@@ -7,7 +7,7 @@ const kinds={maintenance:'정비',calibration:'교정',recipe_change:'레시피 
 function node(tag,value,parent){const el=document.createElement(tag);el.textContent=value;parent.append(el);return el;}
 function error(e){$('context-error').textContent=e.message||String(e);$('context-error').focus();}
 function count(){ $('review-count').textContent=current?`초안 ${drafts.size}건 · 미작성 pending ${current.observations.length-drafts.size}건`:'검토 초안 없음';$('review-export').disabled=!current||drafts.size===0; }
-function clear(){generation++;current=null;packageHash='';drafts.clear();$('context-view').hidden=true;$('context-form').hidden=true;$('context-error').textContent='';$('context-status').textContent='파일과 검토 초안을 지웠습니다.';$('review-reason').value='';count();return generation;}
+function clear(){generation++;current=null;packageHash='';drafts.clear();$('context-view').hidden=true;$('context-form').hidden=true;$('context-error').textContent='';$('context-status').textContent='파일과 검토 초안을 지웠습니다.';$('review-reason').value='';$('review-role').value='';$('review-time').value='';count();return generation;}
 function svg(tag,attrs,value){const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));if(value!==undefined)el.textContent=value;$('context-chart').append(el);}
 function chart(p){
  $('context-chart').replaceChildren();const rows=p.observations,limits=p.reference_limits;
