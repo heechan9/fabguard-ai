@@ -31,6 +31,11 @@ jobs:
           fi
           "$BROWSER_PATH" --version
           echo "FABGUARD_BROWSER_PATH=$BROWSER_PATH" >> "$GITHUB_ENV"
+      - name: Install Korean screenshot fonts (browser unchanged)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          fc-match :lang=ko
       - name: Install isolated test driver only
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
