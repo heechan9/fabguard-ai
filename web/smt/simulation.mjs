@@ -9,7 +9,7 @@ export const STATIONS=[
  {name:'Reflow',label:'리플로우',duration:7,description:'납땜 가열 구간. 데모 최고 온도 범위는 235–250°C입니다. 실물 레시피가 아닙니다.'},
  {name:'Cooling',label:'냉각',duration:3,description:'냉각 구간. 열전달 물리는 계산하지 않습니다.'},
  {name:'3D AOI',label:'최종 검사',duration:4,description:'합성 AOI 결과. 납 부족 또는 과열 시 NG가 되도록 정한 가상 규칙입니다.'},
- {name:'NG buffer',label:'검사 버퍼',duration:3,description:'검사 후 대기. NG는 붉은색으로 표시하며 실제 분기 장치는 구현하지 않았습니다.'},
+ {name:'NG buffer',label:'검사 버퍼',duration:3,description:'검사 후 대기. NG는 붉은색으로 표시하며 옆의 별도 가상 로봇이 합성 분류 동작을 보여줍니다. 실제 분기 장치와 연결되지 않습니다.'},
  {name:'Unloader',label:'배출',duration:3,description:'PCB 배출. 전체 12장 완료 시 시뮬레이션이 정지합니다.'}
 ];
 export const FAULTS={paste:'납 도포량 부족',heat:'리플로우 과열',missing:'SPI 센서 데이터 누락'};
