@@ -1,0 +1,11 @@
+{
+  "docs/review/pr173-validation-20261024/REPORT.md": "da782a969824bd8cf401f3fea6bbf9ea1dc5aedb98f5729ce9021d5102150c42",
+  "docs/review/pr173-validation-20261024/environment.json": "8110182388c05244f0feb744457424751f20a745e2cda0811a52eda882f90f6d",
+  "docs/review/pr173-validation-20261024/main_blob_comparison.json": "13db75fcff197ed3a774857f78896d8ea4c929da47b0b255ea88bbc690ed41b6",
+  "docs/review/pr173-validation-20261024/pr_snapshot.json": "7fc51c5f4422cc60fa150e312ca097b13d71f3f8684ed789fbbaf16985f1253a",
+  "docs/review/pr173-validation-20261024/robot_config.json": "21f2f242c7f3a1d6ced01151c6f3d4d5e885f6cf07f43bbb73951d049d8176d0",
+  "docs/review/pr173-validation-20261024/robot_plan.json": "cf3b100f920d8b0f32daf76bc1c21ca303be9f797d50fc8073ec947a6e65b673",
+  "tests/web/robot-contract-feedback.test.mjs": "2e9ffca029f7f90adf89371f75a599a3fab11c635712a5c4559f51fd82483393",
+  "web/robot/app.mjs": "136fe6d6550dc7a9216894f16ba8841c1a1895efedf69db0a530775be18b6004",
+  "web/robot/contract-feedback.mjs": "b514b4a6343f4c61620b201fac95e408f01f8e189277b76173d5313c8002a4d3"
+}
