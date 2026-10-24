@@ -1,0 +1,322 @@
+{
+  "tested_remote_commit": "dca72e58959c5414f354ed8f1d18d92b871c0f48",
+  "tested_local_commit": "dca72e58959c5414f354ed8f1d18d92b871c0f48",
+  "testedBlobs": {
+    "web/robot/app.mjs": "d6ee6e4f7e55747bd69e307c125143228ad24840",
+    "web/robot/contract-feedback.mjs": "e2333b861c4fe2601ef6fa6abfc320de80a430ee",
+    "web/robot/index.html": "86383118d39f0070181a33bf845aa3ea1513f716",
+    "web/robot/style.css": "dd42fefc33c8963bf12bfc23d11a6a533b1f264a"
+  },
+  "browser": "155.0.8059.39",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 360,
+      "height": 800
+    }
+  ],
+  "network": "loopback only; external font requests blocked, fallback font layout",
+  "checks": [
+    {
+      "name": "1366 robot initial layout",
+      "status": "pass"
+    },
+    {
+      "name": "1366 empty period error focus",
+      "status": "pass"
+    },
+    {
+      "name": "1366 minimum samples marks correct control",
+      "status": "pass"
+    },
+    {
+      "name": "1366 tolerance and gap errors",
+      "status": "pass"
+    },
+    {
+      "name": "1366 lock clears errors and preserves keyboard focus",
+      "status": "pass"
+    },
+    {
+      "name": "1366 unlock enables period and moves focus",
+      "status": "pass"
+    },
+    {
+      "name": "1366 synthetic calculation keeps performance null",
+      "status": "pass"
+    },
+    {
+      "name": "1366 hash mismatch removes previous results",
+      "status": "pass"
+    },
+    {
+      "name": "1366 invalid reference timestamp fails closed",
+      "status": "pass"
+    },
+    {
+      "name": "1366 user CSV upload valid fields and missing-role rejection",
+      "status": "pass"
+    },
+    {
+      "name": "1366 rejects wrong-header",
+      "status": "pass"
+    },
+    {
+      "name": "1366 rejects bad-time",
+      "status": "pass"
+    },
+    {
+      "name": "1366 rejects invalid-utf8",
+      "status": "pass"
+    },
+    {
+      "name": "1366 rejects over-5mb",
+      "status": "pass"
+    },
+    {
+      "name": "1366 rejects over-20000-rows",
+      "status": "pass"
+    },
+    {
+      "name": "1366 clear and unlock leave no stale files or results",
+      "status": "pass"
+    },
+    {
+      "name": "1366 skip link keyboard",
+      "status": "pass"
+    },
+    {
+      "name": "1366 SECOM layout and keyboard filter",
+      "status": "pass"
+    },
+    {
+      "name": "1366 research overview layout",
+      "status": "pass"
+    },
+    {
+      "name": "390 robot initial layout",
+      "status": "pass"
+    },
+    {
+      "name": "390 empty period error focus",
+      "status": "pass"
+    },
+    {
+      "name": "390 minimum samples marks correct control",
+      "status": "pass"
+    },
+    {
+      "name": "390 tolerance and gap errors",
+      "status": "pass"
+    },
+    {
+      "name": "390 lock clears errors and preserves keyboard focus",
+      "status": "pass"
+    },
+    {
+      "name": "390 unlock enables period and moves focus",
+      "status": "pass"
+    },
+    {
+      "name": "390 synthetic calculation keeps performance null",
+      "status": "pass"
+    },
+    {
+      "name": "390 hash mismatch removes previous results",
+      "status": "pass"
+    },
+    {
+      "name": "390 invalid reference timestamp fails closed",
+      "status": "pass"
+    },
+    {
+      "name": "390 user CSV upload valid fields and missing-role rejection",
+      "status": "pass"
+    },
+    {
+      "name": "390 rejects wrong-header",
+      "status": "pass"
+    },
+    {
+      "name": "390 rejects bad-time",
+      "status": "pass"
+    },
+    {
+      "name": "390 rejects invalid-utf8",
+      "status": "pass"
+    },
+    {
+      "name": "390 rejects over-5mb",
+      "status": "pass"
+    },
+    {
+      "name": "390 rejects over-20000-rows",
+      "status": "pass"
+    },
+    {
+      "name": "390 clear and unlock leave no stale files or results",
+      "status": "pass"
+    },
+    {
+      "name": "390 skip link keyboard",
+      "status": "pass"
+    },
+    {
+      "name": "390 SECOM layout and keyboard filter",
+      "status": "pass"
+    },
+    {
+      "name": "390 research overview layout",
+      "status": "pass"
+    },
+    {
+      "name": "360 robot initial layout",
+      "status": "pass"
+    },
+    {
+      "name": "360 empty period error focus",
+      "status": "pass"
+    },
+    {
+      "name": "360 minimum samples marks correct control",
+      "status": "pass"
+    },
+    {
+      "name": "360 tolerance and gap errors",
+      "status": "pass"
+    },
+    {
+      "name": "360 lock clears errors and preserves keyboard focus",
+      "status": "pass"
+    },
+    {
+      "name": "360 unlock enables period and moves focus",
+      "status": "pass"
+    },
+    {
+      "name": "360 synthetic calculation keeps performance null",
+      "status": "pass"
+    },
+    {
+      "name": "360 hash mismatch removes previous results",
+      "status": "pass"
+    },
+    {
+      "name": "360 invalid reference timestamp fails closed",
+      "status": "pass"
+    },
+    {
+      "name": "360 user CSV upload valid fields and missing-role rejection",
+      "status": "pass"
+    },
+    {
+      "name": "360 rejects wrong-header",
+      "status": "pass"
+    },
+    {
+      "name": "360 rejects bad-time",
+      "status": "pass"
+    },
+    {
+      "name": "360 rejects invalid-utf8",
+      "status": "pass"
+    },
+    {
+      "name": "360 rejects over-5mb",
+      "status": "pass"
+    },
+    {
+      "name": "360 rejects over-20000-rows",
+      "status": "pass"
+    },
+    {
+      "name": "360 clear and unlock leave no stale files or results",
+      "status": "pass"
+    },
+    {
+      "name": "360 skip link keyboard",
+      "status": "pass"
+    },
+    {
+      "name": "360 SECOM layout and keyboard filter",
+      "status": "pass"
+    },
+    {
+      "name": "360 research overview layout",
+      "status": "pass"
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [
+    {
+      "viewport": "1366",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "1366",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "1366",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "390",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "390",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "390",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "360",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "360",
+      "origin": "https://fonts.googleapis.com"
+    },
+    {
+      "viewport": "360",
+      "origin": "https://fonts.googleapis.com"
+    }
+  ],
+  "screenshots": [
+    "1366-robot-initial.png",
+    "1366-contract-error.png",
+    "1366-synthetic-results.png",
+    "1366-secom-filter.png",
+    "1366-research-overview.png",
+    "390-robot-initial.png",
+    "390-contract-error.png",
+    "390-synthetic-results.png",
+    "390-secom-filter.png",
+    "390-research-overview.png",
+    "360-robot-initial.png",
+    "360-contract-error.png",
+    "360-synthetic-results.png",
+    "360-secom-filter.png",
+    "360-research-overview.png"
+  ],
+  "summary": {
+    "passed": 57,
+    "failed": 0
+  },
+  "limitations": [
+    "Local Chromium, not Vercel deployment verification",
+    "Touch-capable mobile emulation, not a physical phone",
+    "No screen reader user testing",
+    "No SPC performance evaluation or real equipment control"
+  ]
+}
