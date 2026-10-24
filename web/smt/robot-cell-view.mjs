@@ -14,7 +14,7 @@ export function mountRobotCell(scene,x,{box,cylinder,label}){
   box(root,1.05,.12,1.2,d.x,.94,d.z,palettes[key]);
   label(root,d.label,d.x,.45,d.z);
  }
- label(root,ROBOT_NAME+' · PICK & PLACE',.85,3.1,1.15);
+ label(root,ROBOT_NAME,.85,3.1,1.15);
  function segment(mesh,a,b){mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.scale.y=a.distanceTo(b);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),b.clone().sub(a).normalize());}
  return {root,update(boards){
   const active=boards.find(b=>b.stage===9),pose=active&&robotPose(active);
