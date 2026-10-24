@@ -74,7 +74,7 @@
 
 **예측 성능 향상을 뜻하지 않습니다.** SECOM 잠정 결과는 AP **0.0935**, 상위 40건에서 불량 **5/24건**으로 V1과 같습니다. 로봇 SPC 경보 **9·0·3건**은 정상 개발자료 **1,043개 창**의 탐색 결과이며 탐지 성능이나 방법 간 우열을 입증하지 않습니다. 미검증 성능 지표는 `null`을 유지합니다.
 
-검사 근거: `cce8360f`와 동일한 통합 tree `d7b0377e`에서 `node --test tests/web/*.test.mjs` **120건 통과**, `PYTHONPATH=src python -m unittest discover -s tests -v` **287건 중 284건 통과·환경 의존 3건 건너뜀**. [해당 main CI](https://github.com/heechan9/fabguard-ai/actions/runs/40108975187)와 [배포 브라우저 검사](https://github.com/heechan9/fabguard-ai/actions/runs/40108975237), [실행 로그·화면·해시 근거](https://drive.google.com/file/d/12QbzaWdZ2jU-hT4_aIGPoTaPYGkWucoW/view)를 함께 확인할 수 있습니다. PC·390·360 폭 브라우저 검사는 모바일 화면 크기 에뮬레이션이며 실제 휴대전화·스크린리더 검증과 구분합니다.
+검사 근거(원문 로그 미첨부, 아래 수치는 로컬 실행 기록에 따름): `cce8360f`와 동일한 통합 tree `d7b0377e`에서 `node --test tests/web/*.test.mjs` **120건 통과**, `PYTHONPATH=src python -m unittest discover -s tests -v` **287건 중 284건 통과·환경 의존 3건 건너뜀**. [해당 main CI](https://github.com/heechan9/fabguard-ai/actions/runs/40108975187)와 [배포 브라우저 검사](https://github.com/heechan9/fabguard-ai/actions/runs/40108975237), [실행 결과 요약·화면·해시 근거](https://drive.google.com/file/d/12QbzaWdZ2jU-hT4_aIGPoTaPYGkWucoW/view)를 함께 확인할 수 있습니다. PC·390·360 폭 브라우저 검사는 모바일 화면 크기 에뮬레이션이며 실제 휴대전화·스크린리더 검증과 구분합니다.
 
 ### 문제를 어떻게 정하고 검증했나요?
 
