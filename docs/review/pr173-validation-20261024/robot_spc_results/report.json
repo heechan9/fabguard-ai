@@ -1,0 +1,505 @@
+{
+  "input_binding": "decoded_from_verified_source_bytes:parquet",
+  "run_status": "exploratory_alarm_activity_only",
+  "reasons": [],
+  "flags": [
+    "near_boundary_timestamps_present",
+    "stability_unverified",
+    "reused_development_data"
+  ],
+  "notes": [
+    "condition_labels_do_not_establish_motion_speed_or_session_equivalence",
+    "windows_are_not_independent_sessions",
+    "equal_calibration_cap_is_not_equal_false_alarm_rate_or_arl",
+    "raw_alarms_and_episodes_are_counted_separately",
+    "alarm_activity_is_not_false_alarm_rate_without_established_stable_normal_reference",
+    "no_onset_or_end_labels_so_delay_recall_miss_not_evaluable",
+    "synthetic_or_window_counts_are_not_latency_in_seconds_of_a_real_system",
+    "no_causal_capability_yield_or_economic_claim",
+    "source_sha256_proves_bytes_only_not_provenance_or_trusted_decoding",
+    "separate_from_model_artifact_binding"
+  ],
+  "reference": {
+    "center": 1.018270127323273,
+    "scale": 0.016170891401662484,
+    "n_windows": 1788,
+    "files": [
+      "20240405_10_45_40_dataLog_0",
+      "20240405_10_45_40_dataLog_12",
+      "20240405_10_45_40_dataLog_16",
+      "20240405_10_45_40_dataLog_17",
+      "20240405_10_45_40_dataLog_20",
+      "20240405_10_45_40_dataLog_24",
+      "20240405_10_45_40_dataLog_27",
+      "20240405_10_45_40_dataLog_30",
+      "20240405_10_45_40_dataLog_36",
+      "20240405_10_45_40_dataLog_40",
+      "20240405_10_45_40_dataLog_41",
+      "20240405_10_45_40_dataLog_6"
+    ],
+    "descriptive_only": {
+      "lag1_autocorrelation": -0.19757863219468738,
+      "note": "descriptive; does not establish stability"
+    }
+  },
+  "calibration": {
+    "shewhart": {
+      "status": "calibrated",
+      "threshold": 3.0,
+      "grid": [
+        3.0,
+        4.0,
+        5.0
+      ],
+      "tried": [
+        {
+          "threshold": 3.0,
+          "raw_alarms": 1,
+          "evaluable_windows": 149
+        }
+      ],
+      "budget_max_raw_alarm_fraction": 0.05
+    },
+    "ewma": {
+      "status": "calibrated",
+      "threshold": 3.0,
+      "grid": [
+        3.0,
+        4.0,
+        5.0
+      ],
+      "tried": [
+        {
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "evaluable_windows": 149
+        }
+      ],
+      "budget_max_raw_alarm_fraction": 0.05
+    },
+    "cusum": {
+      "status": "calibrated",
+      "threshold": 4.0,
+      "grid": [
+        4.0,
+        6.0,
+        8.0
+      ],
+      "tried": [
+        {
+          "threshold": 4.0,
+          "raw_alarms": 0,
+          "evaluable_windows": 149
+        }
+      ],
+      "budget_max_raw_alarm_fraction": 0.05
+    }
+  },
+  "evaluation_files": [
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_14",
+      "recording_group": "20240405_11_02_26_corr300",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.499965000000003,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.049965000000003104
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 1,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_19",
+      "recording_group": "20240405_11_02_26_corr300",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.499970999999988,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.049970999999987956
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 0,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 1,
+          "episodes": 1,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.006711409395973154,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_2",
+      "recording_group": "20240405_11_02_26_corr300",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.499953999999999,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.0499539999999989
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 1,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 1,
+          "episodes": 1,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.006711409395973154,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_27",
+      "recording_group": "20240405_11_02_26_corr300",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.499975999999947,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.04997599999994691
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 0,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 2,
+          "episodes": 1,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.013422818791946308,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 1,
+          "episodes": 1,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.006711409395973154,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    },
+    {
+      "file_id": "20240405_11_10_50_dataLog_11",
+      "recording_group": "20240405_11_10_50",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.499860999999996,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.04986099999999567
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 1,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    },
+    {
+      "file_id": "20240405_11_10_50_dataLog_13",
+      "recording_group": "20240405_11_10_50",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.4998609999999815,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.04986099999998146
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 1,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 1,
+          "episodes": 1,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.006711409395973154,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    },
+    {
+      "file_id": "20240405_11_10_50_dataLog_15",
+      "recording_group": "20240405_11_10_50",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      },
+      "file_status": "valid",
+      "file_reasons": [],
+      "duration_total_s": 7.499865,
+      "duration_evaluable_s": 7.45,
+      "windows_complete": 149,
+      "windows_evaluable": 149,
+      "windows_excluded": {},
+      "exclusion_fraction": 0.0,
+      "partial_tail": {
+        "n_samples": 353,
+        "duration_s": 0.049864999999999784
+      },
+      "n_gaps": 0,
+      "near_boundary_samples": 1,
+      "empty_window_runs": 0,
+      "methods": {
+        "shewhart": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 4,
+          "episodes": 2,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.026845637583892617,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "ewma": {
+          "status": "alarm_activity_recorded",
+          "threshold": 3.0,
+          "raw_alarms": 0,
+          "episodes": 0,
+          "any_raw_alarm": false,
+          "alarm_activity_per_evaluable_window": 0.0,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        },
+        "cusum": {
+          "status": "alarm_activity_recorded",
+          "threshold": 4.0,
+          "raw_alarms": 2,
+          "episodes": 1,
+          "any_raw_alarm": true,
+          "alarm_activity_per_evaluable_window": 0.013422818791946308,
+          "resets": {},
+          "evaluable_mask_rle_sha256": "0bfbe6d345b2bd52a0f074d34dad641328e2b860c6bbbb030ecbf127f48b3921"
+        }
+      }
+    }
+  ],
+  "independent_units": {
+    "evaluation_recording_groups": 2,
+    "evaluation_files": 7,
+    "windows_are_independent_sessions": false
+  },
+  "performance": {
+    "detection_delay": null,
+    "anomaly_recall": null,
+    "miss_rate": null,
+    "false_alarm_rate": null,
+    "reason": "no_onset_end_labels_and_stable_normal_not_established"
+  },
+  "config_sha256": "55794547c6d4355a6f407a049bf973abd4e0a34d01a0c1e208477f4d34aef1ce",
+  "manifest_sha256": "0c15aeb4c9da677c5e919e6fe644cb09c5e86a67e9cd9af5683063480bdc3ed6",
+  "stability": {
+    "status": "stability_unverified",
+    "reasons": [
+      "no_stability_evidence"
+    ]
+  }
+}
