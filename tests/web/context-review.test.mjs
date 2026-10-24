@@ -12,7 +12,7 @@ test('generated Python package retains normal/held/missing reference evidence',(
 });
 test('browser blocks invalid IDs, empty rationale, future/past decisions and held release',()=>{
  const p=parsePackage(raw),f=fields(p);
- for(const patch of [{review_id:'unknown'},{rationale:' '},{reviewer_role:''},{action:'release'},{outcome:'false_alarm'},{decided_at:'2026-09-01T00:19:00Z'},{decided_at:'2026-09-01T00:23:00Z'},{decided_at:'2026-09-01T00:21:00'}])assert.throws(()=>reviewDecision(p,{...f,...patch},now));
+ for(const patch of [{review_id:'unknown'},{rationale:' '},{reviewer_role:''},{action:'release'},{outcome:'false_alarm'},{decided_at:'2026-09-01T00:19:00Z'},{decided_at:'2026-09-01T00:23:00Z'},{decided_at:'2026-09-01T00:21:00'},{decided_at:'2026-02-30T00:21:00Z'}])assert.throws(()=>reviewDecision(p,{...f,...patch},now));
  assert.equal(reviewDecision(p,f,now).action,'hold');
 });
 test('export binds exact UTF-8 bytes and refuses duplicate or empty decisions',async()=>{
