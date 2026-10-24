@@ -1,0 +1,89 @@
+# #173 후속 검증과 병합 준비도 — 2026-10-24
+
+## 판정
+
+- **코드·계약 검증:** 기존 #173 head `966981b77ecd3a68385a818c4f6b65e6ec2abe48`에서 Python 269 tests OK (6 skips), Node 110/110 통과를 직접 재실행했다. 선택 robot 의존성 설치 후 robot 필수 엔진 테스트 72/72 통과. 후속 수정본 전체 Python 269 tests OK (3 기존 skips), Node 112/112 통과. 세부 실행 환경은 environment.json.
+- **화면·모바일·실제 키보드 조작:** 미완료. 정확한 #173 프리뷰가 Vercel 로그인으로 이동하는 것을 브라우저에서 관찰했다. 공유 링크 생성은 자동 승인 검토에서 거절됐다(누구나 접근 가능한 URL을 만들 수 있어 권한 확대에 해당). 링크 생성·보호 설정 변경·대체 공개 배포로 우회하지 않았다. HTTP 200/CI/DOM 모형 테스트를 실제 화면 점검으로 계산하지 않았다.
+- **실제 이상 탐지 성능:** 미판정. 원시 가속도 Parquet가 현재 환경과 확인한 기존 Drive 원본/평가 폴더에 없었다. 공식 3,545,453,763-byte RoboticArm.7z 다운로드를 시도했지만 30초 동안 1MB/s 미만으로 종료(curl 28). 약 19MB 부분 파일은 원본 검증·추출·RMS·SPC 계산에 쓰지 않았다.
+- **운영 승인:** 없음. main 병합·운영 배포·기존 PR 종료·최종 모델 교체를 하지 않았다. 이 변경은 #173을 base로 하는 별도 수정 PR이다.
+
+## 발견·수정한 코드 문제
+
+계약 입력 실패 시 기존 코드는 period에만 aria-invalid를 설정했다. 최소 표본 오류도 period를 잘못 표시했고, tolerance/gap 오류는 해당 입력에 표시하지 않았다. submit 후 오류 필드로 초점을 보내지 않았고, 성공 후에는 초점이 있던 submit 자체가 disabled가 됐다.
+
+- 실제 오류 사유를 해당 입력에 연결하고 aria-describedby로 기존 안내와 오류 상태를 함께 연결했다.
+- 첫 오류 입력으로 초점을 보내고, 정상 재입력 시 이전 오류 속성만 지운다(기존 period-help 보존).
+- 계약 고정 뒤 활성화된 고정 해제 버튼으로, 고정 해제 뒤 period로 초점을 보낸다.
+- 두 회귀 테스트는 최소 표본 오류가 period에 잘못 붙는 사례와 여러 오류·기존 안내 보존을 검사한다. DOM 제어 모형 테스트이며 브라우저/스크린리더 실제 조작 확인은 아니다.
+
+## #169 / #170 / #173 수치 구분
+
+| 항목 | #169 | #170 | #173 |
+| --- | --- | --- | --- |
+| 입력 범위 | 공식 학습 1,175건 내부 | 공식 학습 1,175건만 파싱 | #170의 고정 산출물을 화면용 데이터로 옮김 |
+| 시간 분할 | 고유 timestamp 초기 약 55% + 4 expanding folds | 고유 날짜 4블록 → 3 expanding folds | 새 모델 평가 없음 |
+| 검증 건수 / 불량 | 중복 없는 525건 / 14건 | 구간 합계 불량 61건 | #170과 동일 |
+| 점검 예산 | 각 fold ceil(10%), 합계 55건 | 각 fold ceil(10%), 합계 105건 | #170과 동일 |
+| RF 기준 설정 | depth=None, leaf=8 | depth=8 (다른 고정 설정) | #170 표시 |
+| L1 C | .01 | .1 | #170 표시 |
+| 평균 AP (RF / boosting) | .060064 / .203387 | .088042 / .155006 (current) | #170 표시 |
+| 포착 (RF / boosting) | 2/14 / 4/14 | 9/61 / 10/61 (current) | #170 표시 |
+| 행 결측 개수 추가 | RF 2→3/14 | RF 9→7/61, boosting 10→10/61 | #170의 개선 미입증을 표시 |
+
+서로 다른 표본·분할·모델 설정의 탐색 실험이다. 수치를 합산하거나 #169 AP .203을 기존 Test AP .0935와 비교해 성능 향상률로 표현하지 않는다. #173은 #169 코드를 포함한 통합 모델이 아니며 #170/#171/#168/#172의 연구 요약과 별도 SPC 시제품을 추가한다.
+
+## 열린 PR 포함·중복·의존 관계
+
+17개 열린 PR의 고정 head와 changed-file SHA를 pr_snapshot.json에 저장했다. main `cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3` 전체 tree와 최종 파일 blob을 대조한 것은 main_blob_comparison.json이다. 이는 파일 동일성/경로 충돌 검사이며 모든 PR 코드의 의미적 안전성을 승인하는 감사는 아니다.
+
+| PR | 관계·누락 방지 판단 | 제안 순서 |
+| --- | --- | --- |
+| #159 | 유일한 변경 tests/test_results_contract.py의 blob이 이미 main과 동일 | 기록 확인만; 종료하지 않음 |
+| #156 / #160 | 6개 changed-file 경로와 최종 SHA가 모두 같다. 그중 테스트 1개만 main 동일, replay 코드 등 5개는 미반영 | 하나를 정본으로 재기반·검토. 둘 다 병합하지 않음. 아직 종료 안 함 |
+| #161 | DKASC 출처 재확인 1문서. 다른 연구와 독립 | 문서 검토 후 독립 병합 후보 |
+| #154 | Steel 독립 감사 코드·문서·pyproject 변경 | 별도 범위 검토. docs/README·pyproject 변경 보존 필요 |
+| #164 | 판단 보류 설계 문서. #168 구현 파일과 다름 | #168 전에 설계 기록 검토 |
+| #165 → #167 | #167은 #165 head 기반 문서 갱신. 국제 검증·잠금평가 계약 포함 | #165 후 #167, 공통 문서 최신 내용 보존 |
+| #168 | 42특징 판단 보류 API 구현. #173에 포함되지 않음 | 독립 검토·합성 계약 확인 후 병합 후보 |
+| #169 | 이 대화의 4fold 결측 실험. #170과 연구 주제만 유사; 파일/평가 계약 다름 | 별도 연구 기록으로 보존. 합산 금지 |
+| #170 | 3 날짜fold·13후보 비교. #173은 결과 스냅샷만 포함하고 Python 실행기/연구 원문은 포함하지 않음 | 연구 기록을 #173보다 먼저 검토 권장 |
+| #171 | 원본 재현 수치 비교 감사·verifier. #173은 설명만 포함 | #173보다 먼저 감사 기록 검토 권장 |
+| #172 | 독립 합성 SPC 실험. #173에 실제 study.py/results.json은 포함 안 됨 | #173보다 먼저 합성 연구 기록 검토 권장 |
+| #173 | 연구 결과 화면·별도 로봇 SPC 엔진·CI. #168 API와 각 연구 실행기를 전부 포함한 PR 아님 | 근거 PR 검토 후 화면/접근성 점검과 이 수정본 반영 |
+| #137 / #140 / #142 | 시간순 SECOM 음성결과 / KAMP / SCATIM의 서로 다른 연구 기록 | 별도 순서; 모델 승격과 분리 |
+
+여러 PR이 docs/README.md·README.md·장비 UI를 동시에 바꾼다. 하나씩 적용한 후보 tree에서 CI와 링크/서술을 다시 검사해야 하며, 한 PR의 전체 파일 사본으로 나중 문서 내용을 덮어쓰지 않는다. #156/#160과 #173은 equipment 관련 경로도 겹치므로 독립 green CI만으로 결합 호환을 승인하지 않는다.
+
+**제안 순서:** 문서/감사 기록(#161, #164, #165→#167) → 독립 연구 기록(#169, #170, #171, #172; #137/#140/#142 별도) → API #168 → replay #156 또는 동일 #160의 한 정본 → #173 + 이번 수정. #154는 별도 검토 후 공통 목차·의존성 충돌을 조정한다. 각 단계는 dot 검토와 사용자 승인 뒤 수행할 제안일 뿐, 실제 병합하지 않았다.
+
+## 실제 로봇 SPC 사전 고정과 부족한 입력
+
+robot_config.json은 숫자 신호·경보를 보기 전에 고정했다. 모듈 validate_config를 통과했고 config SHA-256은 `55794547c6d4355a6f407a049bf973abd4e0a34d01a0c1e208477f4d34aef1ce`이다.
+
+- metadata SHA-256이 기존 정본 `6d810ca6...aa9d9`와 일치하는 특징 CSV에서 메타데이터 5열만 사용했다. 특징값·기존 예측 점수는 그룹 선택에 쓰지 않았다.
+- normal_source_train / weight15 / BckgA의 그룹을 사전식 정렬해 첫 4개 선택. 각 그룹에 속하는 해당 train 세그먼트를 모두 선택했다. reference 12파일(1그룹), calibration 1파일(1그룹), evaluation 7파일(2그룹)이다. 그룹/구간 ID는 robot_plan.json.
+- 50ms·vector RMS·DC 제거 없음, 공개 공칭 6.7kHz의 역수로 nominal period 고정, cadence 허용 5%, gap 3배, 창당 최소 300표본, reference 최소 10창. 실제 시간열이 이를 만족하지 않으면 실패를 기록하고 같은 평가 자료를 보며 수치를 고치지 않는다.
+- λ=.2, k=.5, 경보 후 리셋 없음. Shewhart/EWMA grid [3,4,5], CUSUM [4,6,8], calibration raw alarm 상한 5%. calibration 첫 통과 threshold만 사용하고 실패 시 grid 확장 없음.
+- 이 자료는 기존 개발에 쓰인 정상 그룹이므로 reused_development_data, 결과 최고 상태는 exploratory_alarm_activity_only. 안정 정상 미확립·onset/종료 라벨 부재로 오탐률/재현율/미탐률/지연은 null이다. 이상을 잘 잡는지 판정할 실험이 아니다.
+
+**다음 실행에 필요한 것:** 완전한 공식 원본 7z(공식 MD5·저장 SHA 검증)와 선택된 원시 가속도 Parquet 20개, 매핑 참조·크기·CRC/멤버 검증. RMS 계산 전 파일별 SHA 매니페스트를 생성·고정하고 run_protocol_from_bytes(..., decoder='parquet')로 동일 바이트를 디코딩한다. 파일 해시 미확보 상태를 실제 실행용 manifest라고 부르지 않는다. pyarrow 26.0.0·py7zr 1.1.4는 이번에 설치했고 필수 엔진 테스트 통과했으므로 현재 막힌 것은 라이브러리가 아닌 원본 바이트다.
+
+운영 성능 판정에는 추가로 미노출 세션, 동작/속도/하중/배경·정비 기록, 안정 정상 근거, 이상 onset/종료 독립 라벨과 사전 승인 운영 지표가 필요하다. 현재 수집 자료나 합성 결과로 이를 대신하지 않는다.
+
+## 재현 명령과 완료 범위
+
+저장소 루트:
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -v
+node --test tests/web/*.test.mjs
+FABGUARD_REQUIRE_ROBOT_EXTRA=1 PYTHONPATH=src python -m unittest tests.test_robot_window_spc tests.test_robot_benchmark -v
+python verification/recompute_v1.py
+python verification/source_clarifications.py
+python scripts/build_web_evidence.py --check
+node --check web/robot/app.mjs
+node --check web/robot/contract-feedback.mjs
+git diff --check
+```
+
+직접 확인: 테스트·산술/출처 재계산·웹 근거 동기화·선택 의존성·PR 파일 SHA 관계·메타데이터 해시·설정 스키마. 미확인: #173 실제 화면/모바일/키보드 조작/사용자 오류파일 UI/최종 탐색 경로, 실측 SPC 실행, 탐지 성능, 현장 KPI. 변경 후 프리뷰가 생겨도 HTTP나 CI 통과만으로 이 미확인 목록을 완료로 바꾸지 않는다.
