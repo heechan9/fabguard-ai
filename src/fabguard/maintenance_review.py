@@ -56,6 +56,8 @@ def build_context_review(events_raw: bytes, history_raw: bytes, baseline_count: 
     report, original_queue = build_review_package(events_raw, baseline_count)
     cutoff = _aware_timestamp(as_of, "as_of")
     measurement = report["measurement"]
+    if any(len(value) > 120 for value in [*measurement.values(), *report["stream_dimensions"].values()]):
+        raise ManufacturingReviewError("measurement and stream identifiers must be at most 120 characters")
     frame = normalize_fledge_readings(source["readings"], required_measurements=(measurement["name"],))
     times = [row["event_time"].to_pydatetime() for _, row in frame.iterrows()]
     if times[-1] > cutoff:
@@ -85,7 +87,9 @@ def build_context_review(events_raw: bytes, history_raw: bytes, baseline_count: 
         _fields(event, {"change_id", "equipment_id", "process_step", "kind", "effective_at",
                         "available_at", "description"}, "change")
         for field in ("change_id", "equipment_id", "process_step", "description"):
-            _nonempty(event[field], f"change.{field}")
+            checked = _nonempty(event[field], f"change.{field}")
+            if len(checked) > (2000 if field == "description" else 120):
+                raise ManufacturingReviewError("change identifier or description exceeds the web contract")
         if event["change_id"] in ids or event["kind"] not in KINDS:
             raise ManufacturingReviewError("duplicate change ID or unsupported change kind")
         ids.add(event["change_id"])
@@ -184,6 +188,8 @@ def record_context_review(events_raw: bytes, history_raw: bytes, package_raw: by
     by_id = {row["review_id"]: row for row in package["observations"]}
     for decision in envelope["decisions"]:
         row = by_id[decision["review_id"]]
+        if len(decision["reviewer_role"]) > 120 or len(decision["rationale"]) > 2000:
+            raise ManufacturingReviewError("review role or rationale exceeds the web contract")
         if _aware_timestamp(decision["decided_at"], "decided_at") < _aware_timestamp(package["as_of"], "as_of"):
             raise ManufacturingReviewError("decision predates the reviewed knowledge snapshot")
         if row["context_state"] == "withheld" and (decision["outcome"] != "insufficient_evidence" or
