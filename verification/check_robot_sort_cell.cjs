@@ -35,7 +35,7 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
   await page.locator('#robot-select').press('Enter');await capture(page.locator('.robot-cell-info'),width+'-robot-description.png');
   // Existing camera and separate inspection/intro paths must remain usable.
   await page.locator('#top-view').press('Enter');await page.locator('#camera-reset').press('Enter');await page.locator('#intro-open').press('Enter');assert.equal(await page.locator('#intro-dialog').isVisible(),true);await page.locator('#intro-close').press('Enter');assert.ok(await page.locator('#inspection-lab button').count()>0);
-  await page.clock.resume();await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#reset').press('Enter');assert.match(await page.locator('#run-status').innerText(),/실행 중/);await page.emulateMedia({reducedMotion:'reduce'});assert.match(await page.locator('#run-status').innerText(),/일시정지/);
+  await page.clock.resume();await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#reset').press('Enter');assert.match(await page.locator('#run-status').innerText(),/실행 중/);await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.getElementById('run-status').textContent==='일시정지');assert.match(await page.locator('#run-status').innerText(),/일시정지/);
   checks.push({width,status:'pass',assertions:'WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow'});
   await context.close();
  }
