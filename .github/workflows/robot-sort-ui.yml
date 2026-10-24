@@ -7,6 +7,10 @@ permissions:
   contents: read
 jobs:
   browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1366, 390, 360]
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -28,6 +32,7 @@ jobs:
         run: npm install --prefix "$RUNNER_TEMP/robot-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
       - name: Loopback browser verification
         env:
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
           FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
           FABGUARD_UI_OUTPUT: ${{ runner.temp }}/robot-sort-ui
         run: |
@@ -38,6 +43,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: robot-sort-ui-${{ github.sha }}
+          name: robot-sort-ui-${{ matrix.width }}-${{ github.sha }}
           path: ${{ runner.temp }}/robot-sort-ui
           retention-days: 14
