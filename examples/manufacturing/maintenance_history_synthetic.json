@@ -1,0 +1,24 @@
+{
+  "schema_version": "fabguard-maintenance-history/v1",
+  "source_id": "synthetic-maintenance-log",
+  "data_role": "synthetic",
+  "equipment_id": "SPI-DEMO-01",
+  "process_step": "solder_paste_inspection",
+  "available_at": "2026-09-01T00:20:00Z",
+  "coverage": {
+    "start": "2026-09-01T00:00:00Z",
+    "end": "2026-09-01T00:13:00Z",
+    "complete": true
+  },
+  "changes": [
+    {
+      "change_id": "PM-001",
+      "equipment_id": "SPI-DEMO-01",
+      "process_step": "solder_paste_inspection",
+      "kind": "maintenance",
+      "effective_at": "2026-09-01T00:11:30Z",
+      "available_at": "2026-09-01T00:15:00Z",
+      "description": "설명용 합성 정비"
+    }
+  ]
+}
