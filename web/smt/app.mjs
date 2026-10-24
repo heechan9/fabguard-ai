@@ -1,3 +1,5 @@
+import {robotPose,DESTINATIONS,ROBOT_NAME,ROBOT_SCOPE} from './robot-cell-model.mjs';
+import {mountRobotCell} from './robot-cell-view.mjs';
 import {mountIntro} from './intro.mjs';
 import {detailMachine,dressFloor,shouldAutoRevealInterior} from './factory-visuals.mjs';
 import {STATION_TERMS,plainCopy} from './terms.mjs';
@@ -11,20 +13,23 @@ import {mountInspection} from './inspection.mjs';
 import {clampZoom,overviewDistance,stationZoom} from './camera-model.mjs';
 
 const $=id=>document.getElementById(id),sim=new Simulation();
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const inspection=mountInspection($('inspection-lab'));
-let introBusy=false;
+let introBusy=false,robotCell;
+function selectRobot(){selectStation(9);$('robot-select').setAttribute('aria-pressed','true');$('station-info').textContent=ROBOT_NAME+' · '+ROBOT_SCOPE+'. 기판 집기 → 이송 → 정상/불량 위치에 내려놓기. 측정 누락은 검토 보류 위치로 이동합니다.';targetX=positions[9];targetY=1.25;zoom=.28;azimuth=.55;elevation=.8;cameraUpdate();}
+$('robot-select').addEventListener('click',selectRobot);
 let selected='PCB-001',activeStation=2,followInjected=false,insideView=false;
 const compactView=matchMedia('(max-width: 900px)'),machineLabels=[];
 function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visible=!compactView.matches&&!insideView&&zoom>=.45;}
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i,focus=true){activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
+function selectStation(i,focus=true){$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
 $('play').addEventListener('click',()=>{if(sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
-$('reset').addEventListener('click',()=>{inspection.reset();sim.reset();selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
+$('reset').addEventListener('click',()=>{inspection.reset();sim.reset();if(reducedMotion.matches)sim.running=false;selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
 $('speed').addEventListener('change',e=>{sim.speed=Number(e.target.value);});
 $('board-select').addEventListener('change',e=>{selected=e.target.value;updateUI();});
 $('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(sim.snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-synthetic-run.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
@@ -42,6 +47,7 @@ function updateUI(){
  $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=plainCopy(a.reason);
  const evidence=measurementEvidence(b),evidenceKey=JSON.stringify(evidence);
  if(prevEvidence!==evidenceKey){$('measurement-evidence').replaceChildren(...evidence.map(item=>{const card=document.createElement('article');card.className='measurement-card';const title=document.createElement('h3');title.textContent=item.label;card.append(title);for(const [label,value] of [['데모 기준 범위',item.range],['가상 측정값',item.measurement],['비교 결과',item.difference],['다음 확인',item.next]]){const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=label+' · ';p.append(strong,document.createTextNode(value));card.append(p);}return card;}));prevEvidence=evidenceKey;}
+ const pose=robotPose(b);$('robot-phase').textContent=ROBOT_NAME+' · '+b.id+' · '+pose.phase+(pose.route?' → '+DESTINATIONS[pose.route].label:'');
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
  const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('export-review').disabled=!done;$('run-status').textContent=done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
  $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>b.stage>=2&&b.volume===null).length;
@@ -96,6 +102,7 @@ try{
  for(const z of[-2.35,2.35]){box(scene,offset+2,.008,.025,-.3,-.13,z,0x397d75);}
  dressFloor(scene,positions,widths,box);
  for(let i=0;i<11;i++)makeMachine(i);
+ robotCell=mountRobotCell(scene,positions[9],{box,cylinder,label});
  for(let i=0;i<10;i++){const x=(positions[i]+widths[i]/2+positions[i+1]-widths[i+1]/2)/2;box(scene,.65,.08,1.2,x,.94,0,color.dark);}
  selectionRing=new THREE.Mesh(new THREE.RingGeometry(.52,.58,32),new THREE.MeshBasicMaterial({color:0x39d6c4,side:THREE.DoubleSide,transparent:true,opacity:.85}));selectionRing.rotation.x=-Math.PI/2;scene.add(selectionRing);
  new ResizeObserver(resize).observe(viewport);resize();
@@ -107,14 +114,17 @@ $('camera-reset').addEventListener('click',()=>{insideView=false;updateInterior(
 viewport.addEventListener('wheel',event=>{event.preventDefault();zoom=clampZoom(zoom*Math.exp(event.deltaY*.001));cameraUpdate();},{passive:false});
 viewport.addEventListener('pointerdown',event=>{pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});viewport.setPointerCapture(event.pointerId);tapGuard.down(event.pointerId);if(pointers.size===2){const [a,b]=[...pointers.values()];pinchDistance=Math.hypot(a.x-b.x,a.y-b.y);}});
 viewport.addEventListener('pointermove',event=>{if(!pointers.has(event.pointerId))return;const prev=pointers.get(event.pointerId),dx=event.clientX-prev.x,dy=event.clientY-prev.y;tapGuard.move(event.pointerId,dx,dy);pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0&&pinchDistance>0)zoom=clampZoom(zoom*pinchDistance/d);pinchDistance=d;}else if(pointers.size===1){azimuth-=dx*.006;elevation=Math.max(-.15,Math.min(1.53,elevation+dy*.006));}cameraUpdate();});
-function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
+function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{if(robotCell&&ray.intersectObject(robotCell.root,true).length){selectRobot();return;}const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{tapGuard.end(event.pointerId,true);pointers.delete(event.pointerId);pinchDistance=0;});
 viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(-.15,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
-function draw(source=sim,paint=true){if(!renderer||!scene)return;for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
+function draw(source=sim,paint=true){if(!renderer||!scene)return;for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const pose=robotPose(b);if(pose.position){const stack=pose.phase==='내려놓기 완료'?(Number(b.id.slice(-3))-1)*.025:0;mesh.position.set(positions[9]+pose.position.x,pose.position.y+stack,pose.position.z);}
+ mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
  for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=source.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(source.time*4));}
+ robotCell?.update(source.boards);
  for(const {head} of heads){head.position.x=Math.sin(source.time*3)*.62;head.position.z=Math.cos(source.time*2)*.25;}if(paint)renderer.render(scene,camera);
 }
-if(matchMedia('(prefers-reduced-motion: reduce)').matches)sim.running=false;
+if(reducedMotion.matches)sim.running=false;
+reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){sim.running=false;updateUI();}});
 sim.advance(.001);updateUI();let last=performance.now(),lastUI=0;
 function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;if(introBusy){requestAnimationFrame(frame);return;}if(!document.hidden)sim.advance(dt*sim.speed);if(now-lastUI>100){updateUI();lastUI=now;}draw();requestAnimationFrame(frame);}requestAnimationFrame(frame);
 
