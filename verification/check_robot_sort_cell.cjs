@@ -4,19 +4,19 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
 (async()=>{
  const browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH,args:['--use-angle=swiftshader']});
  for(const width of [1366,390,360]){
-  console.log('VIEWPORT',width);
+  console.log('VIEWPORT',width);fs.writeFileSync(path.join(output,'checkpoint.txt'),'viewport '+width+' context');
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage();activePage=page;page.setDefaultTimeout(45000);await page.clock.install({time:new Date('2026-10-24T00:00:00Z')});await page.clock.pauseAt(new Date('2026-10-24T00:00:00Z'));
   page.on('pageerror',e=>errors.push({width,message:e.message}));await page.route('**/*',r=>new URL(r.request().url()).origin==='http://127.0.0.1:8764'?r.continue():r.abort());
-  await page.goto('http://127.0.0.1:8764/smt/');await page.locator('#robot-phase').waitFor();
+  fs.writeFileSync(path.join(output,'checkpoint.txt'),'navigation '+width);await page.goto('http://127.0.0.1:8764/smt/');await page.locator('#robot-phase').waitFor();
   assert.equal(await page.locator('#view-error').isVisible(),false,'WebGL must render, not fallback');assert.equal(await page.locator('#viewport canvas').count(),1);
   assert.match(await page.locator('#run-status').innerText(),/일시정지/);
   await page.locator('#robot-select').press('Enter');assert.equal(await page.locator('#robot-select').getAttribute('aria-pressed'),'true');
   assert.match(await page.locator('#station-info').innerText(),/기판 집기.*이송/);assert.equal(await page.locator('.robot-cell-info a').getAttribute('href'),'/robot/');
   const d=await page.evaluate(()=>({w:innerWidth,doc:document.documentElement.scrollWidth}));assert.ok(d.doc<=width,JSON.stringify(d));
-  await page.locator('#viewport').screenshot({path:path.join(output,width+'-robot-initial.png')});
+  fs.writeFileSync(path.join(output,'checkpoint.txt'),'initial screenshot '+width);await page.locator('#viewport').screenshot({path:path.join(output,width+'-robot-initial.png')});fs.writeFileSync(path.join(output,'checkpoint.txt'),'initial captured '+width);
   await page.locator('#robot-select').press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.tagName),'A');
   await page.locator('[data-fault=paste]').click();await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');
-  await page.clock.runFor(9100);await page.locator('#board-select').selectOption('PCB-001');assert.match(await page.locator('#robot-phase').innerText(),/집기/);
+  fs.writeFileSync(path.join(output,'checkpoint.txt'),'advancing to pick '+width);await page.clock.runFor(9100);fs.writeFileSync(path.join(output,'checkpoint.txt'),'pick '+width+' '+await page.locator('#robot-phase').innerText());await page.locator('#board-select').selectOption('PCB-001');assert.match(await page.locator('#robot-phase').innerText(),/집기/);
   await page.locator('#play').click();await page.locator('#speed').selectOption('1');
   const frozen=await page.locator('#robot-phase').innerText();await page.clock.runFor(400);assert.equal(await page.locator('#robot-phase').innerText(),frozen);
   await page.locator('#viewport').screenshot({path:path.join(output,width+'-robot-pick.png')});
