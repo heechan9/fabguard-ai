@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-24",
+  "checked_head": "966981b77ecd3a68385a818c4f6b65e6ec2abe48",
+  "method": "live browser UI / accessibility tree / screenshots / read-only DOM inspection",
+  "viewport_css_px": {
+    "width": 1363,
+    "height": 936
+  },
+  "production_modified": false,
+  "share_token_published": false,
+  "checks": [
+    {
+      "case": "preview_access",
+      "result": "pass",
+      "observation": "After explicit user approval, temporary share URL opened #173; browser redirected to clean origin URL."
+    },
+    {
+      "case": "home_to_robot_navigation",
+      "result": "pass",
+      "observation": "Existing home robot extension link opens robot/index.html, retaining separate prototype labels."
+    },
+    {
+      "case": "robot_desktop_layout",
+      "result": "pass_in_observed_view",
+      "observation": "Title, scope banner and two-column contract rendered; document scrollWidth 1348 <= innerWidth 1363."
+    },
+    {
+      "case": "empty_period",
+      "result": "rejects_input",
+      "observation": "nominal_period_s_must_be_decimal_string; keyboard focus remains lock in original #173."
+    },
+    {
+      "case": "minimum_sample_capacity",
+      "result": "bug_reproduced",
+      "observation": "period=.001 / min_samples=999 rejected; aria-invalid=true incorrectly on period, focus lock. Corrective #174 not applied to this preview."
+    },
+    {
+      "case": "synthetic_load",
+      "result": "pass",
+      "observation": "4 files, invalid 0; reference/calibration 20 evaluable windows each; gap/NaN evaluation 21 complete / 19 evaluable."
+    },
+    {
+      "case": "synthetic_activity",
+      "result": "pass",
+      "observation": "exploratory_alarm_activity_only; Shewhart/EWMA/CUSUM thresholds 3/3/4; evaluation A raw alarms 1/4/4, B 10/10/10. These are UI observations, not real robot metrics."
+    },
+    {
+      "case": "performance_boundary",
+      "result": "pass",
+      "observation": "detection_delay, anomaly_recall, miss_rate, false_alarm_rate shown null; stability_unverified displayed."
+    },
+    {
+      "case": "tampered_expected_hash",
+      "result": "pass",
+      "observation": "Changing expected SHA for evaluation A to 64 zeros returns source_verification_failed and removes prior alarm table."
+    },
+    {
+      "case": "duplicate_timestamp_fixture",
+      "result": "pass",
+      "observation": "Built-in synthetic error has reference invalid, run reference_invalid / reference_file_invalid; no activity results."
+    },
+    {
+      "case": "wrong_role",
+      "result": "pass",
+      "observation": "Evaluation A role reference produces invalid_manifest, reference 2!=1 and evaluation 1!=2; no activity results."
+    },
+    {
+      "case": "clear_and_unlock",
+      "result": "pass_with_known_focus_bug",
+      "observation": "Rows 0, result text empty, file/run disabled. Original #173 focus stays on disabled unlock."
+    },
+    {
+      "case": "skip_link_keyboard",
+      "result": "pass",
+      "observation": "Enter on robot skip link focuses robot-main."
+    },
+    {
+      "case": "secom_filter_keyboard",
+      "result": "pass",
+      "observation": "Home/ArrowDown/Enter selects l1_logistic and renders 4 result rows; Tab then focuses labelled scroll region."
+    },
+    {
+      "case": "research_overview",
+      "result": "pass_in_observed_view",
+      "observation": "Research page renders training-only, reproducibility-only, prototype and synthetic-only status boundaries and links."
+    }
+  ],
+  "remaining": [
+    "Mobile viewport could not be set with available browser API; browser zoom/device toolbar key attempts left innerWidth 1363. No mobile layout pass claimed.",
+    "Corrected #174 preview not inspected; the authorised share URL is for immutable #173 deployment only.",
+    "Arbitrary user-uploaded CSV, file-size limits and drag/drop were not exercised in this browser; synthetic/error fixtures only.",
+    "No assistive screen reader or touch interaction tested.",
+    "Actual robot SPC remains unrun because complete raw data is unavailable."
+  ],
+  "ci_at_previous_fix_head": {
+    "sha": "c27c148a553df407510dc349cd4f955af664c9b9",
+    "state": "success",
+    "url": "https://github.com/heechan9/fabguard-ai/actions/runs/40076152033"
+  }
+}

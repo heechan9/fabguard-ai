@@ -1,0 +1,65 @@
+name: Local browser UI verification
+
+on:
+  push:
+    branches: [codex/pr173-validation-followup]
+    paths:
+      - web/**
+      - verification/local_ui_check.cjs
+      - .github/workflows/local-ui.yml
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Find an already installed browser (no browser download)
+        run: |
+          BROWSER_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$BROWSER_PATH" ]; then
+            echo '::error::No preinstalled Chrome/Chromium. UI verification remains pending.'
+            exit 1
+          fi
+          "$BROWSER_PATH" --version
+          echo "FABGUARD_BROWSER_PATH=$BROWSER_PATH" >> "$GITHUB_ENV"
+      - name: Install Korean screenshot fonts (browser unchanged)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          fc-match :lang=ko
+      - name: Install isolated test driver only
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/fabguard-ui-driver" --no-audit --no-fund --ignore-scripts playwright@1.62.1
+      - name: Run against loopback only
+        env:
+          FABGUARD_TEST_COMMIT: ${{ github.sha }}
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/fabguard-ui-results
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/fabguard-ui-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8764/robot/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          NODE_PATH="$RUNNER_TEMP/fabguard-ui-driver/node_modules" node verification/local_ui_check.cjs
+      - name: Preserve observations (requires separate visual review)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-ui-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/fabguard-ui-results
+            ${{ runner.temp }}/fabguard-ui-server.log
+          retention-days: 14
+          if-no-files-found: warn

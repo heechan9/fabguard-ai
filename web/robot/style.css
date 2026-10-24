@@ -16,7 +16,7 @@
 .robot-step h2{font-size:clamp(21px,2.4vw,28px);margin:0 0 10px;display:flex;align-items:center;gap:12px;line-height:1.35}
 .robot-step p,.robot-step li{color:var(--reader-muted,#b0bdc8);line-height:1.75;font-size:15px}
 .step-no{display:inline-grid;place-items:center;min-width:34px;height:34px;border-radius:50%;border:1px solid var(--cyan);color:var(--cyan);font-size:16px}
-.contract-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.contract-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
 .contract-grid fieldset{border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:0;min-width:0}
 .contract-grid fieldset:disabled{opacity:.72}
 .contract-grid legend{padding:0 6px;color:var(--ink);font-weight:700}
@@ -36,7 +36,7 @@
 .robot-page button:disabled{border-color:var(--line);color:var(--muted);cursor:not-allowed;background:transparent}
 .file-pick{display:inline-flex;align-items:center;gap:10px;margin:0}
 .file-pick input{font-size:13px;color:var(--muted);max-width:220px}
-.status-line{min-height:1.6em;color:var(--ink)!important}
+.status-line{overflow-wrap:anywhere;min-width:0;min-height:1.6em;color:var(--ink)!important}
 .robot-page .bad{color:var(--red);font-weight:700}.robot-page .warn{color:var(--amber);font-weight:700}
 .synthetic-banner{border:2px dashed var(--amber);background:rgba(228,168,61,.1);padding:12px 16px;border-radius:var(--radius);color:var(--ink);line-height:1.7;margin:14px 0}
 .synthetic-banner b,.synthetic-tag{color:var(--amber)!important;font-weight:800;letter-spacing:.04em}
@@ -67,6 +67,6 @@
 .stability-box{border:1px solid var(--amber);background:rgba(228,168,61,.07);border-radius:var(--radius);padding:14px 18px;margin:0 0 14px}
 .robot-page tr.not-evaluated td{color:var(--amber);font-style:italic}
 .robot-page details summary{cursor:pointer;color:var(--cyan);min-height:32px;display:flex;align-items:center}
-@media(max-width:900px){.contract-grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.contract-grid{grid-template-columns:minmax(0,1fr)}.facts{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.robot-step{padding:18px 14px}.field-row{grid-template-columns:1fr}.facts{grid-template-columns:1fr}.fixed-list>div{grid-template-columns:1fr;gap:2px}.robot-page .lead{font-size:16px}.file-pick{width:100%;flex-wrap:wrap}.file-pick input{max-width:100%}.robot-page .actions button{width:100%}}
 @media(prefers-reduced-motion:reduce){.robot-page *{transition:none!important}}

@@ -1,0 +1,36 @@
+{
+  "scope": "real normal development data; exploratory alarm activity only",
+  "run_status": "exploratory_alarm_activity_only",
+  "reference_windows": 1788,
+  "calibration_windows": 149,
+  "evaluation_groups": 2,
+  "evaluation_files": 7,
+  "evaluation_complete_windows": 1043,
+  "evaluation_evaluable_windows": 1043,
+  "evaluation_evaluable_seconds": 52.15,
+  "methods": {
+    "shewhart": {
+      "threshold": 3.0,
+      "raw_alarms": 9,
+      "episodes": 6
+    },
+    "ewma": {
+      "threshold": 3.0,
+      "raw_alarms": 0,
+      "episodes": 0
+    },
+    "cusum": {
+      "threshold": 4.0,
+      "raw_alarms": 3,
+      "episodes": 2
+    }
+  },
+  "performance": {
+    "detection_delay": null,
+    "anomaly_recall": null,
+    "miss_rate": null,
+    "false_alarm_rate": null,
+    "reason": "no_onset_end_labels_and_stable_normal_not_established"
+  },
+  "source_whole_archive_hash_verified": false
+}

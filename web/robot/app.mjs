@@ -3,6 +3,7 @@ import {decodeCSVBytes, parseCSV} from '../equipment/contract.mjs';
 import * as core from './window-core.mjs';
 import {syntheticFiles, toCSV, SYNTHETIC_CONFIG} from './synthetic.mjs';
 import {createLoader} from './load-session.mjs';
+import {markContractErrors} from './contract-feedback.mjs';
 import {methodRow, calibrationStatus, alarmChartCaption, showNumber, showPercent} from './report-view.mjs';
 
 const $ = id => document.getElementById(id);
@@ -102,12 +103,13 @@ function lockContract(event) {
   const reasons = core.validateConfig(config);
   if (reasons.length) {
     $('contract-status').replaceChildren(el('span', {class: 'bad', text: '고정 실패: '}), reasons.map(label).join(' / '));
-    $('period').setAttribute('aria-invalid', reasons.some(r => r.startsWith('nominal') || r.startsWith('min_samples')) ? 'true' : 'false');
+    markContractErrors($, reasons);
     return false;
   }
-  $('period').removeAttribute('aria-invalid');
+  markContractErrors($, []);
   state.config = config;
   setLocked(true);
+  $('unlock').focus(); // submit control is now disabled; keep keyboard focus reachable
   const generation = ++lockGeneration;
   $('contract-status').textContent = '계약 고정됨 · 화면 설정 지문 계산 중…';
   fingerprint(config).then(fp => {
@@ -120,6 +122,8 @@ function lockContract(event) {
 function unlockContract() {
   lockGeneration++;
   state.config = null; clearAll(false); setLocked(false);
+  markContractErrors($, []);
+  $('period').focus();
   $('contract-status').textContent = '고정을 해제하고 파일·결과를 모두 지웠습니다. 진행 중이던 파일 읽기도 취소했습니다.';
 }
 

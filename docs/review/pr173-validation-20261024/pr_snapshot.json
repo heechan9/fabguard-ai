@@ -1,0 +1,1107 @@
+{
+  "prs": [
+    {
+      "n": 173,
+      "head": "966981b77ecd3a68385a818c4f6b65e6ec2abe48",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "title": "feat: reviewed evidence pages and separate robot SPC prototype",
+      "draft": true
+    },
+    {
+      "n": 172,
+      "head": "18015c7c81e6b7edb6e57e80abfb53003d88c224",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "title": "experiment: compare Shewhart EWMA and two-sided CUSUM on frozen synthetic series",
+      "draft": true
+    },
+    {
+      "n": 171,
+      "head": "7a2389b6ee34d5e25aa948498541f1d7edf0e90b",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "title": "docs: record independent robot file comparison without private artifacts",
+      "draft": true
+    },
+    {
+      "n": 170,
+      "head": "e7cdc47bfc13740448f7ee160a4047f42fd887fc",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "title": "experiment: compare SECOM preprocessing within frozen training data",
+      "draft": true
+    },
+    {
+      "n": 169,
+      "head": "cd749b14212b0bd33687bfab20f5d89b2ee18769",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "title": "SECOM 학습 구간에서 결측 정보·부스팅 비교 실험",
+      "draft": false
+    },
+    {
+      "n": 168,
+      "head": "0bdf2458a5f6bdbab1cde7485cb3ff574d08994b",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "title": "feat: add label-free robot feature abstention gate",
+      "draft": true
+    },
+    {
+      "n": 167,
+      "head": "17102c613e886265a3f330cb1a1b10d507246a45",
+      "base": "4eda7765cdff7aec5faf005525518d2153080bb0",
+      "title": "docs: lock robot evaluation and qualify replay evidence",
+      "draft": true
+    },
+    {
+      "n": 165,
+      "head": "4eda7765cdff7aec5faf005525518d2153080bb0",
+      "base": "e9c995bb95331abdb13da14b0fb93ccafc4cac78",
+      "title": "docs: plan Australia, North America, Europe validation outreach",
+      "draft": true
+    },
+    {
+      "n": 164,
+      "head": "97d80cb8f2cad693a01f60608f281f84c63b8f5b",
+      "base": "7d439ab0c3aa4a568a3b3dbf962da98a68e34c2f",
+      "title": "docs: design robot abstention and input quality checks",
+      "draft": true
+    },
+    {
+      "n": 161,
+      "head": "4d9c3572d9b80cbd8e33cce31b771c742ddc89f1",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "title": "docs: record DKASC raw source recheck and normalization hash gap",
+      "draft": true
+    },
+    {
+      "n": 160,
+      "head": "3d5305d73b10985723a008fe1d76dfb34f130695",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "title": "Independent Code Audit for PR #156",
+      "draft": false
+    },
+    {
+      "n": 159,
+      "head": "a0e99bccf6a9db3375f9d2e4fed19b31758ffb17",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "title": "Read-only audit for PR #155",
+      "draft": false
+    },
+    {
+      "n": 156,
+      "head": "310a7bbc62630043a8b8480a63039ee63884ce51",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "title": "feat: compare equipment SPC reruns with saved JSON",
+      "draft": false
+    },
+    {
+      "n": 154,
+      "head": "71d9ad048e65f279ed580cda121d30938c5c4403",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "title": "feat: apply lecture references as isolated Steel structural audit",
+      "draft": false
+    },
+    {
+      "n": 142,
+      "head": "fa7e6ce47c6ce8263aaa092271df5fbc276df8dd",
+      "base": "4e969ce40072a0ee5c47ac51487444b64c1fb00d",
+      "title": "Experiment: external SCATIM molding quality evaluation",
+      "draft": true
+    },
+    {
+      "n": 140,
+      "head": "344c037d5c2c8111a135c29cd5dd8be96108a617",
+      "base": "4e969ce40072a0ee5c47ac51487444b64c1fb00d",
+      "title": "[Draft] KAMP molding temporal study and constrained follow-up validation",
+      "draft": true
+    },
+    {
+      "n": 137,
+      "head": "5eeded217de41aa15d9f73d07d40312588b35f74",
+      "base": "627542999ef229a89b2c4cb592ae2a03e41bade0",
+      "title": "experiment: 시간순 순위 개선 가설 2개와 부정적 결과 보존 (운영 미반영)",
+      "draft": true
+    }
+  ],
+  "diffs": [
+    {
+      "n": 173,
+      "head": "966981b77ecd3a68385a818c4f6b65e6ec2abe48",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "files": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha": "e40b1f149ab5b81e1e2a70fb8a320acd95b5f543",
+          "status": "modified",
+          "changes": 27
+        },
+        {
+          "path": "docs/ROBOT_WINDOW_SPC_PROTOCOL.md",
+          "sha": "5fd95a218b6cd552a9558fc1423872dbb3f07b6a",
+          "status": "added",
+          "changes": 78
+        },
+        {
+          "path": "src/fabguard/robot_window_spc.py",
+          "sha": "776ebd09114e7f0962a8bfe55344f6e34cbeb4f7",
+          "status": "added",
+          "changes": 786
+        },
+        {
+          "path": "tests/test_robot_window_spc.py",
+          "sha": "64f810fc8418887b7e1f2087f9724e52f5d611d2",
+          "status": "added",
+          "changes": 702
+        },
+        {
+          "path": "tests/web/fixtures/robot-window-parity.json",
+          "sha": "94735e027b78cbc706ec7626efe00bc471404727",
+          "status": "added",
+          "changes": 1
+        },
+        {
+          "path": "tests/web/research-evidence.test.mjs",
+          "sha": "22fb231d5da17497da4d0122726a9b87d40685de",
+          "status": "added",
+          "changes": 46
+        },
+        {
+          "path": "tests/web/robot-ui-logic.test.mjs",
+          "sha": "b2f8b77209675426914edfd04e8501a6a0d82fff",
+          "status": "added",
+          "changes": 183
+        },
+        {
+          "path": "tests/web/robot-window.test.mjs",
+          "sha": "f6db5646a4c4c801accc307a0e1d011b81600ae9",
+          "status": "added",
+          "changes": 306
+        },
+        {
+          "path": "tests/web/secom-research.test.mjs",
+          "sha": "67e2c9ba7757a6521d6e231186b5d69d15a635f9",
+          "status": "added",
+          "changes": 66
+        },
+        {
+          "path": "web/README.md",
+          "sha": "8ef650b72b1b393286584c72e6220b3ad7ca3bfe",
+          "status": "modified",
+          "changes": 8
+        },
+        {
+          "path": "web/equipment/index.html",
+          "sha": "d0fc316366fb97b9ba259ca388bd2ce067e142b0",
+          "status": "modified",
+          "changes": 2
+        },
+        {
+          "path": "web/index.html",
+          "sha": "3fbdd95fbd40704e036af818516a506f72fc7d73",
+          "status": "modified",
+          "changes": 3
+        },
+        {
+          "path": "web/research/index.html",
+          "sha": "3775a70090956e23f12a0953dd74aa7bf0bdaf8a",
+          "status": "added",
+          "changes": 11
+        },
+        {
+          "path": "web/research/style.css",
+          "sha": "fb402640b5ffdc5e8b27d4072804fa66c2712112",
+          "status": "added",
+          "changes": 1
+        },
+        {
+          "path": "web/robot/app.mjs",
+          "sha": "3ba9ca96d530ba39ccf1e88b628d270ed1b992d9",
+          "status": "added",
+          "changes": 361
+        },
+        {
+          "path": "web/robot/index.html",
+          "sha": "86383118d39f0070181a33bf845aa3ea1513f716",
+          "status": "added",
+          "changes": 104
+        },
+        {
+          "path": "web/robot/load-session.mjs",
+          "sha": "34843483f9893bfafbff8eafcff984b33db6efd3",
+          "status": "added",
+          "changes": 38
+        },
+        {
+          "path": "web/robot/report-view.mjs",
+          "sha": "a5cd14efeea1fc32fec401ce66c0ebea8d10d3fb",
+          "status": "added",
+          "changes": 55
+        },
+        {
+          "path": "web/robot/style.css",
+          "sha": "f9a5f33e0bb84eede17b68b29538327fd7dbb322",
+          "status": "added",
+          "changes": 72
+        },
+        {
+          "path": "web/robot/synthetic.mjs",
+          "sha": "c6e2564cffaddc2d4ccbace58a10fa28fe79be6f",
+          "status": "added",
+          "changes": 48
+        },
+        {
+          "path": "web/robot/window-core.mjs",
+          "sha": "5b8a653a31d14f63f32021e27e20037268b68ab1",
+          "status": "added",
+          "changes": 461
+        },
+        {
+          "path": "web/secom/index.html",
+          "sha": "43d36aaf5bb551cd1a10c6870cc9356fcb8c0f54",
+          "status": "modified",
+          "changes": 4
+        },
+        {
+          "path": "web/secom/research.html",
+          "sha": "6cf8e80f7fc2ee010e8ebce4fa81f7fcff875785",
+          "status": "added",
+          "changes": 88
+        },
+        {
+          "path": "web/secom/research/data.mjs",
+          "sha": "4b0382cc90529f968782a732f3d124183e60d261",
+          "status": "added",
+          "changes": 1301
+        },
+        {
+          "path": "web/secom/research/model.mjs",
+          "sha": "e06984e86d48677e8403272deaf2afa21c9b75ee",
+          "status": "added",
+          "changes": 43
+        },
+        {
+          "path": "web/secom/research/research.css",
+          "sha": "c11a6ab8cae2b44a5c9797a1e6b45a1d5897b648",
+          "status": "added",
+          "changes": 44
+        },
+        {
+          "path": "web/secom/research/research.mjs",
+          "sha": "8d48feb415d49aab23efe9ab87d87e46f12d91b0",
+          "status": "added",
+          "changes": 103
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 172,
+      "head": "18015c7c81e6b7edb6e57e80abfb53003d88c224",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "files": [
+        {
+          "path": "experiments/synthetic-spc-20261023/PROTOCOL.md",
+          "sha": "a00b4bb95ee271b00ebe72654280fa0c22f7ea52",
+          "status": "added",
+          "changes": 105
+        },
+        {
+          "path": "experiments/synthetic-spc-20261023/REPORT.md",
+          "sha": "85070bee0dfce537fb75342faeb2155742e3882f",
+          "status": "added",
+          "changes": 77
+        },
+        {
+          "path": "experiments/synthetic-spc-20261023/REPRODUCIBILITY.json",
+          "sha": "123e1c2db3f60ba26c1c79a2381bd05c84cf8117",
+          "status": "added",
+          "changes": 7
+        },
+        {
+          "path": "experiments/synthetic-spc-20261023/environment.json",
+          "sha": "9af019c950a24ec5aae322ec3bbd5972f08fad73",
+          "status": "added",
+          "changes": 6
+        },
+        {
+          "path": "experiments/synthetic-spc-20261023/results.json",
+          "sha": "ba04d5681557c514e5ed2815c28cb5c0a361f626",
+          "status": "added",
+          "changes": 16908
+        },
+        {
+          "path": "experiments/synthetic-spc-20261023/study.py",
+          "sha": "97d4a7b4088fbe8df563679ebd9b866d4d637d85",
+          "status": "added",
+          "changes": 210
+        },
+        {
+          "path": "experiments/synthetic-spc-20261023/test_study.py",
+          "sha": "338429e9eef2895c4ec225d45746ee79050242b2",
+          "status": "added",
+          "changes": 138
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 171,
+      "head": "7a2389b6ee34d5e25aa948498541f1d7edf0e90b",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "files": [
+        {
+          "path": "docs/ROBOT_INDEPENDENT_FILE_COMPARISON.md",
+          "sha": "abd5a4861deae0e3faf223c025251244bb08c7ea",
+          "status": "added",
+          "changes": 148
+        },
+        {
+          "path": "results/robot-imad-2026/independent_file_comparison.json",
+          "sha": "5b8c2371e9cc8e9be32f40ef38ccd8289f8e9b4b",
+          "status": "added",
+          "changes": 446
+        },
+        {
+          "path": "tests/test_robot_file_comparison.py",
+          "sha": "629db68a154fbe399486ba250b8d7f66333d5758",
+          "status": "added",
+          "changes": 52
+        },
+        {
+          "path": "verification/compare_robot_files.py",
+          "sha": "c195c8e406ba7f55b9ccb82f7c833e49afd1746b",
+          "status": "added",
+          "changes": 187
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 170,
+      "head": "e7cdc47bfc13740448f7ee160a4047f42fd887fc",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "files": [
+        {
+          "path": "docs/README.md",
+          "sha": "9c8fa3aab90b7d2f6b48aaea3d827f2244bc9903",
+          "status": "modified",
+          "changes": 2
+        },
+        {
+          "path": "experiments/secom-train-only-20261023/PROTOCOL.md",
+          "sha": "d7c418b29caccb48d63edb3fcc25e6e0a71025b0",
+          "status": "added",
+          "changes": 47
+        },
+        {
+          "path": "experiments/secom-train-only-20261023/REPORT.md",
+          "sha": "4f2f44d8d7159fc3b8be316315cf34a1556d9002",
+          "status": "added",
+          "changes": 87
+        },
+        {
+          "path": "experiments/secom-train-only-20261023/results/fold_metrics.csv",
+          "sha": "5d14c6a90bb5f510ce8a85222d778b69c46ceb02",
+          "status": "added",
+          "changes": 40
+        },
+        {
+          "path": "experiments/secom-train-only-20261023/results/manifest.json",
+          "sha": "f0bc336f8dfd4747f6b6618bc6c2e90cf6519f11",
+          "status": "added",
+          "changes": 2601
+        },
+        {
+          "path": "experiments/secom-train-only-20261023/results/summary.csv",
+          "sha": "142205c2927b1c45df22be6b2b71161a5bf1b1d4",
+          "status": "added",
+          "changes": 14
+        },
+        {
+          "path": "src/fabguard/secom_comparison.py",
+          "sha": "5f624ee87893a4d85d336bee369fcd6e2230954b",
+          "status": "added",
+          "changes": 306
+        },
+        {
+          "path": "tests/test_secom_comparison.py",
+          "sha": "3512d68d2942531ff69a7c1e6caf1262b3069433",
+          "status": "added",
+          "changes": 183
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 169,
+      "head": "cd749b14212b0bd33687bfab20f5d89b2ee18769",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "files": [
+        {
+          "path": "docs/validation/SECOM_MISSINGNESS_PILOT.md",
+          "sha": "a770bc3a4faeb5c58f7cd1934c452634fa5a5074",
+          "status": "added",
+          "changes": 33
+        },
+        {
+          "path": "docs/validation/secom_missingness_pilot/README.md",
+          "sha": "87c12448afc845aa5da15e7fecadf8c3132d9c36",
+          "status": "added",
+          "changes": 44
+        },
+        {
+          "path": "docs/validation/secom_missingness_pilot/fold_metrics.csv",
+          "sha": "09a7e6e357b227b29e1940c3d7419857471c8e05",
+          "status": "added",
+          "changes": 25
+        },
+        {
+          "path": "docs/validation/secom_missingness_pilot/manifest.json",
+          "sha": "c738a25e9bf08a6eb938d1784177cd58ad0dc027",
+          "status": "added",
+          "changes": 73
+        },
+        {
+          "path": "docs/validation/secom_missingness_pilot/splits.csv",
+          "sha": "537b8c6960fea4d50e7e0a3733c0a0386be2d76e",
+          "status": "added",
+          "changes": 3916
+        },
+        {
+          "path": "docs/validation/secom_missingness_pilot/summary.csv",
+          "sha": "ba0f359d0ef77ec84a1789e96be557b14b71d63b",
+          "status": "added",
+          "changes": 7
+        },
+        {
+          "path": "src/fabguard/missingness_pilot.py",
+          "sha": "b77dfb41c97d6c82217eae838ee92f5c857c5f4d",
+          "status": "added",
+          "changes": 138
+        },
+        {
+          "path": "tests/test_missingness_pilot.py",
+          "sha": "2241b6ea3b319d0e8e7dc67d2bf06a6ef3985a39",
+          "status": "added",
+          "changes": 82
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 168,
+      "head": "0bdf2458a5f6bdbab1cde7485cb3ff574d08994b",
+      "base": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+      "files": [
+        {
+          "path": "docs/README.md",
+          "sha": "6eb01d966d9f6f8ee3008820df969d2ef1abbdc8",
+          "status": "modified",
+          "changes": 2
+        },
+        {
+          "path": "docs/ROBOT_SCREENING_GATES.md",
+          "sha": "699bbcdd59f7a6a6ae8ddd24e7c78aa34cdd1549",
+          "status": "added",
+          "changes": 55
+        },
+        {
+          "path": "src/fabguard/robot_screening.py",
+          "sha": "0c9dc0c668714b8d4e8da9042e877847b35b0ca6",
+          "status": "added",
+          "changes": 205
+        },
+        {
+          "path": "tests/test_robot_screening.py",
+          "sha": "3927e880d3a333b7dbb3b7d8690be3c8e207655e",
+          "status": "added",
+          "changes": 265
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 167,
+      "head": "17102c613e886265a3f330cb1a1b10d507246a45",
+      "base": "4eda7765cdff7aec5faf005525518d2153080bb0",
+      "files": [
+        {
+          "path": "docs/MELBOURNE_COLLABORATION.md",
+          "sha": "f4e2b4f31559ca8d7772836be604a7d3d9afaf84",
+          "status": "modified",
+          "changes": 10
+        },
+        {
+          "path": "docs/review/INTERNATIONAL_VALIDATION_PLAN.md",
+          "sha": "05a944e958cfa48aec008f79d71bb927e50a5b1e",
+          "status": "modified",
+          "changes": 12
+        },
+        {
+          "path": "docs/review/ROBOT_LOCKED_EVALUATION_CONTRACT.md",
+          "sha": "5073f3d325ec860bbe2e9c8037f42a513f324233",
+          "status": "added",
+          "changes": 60
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 165,
+      "head": "4eda7765cdff7aec5faf005525518d2153080bb0",
+      "base": "e9c995bb95331abdb13da14b0fb93ccafc4cac78",
+      "files": [
+        {
+          "path": "README.md",
+          "sha": "c5d01b8e5610684fe8770ad659d09a567d698c0b",
+          "status": "modified",
+          "changes": 1
+        },
+        {
+          "path": "docs/MELBOURNE_COLLABORATION.md",
+          "sha": "724fe911c59d67fb33b963ed43b1f6e05951266b",
+          "status": "modified",
+          "changes": 8
+        },
+        {
+          "path": "docs/README.md",
+          "sha": "b2a9a2cbbaffb52c42cf1011b5f2a5aa2d7b1aee",
+          "status": "modified",
+          "changes": 1
+        },
+        {
+          "path": "docs/review/INTERNATIONAL_VALIDATION_PLAN.md",
+          "sha": "09fc82ef0af7ffc0e1deb4d138ee1d60537d3877",
+          "status": "added",
+          "changes": 29
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 164,
+      "head": "97d80cb8f2cad693a01f60608f281f84c63b8f5b",
+      "base": "7d439ab0c3aa4a568a3b3dbf962da98a68e34c2f",
+      "files": [
+        {
+          "path": "docs/README.md",
+          "sha": "f1ccc0fe1ae87823a1400f3598ae1ad14724efe3",
+          "status": "modified",
+          "changes": 1
+        },
+        {
+          "path": "docs/ROBOT_SCREENING_GATES_DESIGN.md",
+          "sha": "4ba866dc9495877ce4bf5418da497208d9b2fd6e",
+          "status": "added",
+          "changes": 58
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 161,
+      "head": "4d9c3572d9b80cbd8e33cce31b771c742ddc89f1",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "files": [
+        {
+          "path": "results/dkasc-alice-springs-2025/SOURCE_RECHECK_20261023.md",
+          "sha": "1a5661b37cbfd99f603a05c3641a1f783f2a0e79",
+          "status": "added",
+          "changes": 23
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 160,
+      "head": "3d5305d73b10985723a008fe1d76dfb34f130695",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "files": [
+        {
+          "path": "README.md",
+          "sha": "6bb19f31921f9401504c7b1a07ce751679957fc9",
+          "status": "modified",
+          "changes": 2
+        },
+        {
+          "path": "docs/SPC_SCREENING.md",
+          "sha": "07bd28f57dff8ca5b3c59df31835010f756f7e55",
+          "status": "modified",
+          "changes": 10
+        },
+        {
+          "path": "tests/test_results_contract.py",
+          "sha": "5c6e9ec2acd8d7a707b07438375bb4eeb0e9ed1f",
+          "status": "modified",
+          "changes": 15
+        },
+        {
+          "path": "tests/web/equipment-replay.test.mjs",
+          "sha": "faecef7222eff4c1521936602b543c50081788a0",
+          "status": "added",
+          "changes": 52
+        },
+        {
+          "path": "web/equipment/replay.mjs",
+          "sha": "6e5c567f2cf3798c94078fc16451444720829152",
+          "status": "added",
+          "changes": 47
+        },
+        {
+          "path": "web/equipment/screening-ui.mjs",
+          "sha": "b1558e71c1aa8837adada9b4dfed3e7afe708a44",
+          "status": "modified",
+          "changes": 32
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 159,
+      "head": "a0e99bccf6a9db3375f9d2e4fed19b31758ffb17",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "files": [
+        {
+          "path": "tests/test_results_contract.py",
+          "sha": "5c6e9ec2acd8d7a707b07438375bb4eeb0e9ed1f",
+          "status": "modified",
+          "changes": 15
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 156,
+      "head": "310a7bbc62630043a8b8480a63039ee63884ce51",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "files": [
+        {
+          "path": "README.md",
+          "sha": "6bb19f31921f9401504c7b1a07ce751679957fc9",
+          "status": "modified",
+          "changes": 2
+        },
+        {
+          "path": "docs/SPC_SCREENING.md",
+          "sha": "07bd28f57dff8ca5b3c59df31835010f756f7e55",
+          "status": "modified",
+          "changes": 10
+        },
+        {
+          "path": "tests/test_results_contract.py",
+          "sha": "5c6e9ec2acd8d7a707b07438375bb4eeb0e9ed1f",
+          "status": "modified",
+          "changes": 15
+        },
+        {
+          "path": "tests/web/equipment-replay.test.mjs",
+          "sha": "faecef7222eff4c1521936602b543c50081788a0",
+          "status": "added",
+          "changes": 52
+        },
+        {
+          "path": "web/equipment/replay.mjs",
+          "sha": "6e5c567f2cf3798c94078fc16451444720829152",
+          "status": "added",
+          "changes": 47
+        },
+        {
+          "path": "web/equipment/screening-ui.mjs",
+          "sha": "b1558e71c1aa8837adada9b4dfed3e7afe708a44",
+          "status": "modified",
+          "changes": 32
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 154,
+      "head": "71d9ad048e65f279ed580cda121d30938c5c4403",
+      "base": "519654ea2362accf2127f4255a4379132402383c",
+      "files": [
+        {
+          "path": "docs/README.md",
+          "sha": "46938aa004ac5dec508a1e4e6ee97c554d916880",
+          "status": "modified",
+          "changes": 2
+        },
+        {
+          "path": "docs/governance/AI_USAGE.md",
+          "sha": "fade7194f15c0baf9fcd767ee3af10d22737638c",
+          "status": "modified",
+          "changes": 7
+        },
+        {
+          "path": "docs/validation/LECTURE_REFERENCE_APPLICATION.md",
+          "sha": "e191605d34237273d35eee7562d36a2b50e6daa9",
+          "status": "added",
+          "changes": 79
+        },
+        {
+          "path": "pyproject.toml",
+          "sha": "da9cfe203cd6710ebb20c162350275ea5afafeb6",
+          "status": "modified",
+          "changes": 1
+        },
+        {
+          "path": "src/fabguard/steel_reference_audit.py",
+          "sha": "6702c1922d7e606a5b8b73167b5a67ee6de139ea",
+          "status": "added",
+          "changes": 96
+        },
+        {
+          "path": "tests/test_steel_reference_audit.py",
+          "sha": "e5fd7bb3faca6d4e2627ddfa4e33c81dada9993a",
+          "status": "added",
+          "changes": 143
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 142,
+      "head": "fa7e6ce47c6ce8263aaa092271df5fbc276df8dd",
+      "base": "4e969ce40072a0ee5c47ac51487444b64c1fb00d",
+      "files": [
+        {
+          "path": "experiments/scatim-external-20260926/REPORT.md",
+          "sha": "4a4841223c6bd8d1f5b7f66a18659e9865e1fe77",
+          "status": "added",
+          "changes": 54
+        },
+        {
+          "path": "experiments/scatim-external-20260926/results/audit.json",
+          "sha": "9278515f1f9e85799f3f0583ac97243c36529d3d",
+          "status": "added",
+          "changes": 96
+        },
+        {
+          "path": "experiments/scatim-external-20260926/results/dataset2_audit.json",
+          "sha": "dfbed21e5aaa26aebce1ac085cc9d8a68fcaeda0",
+          "status": "added",
+          "changes": 126
+        },
+        {
+          "path": "experiments/scatim-external-20260926/results/dataset2_within_run.csv",
+          "sha": "263c94279229d8aa43608b55f1f1b9f27575c0aa",
+          "status": "added",
+          "changes": 67
+        },
+        {
+          "path": "experiments/scatim-external-20260926/results/ordered_holdout.csv",
+          "sha": "32fa2ccbb59eae8aeea14d56b9caeec0212f8b68",
+          "status": "added",
+          "changes": 25
+        },
+        {
+          "path": "experiments/scatim-external-20260926/run.py",
+          "sha": "7f9fe67658254d5cb4c061e2e6ecbbc83fc5554e",
+          "status": "added",
+          "changes": 117
+        },
+        {
+          "path": "experiments/scatim-external-20260926/run_dataset2.py",
+          "sha": "fe0ab131357d61d942dd93cd1ab5d45d40e1bb68",
+          "status": "added",
+          "changes": 128
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 140,
+      "head": "344c037d5c2c8111a135c29cd5dd8be96108a617",
+      "base": "4e969ce40072a0ee5c47ac51487444b64c1fb00d",
+      "files": [
+        {
+          "path": "experiments/molding-temporal-20260926/AUDIT_REPORT.md",
+          "sha": "01fa44dc55c039cd41dc5062cb72c76cdfb6c535",
+          "status": "added",
+          "changes": 137
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/LOCAL_COMMIT_HISTORY.txt",
+          "sha": "59c1afa5d0d233ee580b6f2e41ab0236387443ea",
+          "status": "added",
+          "changes": 15
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/PROTOCOL.md",
+          "sha": "5ffa6b04c9cd7c45eb035fed1e340adede78b3df",
+          "status": "added",
+          "changes": 34
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/REPORT.md",
+          "sha": "b8a9cd60b9a294855407d49b334425883a8fed26",
+          "status": "added",
+          "changes": 80
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/REVIEW_20260926.md",
+          "sha": "3b37616d10806cb39ca93bea67aaff07fa6941f8",
+          "status": "added",
+          "changes": 29
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/audit.json",
+          "sha": "df5a36bd75bb5cc862f8263f2104cfabd7919e1f",
+          "status": "added",
+          "changes": 66
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/manifest.json",
+          "sha": "c598771a330bfbe3884d0384667c68cb8d52c070",
+          "status": "added",
+          "changes": 45
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/selection_before_later_prediction.json",
+          "sha": "43dbafb3ddfcc33c92dcb8ee75fbb3b06fa0fe2a",
+          "status": "added",
+          "changes": 9
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/slices.csv",
+          "sha": "fe967682403dac6a83fb73e128c5b8342b9fe720",
+          "status": "added",
+          "changes": 31
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/threshold_metrics.csv",
+          "sha": "769bd98699e9fbc37beb9ebb3347f3799ac8e6e5",
+          "status": "added",
+          "changes": 7
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/top_k.csv",
+          "sha": "f374b48a698ddc0a262b5779d9340754f8a02db9",
+          "status": "added",
+          "changes": 10
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/train_cv.csv",
+          "sha": "a7d90506c65f0c23c629ea94708c3d163bfc970e",
+          "status": "added",
+          "changes": 10
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/results/uncertainty.csv",
+          "sha": "198588a590bd5ae969b15ccad60a3f3a74945b1f",
+          "status": "added",
+          "changes": 13
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/run.py",
+          "sha": "e7b085c08fdda2e3318ad1c7fa70f283e0b20170",
+          "status": "added",
+          "changes": 113
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/LOCAL_COMMIT_HISTORY.txt",
+          "sha": "85e5fe053a844b432f1361e109e2c69fbefe7eac",
+          "status": "added",
+          "changes": 15
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/PROTOCOL.md",
+          "sha": "15498b464fd74d6ca5c48651eb79430904d2cb0e",
+          "status": "added",
+          "changes": 29
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/REPORT.md",
+          "sha": "8f8c805937ccd289bc499b337fd529a4d5a70e8d",
+          "status": "added",
+          "changes": 47
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/daily_budget_detail.csv",
+          "sha": "1f851adc770b08e1247380ab3c1ac1f8f3c4fc2d",
+          "status": "added",
+          "changes": 31
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/daily_budget_totals.csv",
+          "sha": "4a3a7421b7275c1406d6cd65863ef87220cb2358",
+          "status": "added",
+          "changes": 6
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/development_cv.csv",
+          "sha": "a8bfba8df5fd5ba3f84003c484133bcf717939d1",
+          "status": "added",
+          "changes": 16
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/feature_range_diagnostics.csv",
+          "sha": "7d197df41654966cb7940c106e04d1549b2dff20",
+          "status": "added",
+          "changes": 37
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/leave_one_day_out.csv",
+          "sha": "27e69f5368804e67fa3e819bc3b3f923c3531384",
+          "status": "added",
+          "changes": 31
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/linear_diagnostics.csv",
+          "sha": "ef2595881a5e9905adb625d368c9d4f2c91eb400",
+          "status": "added",
+          "changes": 117
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/manifest.json",
+          "sha": "2bca155922a1eae31f5dac9dfa19845f5656ff45",
+          "status": "added",
+          "changes": 47
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/paired_uncertainty.csv",
+          "sha": "7a5eca7c01cbac3e99191e7787f140ae69a09d5e",
+          "status": "added",
+          "changes": 41
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/probability_diagnostics.csv",
+          "sha": "eba7c9722080af1f480a500ec73c502ee1964128",
+          "status": "added",
+          "changes": 6
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/selection_before_prediction.json",
+          "sha": "933a0f89b2d7ab56242f12070dd5e08bcef75251",
+          "status": "added",
+          "changes": 11
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/slices.csv",
+          "sha": "0ec0fc70c705b91c2503e371d91bb0a862373540",
+          "status": "added",
+          "changes": 51
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/thresholds.csv",
+          "sha": "c64bf4a9e7eb26dbbe571f53495bf6cd3208b9f2",
+          "status": "added",
+          "changes": 11
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/tie_sensitivity.csv",
+          "sha": "3a9dd6ab67a44a957d96c0c1adba1aef26815a4e",
+          "status": "added",
+          "changes": 6
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/results/top_k.csv",
+          "sha": "0fee1df425ad68ca7758c064bab3c777e3abb3c5",
+          "status": "added",
+          "changes": 16
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/run.py",
+          "sha": "a64d58ac3020d714df99d0ec9fbfb9c367d72cc0",
+          "status": "added",
+          "changes": 121
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/strengthening/test_strengthening.py",
+          "sha": "464c16b59c9e4ee629c17db221b38f5f73207d02",
+          "status": "added",
+          "changes": 54
+        },
+        {
+          "path": "experiments/molding-temporal-20260926/test_study.py",
+          "sha": "d7269b4ca8a1814691d8a8ad83f86721849d17a5",
+          "status": "added",
+          "changes": 46
+        }
+      ],
+      "capped": false
+    },
+    {
+      "n": 137,
+      "head": "5eeded217de41aa15d9f73d07d40312588b35f74",
+      "base": "627542999ef229a89b2c4cb592ae2a03e41bade0",
+      "files": [
+        {
+          "path": "experiments/temporal-ranking-20260925/LOCAL_COMMIT_HISTORY.txt",
+          "sha": "bf40c4963dae1758f13a23963ee9155f8674b2e7",
+          "status": "added",
+          "changes": 23
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/PROTOCOL.md",
+          "sha": "c024eb77b7dcff360ea001c5d906afeb277b137c",
+          "status": "added",
+          "changes": 31
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/REPORT.md",
+          "sha": "d2ea52abeae99be71b11794e604444b17e904908",
+          "status": "added",
+          "changes": 119
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/bootstrap.csv",
+          "sha": "271d164a88756f1f18c81dddc3eff00ffed5a81c",
+          "status": "added",
+          "changes": 61
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/manifest.json",
+          "sha": "7433467fe3a47b2cc49e016cb46f8ef3638ecbcc",
+          "status": "added",
+          "changes": 43
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/predictions.csv",
+          "sha": "9a2db7600229a774aeeecb2a2b267be8fb7483f2",
+          "status": "added",
+          "changes": 393
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/selection_before_holdout.json",
+          "sha": "f4d7bb901af0c1d0249a131d5c2a3977af7bc093",
+          "status": "added",
+          "changes": 12
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/temporal_variability.csv",
+          "sha": "ff318f5cf5b71f50eaab53e53655ce65acffb3f7",
+          "status": "added",
+          "changes": 21
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/threshold_metrics.csv",
+          "sha": "7895dd600e24b2f493d03ef2c1c2fd874e7dcaf5",
+          "status": "added",
+          "changes": 11
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/top_k.csv",
+          "sha": "7ec5b5da7047f8267e302005e7c2d8f395b7e643",
+          "status": "added",
+          "changes": 16
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/results/train_temporal_cv.csv",
+          "sha": "8a9ad32e3632778b819816528da00045373a6ed6",
+          "status": "added",
+          "changes": 16
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/run.py",
+          "sha": "d87eca5d5d8cf118131ce85bbc68ba5e6a3e8c92",
+          "status": "added",
+          "changes": 120
+        },
+        {
+          "path": "experiments/temporal-ranking-20260925/test_study.py",
+          "sha": "c558a3f8f5f4fdb9b2718d1fb5e39c820c3e051e",
+          "status": "added",
+          "changes": 37
+        }
+      ],
+      "capped": false
+    }
+  ]
+}

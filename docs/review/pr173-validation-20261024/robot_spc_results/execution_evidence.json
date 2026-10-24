@@ -1,0 +1,20 @@
+{
+  "source": "official Zenodo 12665499 HTTP ranges; selected train members only",
+  "whole_archive_hash_verified": false,
+  "test_block_decoded": false,
+  "member_size_crc_checks": 20,
+  "config_sha256": "55794547c6d4355a6f407a049bf973abd4e0a34d01a0c1e208477f4d34aef1ce",
+  "source_code_sha256": "57d3372594f5ce790b504fc6c517f7a1cb5cf8600fba57c48f1c27af90915aa4",
+  "spc_module_sha256": "4be54db123ed5d5242aa5dc3fb59a52f00107d1731dd8cee8e29d2f96c1f9b24",
+  "source_amendment_sha256": "993c9fdb9abcf167e505f0a869bfefae09119ecb572ce3bfd5925015132bc35f",
+  "manifest_before_decode_sha256": "102a06a7c9ad987378f117ce6d3cd3862908112741681d21d96ffa3d4c7369f4",
+  "report_sha256": "9baf554ecf58ccde92747633ac39942aeacd7ebe6a7d4adca358f88d7724b9dc",
+  "run_status": "exploratory_alarm_activity_only",
+  "performance_verdict": "not_evaluable",
+  "limits": [
+    "CRC32 is not cryptographic provenance authentication",
+    "Full archive MD5/SHA256 not verified",
+    "Known development groups; no independent holdout",
+    "No anomaly onset/end labels or verified stable-normal context"
+  ]
+}

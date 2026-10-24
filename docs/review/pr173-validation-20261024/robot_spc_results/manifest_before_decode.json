@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "config_sha256": "55794547c6d4355a6f407a049bf973abd4e0a34d01a0c1e208477f4d34aef1ce",
+  "protocol_status": "prespecified",
+  "holdout_status": "reused_development_data",
+  "expected_groups": {
+    "reference": 1,
+    "calibration": 1,
+    "evaluation": 2
+  },
+  "files": [
+    {
+      "file_id": "20240405_10_45_40_dataLog_0",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "f5e2e6781e0494141a2968ded79f65f723e8743ad8535bb26ca4d6b08b6f4232",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_12",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "dfb32f50aadb6404882ca75b8dd2f472a251ef68f7e5c4d1f2812c076240a585",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_16",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "b9221c2d092746ea259f33c69222e77eb6ca3875fcc7883294f6c802b790afde",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_17",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "37b61e7a9d4572efa656b5de610a5a75b1944c9f91296bd9e447ff9e942fcf98",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_20",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "959171a77ae9c27daf6b71d5082abb533e655dbbf1e96b0df2d35eecc706fbf7",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_24",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "77f553c12e6b31e210d73c025fc383e36a9bfd129c1670fe8612614cbbcf0196",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_27",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "310ff7d09a57bc33cde05d6b65829ee6c15d7b68224353dde271ee3ea87107a4",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_30",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "442e2f5818eb02735cd48ad536681edf22e11f759b30db069785c5bddf136f43",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_36",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "38e137b17e1d7affdfeb84697487b953841d8a88287188576972b414cc1fd928",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_40",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "0c7c4833097b28ad3e27855fc5e9dd6db0a5d75bda41f548fa0973c3af5c8d29",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_41",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "a552743e6197fd6e78434511993098744defca277dce04684f361e82a2222e4e",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_45_40_dataLog_6",
+      "recording_group": "20240405_10_45_40",
+      "role": "reference",
+      "source_sha256": "adde8c30ceb2092ed7a3d31b4822693c3627f542969e8e31a9d7f96b47eee073",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_10_54_03_corr83_dataLog_6",
+      "recording_group": "20240405_10_54_03_corr83",
+      "role": "calibration",
+      "source_sha256": "a824e0c801fc0f49eaff5384cfc1f29c946c77ebe75dc4666a0802697934bca1",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_14",
+      "recording_group": "20240405_11_02_26_corr300",
+      "role": "evaluation",
+      "source_sha256": "9056d60b0de519df12b3334614f59f7a615accf6c125f4b163d0a99c96f79184",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_19",
+      "recording_group": "20240405_11_02_26_corr300",
+      "role": "evaluation",
+      "source_sha256": "76cbceab5594ad54064c533c8651012397155fc068505b65ea9987f0a69e3d30",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_2",
+      "recording_group": "20240405_11_02_26_corr300",
+      "role": "evaluation",
+      "source_sha256": "d9113b63174084781a292a497700638960e0ce376fc63741ae8a88636431263c",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_02_26_corr300_dataLog_27",
+      "recording_group": "20240405_11_02_26_corr300",
+      "role": "evaluation",
+      "source_sha256": "752afa17f7530f03efd62770121a8519679ce20778e1e34c3d69f4f299273ba8",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_10_50_dataLog_11",
+      "recording_group": "20240405_11_10_50",
+      "role": "evaluation",
+      "source_sha256": "3d8c81517cfcc761e609df06f12cca6c527e3e0f446f263bbd0c4a54e4a31761",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_10_50_dataLog_13",
+      "recording_group": "20240405_11_10_50",
+      "role": "evaluation",
+      "source_sha256": "e63b9e235430ba8708dff3d139c9b0a3bb9476a1e4fed6ddfce6040b19bd3941",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    },
+    {
+      "file_id": "20240405_11_10_50_dataLog_15",
+      "recording_group": "20240405_11_10_50",
+      "role": "evaluation",
+      "source_sha256": "e94932fd9408b34d345d470da311bc7d3cf4b3ff9b0bae353b9ff620bbaea068",
+      "condition": {
+        "op": "weight15",
+        "env": "BckgA"
+      }
+    }
+  ]
+}
