@@ -28,7 +28,7 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
   assert.match(await page.locator('#robot-phase').innerText(),/가상 정상 위치/);
   await capture(page.locator('#viewport'),width+'-robot-place.png');
   await page.locator('#board-select').selectOption('PCB-002');await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');
-  await advance(1000);assert.match(await page.locator('#robot-phase').innerText(),/내려놓기 완료/);await page.locator('#play').press('Enter');assert.match(await page.locator('#robot-phase').innerText(),/가상 불량 위치/);
+  await advance(1400);assert.match(await page.locator('#robot-phase').innerText(),/내려놓기 완료/);await page.locator('#play').press('Enter');assert.match(await page.locator('#robot-phase').innerText(),/가상 불량 위치/);
   await capture(page.locator('#viewport'),width+'-robot-ng.png');
   await page.locator('#play').press('Enter');await advance(13000);assert.equal(await page.locator('#completed').innerText(),'12');assert.equal(await page.locator('#export-review').isEnabled(),true);
   await page.locator('#reset').press('Enter');assert.match(await page.locator('#run-status').innerText(),/일시정지/);assert.match(await page.locator('#robot-phase').innerText(),/最|최종 검사 대기/);assert.equal(await page.locator('#completed').innerText(),'0');
