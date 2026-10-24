@@ -4,6 +4,8 @@ FabGuard AI is a leakage-aware decision-support prototype for prioritising semic
 
 This is an offline portfolio and research prototype. It has not been deployed in a semiconductor fab, does not identify physical root causes from anonymous variables, and does not demonstrate yield, cost or defect-reduction impact.
 
+**Collaboration status (23 October 2026):** No institute has agreed to review, share data, run a pilot, or partner with this project. The [Australia–North America–Europe validation plan](review/INTERNATIONAL_VALIDATION_PLAN.md) lists prospective contacts and bounded requests, not institutional endorsements.
+
 ## What is implemented
 
 - reproducible ingestion and validation for 1,567 production records and 590 anonymous measurements;
@@ -21,6 +23,8 @@ The temporal holdout contains 392 records and 24 failures. Reviewing the highest
 Random Forest exceeded Logistic Regression in all five repeat-level paired comparisons, with a mean average-precision difference of +0.0382. The exact two-sided sign-flip result is p=0.0625, so the repository does not claim statistical significance at the 5% level or deployment superiority.
 
 All figures above are provisional public-data results. Canonical artifacts and their interpretation boundaries are documented in [`results/v1/RESULTS_SUMMARY.md`](../results/v1/RESULTS_SUMMARY.md), [`PHASE1_ADVANCED_VALIDATION.md`](PHASE1_ADVANCED_VALIDATION.md) and the [experiment contract](validation/EXPERIMENT_CONTRACT.md).
+
+The separate [IMAD-DS scaled robotic-arm benchmark](ROBOT_IMAD_BENCHMARK.md) used 2,303 recorded segments and 42 summary features. On the target condition with recording-session-disjoint training, AUROC was **0.4793**; reviewing the top 24 of 232 segments captured **1 of 116** induced loose-screw anomalies, with 23 false alarms. This is a negative result for operational screening, not evidence of semiconductor equipment performance. The source archive was rerun by the author; independent follow-up checked retraining and metrics from saved features, but did not rerun the raw 7z archive. The [condition-coverage audit](ROBOT_VALIDATION_READINESS.md) details gaps in load/background coverage. Input-quality and abstention gates remain an unimplemented [Draft proposal](https://github.com/heechan9/fabguard-ai/pull/164).
 
 ## Reproduce the review surface
 
@@ -46,6 +50,8 @@ Feedback is most useful when it addresses one bounded question and cites a file,
 
 Please open a [focused GitHub issue](https://github.com/heechan9/fabguard-ai/issues) with the relevant file or evidence boundary. No private production data should be attached or pasted into a public issue.
 
+For a first conversation, we ask for **one bounded technical review**: what independently recorded conditions, sensor-health evidence, and human-review workload would be required to evaluate an abstaining offline robot screening queue? A useful response can identify a flawed assumption or suggest a feasible recording protocol; data or equipment access is not presumed. Existing test labels and scores must not be used to tune a new method and then presented as independent confirmation.
+
 ## Small collaboration entry points
 
 - review one operational document and identify an unrealistic assumption;
@@ -58,6 +64,6 @@ The owner, Heechan Choi, led the problem framing, requirements, evaluation choic
 
 ## Melbourne-oriented objective
 
-The near-term goal is to make this repository useful for conversations with industrial AI, smart-manufacturing and engineering communities in Melbourne before any claim of factory readiness. A successful review should produce concrete technical feedback, a reproducible issue or a small collaboration—not an implied endorsement, partnership or deployment result.
+The first regional goal is to make this repository useful for conversations with industrial AI, smart-manufacturing and engineering communities in Melbourne before any claim of factory readiness. A successful review should produce concrete technical feedback, a reproducible issue or a small collaboration—not an implied endorsement, partnership or deployment result. Later North American and European technical reviews depend on a clearly documented Australian evaluation design or result; see the [international plan](review/INTERNATIONAL_VALIDATION_PLAN.md).
 
 Potential site-specific pilot inputs such as line ownership, engineering roles, service levels, inspection capacity, cost values, data retention and access controls remain intentionally unset until a qualified organisation supplies and approves them.
