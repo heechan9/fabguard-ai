@@ -3,7 +3,7 @@ const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),ass
 const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true});const checks=[],errors=[];let activePage;
 (async()=>{
  const browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH,args:['--use-angle=swiftshader']});
- for(const width of [1366,390,360]){
+ for(const width of process.env.FABGUARD_UI_WIDTH?[Number(process.env.FABGUARD_UI_WIDTH)]:[1366,390,360]){
   console.log('VIEWPORT',width);fs.writeFileSync(path.join(output,'checkpoint.txt'),'viewport '+width+' context');
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage();activePage=page;page.setDefaultTimeout(45000);await page.clock.install({time:new Date('2026-10-24T00:00:00Z')});
   const advance=async ms=>{for(let t=0;t<ms;t+=100)await page.clock.fastForward(Math.min(100,ms-t));};
@@ -35,6 +35,7 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
   await page.locator('#robot-select').press('Enter');await capture(page.locator('.robot-cell-info'),width+'-robot-description.png');
   // Existing camera and separate inspection/intro paths must remain usable.
   await page.locator('#top-view').press('Enter');await page.locator('#camera-reset').press('Enter');await page.locator('#intro-open').press('Enter');assert.equal(await page.locator('#intro-dialog').isVisible(),true);await page.locator('#intro-close').press('Enter');assert.ok(await page.locator('#inspection-lab button').count()>0);
+  await page.clock.resume();await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#reset').press('Enter');assert.match(await page.locator('#run-status').innerText(),/실행 중/);await page.emulateMedia({reducedMotion:'reduce'});assert.match(await page.locator('#run-status').innerText(),/일시정지/);
   checks.push({width,status:'pass',assertions:'WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow'});
   await context.close();
  }
