@@ -82,6 +82,8 @@
 
 ## 수집·연동 계약과 별도 도메인 검증
 
+- [로봇 라벨 없는 특징 입력·조건 보류 게이트 (첫 구현 범위)](ROBOT_SCREENING_GATES.md)
+
 - [Fledge 연계 준비 계약](FLEDGE_ADAPTER_CONTRACT.md)
 - [Fledge operational validation slice](FLEDGE_OPERATIONAL_VALIDATION.md)
 - [Fledge upstream contribution readiness](FLEDGE_UPSTREAM_READINESS.md)
