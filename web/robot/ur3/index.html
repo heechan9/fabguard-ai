@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<title>UR3 실제 센서 기록 탐색 · FabGuard</title><link rel="stylesheet" href="./style.css"></head>
+<body><a class="skip" href="#main">본문으로 건너뛰기</a><header><a href="/">FabGuard AI</a><nav aria-label="관련 화면"><a href="/robot/">기존 로봇 분석</a><a href="/smt/">가상 R-01 체험</a><a href="/equipment/context-review.html">정비 검토</a></nav></header>
+<main id="main" tabindex="-1"><p class="eyebrow">SECOND ROBOT DATA CASE · UR3 COBOTOPS</p><h1>UR3 실제 센서 기록 탐색</h1>
+<p class="lead">실제로 제공된 관절 전류·온도·속도와 툴 전류를 시간순으로 살펴봅니다. 저장된 센서 기록을 재생하는 연구용 화면입니다.</p>
+<aside><strong>실시간 연결·예측·로봇 제어 없음</strong><p>관절 위치와 자세가 없어 실제 로봇 동작의 3D 재현은 하지 않습니다. 보호 정지·그립 손실은 원본 기록이며 모델 경보가 아닙니다. 보호 정지가 고장이나 제품 불량을 확정하지 않습니다.</p></aside>
+<section aria-labelledby="source-title"><h2 id="source-title">1. 출처와 기록 품질</h2>
+<p><a href="https://archive.ics.uci.edu/dataset/963/ur3+cobotops">UCI 공식 UR3 CobotOps</a> · Tyrovolas, Aliev, Antonelli, Stylios (2024) · DOI 10.24432/C5J891 · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
+<p>원본 XLSX를 JSON으로 변환했습니다. 원래 행 순서와 결측을 유지하고 시각 문자열 일부의 바깥따옴표만 제거했습니다. 자동 보간·중복 제거·모델 학습은 없습니다.</p>
+<p id="load-status" role="status">데이터 확인 중 — 아직 결과를 표시하지 않습니다.</p><p id="load-error" role="alert" hidden></p>
+<div id="quality-summary" hidden></div><details><summary>원본 해시·변환 근거</summary><p>UCI ZIP SHA-256 <code>233334eeb5370e594ea621796ca2d693bd4980cc2bb24fa749b1b633a4993c8d</code></p><p>XLSX SHA-256 <code>f0f10917de9056908a82cec1aa459ddf9da2d2db70d269b128f99241c8796091</code></p><p id="data-hash">화면 데이터 해시 확인 전</p><a href="https://archive.ics.uci.edu/static/public/963/ur3+cobotops.zip">UCI 원본 ZIP</a></details></section>
+<section aria-labelledby="replay-title"><h2 id="replay-title">2. 센서 기록 재생</h2>
+<p>1행/초의 탐색 재생입니다. 시간 공백을 실제 시간만큼 기다리거나 압축해서 연결하지 않고, 공백 직후 행에서 자동 일시정지합니다. 5초 초과는 화면 공백 표시 기준이며 이상 탐지 임계값이 아닙니다.</p>
+<div class="controls"><label for="sensor">실제 제공 센서 <select id="sensor" disabled></select></label><button id="play" disabled>재생</button><button id="pause" disabled>정지</button><button id="reset" disabled>처음으로</button><button id="previous" disabled>이전 행</button><button id="next" disabled>다음 행</button></div>
+<label for="position">행 탐색 (키보드 방향키 사용)</label><input id="position" type="range" min="0" max="7408" value="0" disabled aria-describedby="position-help"><p id="position-help">원본 행 순서입니다. cycle 번호는 행 ID나 독립 세션 ID로 사용하지 않습니다.</p>
+<p id="play-status" role="status">일시정지 · 데이터 확인 전</p><p id="current-time"></p>
+<div class="quality" id="current-quality" role="status"></div><div id="chart"></div><p>그래프는 현재 행까지 최대 120행이며 X축은 실제 UTC 시각입니다. 결측·시간 공백에서는 선을 끊습니다. 원본에 명시된 단위가 없어 값에 단위를 임의로 붙이지 않습니다.</p>
+<div class="controls"><button data-jump="missing" disabled>다음 센서 결측</button><button data-jump="gap" disabled>다음 시간 공백</button><button data-jump="stop" disabled>다음 보호 정지 기록</button><button data-jump="grip" disabled>다음 그립 손실 기록</button></div>
+</section>
+<section aria-labelledby="records-title"><h2 id="records-title">3. 센서 값과 실제 기록 구분</h2>
+<div class="record-grid"><div><h3>현재 센서 값</h3><div class="table-scroll" tabindex="0" role="region" aria-label="현재 실제 센서 값 (가로 스크롤 가능)"><table><thead><tr><th scope="col">원본 센서 열</th><th scope="col">기록 값</th></tr></thead><tbody id="sensor-values"></tbody></table></div></div>
+<div><h3>원본에 기록된 상태</h3><p id="recorded-events">기록 확인 전</p><p>결측은 False로 바꾸지 않습니다. True 행 수는 고장 건수·이벤트 발생 횟수와 같지 않습니다. 같은 상태가 여러 인접 행에 기록될 수 있습니다.</p><h3>예측 성능</h3><p>재현율: <code>null</code> · 오경보율: <code>null</code> · 탐지 지연: <code>null</code></p><p>이번 단계에서는 모델이나 경보를 생성하지 않았습니다.</p></div></div></section>
+<section><h2>아직 알 수 없는 조건</h2><p>하중, 명령 속도, 관절 위치·자세, 세션 식별 정보는 파일에서 확인되지 않습니다. Speed_J0–J5는 실제 제공된 속도 채널이며 명령 속도·동작 조건의 대체 근거로 사용하지 않습니다. 기존 IMAD-DS 분석·R-01 합성 시뮬레이션과 데이터를 합치지 않습니다.</p><p>원본의 수집 장비 결속·상태 라벨 정확성·실제 휴대전화·스크린리더·현장 성능은 별도 검증이 필요합니다.</p></section>
+</main><script type="module" src="./app.mjs"></script></body></html>
