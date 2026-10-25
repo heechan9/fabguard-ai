@@ -1,0 +1,58 @@
+name: Stored robot report and existing UI verification
+on:
+  push:
+    branches: [feat/robot-offline-evidence-20261025]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Use the existing CI Chrome, without browser download
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          python -m pip install .
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Isolated driver only, same as the earlier local UI workflow
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/offline-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Loopback-only report, robot and maintenance checks
+        env:
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_BASE_URL: http://127.0.0.1:8764
+          FABGUARD_TEST_COMMIT: ${{ github.sha }}
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/offline-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8764/robot/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          export NODE_PATH="$RUNNER_TEMP/offline-driver/node_modules"
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/report" timeout 240s node verification/check_robot_offline_evidence.cjs
+          for width in 1366 360 390; do
+            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/robot-$width" timeout 360s node verification/check_robot_sort_cell.cjs
+            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/context-$width" timeout 180s node verification/check_context_review.cjs
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: offline-evidence-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/offline-evidence
+            ${{ runner.temp }}/offline-server.log
+          retention-days: 14

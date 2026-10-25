@@ -1,5 +1,4 @@
 // Read-only projection of a pinned, previously executed Python report. No fitting or control.
-import {REPORT_TEXT} from './offline-report-data.mjs';
 export const REPORT_SHA256 = '9baf554ecf58ccde92747633ac39942aeacd7ebe6a7d4adca358f88d7724b9dc';
 export const METHODS = ['shewhart', 'ewma', 'cusum'];
 const metrics = ['detection_delay', 'anomaly_recall', 'miss_rate', 'false_alarm_rate'];
@@ -40,6 +39,8 @@ const node = (tag, text) => { const n = document.createElement(tag); n.textConte
 export async function renderOfflineEvidence(root) {
   root.replaceChildren(node('p', '저장된 보고서를 확인 중…'));
   try {
+    // A missing report module must not prevent the CSV demo from starting.
+    const {REPORT_TEXT} = await import('./offline-report-data.mjs');
     const bytes = new TextEncoder().encode(REPORT_TEXT);
     const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))]
       .map(v => v.toString(16).padStart(2, '0')).join('');
@@ -67,7 +68,7 @@ export async function renderOfflineEvidence(root) {
       node('p', `보고서 SHA-256: ${hash}`));
     root.dataset.status = 'verified';
   } catch (error) {
-    root.replaceChildren(node('p', `보고서 표시 보류: ${error.message} 경보 0건이나 정상으로 해석하지 마세요.`));
+    root.replaceChildren(node('p', `보고서 표시 보류: 보고서 파일 누락·형식 오류·해시 불일치 여부를 확인하세요. ${error.message} 경보 0건이나 정상으로 해석하지 마세요.`));
     root.dataset.status = 'withheld';
   }
 }
