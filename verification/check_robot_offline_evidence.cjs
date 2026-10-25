@@ -37,6 +37,17 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
   await wrap.evaluate(e=>e.scrollLeft=0);await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:path.join(output,`offline-${width}.png`),fullPage:true});
   await page.locator('.offline-evidence').screenshot({path:path.join(output,`report-card-${width}.png`)});
+  // Renderer itself is optional too, not only its data dependency.
+  await page.route('**/offline-evidence.mjs',r=>r.fulfill({status:404,body:'renderer not found'}));
+  await page.reload();await page.locator('#offline-results[data-status=withheld]').waitFor();
+  assert.match(await page.locator('#offline-results').innerText(),/보고서 표시 보류.*렌더러/);
+  assert.equal(await page.locator('#offline-results table').count(),0);
+  await page.locator('#synthetic').focus();await page.keyboard.press('Enter');
+  await page.locator('#file-table').waitFor({state:'visible'});
+  assert.equal(await page.locator('#file-table tbody tr').count(),4);
+  assert.equal(errors.length,0,JSON.stringify(errors));
+  await page.screenshot({path:path.join(output,`missing-renderer-${width}.png`),fullPage:true});
+  await page.unroute('**/offline-evidence.mjs');
   // Corrupt only the test response, keeping application code unchanged: hash mismatch must withhold.
   for(const kind of ['malformed-json','missing-file']){
    await page.route('**/offline-report-data.mjs',r=>kind==='missing-file'
@@ -46,11 +57,12 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
    assert.equal(await page.locator('#offline-results table').count(),0);
    assert.match(await page.locator('#offline-results').innerText(),/파일 누락·형식 오류·해시 불일치/);
    await page.locator('#synthetic').click();await page.locator('#file-table').waitFor({state:'visible'});
+   assert.equal(await page.locator('#file-table tbody tr').count(),4);
    await page.screenshot({path:path.join(output,`${kind}-${width}.png`),fullPage:true});
    await page.unroute('**/offline-report-data.mjs');
   }
   assert.equal(errors.length,0,JSON.stringify(errors));await context.close();
  }
- fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({status:'pass',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),widths,browser:browser.version(),report_sha256:expectedHash,checks:['download bytes = historical report','table rows = downloaded JSON','visible hash','7 file rows','null performance','overflow','keyboard table/scroll/download Enter','reduced motion','malformed JSON withheld','missing file withheld','CSV demo still works after errors'],scope:'stored exploratory report display only'},null,2));
+ fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({status:'pass',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),widths,browser:browser.version(),report_sha256:expectedHash,checks:['download bytes = historical report','table rows = downloaded JSON','visible hash','7 file rows','null performance','overflow','keyboard table/scroll/download Enter','reduced motion','renderer 404 withheld; CSV keyboard Enter generates 4 rows; no pageerror','malformed JSON withheld','missing file withheld','CSV demo generates 4 rows after each error; no pageerror'],scope:'stored exploratory report display only'},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
