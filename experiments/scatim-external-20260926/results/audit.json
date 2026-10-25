@@ -1,0 +1,96 @@
+{
+  "data": [
+    {
+      "dataset": 1,
+      "archive_sha256": "f8c7f6363ecbd541735b374746ce8549aaa50dae754aaaa2efa980c227b19c09",
+      "n": 1167,
+      "train_n": 816,
+      "holdout_n": 351,
+      "train_counter": [
+        25136,
+        25972
+      ],
+      "holdout_counter": [
+        25973,
+        26326
+      ],
+      "scalar_features": [
+        "cycle_time",
+        "umschaltvolumen",
+        "maximaler_spritzdruck",
+        "umschaltspritzdruck",
+        "einspritzzeit",
+        "massepolster",
+        "dosierzeit",
+        "zylinderheizzone_1",
+        "zylinderheizzone_2",
+        "zylinderheizzone_3",
+        "zylinderheizzone_4",
+        "zylinderheizzone_5",
+        "zylinderheizzone_6",
+        "zylinderheizzone_7",
+        "zylinderheizzone_8",
+        "werkzeugheizkreis_1",
+        "oeil_temperatur_ist",
+        "staudruck_ist"
+      ],
+      "curve_features": [
+        "injectionflow_mean",
+        "injectionflow_max",
+        "injectionflow_std",
+        "injectionpressure_mean",
+        "injectionpressure_max",
+        "injectionpressure_std"
+      ]
+    },
+    {
+      "dataset": 3,
+      "archive_sha256": "b6baa4f5f5dbdf0c1bbe23a7b854358967d9004b75de4a16502730a77aed316e",
+      "n": 1332,
+      "train_n": 932,
+      "holdout_n": 400,
+      "train_counter": [
+        23491,
+        24614
+      ],
+      "holdout_counter": [
+        24615,
+        25032
+      ],
+      "scalar_features": [
+        "cycle_time",
+        "umschaltvolumen",
+        "maximaler_spritzdruck",
+        "umschaltspritzdruck",
+        "einspritzzeit",
+        "massepolster",
+        "dosierzeit",
+        "zylinderheizzone_1",
+        "zylinderheizzone_2",
+        "zylinderheizzone_3",
+        "zylinderheizzone_4",
+        "zylinderheizzone_5",
+        "zylinderheizzone_6",
+        "zylinderheizzone_7",
+        "zylinderheizzone_8",
+        "werkzeugheizkreis_1",
+        "staudruck_ist"
+      ],
+      "curve_features": [
+        "injectionflow_mean",
+        "injectionflow_max",
+        "injectionflow_std",
+        "injectionpressure_mean",
+        "injectionpressure_max",
+        "injectionpressure_std"
+      ]
+    }
+  ],
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "sklearn": "1.8.0",
+  "seed": 20260926,
+  "split": "first 70 percent train; last 30 percent untouched holdout",
+  "prediction_time": "after injection cycle, before quality measurement"
+}
