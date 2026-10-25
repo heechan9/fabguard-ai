@@ -8,7 +8,9 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
  const browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH});
  const original=fs.readFileSync('docs/review/pr173-validation-20261024/robot_spc_results/report.json');
  const expectedHash=crypto.createHash('sha256').update(original).digest('hex');
- try{for(const width of [1366,360,390]){
+ const widths=process.env.FABGUARD_UI_WIDTH?[Number(process.env.FABGUARD_UI_WIDTH)]:[1366,360,390];
+ assert.ok(widths.every(width=>[1366,360,390].includes(width)));
+ try{for(const width of widths){
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
   const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
@@ -32,7 +34,9 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
    assert.ok(tableRows[i].includes(file.file_id));assert.ok(tableRows[i].includes(file.recording_group));
    assert.deepEqual(cells.slice(-3),['shewhart','ewma','cusum'].map(m=>String(file.methods[m].raw_alarms)));
   }
-  await page.locator('#offline-title').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`offline-${width}.png`),fullPage:true});
+  await wrap.evaluate(e=>e.scrollLeft=0);await page.evaluate(()=>scrollTo(0,0));
+  await page.screenshot({path:path.join(output,`offline-${width}.png`),fullPage:true});
+  await page.locator('.offline-evidence').screenshot({path:path.join(output,`report-card-${width}.png`)});
   // Corrupt only the test response, keeping application code unchanged: hash mismatch must withhold.
   for(const kind of ['malformed-json','missing-file']){
    await page.route('**/offline-report-data.mjs',r=>kind==='missing-file'
@@ -47,6 +51,6 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
   }
   assert.equal(errors.length,0,JSON.stringify(errors));await context.close();
  }
- fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({status:'pass',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),widths:[1366,360,390],browser:browser.version(),report_sha256:expectedHash,checks:['download bytes = historical report','table rows = downloaded JSON','visible hash','7 file rows','null performance','overflow','keyboard table/scroll/download Enter','reduced motion','malformed JSON withheld','missing file withheld','CSV demo still works after errors'],scope:'stored exploratory report display only'},null,2));
+ fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({status:'pass',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),widths,browser:browser.version(),report_sha256:expectedHash,checks:['download bytes = historical report','table rows = downloaded JSON','visible hash','7 file rows','null performance','overflow','keyboard table/scroll/download Enter','reduced motion','malformed JSON withheld','missing file withheld','CSV demo still works after errors'],scope:'stored exploratory report display only'},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

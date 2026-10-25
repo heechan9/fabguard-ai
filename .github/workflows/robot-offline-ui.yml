@@ -6,6 +6,10 @@ permissions:
   contents: read
 jobs:
   browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1366, 360, 390]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -34,6 +38,7 @@ jobs:
           FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
           FABGUARD_BASE_URL: http://127.0.0.1:8764
           FABGUARD_TEST_COMMIT: ${{ github.sha }}
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
         run: |
           python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/offline-server.log" 2>&1 &
           SERVER_PID=$!
@@ -44,14 +49,12 @@ jobs:
           done
           export NODE_PATH="$RUNNER_TEMP/offline-driver/node_modules"
           FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/report" timeout 240s node verification/check_robot_offline_evidence.cjs
-          for width in 1366 360 390; do
-            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/robot-$width" timeout 360s node verification/check_robot_sort_cell.cjs
-            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/context-$width" timeout 180s node verification/check_context_review.cjs
-          done
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/robot-$FABGUARD_UI_WIDTH" timeout 360s node verification/check_robot_sort_cell.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/context-$FABGUARD_UI_WIDTH" timeout 180s node verification/check_context_review.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: offline-evidence-${{ github.sha }}
+          name: offline-evidence-${{ matrix.width }}-${{ github.sha }}
           path: |
             ${{ runner.temp }}/offline-evidence
             ${{ runner.temp }}/offline-server.log
