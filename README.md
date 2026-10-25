@@ -270,6 +270,7 @@ FabGuard is a reviewable industrial-AI prototype rather than a black-box demo. E
 | Cost-aware Top-K review, uncertainty, drift, and walk-forward checks | [Phase 1 validation](docs/PHASE1_ADVANCED_VALIDATION.md) |
 | Boundary between prototype evidence and factory claims | [Dataset card](docs/validation/DATASET_CARD.md) · [field validation plan](docs/CAUSAL_FIELD_VALIDATION.md) |
 | Staged path to external industrial open source | [Roadmap](docs/project/ROADMAP.md) |
+| Proposed Australia–North America–Europe validation path | [International validation plan](docs/review/INTERNATIONAL_VALIDATION_PLAN.md) |
 | Frozen Train-only model artifact and trust boundary | [Locked model export](docs/LOCKED_MODEL_EXPORT.md) |
 
 Focused issues and reviewable pull requests are welcome, especially for validation design, data-contract tests, drift diagnostics, calibration, documentation, and contract-preserving adapters.
