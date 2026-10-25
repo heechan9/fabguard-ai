@@ -22,7 +22,24 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  await page.locator('#reset').press('Enter');await page.locator('[data-jump=stop]').press('Enter');assert.match(await page.locator('#recorded-events').innerText(),/Robot_ProtectiveStop: True · 원본/);
  await page.locator('#reset').press('Enter');await page.locator('[data-jump=grip]').press('Enter');assert.match(await page.locator('#recorded-events').innerText(),/grip_lost: True · 원본/);
  await page.locator('#sensor').selectOption('20');assert.equal(await page.locator('#sensor').inputValue(),'20');
- await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#play').press('Enter');await page.emulateMedia({reducedMotion:'reduce'});assert.match(await page.locator('#play-status').innerText(),/동작 줄이기.*일시정지/);
+ // Media-query changes are delivered asynchronously; observe both transitions
+ // instead of asserting immediately after the emulation command returns.
+ await page.evaluate(()=>{
+  window.ur3MotionObserved=null;
+  matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{window.ur3MotionObserved=event.matches;});
+ });
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ await page.waitForFunction(()=>window.ur3MotionObserved===false);
+ const motionStart=Number(await page.locator('#position').inputValue());
+ await page.locator('#play').press('Enter');
+ assert.match(await page.locator('#play-status').innerText(),/기록 재생 중/);
+ await page.waitForFunction(start=>Number(document.querySelector('#position').value)>start,motionStart);
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.waitForFunction(()=>window.ur3MotionObserved===true&&/동작 줄이기.*일시정지/.test(document.querySelector('#play-status').textContent));
+ assert.match(await page.locator('#play-status').innerText(),/동작 줄이기.*일시정지/);
+ const motionPaused=await page.locator('#position').inputValue();
+ await page.waitForTimeout(1100);
+ assert.equal(await page.locator('#position').inputValue(),motionPaused);
  await page.locator('#reset').press('Enter');await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(output,'overview.png'),fullPage:true});
  for(const kind of ['missing-file','corrupt-json']){
   await page.route('**/ur3/data.json',r=>kind==='missing-file'?r.fulfill({status:404,body:'missing'}):r.fulfill({contentType:'application/json',body:'{bad json'}));
