@@ -17,6 +17,8 @@
 | 현장 적용 가능성 검토 | [실행 가능한 제조 검토 슬라이스](MANUFACTURING_REVIEW_SLICE.md) → [엔지니어 검토 흐름](SEMICONDUCTOR_REVIEW_WORKFLOW.md) → [최소 파일럿 초안](MINIMUM_PILOT.md) → [실패 대응 초안](FAILURE_GOVERNANCE.md) |
 | 작업 범위·기여 확인 | [요구사항](project/PRD.md) → [로드맵](project/ROADMAP.md) → [작업 참여 안내](../CONTRIBUTING.md) → [기여 기록](governance/CONTRIBUTIONS.md) → [AI 사용 기록](governance/AI_USAGE.md) |
 
+- [FDC 강의 적용: 경보 해석과 근거 추적](FDC_LECTURE_APPLICATION.md) — 현재 main / Draft 구분, 원시 경보·연속 묶음·분모·보류 사유, 11월 PCA 연구안(미실행).
+
 ## 문서의 상태를 읽는 법
 
 - [독립 구현 재계산·자료 정정 기록](INDEPENDENT_EVIDENCE_AUDIT.md): 저장된 예측의 산술 일치 검사와 원본 해시에 연결된 의미 정정 절차. 외부 전문가 검토나 새 모델 추론 결과는 아니다.
