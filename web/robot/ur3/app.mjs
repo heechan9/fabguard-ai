@@ -8,12 +8,13 @@ const recorded=value=>value===null?'결측 (판단 불가)':value?'True · 원�
 function svg(tag,attrs={}){const e=document.createElementNS(SVG,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);return e;}
 function pause(message='일시정지'){clearInterval(timer);timer=null;$('play-status').textContent=message;}
 function draw(points,sensor){
- const plot=svg('svg',{viewBox:'0 0 900 220',role:'img','aria-label':`${COLUMNS[sensor]} 실제 기록. 결측·5초 초과 시간 공백에서 선을 끊음. 예측 아님`});
+ const width=Math.max(240,$('chart').clientWidth);
+ const plot=svg('svg',{viewBox:`0 0 ${width} 220`,role:'img','aria-label':`${COLUMNS[sensor]} 실제 기록. 결측·5초 초과 시간 공백에서 선을 끊음. 예측 아님`});
  const finite=points.filter(p=>p.value!==null);
  if(!finite.length){const t=svg('text',{x:20,y:100});t.textContent='이 구간의 선택 센서가 모두 결측입니다.';plot.append(t);$('chart').replaceChildren(plot);return;}
  const min=Math.min(...finite.map(p=>p.value)),max=Math.max(...finite.map(p=>p.value)),range=max-min||1;
  const start=points[0].time,end=points.at(-1).time;
- const x=t=>55+(t-start)/Math.max(1,end-start)*825,y=v=>180-(v-min)/range*145;
+ const x=t=>55+(t-start)/Math.max(1,end-start)*(width-67),y=v=>180-(v-min)/range*145;
  let path='',pen=false;
  points.forEach((p,i)=>{
   if(p.breakBefore&&i){plot.append(svg('rect',{x:x(points[i-1].time),y:20,width:Math.max(1,x(p.time)-x(points[i-1].time)),height:165,class:'gap'}));pen=false;}
@@ -22,7 +23,7 @@ function draw(points,sensor){
  });
  plot.append(svg('path',{d:path}));
  const last=points.at(-1);if(last.value!==null)plot.append(svg('circle',{cx:x(last.time),cy:y(last.value),r:4,fill:'#ffd383'}));
- for(const [value,xx,yy] of [[fmt(max),3,25],[fmt(min),3,182],[new Date(start).toISOString().slice(11,23)+' UTC',55,212],[new Date(end).toISOString().slice(11,23)+' UTC',715,212]]){const t=svg('text',{x:xx,y:yy});t.textContent=value;plot.append(t);}
+ for(const [value,xx,yy,anchor] of [[fmt(max),3,25,'start'],[fmt(min),3,182,'start'],[new Date(start).toISOString().slice(11,23)+' UTC',3,212,'start'],[new Date(end).toISOString().slice(11,23)+' UTC',width-3,212,'end']]){const t=svg('text',{x:xx,y:yy,'text-anchor':anchor});t.textContent=value;plot.append(t);}
  $('chart').replaceChildren(plot);
 }
 function render(){

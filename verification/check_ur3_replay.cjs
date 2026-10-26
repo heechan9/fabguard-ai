@@ -9,6 +9,7 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  await page.goto(base+'/robot/ur3/');await page.locator('#load-status[data-status=ready]').waitFor();
  assert.match(await page.locator('#quality-summary').innerText(),/7,409행.*24열/);
  assert.equal(await page.locator('#sensor option').count(),19);assert.equal(await page.locator('#sensor-values tr').count(),19);
+ assert.ok(await page.locator('#chart svg text').first().evaluate(e=>e.getBoundingClientRect().height>=11),'chart labels must remain readable after SVG scaling');
  assert.match(await page.locator('#play-status').innerText(),/일시정지/);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  await page.locator('#position').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#position').inputValue(),'1');
  await page.locator('#reset').press('Enter');await page.locator('#play').press('Enter');await page.waitForFunction(()=>Number(document.querySelector('#position').value)>0);await page.locator('#pause').press('Enter');
