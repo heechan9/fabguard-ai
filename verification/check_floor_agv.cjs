@@ -8,7 +8,7 @@ const originalAdd=Scene.prototype.add;
 Scene.prototype.add=function(...objects){if(objects.some(o=>o.name==='synthetic-floor-agv-a01'))globalThis.__agvScene=this;return originalAdd.apply(this,objects);};
 const originalLookAt=Object3D.prototype.lookAt;
 Object3D.prototype.lookAt=function(...args){if(this.isPerspectiveCamera)globalThis.__agvCamera=this;return originalLookAt.apply(this,args);};
-globalThis.__agvThree={Box3,Vector3};
+globalThis.__agvThree={Box3,Vector3,Raycaster};
 `;
 async function sample(page){return page.evaluate(()=>{
  const scene=globalThis.__agvScene,camera=globalThis.__agvCamera,{Box3,Vector3}=globalThis.__agvThree;
@@ -21,6 +21,25 @@ async function sample(page){return page.evaluate(()=>{
  const routeBounds=new Box3().setFromObject(route),corners=[];
  for(const x of [routeBounds.min.x,routeBounds.max.x])for(const z of [routeBounds.min.z,routeBounds.max.z])corners.push(new Vector3(x,routeBounds.min.y,z).project(camera).toArray());
  return {count:vehicles.length,meshes,cylinders,size,center,corners,phase:vehicle.userData.phase,position:vehicle.position.toArray(),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray()},routeBounds:{min:routeBounds.min.toArray(),max:routeBounds.max.toArray()},board:document.querySelector('#board-select').value};
+ });}
+// Inspect the rendered meshes through the current public-control camera, without
+// changing application state or inventing replacement geometry.
+async function closeupGeometry(page){return page.evaluate(()=>{
+ const {Box3,Vector3,Raycaster}=globalThis.__agvThree,scene=globalThis.__agvScene,camera=globalThis.__agvCamera;
+ scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+ const root=scene.getObjectByName('synthetic-floor-agv-a01'),rect=document.querySelector('#viewport').getBoundingClientRect();
+ const projected=object=>{
+  const box=new Box3().setFromObject(object),points=[];
+  for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])points.push(new Vector3(x,y,z).project(camera));
+  return {width:(Math.max(...points.map(p=>p.x))-Math.min(...points.map(p=>p.x)))*rect.width/2,height:(Math.max(...points.map(p=>p.y))-Math.min(...points.map(p=>p.y)))*rect.height/2,inFrame:points.every(p=>Math.abs(p.x)<1&&Math.abs(p.y)<1&&p.z>-1&&p.z<1)};
+ };
+ const wheels=[];root.traverse(o=>{if(o.name==='agv-wheel'){
+  const center=o.getWorldPosition(new Vector3()),ray=new Raycaster(camera.position,center.clone().sub(camera.position).normalize());
+  const first=ray.intersectObject(root,true).find(hit=>hit.object.isMesh);
+  wheels.push({...projected(o),unobscured:first?.object===o});
+ }});
+ const chassis=root.children.find(o=>o.isMesh&&o.geometry.type==='BoxGeometry');
+ return {chassis:projected(chassis),wheels,position:root.position.toArray(),phase:root.userData.phase};
  });}
 function samePosition(a,b,message){assert.ok(a.every((v,i)=>Math.abs(v-b[i])<.03),message+': '+JSON.stringify({a,b}));}
 function framed(s){assert.ok([...s.corners,s.center].every(p=>Math.abs(p[0])<1&&Math.abs(p[1])<1&&p[2]>-1&&p[2]<1),JSON.stringify({message:'Route and vehicle must be in the actual camera frustum',s}));}
@@ -73,8 +92,26 @@ function framed(s){assert.ok([...s.corners,s.center].every(p=>Math.abs(p[0])<1&&
   await page.locator('#play').press('Enter');await advance(2000);await page.locator('#play').press('Enter');await advance(200);
   samePosition((await sample(page)).position,moving.position,'Reset deterministically replays the same travel');
   await page.locator('#reset').press('Enter');await advance(200);assert.equal(await page.locator('#completed').innerText(),'0');assert.equal(await page.locator('#board-select option').count(),1);samePosition((await sample(page)).position,start.position,'Global reset returns to start');
+  // Supplemental close-up after all route/state assertions, using only the
+  // existing play, camera-focus and keyboard controls. Restore the reset run.
+  await page.locator('#floor-agv-select').press('Enter');
+  await page.locator('#play').press('Enter');await advance(5000);await page.locator('#play').press('Enter');await advance(200);
+  assert.equal((await sample(page)).phase,'transport');
+  const viewport=page.locator('#viewport');
+  for(let n=0;n<7;n++)await viewport.press('ArrowDown');
+  for(let n=0;n<8;n++)await viewport.press('+');
+  await advance(200);
+  const closeup=await closeupGeometry(page);
+  assert.ok(closeup.chassis.inFrame&&closeup.chassis.width>=50&&closeup.chassis.height>=12,JSON.stringify({message:'Actual chassis must be legible in close-up',closeup}));
+  assert.ok(closeup.wheels.filter(w=>w.unobscured&&w.inFrame&&w.width>=8&&w.height>=8).length>=2,JSON.stringify({message:'At least two actual wheels must be unobscured and legible',closeup}));
+  const closeupHash=await capture('chassis-wheels-closeup');
+  assert.deepEqual((await sample(page)).position,closeup.position,'Close-up capture keeps live simulation paused');
+  await page.locator('#reset').press('Enter');await page.locator('#floor-agv-select').press('Enter');await advance(200);
+  samePosition((await sample(page)).position,start.position,'Supplemental capture restores reset position');
+  assert.deepEqual((await sample(page)).camera,start.camera,'Supplemental capture restores route camera');
+  assert.equal(await page.locator('#completed').innerText(),'0');assert.equal(await page.locator('#board-select option').count(),1);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  checks.push({width,theme,initial,transport:moving,wait,blocked,hashes:{transportHash,waitHash,blockedHash},globalPause:true,independentPause:true,blockedLatch:true,resetReplay:true,exportUnchanged:true});
+  checks.push({width,theme,initial,transport:moving,wait,blocked,closeup,hashes:{transportHash,waitHash,blockedHash,closeupHash},globalPause:true,independentPause:true,blockedLatch:true,resetReplay:true,exportUnchanged:true});
   await context.close();
  }
  await browser.close();fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({checks,errors,scope:'Synthetic floor AGV geometry/UI only. No real fleet, collision avoidance or safety certification.'},null,2));assert.deepEqual(errors,[]);

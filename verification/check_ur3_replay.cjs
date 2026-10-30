@@ -34,6 +34,8 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  await page.screenshot({path:path.join(output,'large-gap-boundary.png'),fullPage:true});
  await page.locator('#position').evaluate(e=>{e.value='2900';e.dispatchEvent(new Event('input',{bubbles:true}));});
  assert.ok(await page.locator('#chart .gap').count()>0,'Large original UTC gap remains visible, not compressed away');
+ assert.match(await page.locator('#chart-quality').innerText(),/120행.*시간 공백 1곳.*18,814.125초/);
+ assert.ok(await page.locator('#chart svg text').first().evaluate(e=>{const r=e.getBoundingClientRect(),svg=e.ownerSVGElement.getBoundingClientRect();return r.left>=svg.left&&r.right<svg.left+92;}),'Y-axis label remains inside a dedicated margin, not over the plot');
  await page.screenshot({path:path.join(output,'large-gap-window.png'),fullPage:true});
  await page.locator('#theme-toggle').click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
  await page.screenshot({path:path.join(output,'large-gap-window-dark.png'),fullPage:true});

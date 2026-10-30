@@ -16,7 +16,7 @@
 <div class="controls"><label for="sensor">실제 제공 센서 <select id="sensor" disabled></select></label><button id="play" disabled>재생</button><button id="pause" disabled>정지</button><button id="reset" disabled>처음으로</button><button id="previous" disabled>이전 행</button><button id="next" disabled>다음 행</button></div>
 <label for="position">행 탐색 (키보드 방향키 사용)</label><input id="position" type="range" min="0" max="7408" value="0" disabled aria-describedby="position-help"><p id="position-help">원본 행 순서입니다. cycle 번호는 행 ID나 독립 세션 ID로 사용하지 않습니다.</p>
 <p id="play-status" role="status">일시정지 · 데이터 확인 전</p><p id="current-time"></p>
-<div class="quality" id="current-quality" role="status"></div><div id="chart"></div><p>그래프는 현재 행까지 최대 120행이며 X축은 실제 UTC 시각입니다. 결측·시간 공백에서는 선을 끊습니다. 긴 공백을 포함하면 실제 시간축 때문에 관측점이 한쪽에 좁게 모일 수 있습니다. 원본에 명시된 단위가 없어 값에 단위를 임의로 붙이지 않습니다.</p>
+<div class="quality" id="current-quality" role="status"></div><div id="chart"></div><p id="chart-quality"></p><p>그래프는 현재 행까지 최대 120행이며 X축은 실제 UTC 시각입니다. 결측·시간 공백에서는 선을 끊습니다. 긴 공백을 포함하면 실제 시간축 때문에 관측점이 한쪽에 좁게 모일 수 있습니다. 원본에 명시된 단위가 없어 값에 단위를 임의로 붙이지 않습니다.</p>
 <div class="controls"><button data-jump="missing" disabled>다음 센서 결측</button><button data-jump="gap" disabled>다음 시간 공백</button><button data-jump="stop" disabled>다음 보호 정지 기록</button><button data-jump="grip" disabled>다음 그립 손실 기록</button></div>
 </section>
 <section aria-labelledby="records-title"><h2 id="records-title">3. 센서 값과 실제 기록 구분</h2>

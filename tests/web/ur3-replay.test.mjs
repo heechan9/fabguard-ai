@@ -41,6 +41,7 @@ test('UR3 is a separate linked real-record route and preserves CSP and theme con
  assert.match(html,/default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'/);
  assert.doesNotMatch(html,/unsafe-inline|unsafe-eval/);
  const app=readFileSync(new URL('../../web/robot/ur3/app.mjs',import.meta.url),'utf8');
+ assert.match(app,/left=92/);assert.match(app,/points.slice\(1\).filter\(p=>p.breakBefore\)/);
  assert.match(app,/if\(\$\('current-quality'\).textContent!==quality\)/);
  assert.match(app,/querySelectorAll\('main button,main select,main input'\)/);
  for(const route of ['index.html','robot/index.html','smt/index.html']){
