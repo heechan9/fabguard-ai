@@ -1,6 +1,9 @@
 import csv
 import importlib.util
+import json
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -70,6 +73,23 @@ class PriorityComparisonTests(unittest.TestCase):
                 with self.assertRaises(ValueError): self.check()
         self.write(self.b, original[:-1])
         with self.assertRaises(ValueError): self.check()
+
+    def test_malformed_quoted_csv_is_blocked_by_cli(self):
+        header = 'sample_id,timestamp,risk_score,rank,prediction,label,model\n'
+        self.a.write_text(header + '0,2008-10-01,0.8,1,0,0,frozen', encoding='utf-8')
+        for malformed in ['"frozen', '"fro"zen']:
+            with self.subTest(model=malformed):
+                self.b.write_text(header + '0,2008-10-01,0.8,1,0,0,' + malformed,
+                                  encoding='utf-8')
+                before = self.a.read_bytes(), self.b.read_bytes()
+                result = subprocess.run(
+                    [sys.executable, str(ROOT/'verification/compare_priority_runs.py'),
+                     '--reference', str(self.a), '--actual', str(self.b),
+                     '--score-atol', '0', '--top-k', '1'],
+                    capture_output=True, text=True, check=False)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertEqual(json.loads(result.stdout)['status'], 'BLOCKED')
+                self.assertEqual(before, (self.a.read_bytes(), self.b.read_bytes()))
 
     def test_invalid_configuration_blocks(self):
         for atol in [-1, float('nan'), float('inf')]:

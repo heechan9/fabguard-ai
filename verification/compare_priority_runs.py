@@ -11,7 +11,7 @@ import platform
 
 def read_table(path):
     raw = Path(path).read_bytes()
-    reader = csv.DictReader(io.StringIO(raw.decode('utf-8-sig'), newline=''))
+    reader = csv.DictReader(io.StringIO(raw.decode('utf-8-sig'), newline=''), strict=True)
     required = {'sample_id', 'timestamp', 'risk_score', 'rank', 'prediction', 'label', 'model'}
     fields = reader.fieldnames or []
     if len(set(fields)) != len(fields) or not required.issubset(fields):
