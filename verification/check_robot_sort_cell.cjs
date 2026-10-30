@@ -55,7 +55,9 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
    assert.notEqual(await page.locator('#volume').innerText(),'누락');assert.match(await page.locator('#robot-phase').innerText(),/검토 보류 위치/);
    assert.equal(await page.locator('#robot-review').getAttribute('data-state'),'hold');assert.equal(await page.locator('#context-review ol li').count(),1);assert.equal(await page.locator('.context-hypotheses article').count(),3);
    assert.match(await page.locator('#context-review').innerText(),/변경 전:.*변경 후:/s);assert.match(await page.locator('#robot-next').innerText(),/자동 해제하지/);
-   await capture(page.locator('#context-review'),width+'-'+fault+'-context.png');await capture(page.locator('#viewport'),width+'-'+fault+'-hold.png');
+   await capture(page.locator('#context-review'),width+'-'+fault+'-context.png');
+   await page.locator('#context-review').evaluate(el=>scrollTo({top:el.getBoundingClientRect().top+scrollY-document.querySelector('.topbar').getBoundingClientRect().height-12,behavior:'instant'}));
+   await page.screenshot({path:path.join(output,width+'-'+fault+'-review-viewport.png')});await capture(page.locator('#viewport'),width+'-'+fault+'-hold.png');
    await page.locator('#board-select').selectOption('PCB-001');assert.equal(await page.locator('#context-review ol').count(),0);assert.equal(await page.locator('#robot-review').getAttribute('data-state'),'ok');
    await page.locator('#reset').press('Enter');assert.equal(await page.locator('#context-review ol').count(),0);assert.equal(await page.locator('.context-hypotheses article').count(),0);assert.equal(await page.locator('#review-count').innerText(),'0');
   }

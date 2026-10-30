@@ -17,6 +17,7 @@ fs.mkdirSync(output,{recursive:true});
     for(const selector of selectors){const surface=await page.locator(selector).first().evaluate(e=>({color:getComputedStyle(e).color,bg:getComputedStyle(e).backgroundColor,image:getComputedStyle(e).backgroundImage}));assert.equal(surface.image,'none',name+' '+selector);assert.ok(['rgb(209, 217, 226)','rgb(197, 207, 218)'].includes(surface.bg),JSON.stringify({selector,surface}));}
    }
    const overflow=await page.evaluate(()=>({inner:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(overflow.scroll<=width+1,JSON.stringify({name,width,overflow}));
+   await page.screenshot({path:path.join(output,`${width}-${name}-viewport.png`)});
    await page.screenshot({path:path.join(output,`${width}-${name}.png`),fullPage:true});
    const contrast=await page.evaluate(()=>{
     const rgba=s=>{const c=(s.match(/[\d.]+/g)||[]).map(Number);if(c.length===3)c.push(1);return c;},lum=c=>c.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
