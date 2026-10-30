@@ -88,6 +88,14 @@
 
 ### 프로젝트 상태
 
+**2026-10-30 기준:** main은 [`9d034091cc366d92df9cfeb45bcf21a2f04583d8`](https://github.com/heechan9/fabguard-ai/commit/9d034091cc366d92df9cfeb45bcf21a2f04583d8)입니다. 아래 배포 기능·오프라인 연구·미병합 Draft를 구분합니다. 웹 화면이 풍부해진 것은 모델 성능이나 실제 공장 효과가 개선됐다는 뜻이 아닙니다.
+
+- **배포된 화면:** [#187](https://github.com/heechan9/fabguard-ai/pull/187)·[#188](https://github.com/heechan9/fabguard-ai/pull/188)의 PCB 전후 맥락 타임라인, 조건 변경·정비 후 HOLD 설명, 설비·자재·측정 가설과 다음 확인 항목을 제공합니다. 모두 설명용 예시이며 원인 확정·자동 HOLD 해제가 아닙니다.
+- **현재 테마·이송 시연:** [#189](https://github.com/heechan9/fabguard-ai/pull/189)의 더 어두운 Silver / Dark 전환과 선택 유지, Cooling 단계 R-02 이송·빈 복귀가 반영됐습니다. [배포 검증 기록](https://github.com/heechan9/fabguard-ai/actions/runs/41096943657)은 24개 정적 자산과 1366/390/360px의 15개 브라우저 검사입니다. 실제 장비 제어·충돌 안전·디지털 트윈 검증이 아닙니다.
+- **사용 순서:** [웹 데모](https://fabguard-ai.vercel.app/)에서 위험순위의 근거를 보고, [SMT 실험실](https://fabguard-ai.vercel.app/smt/)에서 PCB를 선택해 맥락·HOLD·검토 가설을 확인합니다. Silver / Dark는 읽기 테마이고, 3D 움직임은 합성 시연입니다. 코드·단위검사는 아래 [빠른 시작](#빠른-시작)을 따릅니다.
+- **실제 기록과 합성 화면의 경계:** Fledge의 WSL 연동·합성 입력 검증은 실제 반도체 공장 연결 증거가 아닙니다. 공개 로봇 실험실 센서 기록, SECOM 오프라인 평가, SMT 3D 합성 움직임은 서로 다른 자료이며 하나의 현장 성능으로 합치지 않습니다.
+
+
 | 구분 | 현재 상태 |
 |---|---|
 | **구현·재현 확인** | SECOM 데이터 감사, 누출 방지 학습, 시간순 평가, Top-K 우선점검표, 재현 명령과 웹 데모. 성능 수치는 홀드아웃 노출 이력이 있는 잠정 결과 |
@@ -101,6 +109,14 @@
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
 ### 진행 중인 실험 (Draft PR · main 미반영)
+
+2026-10-30 확인: 다음 작업은 **open Draft이며 아직 main·배포 기능이 아닙니다**.
+
+- [#190 UR3 기록·합성 바닥 AGV](https://github.com/heechan9/fabguard-ai/pull/190), head `b38574cd96b4a042472a5c4b2620e0bc8bd98aa4`: 실제 UR3 센서 기록 재생과 별도의 합성 A-01 고정경로 이송 시연을 통합하는 후보입니다. UR3 기록으로 로봇 자세를 재구성하거나 AGV를 제어하지 않습니다. 정확한 head의 CI·화면 검토·병합·배포 확인은 별도입니다.
+- [#191 저장 우선점검 CSV 비교](https://github.com/heechan9/fabguard-ai/pull/191), head `ce2ba66d96bd006c3a8d310b594202b428e4453b`: 같은 ID·시각·라벨·모델 계약의 저장 결과 차이를 보고하는 별도 CLI 후보입니다. 자기비교·저장 결과 감사는 새 추론·독립 재현·모델 성능 검증이 아닙니다.
+- [#179](https://github.com/heechan9/fabguard-ai/pull/179)·[#180](https://github.com/heechan9/fabguard-ai/pull/180)의 로봇 기록 작업, [#182](https://github.com/heechan9/fabguard-ai/pull/182)의 BOSCH/voraus 자료 자격 감사, [#183](https://github.com/heechan9/fabguard-ai/pull/183)의 학습 분포·P-A-D-A·입력 계약, [#184](https://github.com/heechan9/fabguard-ai/pull/184)의 현장 대응·알람 부담 평가 계획도 별도 미병합입니다. 제안·검사 통과를 현장 검증이나 채택으로 바꾸지 않습니다.
+
+아래 세 데이터 실험 역시 기존 Draft 상태를 유지합니다.
 
 | 실험 | 확인한 내용 | 해석 경계 |
 |---|---|---|
@@ -351,3 +367,4 @@ PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir res
 ### 동일 조건 성능 비교와 검증 한계
 
 [비교 성적표](docs/review/PERFORMANCE_EVIDENCE_20260925.md): V1 후기 AP는 Logistic 0.094692, RF 0.093477입니다. RF가 후기 평가에서 우수하다고 결론내리지 않습니다. RF 상위 40건은 불량 24건 중 5건을 포착하고 임계값 0.5 재현율은 0입니다. Phase1은 축소 학습·별도 보정 결과로 구분합니다. 후속 SECOM 실험은 노출된 홀드아웃의 탐색적 평가이며 독립 검증이 아닙니다.
+
