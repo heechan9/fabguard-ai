@@ -1,0 +1,148 @@
+{
+  "scope": "observed_training_descriptive_sensitivity_only",
+  "deletion_recommended": false,
+  "original_data_modified": false,
+  "tie_policy": "first_in_frozen_training_order",
+  "baseline": {
+    "feature": "feature_475",
+    "groups": {
+      "pass": {
+        "n_total": 1095,
+        "n_observed": 1091,
+        "n_missing": 4,
+        "missing_rate": 0.0036529680365296802,
+        "mean": 4.297289367552703,
+        "std": 1.604246545305733,
+        "quantiles": {
+          "0.05": 2.67945,
+          "0.25": 3.80175,
+          "0.5": 4.4005,
+          "0.75": 4.8037,
+          "0.95": 5.351649999999999
+        }
+      },
+      "fail": {
+        "n_total": 80,
+        "n_observed": 80,
+        "n_missing": 0,
+        "missing_rate": 0.0,
+        "mean": 4.8601425,
+        "std": 4.280019075634026,
+        "quantiles": {
+          "0.05": 2.65021,
+          "0.25": 3.38095,
+          "0.5": 4.489850000000001,
+          "0.75": 4.993525,
+          "0.95": 5.873124999999999
+        }
+      }
+    },
+    "difference_direction": "fail_minus_pass",
+    "mean_difference": 0.5628531324472972,
+    "standardized_mean_difference": 0.29511099132460633,
+    "standardized_difference_unavailable_reason": null
+  },
+  "leave_one_group_maximum_out": [
+    {
+      "group": "pass",
+      "available": true,
+      "excluded_sample_id": "secom_0275",
+      "excluded_value": 39.3528,
+      "maximum_tie_count": 1,
+      "summary": {
+        "feature": "feature_475",
+        "groups": {
+          "pass": {
+            "n_total": 1094,
+            "n_observed": 1090,
+            "n_missing": 4,
+            "missing_rate": 0.003656307129798903,
+            "mean": 4.265128348623854,
+            "std": 1.202696449941375,
+            "quantiles": {
+              "0.05": 2.678985,
+              "0.25": 3.801575,
+              "0.5": 4.39975,
+              "0.75": 4.80345,
+              "0.95": 5.34329
+            }
+          },
+          "fail": {
+            "n_total": 80,
+            "n_observed": 80,
+            "n_missing": 0,
+            "missing_rate": 0.0,
+            "mean": 4.8601425,
+            "std": 4.280019075634026,
+            "quantiles": {
+              "0.05": 2.65021,
+              "0.25": 3.38095,
+              "0.5": 4.489850000000001,
+              "0.75": 4.993525,
+              "0.95": 5.873124999999999
+            }
+          }
+        },
+        "difference_direction": "fail_minus_pass",
+        "mean_difference": 0.5950141513761462,
+        "standardized_mean_difference": 0.36989124258426215,
+        "standardized_difference_unavailable_reason": null
+      }
+    },
+    {
+      "group": "fail",
+      "available": true,
+      "excluded_sample_id": "secom_0634",
+      "excluded_value": 38.2143,
+      "maximum_tie_count": 1,
+      "summary": {
+        "feature": "feature_475",
+        "groups": {
+          "pass": {
+            "n_total": 1095,
+            "n_observed": 1091,
+            "n_missing": 4,
+            "missing_rate": 0.0036529680365296802,
+            "mean": 4.297289367552703,
+            "std": 1.604246545305733,
+            "quantiles": {
+              "0.05": 2.67945,
+              "0.25": 3.80175,
+              "0.5": 4.4005,
+              "0.75": 4.8037,
+              "0.95": 5.351649999999999
+            }
+          },
+          "fail": {
+            "n_total": 79,
+            "n_observed": 79,
+            "n_missing": 0,
+            "missing_rate": 0.0,
+            "mean": 4.437937974683544,
+            "std": 2.0273274088419955,
+            "quantiles": {
+              "0.05": 2.65002,
+              "0.25": 3.376,
+              "0.5": 4.4718,
+              "0.75": 4.985200000000001,
+              "0.95": 5.84476
+            }
+          }
+        },
+        "difference_direction": "fail_minus_pass",
+        "mean_difference": 0.14064860713084126,
+        "standardized_mean_difference": 0.0859755873827026,
+        "standardized_difference_unavailable_reason": null
+      }
+    }
+  ],
+  "source_sha256": {
+    "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+    "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+    "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+  },
+  "frozen_input_sha256": {
+    "results/v1/train_split.csv": "d47b5254102519050844e21f0076537644d45dfe7262d596ad5c7887e6e81aec",
+    "results/v1/final_model_importance.csv": "844cdc475f21263b26f6078617e3bce7613aba7432979c7424b80d0b18accb4e"
+  }
+}
