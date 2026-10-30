@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kind: [robot, context, silver, theme, transfer]
+        kind: [robot, context, silver, theme, transfer, floor-agv, ur3]
         width: [1366, 390, 360]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -61,6 +61,10 @@ jobs:
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_robot_sort_cell.cjs
           elif [ "$REVIEW_KIND" = theme ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_theme_ui.cjs
+          elif [ "$REVIEW_KIND" = ur3 ]; then
+            FABGUARD_UI_OUTPUT="$RUNNER_TEMP/release-ui/ur3" NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 240s node verification/check_ur3_replay.cjs
+          elif [ "$REVIEW_KIND" = floor-agv ]; then
+            NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_floor_agv.cjs
           elif [ "$REVIEW_KIND" = transfer ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_transfer_robot.cjs
           elif [ "$REVIEW_KIND" = silver ]; then

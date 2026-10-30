@@ -7,3 +7,7 @@
 @media(max-width:700px){.smt-page .experience-map>div{grid-template-columns:minmax(0,1fr)}}
 
 .robot-review{padding:10px 14px;border-left:3px solid #6c8997;background:rgba(8,24,33,.25)}.robot-review p{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px}.robot-review[data-state="hold"]{border-color:#e8aa4e}.robot-review[data-state="review"]{border-color:#d75948}.robot-review[data-state="ok"]{border-color:#43b998}.robot-evidence-boundary{margin-top:14px}.robot-evidence-boundary summary{cursor:pointer;font-weight:600}@media(max-width:600px){.robot-review p{grid-template-columns:1fr;gap:2px}}
+
+.floor-agv-info{margin:14px 0;padding:16px;border:1px solid var(--line,#536776);border-radius:12px;background:var(--panel,#17242e)}
+.floor-agv-info h3{margin:0 0 12px}.floor-agv-info p{line-height:1.65;overflow-wrap:anywhere}.floor-agv-controls{display:flex;flex-wrap:wrap;gap:8px}.floor-agv-info button{min-height:44px}.floor-agv-info [data-phase="blocked"]{font-weight:700}
+.floor-agv-controls button[aria-pressed="true"]{outline:2px solid var(--cyan,#43b998);outline-offset:2px}
