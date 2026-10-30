@@ -1,6 +1,6 @@
 /* Silver reader surfaces. The scene, photographs and diagnostic drawings retain
    their own dark palette; blue navigation is not a quality-status indicator. */
-:root{--bg:#b8c2ce;--panel:#d1d9e2;--panel2:#c5cfda;--outer:#a7b3c1;--text:#17202e;--muted:#405161;--reader-muted:#405161;--line:#8a9aaa;--cyan:#004b9e;--blue:#004b9e;--amber:#805000;--red:#a32727;--normal:#116143;--radius:14px;color-scheme:light;background:var(--outer)}
+:root{--bg:#b8c2ce;--panel:#d1d9e2;--panel2:#c5cfda;--outer:#a7b3c1;--text:#17202e;--muted:#405161;--reader-muted:#405161;--line:#8a9aaa;--cyan:#004b9e;--blue:#004b9e;--amber:#714600;--red:#8f2424;--normal:#116143;--radius:14px;color-scheme:light;background:var(--outer)}
 body{background:var(--bg);color:var(--text)}
 body .ambient,body .hero:after{display:none}
 body .topbar{background:var(--panel);border-top:4px solid var(--blue);border-bottom:1px solid var(--line);backdrop-filter:none}
@@ -47,7 +47,7 @@ body.smt-page button:hover{background:#b5c7db;border-color:var(--blue)}
 body.smt-page button:disabled{opacity:.65}
 body.smt-page :is(.primary,.station-strip button.active),body.smt-page #inside-view[aria-pressed=true]{background:var(--blue);color:#fff;border-color:var(--blue)}
 body.smt-page .station-strip button.active small{color:#fff}
-body.smt-page :is(.station-strip button small,.field-label,.metrics span,.metrics small,.history-heading,.history-heading span,#history time,#history li,.reason p,.measurement-card strong,.technical-terms p,.experience-map a span,.viewbar b,footer b){color:var(--muted)}
+body.smt-page :is(.station-strip button small,.field-label,.metrics span,.metrics small,.history-heading,.history-heading span,.reason p,.measurement-card strong,.technical-terms p,.experience-map a span,.viewbar b,footer b){color:var(--muted)}
 body.smt-page :is(.measurement-details summary,.technical-terms h3,.equipment-reference summary){color:var(--blue)}
 body.smt-page .scenario-buttons button.armed{background:#fff0d2;border-color:var(--amber)}
 body.smt-page .board-status{color:var(--normal)}
@@ -98,3 +98,11 @@ body.smt-page :is(.panel,.workspace),body.analysis-page .panel{background:var(--
 
 body .system-state,body .candidate-list article.deferred em{color:var(--muted)}
 body .candidate-list article.next em,body .brand b{color:var(--blue)}
+
+/* Rendered contrast audit: these labels previously retained the dark-theme ink. */
+body .live{color:var(--normal)}
+body :is(.principles-note small,.evidence-levels span,.pipeline>article>span){color:var(--muted)}
+body .table-shell th{color:var(--text);background:var(--panel2)}
+body .tour-role-label{color:var(--blue)}
+
+body.smt-page #history time,body.smt-page #history li{color:var(--muted)}

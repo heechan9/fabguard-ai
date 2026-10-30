@@ -19,7 +19,7 @@ fs.mkdirSync(output,{recursive:true});
    const overflow=await page.evaluate(()=>({inner:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(overflow.scroll<=width+1,JSON.stringify({name,width,overflow}));
    await page.screenshot({path:path.join(output,`${width}-${name}.png`),fullPage:true});
    const contrast=await page.evaluate(()=>{
-    const rgba=s=>(s.match(/[\d.]+/g)||[]).map(Number),lum=c=>c.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
+    const rgba=s=>{const c=(s.match(/[\d.]+/g)||[]).map(Number);if(c.length===3)c.push(1);return c;},lum=c=>c.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
     const issues=[];
     for(const el of document.querySelectorAll('body *')){
      if(![...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())||!el.getClientRects().length||el.closest('svg,.hero-visual,#viewport,.inspection-drawing'))continue;

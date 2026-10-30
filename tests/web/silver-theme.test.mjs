@@ -14,7 +14,7 @@ test('silver tokens retain contrasting text and distinct semantic states',()=>{
  for(const token of ['--bg:#b8c2ce','--panel:#d1d9e2','--outer:#a7b3c1','--text:#17202e','--cyan:#004b9e'])assert.ok(css.includes(token),token);
  const rgb=h=>h.match(/\w\w/g).map(x=>parseInt(x,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
  const lum=h=>rgb(h).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
- for(const [fg,bg] of [['17202e','b8c2ce'],['405161','b8c2ce'],['004b9e','d1d9e2'],['004b9e','b8c2ce'],['004b9e','c5cfda'],['805000','fff0d2'],['a32727','f6dddd'],['116143','d1d9e2']]) assert.ok((Math.max(lum(fg),lum(bg))+.05)/(Math.min(lum(fg),lum(bg))+.05)>=4.5,fg+' on '+bg);
+ for(const [fg,bg] of [['17202e','b8c2ce'],['405161','b8c2ce'],['004b9e','d1d9e2'],['004b9e','b8c2ce'],['004b9e','c5cfda'],['714600','fff0d2'],['714600','b8c2ce'],['8f2424','f6dddd'],['8f2424','b8c2ce'],['116143','d1d9e2']]) assert.ok((Math.max(lum(fg),lum(bg))+.05)/(Math.min(lum(fg),lum(bg))+.05)>=4.5,fg+' on '+bg);
  assert.match(css,/\.robot-review\[data-state="waiting"\]/);
  assert.match(css,/\.robot-review\[data-state="hold"\]/);
  assert.match(css,/#viewport/);
@@ -23,4 +23,14 @@ test('silver component overrides outrank legacy dark component selectors',()=>{
  const css=read('web/silver.css');
  // Scope with body + page + component: (0,2,1) > legacy (0,2,0).
  for(const selector of ['body.smt-page :is(.panel,.workspace)','body.analysis-page .panel','body.smt-page .scenario-buttons button','body.smt-page .station-strip button'])assert.ok(css.includes(selector),selector);
+});
+
+test('rendered contrast scanner recognizes opaque rgb and rgba backgrounds',()=>{
+ const scanner=read('verification/check_silver_ui.cjs');
+ const definition=scanner.match(/const rgba=(.*?),lum=c=>/)[1];
+ const rgba=Function('return ('+definition+')')();
+ assert.deepEqual(rgba('rgb(0, 75, 158)'),[0,75,158,1]);
+ assert.deepEqual(rgba('rgba(0, 75, 158, 0.5)'),[0,75,158,.5]);
+ assert.deepEqual(rgba('rgba(0, 75, 158, 0)'),[0,75,158,0]);
+ assert.deepEqual(rgba('rgba(0, 75, 158, 1)'),[0,75,158,1]);
 });
