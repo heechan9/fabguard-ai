@@ -88,6 +88,8 @@ FabGuard의 현재 역할은 공개 데이터의 생산 건별 위험순위와 �
 
 ## 관련 문서와 참고 범위
 
+- [경보→근거→사람 검토→대응 기록과 평가 계획](FIELD_RESPONSE_EVALUATION.md): 기존 구현과 현장 제안을 구분하고 오경보·누락·알람 부담·임계값 선택을 함께 검토
+
 - [직무 연계](ROLE_ALIGNMENT.md): 구현 증거와 면접 설명
 - [스마트팩토리 연계](SMART_FACTORY_INTEGRATION.md): 정보 흐름과 KPI 경계
 - [도메인 전문가 검토](DOMAIN_EXPERT_REVIEW.md): 검토 체크리스트
