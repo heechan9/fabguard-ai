@@ -1,10 +1,10 @@
 name: Synthetic robot sorting UI
 on:
   pull_request:
-    paths: ['web/**', 'verification/check_robot_sort_cell.cjs', 'verification/check_transfer_robot.cjs', '.github/workflows/robot-sort-ui.yml']
+    paths: ['web/**', 'verification/check_robot_sort_cell.cjs', 'verification/check_transfer_robot.cjs', 'verification/check_floor_agv.cjs', '.github/workflows/robot-sort-ui.yml']
   push:
     branches: [feat/synthetic-robot-sort-cell]
-    paths: ['web/smt/**', 'verification/check_robot_sort_cell.cjs', 'verification/check_transfer_robot.cjs', '.github/workflows/robot-sort-ui.yml']
+    paths: ['web/smt/**', 'verification/check_robot_sort_cell.cjs', 'verification/check_transfer_robot.cjs', 'verification/check_floor_agv.cjs', '.github/workflows/robot-sort-ui.yml']
 permissions:
   contents: read
 jobs:
@@ -14,7 +14,7 @@ jobs:
       matrix:
         width: [1366, 390, 360]
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 24
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,6 +43,7 @@ jobs:
           trap 'kill "$SERVER_PID"' EXIT
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_robot_sort_cell.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_transfer_robot.cjs
+          NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_floor_agv.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

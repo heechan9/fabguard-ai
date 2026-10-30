@@ -1,0 +1,91 @@
+name: UR3 source and replay verification
+on:
+  pull_request:
+    paths:
+      - 'web/**'
+      - 'scripts/build_ur3_replay.py'
+      - 'verification/check_ur3_replay.cjs'
+      - '.github/workflows/ur3-replay-ui.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Rebuild from pinned UCI original without new dependencies
+        run: |
+          python -c "import urllib.request; urllib.request.urlretrieve('https://archive.ics.uci.edu/static/public/963/ur3+cobotops.zip', '/tmp/ur3-source.zip')"
+          python scripts/build_ur3_replay.py --archive /tmp/ur3-source.zip --output "$RUNNER_TEMP/ur3-derived/data.json" > "$RUNNER_TEMP/ur3-audit.json"
+          cmp web/robot/ur3/data.json "$RUNNER_TEMP/ur3-derived/data.json"
+          cmp web/robot/ur3/data-hash.mjs "$RUNNER_TEMP/ur3-derived/data-hash.mjs"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ur3-source-${{ github.sha }}
+          path: ${{ runner.temp }}/ur3-audit.json
+  browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1366, 360, 390]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Existing Chrome, project, Korean fonts
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          python -m pip install .
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Isolated driver only
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/ur3-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Loopback-only UR3 and existing feature regression
+        env:
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_BASE_URL: http://127.0.0.1:8764
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
+          FABGUARD_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          FABGUARD_PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/ur3-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8764/robot/ur3/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          export NODE_PATH="$RUNNER_TEMP/ur3-driver/node_modules"
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/ur3" timeout 240s node verification/check_ur3_replay.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/robot" timeout 360s node verification/check_robot_sort_cell.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/context" timeout 180s node verification/check_context_review.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/theme" timeout 360s node verification/check_theme_ui.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/transfer" timeout 360s node verification/check_transfer_robot.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ur3-ui-${{ matrix.width }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/ur3-evidence
+            ${{ runner.temp }}/ur3-server.log
+          retention-days: 14
