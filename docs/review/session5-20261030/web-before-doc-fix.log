@@ -1,0 +1,200 @@
+✔ zoom permits a closer view while bounding pinch, wheel and keyboard inputs (2.151442ms)
+✔ station framing fits the widest machine on phone and desktop (0.546786ms)
+✔ generated Python package retains normal/held/missing reference evidence (3.216055ms)
+✔ browser blocks invalid IDs, empty rationale, future/past decisions and held release (4.65498ms)
+✔ export binds exact UTF-8 bytes and refuses duplicate or empty decisions (12.072802ms)
+✔ invalid shape, scope, chronology and mismatched queue fail closed (2.7937ms)
+✔ a condition-clear row still needs a complete explicit reviewer decision (0.706429ms)
+✔ BOM, CRLF, quoted comma and escaped quotes (4.393936ms)
+✔ reject malformed headers and quotes (1.497532ms)
+✔ zero accepted; missing, NaN, Infinity, negative, duplicate quarantined (2.152086ms)
+✔ mapping and context fail closed (0.3931ms)
+✔ column mismatch quarantined; HTML is plain data (0.347891ms)
+✔ row limit accepts boundary and stops before malformed trailing content (42.17652ms)
+✔ column limit covers headers and data, accepts boundary (0.644398ms)
+✔ binary signatures, controls and non-UTF8 rejected before parsing (0.914077ms)
+✔ UTF8 BOM, Korean, tabs and quoted newlines remain valid (1.048502ms)
+✔ byte limits also apply to decoder and direct parser (20.39472ms)
+✔ frozen baseline connects actual mapped rows to a pending review queue (9.051674ms)
+✔ downloadable example goes through the same CSV and screening path (0.951424ms)
+✔ rejected rows cannot be silently dropped from time-series analysis (0.689907ms)
+✔ mixed process context and invalid chronology fail closed (3.548834ms)
+✔ baseline selection and mapping must be explicit and valid (2.186516ms)
+✔ an unstable baseline blocks later interpretation (0.427528ms)
+✔ school reference covers all existing stations without inventing dimensions (2.4888ms)
+✔ download examples keep missing measurements and unknown inspections explicit (1.783816ms)
+✔ each PV source binds its report to audit rows/hash and correct source type (2.823464ms)
+✔ collection warnings survive successful structural and SDT checks (0.271548ms)
+✔ weather stays resource-only while RTE admits annual evidence (0.575164ms)
+✔ canonical SECOM V1 counts agree with stored display summary (1.243051ms)
+✔ Phase 1 scenarios use their own outcomes and explicit cost assumptions (2.21974ms)
+✔ RF canonical rows expose global scope, never a per-row explanation (2.185401ms)
+✔ linear contribution and unknown scopes retain distinct interpretation (0.650287ms)
+✔ all added station and floor geometry has finite transformed vertices and valid bounds (45.133561ms)
+✔ added reflow cover stays clear of the bare PCB swept volume in three dimensions (2.21398ms)
+✔ all five authored cases have explicit assumptions and deterministic results (3.969023ms)
+✔ internal void does not imply an electrical failure or product rejection (0.271844ms)
+✔ open and short do not invent X-ray observations (0.250715ms)
+✔ missing inspections never become normal results (0.317942ms)
+✔ case changes, board changes and resets invalidate earlier results (0.774684ms)
+✔ invalid cases and methods fail explicitly (0.412174ms)
+✔ inspection experience cannot mutate production simulation or its export (1.488582ms)
+✔ ten-second introduction contains overview, every station in order, and an outro (2.760871ms)
+✔ invalid and out-of-range presentation times cannot create invalid camera inputs (0.260498ms)
+✔ recording uses only supported formats and never labels WebM as MP4 (0.275236ms)
+✔ two and three fingers cannot select on any release, including no movement (1.257653ms)
+✔ cancel, unknown release and dragging do not select (0.442789ms)
+✔ lot boundaries ignore fault injection and counts reconcile with boards (2.497764ms)
+✔ NG and missing are overlapping counts, not a partition (0.207692ms)
+✔ unmeasured values remain hidden even when raw synthetic values exist (1.788967ms)
+✔ mixed batch retains normal, low paste, heat and missing evidence (1.68116ms)
+✔ inclusive limits, both directions, invalid numbers and reset (1.183611ms)
+✔ simulation exposes the NVIDIA AOI plan without claiming a running model (1.877833ms)
+✔ simulation mirrors the contract runtime and validation gates (0.503088ms)
+✖ headline counts match canonical evaluation CSV, including missed and normal inspections (4.65927ms)
+✔ missing or contradictory evidence fails before rendering a success claim (3.336982ms)
+✔ research snapshot pins each source to its verified commit (1.867316ms)
+✔ claims distinguish abstention, adverse target result, synthetic scope and unrun work (0.39512ms)
+✔ static research page has no executable code or private artifact links (0.628376ms)
+✔ local links exist and section IDs resolve uniquely (1.583196ms)
+✔ tables and keyboard navigation expose accessible context (0.439529ms)
+✔ integrated navigation exposes separate robot demo and detailed SECOM record without replacing app (2.033068ms)
+✔ synthetic NG and missing measurements cannot be silently sent to normal (0.838899ms)
+✔ pick, transport and placement use continuous endpoints and separate bins (0.647622ms)
+✔ shared simulation pause freezes robot pose; reset clears it without changing export contract (2.1775ms)
+✔ minimum sample capacity failure marks minimum samples, not period (2.815339ms)
+✔ multiple invalid fields focus first in form order and preserve existing help (0.819652ms)
+✔ recorded zero alarms is the only way to show "no alarm" (5.032873ms)
+✔ unavailable, missing and malformed results render as not evaluated with null values (1.023521ms)
+✔ null activity (no evaluable window) is null, not 0% (0.397734ms)
+✔ number formatting keeps null, undefined, NaN and 0 apart (0.443617ms)
+✔ partial calibration failure: failed method is not evaluated, others are (10.409669ms)
+✔ all calibrations failing stops the run with no evaluation rows (2.378654ms)
+✔ NaN detector input never becomes "within" (throws); normal UI windows never carry NaN (5.743659ms)
+✔ cancel (Clear/unlock) during a pending read discards the load (0.584893ms)
+✔ newer load wins even when the older one resolves last (17.448254ms)
+✔ repeated clicks commit exactly one complete set, atomically (3.40036ms)
+✔ a stale load cancelled between read and digest cannot commit (7.112498ms)
+✔ errors from stale loads are swallowed; errors from the current load are reported (0.559293ms)
+✔ fsum matches Python math.fsum on cancellation cases (3.784992ms)
+✔ windowing matches the Python backend window by window (32.728251ms)
+✔ exact boundary assignment matches Python (stored 0.15 < 3/20) (0.471734ms)
+✔ protocol results match Python: reference, calibration, alarm activity (22.968969ms)
+✔ fail closed: duplicate/reversed time and cadence mismatch invalidate the file (0.458778ms)
+✔ no performance numbers without onset labels; stability stays unverified (18.626864ms)
+✔ manifest guards: crossing groups, duplicate bytes, missing or wrong expected hash (45.838531ms)
+✔ invalid reference file stops the run before any alarm activity (9.104988ms)
+✔ config without declared cadence is rejected (no silent default) (0.362312ms)
+✔ strict CSV columns and numbers (1.579969ms)
+✔ synthetic example is labelled, deterministic and round-trips through the CSV contract (36.274215ms)
+✔ huge finite values fail closed as value_out_of_range (parity with Python v2) (7.714722ms)
+✔ huge gaps stay sparse: parity with Python and bounded time/memory (1.713781ms)
+✔ EmptyRun detector items equal the same number of nulls (parity with Python v2) (0.732441ms)
+✔ protocol with a huge-gap evaluation file completes with bounded output (27.258374ms)
+✔ scale floor and non-finite statistic fail closed (28.518991ms)
+✔ extreme finite spans fail closed with a clear reason (parity with Python v3) (5.995303ms)
+✔ runs never overlap and indices stay ordered near the safe-integer limit (0.632188ms)
+✔ subnormal and huge timestamps convert without Infinity/NaN (parity with Python v3) (0.878262ms)
+✔ protocol with an extreme-span evaluation file reports it invalid and still finishes (17.685764ms)
+✔ large DC reference cannot cross scale floor through rounded-mean variance (16.939757ms)
+✔ data is pinned to the frozen #170 head with source hashes (1.975634ms)
+✔ 13 candidates x 3 folds = 39 fits; summaries recompute from fold rows (0.830797ms)
+✔ fold windows match fold metrics and budgets (0.292796ms)
+✔ bottom line: row-missing feature did not increase captures for any model (1.006341ms)
+✔ page states scope limits and does not claim improvement or link a network source (1.135357ms)
+✔ robot page is labelled as a separate extension with synthetic and backend boundaries (0.525316ms)
+✔ 12 deterministic boards complete without manufacturing claims (5.150664ms)
+✔ fault is next board only, disclosed after measurement (0.688706ms)
+✔ heat is not exposed before reflow exit (0.504119ms)
+✔ missing SPI never falsely normal, including AOI OK (0.427383ms)
+✔ pause, pending replacement, invalid fault, end-of-batch guard (0.643873ms)
+✔ completed SMT run exports the manufacturing review contract (1.795141ms)
+✔ SMT page exposes the completed-run review export control (1.031849ms)
+✔ skip link focuses the current main content without changing the hash route (5.788928ms)
+✔ browser SPC agrees with Python for all interactive scenarios and blocked baseline (75.159197ms)
+✔ scenario changes preserve baseline and reset (1.829224ms)
+✔ acknowledgement never clears an active alarm or judges quality (1.942785ms)
+✔ recovery and acknowledgement remain independent in either order (1.046975ms)
+✔ reset and a new case remove stale events; snapshots cannot mutate state (0.540447ms)
+✔ READY never clears overdue maintenance; acknowledging it never completes work (0.233471ms)
+✔ case changes and resets clear stale READY and maintenance history; invalid cases leave state intact (0.591307ms)
+ℹ tests 120
+ℹ suites 0
+ℹ pass 119
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 900.270826
+
+✖ failing tests:
+
+test at tests/web/portfolio-story.test.mjs:15:1
+✖ headline counts match canonical evaluation CSV, including missed and normal inspections (4.65927ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /현장 의사결정 구조/. Input:
+  
+  '# FabGuard AI — 1페이지 검증 요약\n' +
+    '\n' +
+    '> **문제 정의:** 제한된 점검 여력 안에서 어떤 반도체 생산 기록을 엔지니어가 먼저 확인할지 순서를 제안한다. 자동 합격·불합격 판정이나 공정 제어가 목적이 아니다.\n' +
+    '\n' +
+    '## P-A-D-A: 문제에서 다음 확인까지\n' +
+    '\n' +
+    '| 단계 | 결론과 근거 |\n' +
+    '|---|---|\n' +
+    '| **P · Problem** | 제한된 점검 여력에서 먼저 볼 생산 기록을 정한다. 익명 센서가 고장의 원인인지 자동 판정하는 문제와 구분한다. |\n' +
+    '| **A · Analysis** | 기존 시간순 Test 392건의 AP **0.0935**, 상위40건에서 Fail **5/24**를 포착했다. 0.5 임계값에서는 TP=0이다. 기존 스모크 노출로 잠정 결과이며 새 성능이 아니다. [정본 결과](../results/v1/RESULTS_SUMMARY.md) |\n' +
+    '| **D · Decision 제안** | 연구용 점검 순위와 사람의 검토 근거로 사용한다. 현장 탐지/수율 개선/자동 제어 통과로 판단하지 않는다. [학습 구간 변수 분포 근거](SECOM_DISTRIBUTION_EVIDENCE.md)를 함께 보고 원인 후보도 추가 이력 없이 확정하지 않는다. |\n' +
+    '| **A · Action 제안** | 아래 후속 확인을 검토한 뒤 결정한다. 실제 조치·정비 완료 이력은 만들지 않는다. |\n' +
+    '\n' +
+    '| 다음 확인 | 담당·시점 | 현재 상태 |\n' +
+    '|---|---|---|\n' +
+    '| 학습 구간 분포·결측·월별 설명을 원본과 대조 | Codex 작성, 독립 검토 담당/Claude 검토 · 병합 승인 전 | 계산·검사 완료, 독립 검토 대기 |\n' +
+    '| BOSCH 시간·계측·단위·타깃/마스크·LOT 분할 확인 | 자료 제공자 확인 및 최희찬 승인 · 별도 실험 전 | [입력 계약 제안](BOSCH_INPUT_CONTRACT.md), 실험 준비 미완료 |\n' +
+    '| 독립 제조 자료의 사전 고정 평가 | 현장/데이터 담당자·프로젝트 소유자 · 입력과 사용 허가 확보 뒤 | 현장 성능 미검증 |\n' +
+    '\n' +
+    '최종 결정은 엔지니어에게 있다. 기존 정비 검토 도구는 원본 대조·보류·검토 기록을 지원하지만 현장 피드백이나 물리적 조치가 완료됐다는 뜻은 아니다. 상세 검증 표는 아래 근거로 분리한다.\n' +
+    '\n' +
+    '## 30초 방법론 확인\n' +
+    '\n' +
+    '| 검증 장치 | 확인된 내용 | 원본 근거 |\n' +
+    '|---|---|---|\n' +
+    '| 시간순 홀드아웃 | 앞 75%로 개발하고 뒤 25%(392건)를 시간순 평가 구간으로 분리했다. 홀드아웃은 엔지니어링 스모크에서 먼저 노출돼 현재 결과는 잠정적이다. | [정본 결과](../results/v1/RESULTS_SUMMARY.md) · [노출 기록](TEST_EXPOSURE.md) |\n' +
+    '| 최종 재실행 전 고정한 실험계약 | 분할, Train-only 전처리, 주지표 Average Precision, Top-K 점검예산과 주장 경계를 코드 실행 전에 문서로 고정했다. | [실험계약](validation/EXPERIMENT_CONTRACT.md) · [재현 방법](validation/REPRODUCIBILITY.md) |\n' +
+    '| RF 대 Logistic 통계검정 | 공유된 5개 repeat 평균을 짝으로 비교했다. Random Forest의 평균 AP 차이는 `+0.0382`, 양측 exact sign-flip `p=0.0625`로 5% 기준 통계적 유의성을 주장하지 않는다. | [Phase 1 검증](PHASE1_ADVANCED_VALIDATION.md) · [paired 비교 원자료](../results/phase1/model_pairwise_comparison.csv) |\n' +
+    '| Bootstrap 불확실성 | Top-10% Fail 포착률의 95% bootstrap 구간은 `6.2%–36.8%`(2,000회)로 넓다. 다른 공장으로의 일반화를 뜻하지 않는다. | [Phase 1 검증](PHASE1_ADVANCED_VALIDATION.md) · [bootstrap 원자료](../results/phase1/top_k_bootstrap.csv) |\n' +
+    '| Walk-forward 변동성 | 네 시간 구간의 PR-AUC는 `0.054–0.280`으로 변동해 단일 홀드아웃 값을 대표 성능으로 확대하지 않는다. | [Phase 1 검증](PHASE1_ADVANCED_VALIDATION.md) · [walk-forward 원자료](../results/phase1/walk_forward_metrics.csv) |\n' +
+    '\n' +
+    '## 정직성 서사\n' +
+    '\n' +
+    '**0.5 임계값에서 Fail을 한 건도 분류하지 못했다(TP=0) → 실패를 숨기지 않고, 제한된 점검예산에서 연속 점수로 검토 순서를 정하는 문제로 범위를 재정의했다.**\n' +
+    '\n' +
+    '근거: [V1 정본 결과](../results/v1/RESULTS_SUMMARY.md) · [핵심 연구질문](../RESEARCH_QUESTION.md) · [실패 거버넌스](FAILURE_GOVERNANCE.md)\n' +
+    '\n' +
+    '## 국제 데이터 검증 현황\n' +
+    '\n' +
+    '국가별 확장은 **관측(observed)·추정(estimated)·기준(reference)·합성(synthetic)** 네 유형을 분리하고 출처·스키마·시간·단위·해시·주장 경계를 같은 계약으로 검사한다. 이는 데이터 파이프라인 호환성 검증이며 SECOM 모델의 외부 성능 증거가 아니다.\n' +
+    '\n' +
+    '근거: [외부 데이터 자격 심사](EXTERNAL_DATA_QUALIFICATION.md) · [국가별 결과 목록](../results/README.md) · [PV_Live E2E 계약](PVLIVE_LOCAL_E2E.md)\n' +
+    '\n' +
+    '## 이 요약이 말하지 않는 것\n' +
+    '\n' +
+    '- 실제 반도체 공장에서의 현장 검증 또는 배포 완료\n' +
+    '- 수율·불량률·가동률·리드타임·비용 개선\n' +
+    '- 익명 변수의 물리적 의미, 불량 원인 또는 인과효과\n' +
+    '- 자동 Fail 판정, 공정 제어 또는 엔지니어 승인 대체\n' +
+    '- PV·기상·로봇·합성 SMT 자료를 이용한 SECOM 성능 향상\n' +
+    '\n' +
+    '다음 확인 실험은 독립 제조 데이터, 동결 모델과 사전 승인된 1회 평가가 준비된 뒤에만 수행한다: [V2 독립 확인 프로토콜](V2_PROTOCOL.md).\n'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/3916a62be241/fabguard-session5/tests/web/portfolio-story.test.mjs:56:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '# FabGuard AI — 1페이지 검증 요약\n\n> **문제 정의:** 제한된 점검 여력 안에서 어떤 반도체 생산 기록을 엔지니어가 먼저 확인할지 순서를 제안한다. 자동 합격·불합격 판정이나 공정 제어가 목적이 아니다.\n\n## P-A-D-A: 문제에서 다음 확인까지\n\n| 단계 | 결론과 근거 |\n|---|---|\n| **P · Problem** | 제한된 점검 여력에서 먼저 볼 생산 기록을 정한다. 익명 센서가 고장의 원인인지 자동 판정하는 문제와 구분한다. |\n| **A · Analysis** | 기존 시간순 Test 392건의 AP **0.0935**, 상위40건에서 Fail **5/24**를 포착했다. 0.5 임계값에서는 TP=0이다. 기존 스모크 노출로 잠정 결과이며 새 성능이 아니다. [정본 결과](../results/v1/RESULTS_SUMMARY.md) |\n| **D · Decision 제안** | 연구용 점검 순위와 사람의 검토 근거로 사용한다. 현장 탐지/수율 개선/자동 제어 통과로 판단하지 않는다. [학습 구간 변수 분포 근거](SECOM_DISTRIBUTION_EVIDENCE.md)를 함께 보고 원인 후보도 추가 이력 없이 확정하지 않는다. |\n| **A · Action 제안** | 아래 후속 확인을 검토한 뒤 결정한다. 실제 조치·정비 완료 이력은 만들지 않는다. |\n\n| 다음 확인 | 담당·시점 | 현재 상태 |\n|---|---|---|\n| 학습 구간 분포·결측·월별 설명을 원본과 대조 | Codex 작성, 독립 검토 담당/Claude 검토 · 병합 승인 전 | 계산·검사 완료, 독립 검토 대기 |\n| BOSCH 시간·계측·단위·타깃/마스크·LOT 분할 확인 | 자료 제공자 확인 및 최희찬 승인 · 별도 실험 전 | [입력 계약 제안](BOSCH_INPUT_CONTRACT.md), 실험 준비 미완료 |\n| 독립 제조 자료의 사전 고정 평가 | 현장/데이터 담당자·프로젝트 소유자 · 입력과 사용 허가 확보 뒤 | 현장 성능 미검증 |\n\n최종 결정은 엔지니어에게 있다. 기존 정비 검토 도구는 원본 대조·보류·검토 기록을 지원하지만 현장 피드백이나 물리적 조치가 완료됐다는 뜻은 아니다. 상세 검증 표는 아래 근거로 분리한다.\n\n## 30초 방법론 확인\n\n| 검증 장치 | 확인된 내용 | 원본 근거 |\n|---|---|---|\n| 시간순 홀드아웃 | 앞 75%로 개발하고 뒤 25%(392건)를 시간순 평가 구간으로 분리했다. 홀드아웃은 엔지니어링 스모크에서 먼저 노출돼 현재 결과는 잠정적이다. | [정본 결과](../results/v1/RESULTS_SUMMARY.md) · [노출 기록](TEST_EXPOSURE.md) |\n| 최종 재실행 전 고정한 실험계약 | 분할, Train-only 전처리, 주지표 Average Precision, Top-K 점검예산과 주장 경계를 코드 실행 전에 문서로 고정했다. | [실험계약](validation/EXPERIMENT_CONTRACT.md) · [재현 방법](validation/REPRODUCIBILITY.md) |\n| RF 대 Logistic 통계검정 | 공유된 5개 repeat 평균을 짝으로 비교했다. Random Forest의 평균 AP 차이는 `+0.0382`, 양측 exact sign-flip `p=0.0625`로 5% 기준 통계적 유의성을 주장하지 않는다. | [Phase 1 검증](PHASE1_ADVANCED_VALIDATION.md) · [paired 비교 원자료](../results/phase1/model_pairwise_comparison.csv) |\n| Bootstrap 불확실성 | Top-10% Fail 포착률의 95% bootstrap 구간은 `6.2%–36.8%`(2,000회)로 넓다. 다른 공장으로의 일반화를 뜻하지 않는다. | [Phase 1 검증](PHASE1_ADVANCED_VALIDATION.md) · [bootstrap 원자료](../results/phase1/top_k_bootstrap.csv) |\n| Walk-forward 변동성 | 네 시간 구간의 PR-AUC는 `0.054–0.280`으로 변동해 단일 홀드아웃 값을 대표 성능으로 확대하지 않는다. | [Phase 1 검증](PHASE1_ADVANCED_VALIDATION.md) · [walk-forward 원자료](../results/phase1/walk_forward_metrics.csv) |\n\n## 정직성 서사\n\n**0.5 임계값에서 Fail을 한 건도 분류하지 못했다(TP=0) → 실패를 숨기지 않고, 제한된 점검예산에서 연속 점수로 검토 순서를 정하는 문제로 범위를 재정의했다.**\n\n근거: [V1 정본 결과](../results/v1/RESULTS_SUMMARY.md) · [핵심 연구질문](../RESEARCH_QUESTION.md) · [실패 거버넌스](FAILURE_GOVERNANCE.md)\n\n## 국제 데이터 검증 현황\n\n국가별 확장은 **관측(observed)·추정(estimated)·기준(reference)·합성(synthetic)** 네 유형을 분리하고 출처·스키마·시간·단위·해시·주장 경계를 같은 계약으로 검사한다. 이는 데이터 파이프라인 호환성 검증이며 SECOM 모델의 외부 성능 증거가 아니다.\n\n근거: [외부 데이터 자격 심사](EXTERNAL_DATA_QUALIFICATION.md) · [국가별 결과 목록](../results/README.md) · [PV_Live E2E 계약](PVLIVE_LOCAL_E2E.md)\n\n## 이 요약이 말하지 않는 것\n\n- 실제 반도체 공장에서의 현장 검증 또는 배포 완료\n- 수율·불량률·가동률·리드타임·비용 개선\n- 익명 변수의 물리적 의미, 불량 원인 또는 인과효과\n- 자동 Fail 판정, 공정 제어 또는 엔지니어 승인 대체\n- PV·기상·로봇·합성 SMT 자료를 이용한 SECOM 성능 향상\n\n다음 확인 실험은 독립 제조 데이터, 동결 모델과 사전 승인된 1회 평가가 준비된 뒤에만 수행한다: [V2 독립 확인 프로토콜](V2_PROTOCOL.md).\n',
+    expected: /현장 의사결정 구조/,
+    operator: 'match',
+    diff: 'simple'
+  }

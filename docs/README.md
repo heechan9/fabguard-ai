@@ -54,6 +54,9 @@
 
 ## 모델 평가·재현·한계
 
+- [학습 구간 변수 분포·결측·그룹 차이](SECOM_DISTRIBUTION_EVIDENCE.md) — 기존 선택 변수 설명, 모델 재학습·시험셋 통계 없음.
+- [BOSCH 다음 연구 입력 계약](BOSCH_INPUT_CONTRACT.md) — #182 감사 재사용, 미해결 항목과 착수 조건.
+
 - [IMAD-DS 로봇 암 오프라인 학습·성능 측정](ROBOT_IMAD_BENCHMARK.md) — 별도 로봇 실험, 세션 분리 및 대상 조건 실패 포함
 - [RTE 2024 연간 수집·SDT 실행 증거 — 품질 경고 포함](../results/rte-france-national-solar-2024/README.md)
 

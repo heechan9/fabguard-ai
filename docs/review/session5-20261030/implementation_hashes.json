@@ -1,0 +1,6 @@
+{
+  "scripts/build_secom_distribution_evidence.py": "58ce53d3f2aa9a594f5637fb37a7deb1523b5aa293725ddc2aac71f937f22049",
+  "src/fabguard/distribution_evidence.py": "cb56da97c23c18e0cf83209e27e206355c0e485608b0b643b6bfac2958142782",
+  "tests/test_distribution_evidence.py": "e4ec9f6e46b542b0b1dd2e317ff7b341899e3fa397a3901ca6023e6ab6a17773",
+  "docs/BOSCH_INPUT_CONTRACT.json": "ef849eb8fb8fcd5c8b811e73069d452373a5ce4f7e425cdc2977b71f38526586"
+}

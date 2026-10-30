@@ -1,0 +1,13 @@
+{
+  "status": "descriptive_evidence_written",
+  "train_n": 1175,
+  "train_fail": 80,
+  "features": [
+    "feature_059",
+    "feature_247",
+    "feature_519",
+    "feature_065",
+    "feature_475"
+  ],
+  "output": "/workspace/scratch/3916a62be241/fabguard-session5/docs/review/session5-20261030"
+}
