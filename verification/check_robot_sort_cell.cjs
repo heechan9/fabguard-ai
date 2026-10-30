@@ -14,7 +14,8 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
   assert.equal(await page.locator('#view-error').isVisible(),false,'WebGL must render, not fallback');assert.equal(await page.locator('#viewport canvas').count(),1);
   assert.match(await page.locator('#run-status').innerText(),/일시정지/);
   await page.locator('#robot-select').press('Enter');assert.equal(await page.locator('#robot-select').getAttribute('aria-pressed'),'true');
-  assert.match(await page.locator('#station-info').innerText(),/기판 집기.*이송/);assert.equal(await page.locator('.robot-cell-info a').getAttribute('href'),'/robot/');
+  assert.match(await page.locator('#station-info').innerText(),/기판 집기.*이송/);assert.equal(await page.locator('.robot-cell-info a[href="/robot/"]').count(),1);
+  assert.equal(await page.locator('.robot-cell-info a[href="/secom/#distribution-evidence"]').count(),1);
   const d=await page.evaluate(()=>({w:innerWidth,doc:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].map(e=>({tag:e.tagName,id:e.id,cls:e.className,left:e.getBoundingClientRect().left,right:e.getBoundingClientRect().right,scroll:e.scrollWidth,client:e.clientWidth})).filter(e=>e.right>innerWidth+1||e.left< -1).slice(0,30)}));assert.ok(d.doc<=width,JSON.stringify(d));
   fs.writeFileSync(path.join(output,'checkpoint.txt'),'initial screenshot '+width);await capture(page.locator('#viewport'),width+'-robot-initial.png');fs.writeFileSync(path.join(output,'checkpoint.txt'),'initial captured '+width);
   await page.locator('#robot-select').press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.tagName),'A');
