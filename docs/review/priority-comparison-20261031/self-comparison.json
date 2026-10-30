@@ -1,0 +1,17 @@
+{
+  "status": "MATCH",
+  "scope": "saved_output_comparison",
+  "sample_count": 392,
+  "score_atol": 0.0,
+  "top_k": 40,
+  "differences": [],
+  "input_sha256": {
+    "reference": "73a14b4a64a257f32ddef5924d79f3e6729ba9db6f0c402acdfe0c1708d6c563",
+    "actual": "73a14b4a64a257f32ddef5924d79f3e6729ba9db6f0c402acdfe0c1708d6c563"
+  },
+  "python": "3.12.14",
+  "model_inference_performed": false,
+  "performance_evaluated": false,
+  "reviewer_identity_authenticated": false,
+  "claim_boundary": "Saved-output agreement only; not independent inference, ground truth, performance or factory approval."
+}
