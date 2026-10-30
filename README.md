@@ -88,11 +88,13 @@
 
 ### 프로젝트 상태
 
-**2026-10-30 기준:** main은 [`9d034091cc366d92df9cfeb45bcf21a2f04583d8`](https://github.com/heechan9/fabguard-ai/commit/9d034091cc366d92df9cfeb45bcf21a2f04583d8)입니다. 아래 배포 기능·오프라인 연구·미병합 Draft를 구분합니다. 웹 화면이 풍부해진 것은 모델 성능이나 실제 공장 효과가 개선됐다는 뜻이 아닙니다.
+**2026-10-30 기준:** main은 [`c0d8622343249f0e633021d87b95279c7ed9ba76`](https://github.com/heechan9/fabguard-ai/commit/c0d8622343249f0e633021d87b95279c7ed9ba76)입니다. 아래 배포 기능·오프라인 연구·미병합 Draft를 구분합니다. 웹 화면이 풍부해진 것은 모델 성능이나 실제 공장 효과가 개선됐다는 뜻이 아닙니다.
 
 - **배포된 화면:** [#187](https://github.com/heechan9/fabguard-ai/pull/187)·[#188](https://github.com/heechan9/fabguard-ai/pull/188)의 PCB 전후 맥락 타임라인, 조건 변경·정비 후 HOLD 설명, 설비·자재·측정 가설과 다음 확인 항목을 제공합니다. 모두 설명용 예시이며 원인 확정·자동 HOLD 해제가 아닙니다.
 - **현재 테마·이송 시연:** [#189](https://github.com/heechan9/fabguard-ai/pull/189)의 더 어두운 Silver / Dark 전환과 선택 유지, Cooling 단계 R-02 이송·빈 복귀가 반영됐습니다. [배포 검증 기록](https://github.com/heechan9/fabguard-ai/actions/runs/41096943657)은 24개 정적 자산과 1366/390/360px의 15개 브라우저 검사입니다. 실제 장비 제어·충돌 안전·디지털 트윈 검증이 아닙니다.
 - **사용 순서:** [웹 데모](https://fabguard-ai.vercel.app/)에서 위험순위의 근거를 보고, [SMT 실험실](https://fabguard-ai.vercel.app/smt/)에서 PCB를 선택해 맥락·HOLD·검토 가설을 확인합니다. Silver / Dark는 읽기 테마이고, 3D 움직임은 합성 시연입니다. 코드·단위검사는 아래 [빠른 시작](#빠른-시작)을 따릅니다.
+- **main의 UR3 기록과 별도 AGV 시연:** [#190](https://github.com/heechan9/fabguard-ai/pull/190)에서 공개 실험실의 실제 UR3 센서 기록 **7,409행·19채널**을 결측·시간 공백을 유지해 탐색·재생하는 화면과 별도의 합성 A-01 고정경로 이송·대기·차단 시연을 통합했습니다. UR3 기록은 실제 장비의 실시간 연결·자세 재구성·AGV 제어 입력이 아니며, A-01은 AMR/SLAM·물리 충돌 안전 검증이 아닙니다. 소스 병합과 배포 검증은 [PR 기록](https://github.com/heechan9/fabguard-ai/pull/190)에서 구분합니다.
+- **main의 저장 결과 비교:** [#191 저장 우선점검 CSV 비교](https://github.com/heechan9/fabguard-ai/pull/191)는 같은 ID·시각·라벨·모델 계약의 저장 결과에서 점수·순위·예측·Top-K 차이를 보고하는 CLI입니다. 잘못된 CSV 따옴표는 BLOCKED/2로 차단합니다. 자기비교·저장 결과 감사는 새 추론·독립 재현·모델 성능 검증이 아니며, 웹 기능·모델·정본 결과는 바꾸지 않습니다.
 - **실제 기록과 합성 화면의 경계:** Fledge의 WSL 연동·합성 입력 검증은 실제 반도체 공장 연결 증거가 아닙니다. 공개 로봇 실험실 센서 기록, SECOM 오프라인 평가, SMT 3D 합성 움직임은 서로 다른 자료이며 하나의 현장 성능으로 합치지 않습니다.
 
 
@@ -110,11 +112,9 @@
 
 ### 진행 중인 실험 (Draft PR · main 미반영)
 
-2026-10-30 확인: 다음 작업은 **open Draft이며 아직 main·배포 기능이 아닙니다**.
+2026-10-30 확인: 다음 원본 PR은 **open Draft**입니다. 아래에 명시한 선별 통합 외에 원본 Draft 전체가 main·배포에 반영된 것은 아닙니다.
 
-- [#190 UR3 기록·합성 바닥 AGV](https://github.com/heechan9/fabguard-ai/pull/190), head `b38574cd96b4a042472a5c4b2620e0bc8bd98aa4`: 실제 UR3 센서 기록 재생과 별도의 합성 A-01 고정경로 이송 시연을 통합하는 후보입니다. UR3 기록으로 로봇 자세를 재구성하거나 AGV를 제어하지 않습니다. 정확한 head의 CI·화면 검토·병합·배포 확인은 별도입니다.
-- [#191 저장 우선점검 CSV 비교](https://github.com/heechan9/fabguard-ai/pull/191), head `ce2ba66d96bd006c3a8d310b594202b428e4453b`: 같은 ID·시각·라벨·모델 계약의 저장 결과 차이를 보고하는 별도 CLI 후보입니다. 자기비교·저장 결과 감사는 새 추론·독립 재현·모델 성능 검증이 아닙니다.
-- [#179](https://github.com/heechan9/fabguard-ai/pull/179)·[#180](https://github.com/heechan9/fabguard-ai/pull/180)의 로봇 기록 작업, [#182](https://github.com/heechan9/fabguard-ai/pull/182)의 BOSCH/voraus 자료 자격 감사, [#183](https://github.com/heechan9/fabguard-ai/pull/183)의 학습 분포·P-A-D-A·입력 계약, [#184](https://github.com/heechan9/fabguard-ai/pull/184)의 현장 대응·알람 부담 평가 계획도 별도 미병합입니다. 제안·검사 통과를 현장 검증이나 채택으로 바꾸지 않습니다.
+- [#179](https://github.com/heechan9/fabguard-ai/pull/179)·[#180](https://github.com/heechan9/fabguard-ai/pull/180)의 로봇 기록 작업, [#182](https://github.com/heechan9/fabguard-ai/pull/182)의 BOSCH/voraus 자료 자격 감사, [#183](https://github.com/heechan9/fabguard-ai/pull/183)의 학습 분포·P-A-D-A·입력 계약, [#184](https://github.com/heechan9/fabguard-ai/pull/184)의 현장 대응·알람 부담 평가 계획도 원본 PR 기준 별도 미병합입니다. #180에서 선별한 UR3 재생 부분만 #190으로 통합했으며 원본 Draft 전체를 병합한 것은 아닙니다. 제안·검사 통과를 현장 검증이나 채택으로 바꾸지 않습니다.
 
 아래 세 데이터 실험 역시 기존 Draft 상태를 유지합니다.
 
@@ -201,7 +201,7 @@
 
 ### 로봇 기능 방향 (검토 중)
 
-산업용 로봇의 상태 기록을 사람이 점검할 순서로 정리하는 기능은 **FabGuard 안의 별도 도메인 모듈**로 검토합니다. IMAD-DS 원본을 이용한 로봇 암 오프라인 벤치마크와 데이터 입력 검사는 구현했지만, 낮은 target 성능 때문에 운영 사용 근거는 없습니다. 수집·데이터 출처 감사·검토 이력·사람의 최종 판단이라는 공통 흐름을 재사용하되, 로봇별 신호·고장/정비 라벨·시간 및 설비 단위 분할·평가 지표는 별도 계약으로 정의해야 합니다. SECOM 모델 점수를 로봇에 적용하지 않습니다. 로봇 웹 점검, 실제 장비 연동, 동작 명령이나 안전 제어는 구현 범위에 포함하지 않습니다.
+산업용 로봇의 상태 기록을 사람이 점검할 순서로 정리하는 기능은 **FabGuard 안의 별도 도메인 모듈**로 검토합니다. IMAD-DS 원본을 이용한 로봇 암 오프라인 벤치마크와 데이터 입력 검사는 구현했지만, 낮은 target 성능 때문에 운영 사용 근거는 없습니다. 수집·데이터 출처 감사·검토 이력·사람의 최종 판단이라는 공통 흐름을 재사용하되, 로봇별 신호·고장/정비 라벨·시간 및 설비 단위 분할·평가 지표는 별도 계약으로 정의해야 합니다. SECOM 모델 점수를 로봇에 적용하지 않습니다. 공개 실험실 UR3 기록의 웹 탐색·재생은 #190으로 통합했지만, 실제 장비 연동·동작 명령·안전 제어는 구현 범위에 포함하지 않습니다.
 
 ## 핵심 근거
 
@@ -307,13 +307,29 @@ python -m http.server 8000 -d web
 
 브라우저에서 `http://localhost:8000`을 열면 됩니다.
 
-전체 실험을 다시 실행하려면 공식 [UCI SECOM ZIP](https://archive.ics.uci.edu/static/public/179/secom.zip)을 `data/raw/`에 풀고 다음 명령을 사용합니다.
+전체 실험은 **새 학습·평가 실행**이므로 저장 결과 조회나 위 단위검사와 다릅니다. 실행을 의도한 경우에만 공식 [UCI SECOM ZIP](https://archive.ics.uci.edu/static/public/179/secom.zip)을 `data/raw/`에 풉니다. **정본 `results/v1/`과 배포 입력 `web/data/`에 재실행 출력을 쓰지 마세요.** 아래는 새 폴더 생성에 성공해야만 진행하며, 폴더가 이미 있으면 다른 새 경로를 사용합니다.
+
+정본 [manifest](results/v1/manifest.json)의 환경은 Python 3.12.13 · NumPy 2.3.5 · pandas 2.2.3 · scikit-learn 1.8.0입니다. 저장소의 Python 호환 범위와 실제 정본 실행 환경을 구분하고, 비교 전 코드 SHA·입력 해시·환경·seed·비교 조건을 기록하세요. 다른 환경의 동일 결과를 보장하지 않습니다.
 
 ```bash
-PYTHONPATH=src python -m fabguard.data --data-dir data/raw --output-dir results/v1
-PYTHONPATH=src python -m fabguard.experiment --data-dir data/raw --output-dir results/v1
-PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir results/v1 --web-data-dir web/data
+mkdir results/local_reproduction && \
+PYTHONPATH=src python -m fabguard.data --data-dir data/raw --output-dir results/local_reproduction && \
+PYTHONPATH=src python -m fabguard.experiment --data-dir data/raw --output-dir results/local_reproduction && \
+PYTHONPATH=src python -m fabguard.reporting --data-dir data/raw --result-dir results/local_reproduction --web-data-dir results/local_reproduction/web-data
 ```
+
+위 reporting 명령은 기존 `results/phase1` 요약도 파생 웹 출력에 복사할 수 있으며, Phase 1 실험 자체를 새로 실행하지 않습니다.
+
+재실행 결과가 실제로 생성된 뒤에는 [읽기 전용 저장표 비교](docs/SAVED_PRIORITY_COMPARISON.md)를 사용할 수 있습니다. 아래 `--score-atol 0 --top-k 40`은 결과를 보기 전에 고정하는 비교 조건의 예이며, 차이를 보고 허용오차를 완화하지 않습니다.
+
+```bash
+python verification/compare_priority_runs.py \
+  --reference results/v1/priority_table.csv \
+  --actual results/local_reproduction/priority_table.csv \
+  --score-atol 0 --top-k 40
+```
+
+`MATCH/0`은 선언한 조건에서 두 저장표가 일치한다는 뜻이며 독립 재실행·모델 정확도·현장 성능 검증이 아닙니다. 이 README 갱신에서는 위 학습·평가를 실행하지 않았습니다.
 
 ## 저장소 구성
 
