@@ -11,10 +11,10 @@ fs.mkdirSync(output,{recursive:true});
   await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
   for(const [name,route,ready] of [['home','/','#app h1'],['smt','/smt/','#context-review h3'],['secom','/secom/','#distribution-evidence select'],['limits','/#limitations','#app h1'],['global','/#global','.country-card'],['risks','/#risks','table']]){
    await page.goto(new URL(route,base).href);await page.locator(ready).first().waitFor();
-   assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(184, 194, 206)');
+   assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(170, 182, 197)');
    if(name==='smt'||name==='secom'){
     const selectors=name==='smt'?['.workspace','.panel','.scenario-buttons button','.station-strip button:not(.active)']:['.panel'];
-    for(const selector of selectors){const surface=await page.locator(selector).first().evaluate(e=>({color:getComputedStyle(e).color,bg:getComputedStyle(e).backgroundColor,image:getComputedStyle(e).backgroundImage}));assert.equal(surface.image,'none',name+' '+selector);assert.ok(['rgb(209, 217, 226)','rgb(197, 207, 218)'].includes(surface.bg),JSON.stringify({selector,surface}));}
+    for(const selector of selectors){const surface=await page.locator(selector).first().evaluate(e=>({color:getComputedStyle(e).color,bg:getComputedStyle(e).backgroundColor,image:getComputedStyle(e).backgroundImage}));assert.equal(surface.image,'none',name+' '+selector);assert.ok(['rgb(194, 205, 218)','rgb(184, 196, 210)'].includes(surface.bg),JSON.stringify({selector,surface}));}
    }
    const overflow=await page.evaluate(()=>({inner:innerWidth,scroll:document.documentElement.scrollWidth}));assert.ok(overflow.scroll<=width+1,JSON.stringify({name,width,overflow}));
    await page.screenshot({path:path.join(output,`${width}-${name}-viewport.png`)});
@@ -25,7 +25,7 @@ fs.mkdirSync(output,{recursive:true});
     for(const el of document.querySelectorAll('body *')){
      if(![...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim())||!el.getClientRects().length||el.closest('svg,.hero-visual,#viewport,.inspection-drawing'))continue;
      const s=getComputedStyle(el);if(s.visibility==='hidden'||Number(s.opacity)<1)continue;
-     let bg=[184,194,206,1],p=el,uncertain=false;
+     let bg=[170,182,197,1],p=el,uncertain=false;
      while(p){const ps=getComputedStyle(p),c=rgba(ps.backgroundColor);if(ps.backgroundImage!=='none'){uncertain=true;break;}if(c[3]===1){bg=c;break;}if(c[3]>0){uncertain=true;break;}p=p.parentElement;}
      if(uncertain)continue;const fg=rgba(s.color),ratio=(Math.max(lum(fg),lum(bg))+.05)/(Math.min(lum(fg),lum(bg))+.05),large=parseFloat(s.fontSize)>=24||(parseFloat(s.fontSize)>=18.66&&Number(s.fontWeight)>=700);
      if(ratio<(large?3:4.5))issues.push({text:el.textContent.trim().slice(0,85),tag:el.tagName,cls:el.className,color:s.color,background:bg,ratio:Number(ratio.toFixed(2))});

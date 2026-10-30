@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kind: [robot, context, silver]
+        kind: [robot, context, silver, theme, transfer]
         width: [1366, 390, 360]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -59,6 +59,10 @@ jobs:
         run: |
           if [ "$REVIEW_KIND" = robot ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_robot_sort_cell.cjs
+          elif [ "$REVIEW_KIND" = theme ]; then
+            NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_theme_ui.cjs
+          elif [ "$REVIEW_KIND" = transfer ]; then
+            NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_transfer_robot.cjs
           elif [ "$REVIEW_KIND" = silver ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 180s node verification/check_silver_ui.cjs
           else

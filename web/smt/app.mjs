@@ -2,6 +2,8 @@ import {mountContextReview} from './context-review.mjs';
 import {holdReasons} from './context-review-model.mjs';
 import {robotPose,robotReview,DESTINATIONS,ROBOT_NAME,ROBOT_SCOPE} from './robot-cell-model.mjs';
 import {mountRobotCell} from './robot-cell-view.mjs';
+import {mountTransferRobot} from './transfer-robot-view.mjs';
+import {TRANSFER_STAGE,TRANSFER_NAME,TRANSFER_SCOPE,transferPose,activeTransferBoard,transferRobotPose} from './transfer-robot-model.mjs';
 import {mountIntro} from './intro.mjs';
 import {detailMachine,dressFloor,shouldAutoRevealInterior} from './factory-visuals.mjs';
 import {STATION_TERMS,plainCopy} from './terms.mjs';
@@ -18,7 +20,9 @@ const $=id=>document.getElementById(id),sim=new Simulation();
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const inspection=mountInspection($('inspection-lab'));
 const updateContextReview=mountContextReview($('context-review'));
-let introBusy=false,robotCell;
+let introBusy=false,robotCell,transferRobot;
+function selectTransferRobot(){selectStation(TRANSFER_STAGE);$('transfer-robot-select').setAttribute('aria-pressed','true');$('station-info').textContent=TRANSFER_NAME+' · '+TRANSFER_SCOPE;$('selected-station-caption').textContent=TRANSFER_NAME+' · 냉각 → 최종 검사';targetX=positions[TRANSFER_STAGE];targetY=1.5;zoom=stationZoom(4.5,viewport.clientWidth/Math.max(1,viewport.clientHeight));azimuth=.35;elevation=.6;cameraUpdate();}
+$('transfer-robot-select').addEventListener('click',selectTransferRobot);
 function selectRobot(){selectStation(9);$('robot-select').setAttribute('aria-pressed','true');$('station-info').textContent=ROBOT_NAME+' · '+ROBOT_SCOPE+'. 기판 집기 → 이송 → 정상/불량 위치에 내려놓기. 측정 누락·조건 변경·정비 후 검토 대기는 검토 보류 위치로 이동합니다.';targetX=positions[9];targetY=1.25;zoom=.28;azimuth=.55;elevation=.8;cameraUpdate();}
 $('robot-select').addEventListener('click',selectRobot);
 let selected='PCB-001',activeStation=2,followInjected=false,insideView=false;
@@ -27,7 +31,7 @@ function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visibl
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i,focus=true){$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
+function selectStation(i,focus=true){$('transfer-robot-select').setAttribute('aria-pressed','false');$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
@@ -53,6 +57,8 @@ function updateUI(){
  updateContextReview(b);
  const review=robotReview(b);$('robot-review').dataset.state=review.state;
  for(const key of ['evidence','decision','next']){const node=$('robot-'+key);if(node.textContent!==review[key])node.textContent=review[key];}
+ const transferring=activeTransferBoard(sim.boards);$('transfer-robot-active').textContent=transferring?'지금 이송하는 기판 · '+transferring.id+' · '+transferPose(transferring).phase:'지금 이송하는 기판 · 없음 · '+transferRobotPose(sim.boards,sim.time).phase;
+ $('transfer-robot-phase').textContent='선택한 기판 · '+b.id+' · '+transferPose(b).phase;
  const moving=sim.boards.find(board=>board.stage===9);$('robot-active').textContent=moving?'지금 이송하는 기판 · '+moving.id:'지금 이송하는 기판 · 없음';
  const pose=robotPose(b);$('robot-phase').textContent='선택한 기판 · '+ROBOT_NAME+' · '+b.id+' · '+pose.phase+(pose.route?' → '+DESTINATIONS[pose.route].label:'');
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
@@ -110,6 +116,7 @@ try{
  dressFloor(scene,positions,widths,box);
  for(let i=0;i<11;i++)makeMachine(i);
  robotCell=mountRobotCell(scene,positions[9],{box,cylinder,label});
+ transferRobot=mountTransferRobot(scene,positions[TRANSFER_STAGE],{box,cylinder,label});
  for(let i=0;i<10;i++){const x=(positions[i]+widths[i]/2+positions[i+1]-widths[i+1]/2)/2;box(scene,.65,.08,1.2,x,.94,0,color.dark);}
  selectionRing=new THREE.Mesh(new THREE.RingGeometry(.52,.58,32),new THREE.MeshBasicMaterial({color:0x39d6c4,side:THREE.DoubleSide,transparent:true,opacity:.85}));selectionRing.rotation.x=-Math.PI/2;scene.add(selectionRing);
  new ResizeObserver(resize).observe(viewport);resize();
@@ -121,13 +128,14 @@ $('camera-reset').addEventListener('click',()=>{insideView=false;updateInterior(
 viewport.addEventListener('wheel',event=>{event.preventDefault();zoom=clampZoom(zoom*Math.exp(event.deltaY*.001));cameraUpdate();},{passive:false});
 viewport.addEventListener('pointerdown',event=>{pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});viewport.setPointerCapture(event.pointerId);tapGuard.down(event.pointerId);if(pointers.size===2){const [a,b]=[...pointers.values()];pinchDistance=Math.hypot(a.x-b.x,a.y-b.y);}});
 viewport.addEventListener('pointermove',event=>{if(!pointers.has(event.pointerId))return;const prev=pointers.get(event.pointerId),dx=event.clientX-prev.x,dy=event.clientY-prev.y;tapGuard.move(event.pointerId,dx,dy);pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0&&pinchDistance>0)zoom=clampZoom(zoom*pinchDistance/d);pinchDistance=d;}else if(pointers.size===1){azimuth-=dx*.006;elevation=Math.max(-.15,Math.min(1.53,elevation+dy*.006));}cameraUpdate();});
-function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{if(robotCell&&ray.intersectObject(robotCell.root,true).length){selectRobot();return;}const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
+function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{if(transferRobot&&ray.intersectObject(transferRobot.root,true).length){selectTransferRobot();return;}if(robotCell&&ray.intersectObject(robotCell.root,true).length){selectRobot();return;}const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{tapGuard.end(event.pointerId,true);pointers.delete(event.pointerId);pinchDistance=0;});
 viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(-.15,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
-function draw(source=sim,paint=true){if(!renderer||!scene)return;for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const pose=robotPose(b);if(pose.position){const stack=pose.phase==='내려놓기 완료'?(Number(b.id.slice(-3))-1)*.025:0;mesh.position.set(positions[9]+pose.position.x,pose.position.y+stack,pose.position.z);}
+function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferBoard=activeTransferBoard(source.boards);for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const transfer=b===transferBoard?transferPose(b):null;if(transfer?.position){const p=transfer.position;mesh.position.set(positions[TRANSFER_STAGE]+p.x,p.y,p.z);}const pose=robotPose(b);if(pose.position){const stack=pose.phase==='내려놓기 완료'?(Number(b.id.slice(-3))-1)*.025:0;mesh.position.set(positions[9]+pose.position.x,pose.position.y+stack,pose.position.z);}
  mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
  for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=source.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(source.time*4));}
  robotCell?.update(source.boards,selected);
+ transferRobot?.update(source.boards,source.time);
  for(const {head} of heads){head.position.x=Math.sin(source.time*3)*.62;head.position.z=Math.cos(source.time*2)*.25;}if(paint)renderer.render(scene,camera);
 }
 if(reducedMotion.matches)sim.running=false;

@@ -1,6 +1,6 @@
 /* Silver reader surfaces. The scene, photographs and diagnostic drawings retain
    their own dark palette; blue navigation is not a quality-status indicator. */
-:root{--bg:#b8c2ce;--panel:#d1d9e2;--panel2:#c5cfda;--outer:#a7b3c1;--text:#17202e;--muted:#405161;--reader-muted:#405161;--line:#8a9aaa;--cyan:#004b9e;--blue:#004b9e;--amber:#714600;--red:#8f2424;--normal:#116143;--radius:14px;color-scheme:light;background:var(--outer)}
+:root{--bg:#aab6c5;--panel:#c2cdda;--panel2:#b8c4d2;--outer:#99a7b8;--text:#17202e;--muted:#354656;--reader-muted:#354656;--line:#8a9aaa;--cyan:#00438e;--blue:#00438e;--amber:#613c00;--red:#802020;--normal:#0b5036;--radius:14px;--action:#004b9e;--action-hover:#004692;--hover:#b5c7db;--row-hover:#bbcbdc;--danger-bg:#f6dddd;--caution-bg:#f0dada;--caution-ink:#722525;--caution-line:#b47f7f;--warning-bg:#fff0d2;--warning-line:#b58c44;--success-bg:#c5dfd3;--success-ink:#0c543a;--note-bg:#b8cee5;--note-ink:#154a79;--note-line:#698bac;--control-line:#73879a;color-scheme:light;background:var(--outer)}
 body{background:var(--bg);color:var(--text)}
 body .ambient,body .hero:after{display:none}
 body .topbar{background:var(--panel);border-top:4px solid var(--blue);border-bottom:1px solid var(--line);backdrop-filter:none}
@@ -11,63 +11,63 @@ body .brand-mark i{background:var(--panel);box-shadow:none;border-radius:1px}
 body .hero h1{color:var(--text);text-shadow:none;line-height:1.18}
 body .hero h1 span,body .page-hero h1 span{color:var(--blue);-webkit-text-stroke:0}
 body .hero-copy:before{background:var(--blue);box-shadow:none;width:3px}
-body .button,body .skip-link{color:#fff;background:var(--blue);box-shadow:none;border-radius:24px}
-body .button:hover{background:#004692;box-shadow:none}
+body .button,body .skip-link{color:#fff;background:var(--action);box-shadow:none;border-radius:24px}
+body .button:hover{background:var(--action-hover);box-shadow:none}
 body .text-link,body a:not(.button):not(.brand):not(.skip-link){color:var(--blue)}
 body .status-chip,body .language-toggle{background:var(--panel);color:var(--blue);border-color:var(--line)}
 body :is(.command-panel,.table-shell,.data-strip,.answer-strip,.plain-guide>div,.budget-grid article,.decision-flow,.evidence-cards article,.country-card,.tool-rail,.candidate-registry,.candidate-list article,.validation-details,.absolute-beginner,.evidence-entry,.plain-result,.portfolio-result,.experience-map,.evidence-levels article,.validation-grid article){background:var(--panel);box-shadow:none;border-color:var(--line)}
 body :is(.pipeline,.review-prompt,.design-boundary,.implementation-note,.dkasc-evidence,.portfolio-proof-flow,.quick-start li){background:var(--panel2);border-color:var(--line)}
 body :is(.lead,.hero .lead,.hero-ko,.text-link,.plain-guide p,.principles-list p,.validation-grid article>p:last-child,.decision-flow p,.pipeline p,.country-card>p,.tool-rail p,.candidate-list p,.country-card dt,.country-card dd,.country-top>b,.country-top em,.candidate-list small,.candidate-boundary,.candidate-intro,.candidate-registry summary>small,.global-summary p,.global-summary>span,.dkasc-evidence small,.tool-rail article>span,.tool-rail article>b,.metrics-grid article>span,.metrics-grid small,.metrics-grid em,.budget-top,.budget-grid p,.data-strip small,.panel-head,.portfolio-result p,.portfolio-credit,.section-intro>p:last-child,.section-heading>p,.evidence-cards p,.evidence-cards span,.research-note>div:last-child p,.evidence-ladder>div:first-child>p:last-child,.evidence-levels p,.boundary-quote p,.queue-stat span,.queue-stat small,.validation-seal small,.features span,.detail-grid span,.evidence-panel p,footer){color:var(--muted)}
 body :is(.answer-strip span,.absolute-beginner ol,.review-prompt b,.result-numbers strong,.result-numbers span,.plain-takeaway,.country-card dd,.data-strip strong,td b){color:var(--text)}
-body :is(.caution,.global-boundary){background:#f0dada;border-color:#b47f7f}
-body :is(.caution p,.global-boundary p){color:#722525}
-body :is(.uncertainty-note,.plain-quality,.evidence-warning){background:#fff0d2;border-color:#b58c44;color:var(--amber)}
+body :is(.caution,.global-boundary){background:var(--caution-bg);border-color:var(--caution-line)}
+body :is(.caution p,.global-boundary p){color:var(--caution-ink)}
+body :is(.uncertainty-note,.plain-quality,.evidence-warning){background:var(--warning-bg);border-color:var(--warning-line);color:var(--amber)}
 body :is(.uncertainty-note p,.uncertainty-note b,.portfolio-result small,.answer-strip .boundary span){color:var(--amber)}
 body :is(.design-boundary p,.implementation-note p,.review-prompt p){color:var(--muted)}
 body .data-role{color:var(--muted)!important}
 body table th,body .evidence-section .evidence-table th{background:var(--panel2);color:var(--text);border-color:var(--line)}
 body table td,body .evidence-section .evidence-table td{color:var(--muted);border-color:var(--line)}
-body tbody tr:hover{background:#bbcbdc}
+body tbody tr:hover{background:var(--row-hover)}
 body :is(.panel,.workspace),body #country-evidence{background:var(--panel);border-color:var(--line);box-shadow:0 8px 22px #17202e0a}
 body .evidence-section :is(.evidence-card,.evidence-facts>div,.evidence-scenario){background:var(--panel2);border-color:var(--line)}
-body .evidence-section :is(.evidence-note,.evidence-tag){background:#b8cee5;color:#154a79;border-color:#698bac}
+body .evidence-section :is(.evidence-note,.evidence-tag){background:var(--note-bg);color:var(--note-ink);border-color:var(--note-line)}
 body .evidence-section :is(.evidence-details p,.evidence-details li,.evidence-scenario p){color:var(--muted)}
-body .evidence-section .evidence-error{background:#f6dddd;color:var(--red)}
-body .evidence-section :is(.evidence-picks button,.evidence-form input),body select{background:var(--panel);color:var(--text);border-color:#6a7e91}
-body .evidence-section .evidence-picks button[aria-pressed=true]{background:var(--blue);color:#fff}
+body .evidence-section .evidence-error{background:var(--danger-bg);color:var(--red)}
+body .evidence-section :is(.evidence-picks button,.evidence-form input),body select{background:var(--panel);color:var(--text);border-color:var(--control-line)}
+body .evidence-section .evidence-picks button[aria-pressed=true]{background:var(--action);color:#fff}
 body .evidence-section .evidence-picks button[aria-pressed=true] small{color:#fff}
 body .evidence-section .evidence-picks button small{color:var(--muted)}
 body .distribution-plot{background:var(--panel)}
 /* Keep the existing scene and green PCB identity. Only its surrounding UI changes. */
 body.smt-page .heading{background:var(--panel);border-color:var(--line)}
-body.smt-page :is(.visual,.robot-cell-info){background:var(--panel)}
+body.smt-page :is(.visual,.robot-cell-info,.transfer-robot-info){background:var(--panel)}
 body.smt-page :is(aside,.viewbar,.station-strip,.transport,.inspection-card,.aoi-gates article,.measurement-card){background:var(--panel);color:var(--text);border-color:var(--line)}
-body.smt-page :is(button,select),body .experience-map a{background:var(--panel2);color:var(--text);border-color:#73879a}
-body.smt-page button:hover{background:#b5c7db;border-color:var(--blue)}
+body.smt-page :is(button,select),body .experience-map a{background:var(--panel2);color:var(--text);border-color:var(--control-line)}
+body.smt-page button:hover{background:var(--hover);border-color:var(--blue)}
 body.smt-page button:disabled{opacity:.65}
-body.smt-page :is(.primary,.station-strip button.active),body.smt-page #inside-view[aria-pressed=true]{background:var(--blue);color:#fff;border-color:var(--blue)}
+body.smt-page :is(.primary,.station-strip button.active),body.smt-page #inside-view[aria-pressed=true]{background:var(--action);color:#fff;border-color:var(--blue)}
 body.smt-page .station-strip button.active small{color:#fff}
 body.smt-page :is(.station-strip button small,.field-label,.metrics span,.metrics small,.history-heading,.history-heading span,.reason p,.measurement-card strong,.technical-terms p,.experience-map a span,.viewbar b,footer b){color:var(--muted)}
 body.smt-page :is(.measurement-details summary,.technical-terms h3,.equipment-reference summary){color:var(--blue)}
-body.smt-page .scenario-buttons button.armed{background:#fff0d2;border-color:var(--amber)}
+body.smt-page .scenario-buttons button.armed{background:var(--warning-bg);border-color:var(--amber)}
 body.smt-page .board-status{color:var(--normal)}
 body.smt-page .board-status.warn{color:var(--amber)}
 body.smt-page .board-status.danger{color:var(--red)}
 body.smt-page .robot-review{background:var(--panel2);border-color:var(--muted)}
-body.smt-page .robot-review[data-state="waiting"]{background:var(--bg);border-color:#647586;color:#344555}
-body.smt-page .robot-review[data-state="hold"]{background:#fff0d2;border-color:var(--amber);color:var(--amber)}
-body.smt-page .robot-review[data-state="review"]{background:#f6dddd;border-color:var(--red);color:var(--red)}
-body.smt-page .robot-review[data-state="ok"]{background:#c5dfd3;border-color:var(--normal);color:#0c543a}
+body.smt-page .robot-review[data-state="waiting"]{background:var(--bg);border-color:var(--line);color:var(--muted)}
+body.smt-page .robot-review[data-state="hold"]{background:var(--warning-bg);border-color:var(--amber);color:var(--amber)}
+body.smt-page .robot-review[data-state="review"]{background:var(--danger-bg);border-color:var(--red);color:var(--red)}
+body.smt-page .robot-review[data-state="ok"]{background:var(--success-bg);border-color:var(--normal);color:var(--success-ink)}
 body.smt-page #viewport,body .inspection-drawing{background:#091018;--cyan:#39d6c4;--amber:#e4a83d;--red:#ff746b;--muted:#b0c0cc;--line:#44606c}
 body.smt-page #viewport :is(.scene-caption,.gesture,.inside-note,.selected-station-caption){color:#c4d2db}
 body.smt-page .scene-caption{background:#091018e8;border-color:#44606c}
-body.smt-page #view-error{background:#d1d9e2;color:#17202e;border-color:#73879a}
+body.smt-page #view-error{background:var(--panel);color:var(--text);border-color:var(--control-line)}
 body.smt-page .legend-key{background:#39d6c4}
 body.smt-page .legend-key.amber{background:#e4a83d}
 body.smt-page .legend-key.red{background:#ff746b}
 body.smt-page #intro-dialog{background:var(--panel);color:var(--text);border-color:var(--line)}
-body.smt-page .quick-start li>span{background:var(--blue);color:#fff}
-body.smt-page .robot-cell-info button[aria-pressed=true]{outline-color:var(--blue)}
+body.smt-page .quick-start li>span{background:var(--action);color:#fff}
+body.smt-page :is(.robot-cell-info,.transfer-robot-info) button[aria-pressed=true]{outline-color:var(--blue)}
 body :is(a,button,select,input,summary):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 /* Photo captions must stay light; these are intentionally not reader cards. */
 body .hero-visual{box-shadow:0 12px 28px #17202e26}
@@ -83,16 +83,16 @@ body.smt-page .board-status.waiting{color:var(--muted)}
 .context-review ol{padding-left:22px}
 .context-review li+li{border-top:1px solid var(--line);padding-top:12px}
 .context-hold{padding:12px;border-left:3px solid var(--muted);background:var(--bg);font-weight:700}
-.context-hold[data-state=hold]{background:#fff0d2;color:var(--amber);border-color:var(--amber)}
-.context-hold[data-state=clear]{background:#c5dfd3;color:#0c543a;border-color:var(--normal)}
+.context-hold[data-state=hold]{background:var(--warning-bg);color:var(--amber);border-color:var(--amber)}
+.context-hold[data-state=clear]{background:var(--success-bg);color:var(--success-ink);border-color:var(--normal)}
 .context-hypotheses{display:grid;gap:10px}
 .context-hypotheses article{padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
 .context-hypotheses article h4{margin-top:0}
 /* Beat the legacy component selectors, not just the generic button rule. */
-body.smt-page .scenario-buttons button,body.smt-page .station-strip button{background:var(--panel2);color:var(--text);border-color:#73879a}
-body.smt-page .scenario-buttons button:hover,body.smt-page .station-strip button:hover{background:#b5c7db;border-color:var(--blue)}
-body.smt-page .scenario-buttons button.armed{background:#fff0d2;border-color:var(--amber)}
-body.smt-page .station-strip button.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+body.smt-page .scenario-buttons button,body.smt-page .station-strip button{background:var(--panel2);color:var(--text);border-color:var(--control-line)}
+body.smt-page .scenario-buttons button:hover,body.smt-page .station-strip button:hover{background:var(--hover);border-color:var(--blue)}
+body.smt-page .scenario-buttons button.armed{background:var(--warning-bg);border-color:var(--amber)}
+body.smt-page .station-strip button.active{background:var(--action);color:#fff;border-color:var(--blue)}
 body.smt-page .station-strip button.active small{color:#fff}
 body.smt-page :is(.panel,.workspace),body.analysis-page .panel{background:var(--panel);border-color:var(--line);box-shadow:0 8px 22px #17202e0a}
 
@@ -113,3 +113,24 @@ body.smt-page .context-review-details{margin:24px 0;padding:20px;border:1px soli
 .context-hypotheses{grid-template-columns:repeat(3,minmax(0,1fr))}
 .context-hypotheses article{min-width:0}
 @media(max-width:900px){.context-hypotheses{grid-template-columns:1fr}body.smt-page .context-review-details{padding:12px}}
+
+/* User-selected dark reader palette; the WebGL scene keeps its own colors. */
+:root[data-theme="dark"]{--bg:#070b0f;--panel:#0d141a;--panel2:#111b22;--outer:#070b0f;--text:#f5f7f8;--muted:#b0c0cc;--reader-muted:#b0c0cc;--line:#647586;--cyan:#76b7ff;--blue:#76b7ff;--amber:#f1c46d;--red:#ff9e98;--normal:#7ad8ae;--hover:#203740;--row-hover:#203740;--danger-bg:#301c20;--caution-bg:#301c20;--caution-ink:#ffc3bd;--caution-line:#a36969;--warning-bg:#332918;--warning-line:#b58c44;--success-bg:#163a2c;--success-ink:#9ae5c1;--note-bg:#132b42;--note-ink:#b8d9ff;--note-line:#698bac;--control-line:#73879a;color-scheme:dark}
+body .theme-toggle{font:inherit;font-size:13px;font-weight:700;white-space:nowrap;min-height:44px;padding:8px 12px;border:1px solid var(--control-line);border-radius:6px;background:var(--panel2);color:var(--blue);cursor:pointer;flex-shrink:0}
+body .theme-toggle:hover{background:var(--hover)}
+body .theme-toggle[aria-pressed=true]{box-shadow:inset 0 -3px var(--blue)}
+/* Wrap desktop navigation instead of pushing controls beyond the viewport. */
+body .topbar nav{flex-wrap:wrap;gap:8px 14px;min-width:0}
+body .topbar{height:auto;min-height:76px;padding-top:8px;padding-bottom:8px}
+@media(max-width:900px){body .theme-toggle{min-width:0;padding:8px;font-size:12px}body.smt-page .topbar nav{flex-wrap:nowrap}}
+
+:root[data-theme="dark"] body :is(.budget-top b,.decision-flow b,.validation-grid article>b,.sequence-number){color:var(--muted);opacity:1}
+
+:root[data-theme="dark"] body .data-strip span,:root[data-theme="dark"] body [data-section]::before,:root[data-theme="dark"] body [data-validation-step]::before{color:var(--muted);opacity:1}
+/* Theme switches are immediate: legacy hover transitions must not mix palettes. */
+body .topbar nav a,body .experience-map a{transition:none}
+body .topbar nav a{word-break:keep-all}
+/* Disabled does not need to mean illegible; keep its disabled semantics/cursor. */
+body .tour-actions button{background:var(--panel2);color:var(--text);border:1px solid var(--control-line);border-radius:6px}
+body .tour-actions button:disabled{color:var(--muted);background:var(--panel);cursor:not-allowed}
+body .tour-state [data-state=active]{color:var(--amber)}
