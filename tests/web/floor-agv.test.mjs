@@ -65,3 +65,13 @@ test('app advances AGV only with live simulation clock, preserves intro/camera a
  assert.match(app,/floorAgv.reset\(sim.time\);updateUI\(\);draw\(\)/);
  assert.match(html,/AMR의 자율주행·SLAM·경로 최적화/);assert.match(html,/별도 합성 자재 트레이/);assert.match(html,/OHT는 이번 범위에 없습니다/);
 });
+test('close-up raycasting supplies active camera for real Sprite labels and preserves mesh hits',async()=>{
+ const root=new THREE.Group(),sprite=new THREE.Sprite(new THREE.SpriteMaterial());
+ const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.15),new THREE.MeshBasicMaterial());
+ sprite.position.set(0,2,0);root.add(sprite,wheel);root.updateMatrixWorld(true);
+ const camera=new THREE.PerspectiveCamera(42,1,.1,180);camera.position.set(0,0,4);camera.lookAt(0,0,0);camera.updateMatrixWorld(true);
+ const ray=new THREE.Raycaster(camera.position,new THREE.Vector3(0,0,-1));ray.camera=camera;
+ assert.doesNotThrow(()=>ray.intersectObject(root,true));assert.ok(ray.intersectObject(root,true).some(hit=>hit.object===wheel));
+ const verifier=await readFile(new URL('../../verification/check_floor_agv.cjs',import.meta.url),'utf8');
+ assert.match(verifier,/ray.camera=camera;[\s\S]*ray.intersectObject\(root,true\)/);
+});

@@ -35,6 +35,7 @@ async function closeupGeometry(page){return page.evaluate(()=>{
  };
  const wheels=[];root.traverse(o=>{if(o.name==='agv-wheel'){
   const center=o.getWorldPosition(new Vector3()),ray=new Raycaster(camera.position,center.clone().sub(camera.position).normalize());
+  ray.camera=camera; // Sprite labels require the active camera during traversal.
   const first=ray.intersectObject(root,true).find(hit=>hit.object.isMesh);
   wheels.push({...projected(o),unobscured:first?.object===o});
  }});
