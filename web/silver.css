@@ -106,3 +106,10 @@ body .table-shell th{color:var(--text);background:var(--panel2)}
 body .tour-role-label{color:var(--blue)}
 
 body.smt-page #history time,body.smt-page #history li{color:var(--muted)}
+
+/* Long context belongs to the selected PCB, not to the narrow metric column. */
+body.smt-page .context-review-details{margin:24px 0;padding:20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
+.context-review-details{scroll-margin-top:115px}.context-review-details .context-review{margin-top:12px}
+.context-hypotheses{grid-template-columns:repeat(3,minmax(0,1fr))}
+.context-hypotheses article{min-width:0}
+@media(max-width:900px){.context-hypotheses{grid-template-columns:1fr}body.smt-page .context-review-details{padding:12px}}

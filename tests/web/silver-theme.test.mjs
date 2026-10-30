@@ -34,3 +34,9 @@ test('rendered contrast scanner recognizes opaque rgb and rgba backgrounds',()=>
  assert.deepEqual(rgba('rgba(0, 75, 158, 0)'),[0,75,158,0]);
  assert.deepEqual(rgba('rgba(0, 75, 158, 1)'),[0,75,158,1]);
 });
+test('long selected-PCB context sits below the workspace, not inside its narrow inspector',()=>{
+ const html=read('web/smt/index.html');
+ assert.doesNotMatch(html.match(/<aside id="board-inspector">[\s\S]*?<\/aside>/)[0],/id="context-review"/);
+ assert.match(html,/<\/aside><\/section>\s*<details class="measurement-details context-review-details"/);
+ assert.match(read('web/silver.css'),/\.context-hypotheses\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+});
