@@ -54,7 +54,13 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
    await page.locator('#play').press('Enter');await advance(10000);await page.locator('#play').press('Enter');
    assert.notEqual(await page.locator('#volume').innerText(),'누락');assert.match(await page.locator('#robot-phase').innerText(),/검토 보류 위치/);
    assert.equal(await page.locator('#robot-review').getAttribute('data-state'),'hold');assert.equal(await page.locator('#context-review ol li').count(),1);assert.equal(await page.locator('.context-hypotheses article').count(),3);
-   assert.match(await page.locator('#context-review').innerText(),/변경 전:.*변경 후:/s);assert.match(await page.locator('#robot-next').innerText(),/자동 해제하지/);
+   assert.match(await page.locator('#context-review').innerText(),/변경 전:.*변경 후:/s);
+   const contextLayout=await page.locator('#context-review').evaluate(el=>({inInspector:!!el.closest('aside'),width:el.getBoundingClientRect().width,workspace:document.querySelector('.workspace').getBoundingClientRect().width,columns:getComputedStyle(el.querySelector('.context-hypotheses')).gridTemplateColumns.split(' ').length}));
+   assert.equal(contextLayout.inInspector,false);assert.ok(contextLayout.width/contextLayout.workspace>.8);assert.equal(contextLayout.columns,width>900?3:1);
+   await page.locator('#context-review-panel>summary').click();assert.equal(await page.locator('#context-review').isVisible(),false);
+   await page.locator('a[href="#context-review-panel"]').click();assert.equal(await page.locator('#context-review-panel>summary').isVisible(),true);
+   const jump=await page.locator('#context-review-panel>summary').evaluate(el=>({top:el.getBoundingClientRect().top,header:document.querySelector('.topbar').getBoundingClientRect().bottom,height:innerHeight}));assert.ok(jump.top>=jump.header-1&&jump.top<jump.height,JSON.stringify(jump));
+   await page.locator('#context-review-panel>summary').click();assert.equal(await page.locator('#context-review').isVisible(),true);assert.match(await page.locator('#robot-next').innerText(),/자동 해제하지/);
    await capture(page.locator('#context-review'),width+'-'+fault+'-context.png');
    await page.locator('#context-review').evaluate(el=>scrollTo({top:el.getBoundingClientRect().top+scrollY-document.querySelector('.topbar').getBoundingClientRect().height-12,behavior:'instant'}));
    await page.screenshot({path:path.join(output,width+'-'+fault+'-review-viewport.png')});await capture(page.locator('#viewport'),width+'-'+fault+'-hold.png');
