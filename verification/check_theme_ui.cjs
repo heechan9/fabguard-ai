@@ -47,6 +47,12 @@ async function audit(page,name,width,mode){
    if(await page.locator('html').getAttribute('data-theme')!==mode)await theme.click();
    for(const [name,route,ready] of [['home','/','#app h1'],['global','/#global','.country-card'],['risks','/#risks','table'],['limits','/#limitations','#app h1'],['secom','/secom/','#distribution-evidence select'],['smt','/smt/','#context-review h3']]){
     await page.goto(new URL(route,base).href);await page.locator(ready).first().waitFor();assert.equal(await page.locator('html').getAttribute('data-theme'),mode);await audit(page,name,width,mode);
+    if(name==='secom'){
+     await page.locator('[data-action=begin][data-case=solution]').click();
+     assert.equal(await page.locator('[data-condition]').getAttribute('data-state'),'active');
+     await audit(page,'secom-active-warning',width,mode);
+     await page.locator('[data-action=reset]').click();
+    }
    }
    assert.equal(await page.locator('#view-error').isVisible(),false,'WebGL must render');
    await page.locator('#robot-select').click();await page.locator('[data-fault=condition]').click();

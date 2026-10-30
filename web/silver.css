@@ -133,3 +133,4 @@ body .topbar nav a{word-break:keep-all}
 /* Disabled does not need to mean illegible; keep its disabled semantics/cursor. */
 body .tour-actions button{background:var(--panel2);color:var(--text);border:1px solid var(--control-line);border-radius:6px}
 body .tour-actions button:disabled{color:var(--muted);background:var(--panel);cursor:not-allowed}
+body .tour-state [data-state=active]{color:var(--amber)}
