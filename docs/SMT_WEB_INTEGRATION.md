@@ -72,3 +72,27 @@ SPI measurement, reflow profile and AOI result. Establish missingness, temporal
 alignment and labeling contracts before separate model training and independent
 evaluation. Energy scenarios additionally require the actual plant's location,
 metered load, aligned weather/generation periods and tariff assumptions.
+
+## Illustrative context review (2026-10-30)
+
+Two optional next-PCB scenarios add context only: a recipe-context label change
+(A → B, no physical parameter values) or a maintenance-context change without a
+post-maintenance review record. They do not alter seeded measurement values or AOI
+rules. At SPI disclosure time (board insertion + 7 synthetic seconds), the selected
+PCB shows an authored before/after event, explicit HOLD reason, and equipment,
+material and measurement hypothesis/check examples. These are unranked possibilities,
+not root causes or computed before/after effects. Before measurement, no event or
+hypothesis is disclosed. No real recipe, maintenance record or SECOM mapping exists.
+
+An OK PCB with either context reason goes to the existing review tray. NG keeps the
+NG route while any additional HOLD remains visible. Neither reaching AOI nor changing
+selection releases HOLD. Reset clears the run; it is not a review approval. The full
+run JSON includes per-PCB `context_review` with `illustrative-not-operational` scope.
+The separate manufacturing-event export remains the existing constant synthetic SPI
+measurement stream; these illustrative annotations do not change its operational
+recipe/version fields or create an approved mixed-context baseline.
+
+`tests/web/smt-context-review.test.mjs` covers disclosure timing, unchanged normal/NG/
+missing routes, persistent HOLD, reset, deterministic non-mutating context and export.
+`verification/check_robot_sort_cell.cjs` additionally exercises both context scenarios,
+selection and reset at desktop/mobile sizes when a WebGL browser is available.

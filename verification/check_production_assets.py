@@ -9,6 +9,8 @@ import urllib.request
 
 BASE = 'https://fabguard-ai.vercel.app/'
 FILES = [
+    'index.html', 'silver.css', 'secom/index.html',
+    'smt/context-review-model.mjs', 'smt/context-review.mjs',
     'smt/index.html', 'smt/app.mjs', 'smt/style.css', 'smt/simulation.mjs',
     'smt/robot-cell-model.mjs', 'smt/robot-cell-view.mjs', 'smt/terms.mjs',
     'equipment/index.html', 'equipment/context-review.html',
