@@ -11,10 +11,10 @@ test('silver theme is loaded after page styles in all three entry pages',()=>{
 });
 test('silver tokens retain contrasting text and distinct semantic states',()=>{
  const css=read('web/silver.css');
- for(const token of ['--bg:#b8c2ce','--panel:#d1d9e2','--outer:#a7b3c1','--text:#17202e','--cyan:#004b9e'])assert.ok(css.includes(token),token);
+ for(const token of ['--bg:#aab6c5','--panel:#c2cdda','--outer:#99a7b8','--text:#17202e','--cyan:#00438e'])assert.ok(css.includes(token),token);
  const rgb=h=>h.match(/\w\w/g).map(x=>parseInt(x,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
  const lum=h=>rgb(h).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
- for(const [fg,bg] of [['17202e','b8c2ce'],['405161','b8c2ce'],['004b9e','d1d9e2'],['004b9e','b8c2ce'],['004b9e','c5cfda'],['714600','fff0d2'],['714600','b8c2ce'],['8f2424','f6dddd'],['8f2424','b8c2ce'],['116143','d1d9e2']]) assert.ok((Math.max(lum(fg),lum(bg))+.05)/(Math.min(lum(fg),lum(bg))+.05)>=4.5,fg+' on '+bg);
+ for(const [fg,bg] of [['17202e','aab6c5'],['354656','aab6c5'],['00438e','c2cdda'],['00438e','aab6c5'],['00438e','b8c4d2'],['613c00','fff0d2'],['613c00','aab6c5'],['802020','f6dddd'],['802020','aab6c5'],['0b5036','c2cdda']]) assert.ok((Math.max(lum(fg),lum(bg))+.05)/(Math.min(lum(fg),lum(bg))+.05)>=4.5,fg+' on '+bg);
  assert.match(css,/\.robot-review\[data-state="waiting"\]/);
  assert.match(css,/\.robot-review\[data-state="hold"\]/);
  assert.match(css,/#viewport/);
