@@ -127,3 +127,9 @@ body .topbar{height:auto;min-height:76px;padding-top:8px;padding-bottom:8px}
 :root[data-theme="dark"] body :is(.budget-top b,.decision-flow b,.validation-grid article>b,.sequence-number){color:var(--muted);opacity:1}
 
 :root[data-theme="dark"] body .data-strip span,:root[data-theme="dark"] body [data-section]::before,:root[data-theme="dark"] body [data-validation-step]::before{color:var(--muted);opacity:1}
+/* Theme switches are immediate: legacy hover transitions must not mix palettes. */
+body .topbar nav a,body .experience-map a{transition:none}
+body .topbar nav a{word-break:keep-all}
+/* Disabled does not need to mean illegible; keep its disabled semantics/cursor. */
+body .tour-actions button{background:var(--panel2);color:var(--text);border:1px solid var(--control-line);border-radius:6px}
+body .tour-actions button:disabled{color:var(--muted);background:var(--panel);cursor:not-allowed}

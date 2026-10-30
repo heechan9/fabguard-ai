@@ -42,7 +42,7 @@ async function audit(page,name,width,mode){
   await page.locator('#language-toggle').click();await page.waitForURL(/lang=en/);await page.waitForFunction(()=>document.documentElement.lang==='en');
   assert.match(await theme.innerText(),/Silver.*Dark/);assert.equal(await theme.getAttribute('aria-pressed'),'true');
   await theme.click();assert.equal(new URL(page.url()).searchParams.get('lang'),'en');await theme.click();
-  await page.locator('#language-toggle').click();await page.waitForFunction(()=>document.documentElement.lang==='ko');assert.equal(await theme.getAttribute('aria-pressed'),'true');
+  await page.locator('#language-toggle').click();await page.waitForURL(url=>!url.searchParams.has('lang'));await page.locator('#app h1').waitFor();await page.waitForFunction(()=>document.documentElement.lang==='ko');assert.equal(await theme.getAttribute('aria-pressed'),'true');
   for(const mode of ['dark','silver']){
    if(await page.locator('html').getAttribute('data-theme')!==mode)await theme.click();
    for(const [name,route,ready] of [['home','/','#app h1'],['global','/#global','.country-card'],['risks','/#risks','table'],['limits','/#limitations','#app h1'],['secom','/secom/','#distribution-evidence select'],['smt','/smt/','#context-review h3']]){
