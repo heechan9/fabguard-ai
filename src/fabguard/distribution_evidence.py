@@ -49,3 +49,35 @@ def group_summary(frame, feature):
     return {'feature': feature, 'groups': groups, 'difference_direction': 'fail_minus_pass',
             'mean_difference': delta, 'standardized_mean_difference': standardized,
             'standardized_difference_unavailable_reason': reason}
+
+
+def maximum_sensitivity(frame, feature):
+    """Leave one group maximum out of a COPY, never a cleaning recommendation.
+
+    Ties use the first row in the frozen training order. Original summaries and
+    model inputs are unchanged; each scenario removes exactly one observed row.
+    """
+    baseline = group_summary(frame, feature)  # also validates observed values
+    scenarios = []
+    for label, group in [(0, 'pass'), (1, 'fail')]:
+        observed = frame.loc[(frame.label == label) & frame[feature].notna()]
+        if observed.empty:
+            scenarios.append({'group': group, 'available': False,
+                              'reason': 'no_observed_values'})
+            continue
+        maximum = observed[feature].max()
+        # Positional selection avoids accidentally removing multiple equal indexes.
+        positions = [i for i, (y, v) in enumerate(zip(frame.label, frame[feature]))
+                     if y == label and pd.notna(v) and v == maximum]
+        position = positions[0]
+        reduced = frame.iloc[[i for i in range(len(frame)) if i != position]]
+        row = frame.iloc[position]
+        scenarios.append({'group': group, 'available': True,
+                          'excluded_sample_id': str(row.sample_id),
+                          'excluded_value': float(maximum),
+                          'maximum_tie_count': len(positions),
+                          'summary': group_summary(reduced, feature)})
+    return {'scope': 'observed_training_descriptive_sensitivity_only',
+            'deletion_recommended': False, 'original_data_modified': False,
+            'tie_policy': 'first_in_frozen_training_order',
+            'baseline': baseline, 'leave_one_group_maximum_out': scenarios}

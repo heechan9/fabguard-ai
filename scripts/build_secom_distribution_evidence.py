@@ -10,7 +10,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from fabguard.data import load_secom
-from fabguard.distribution_evidence import select_training, group_summary
+from fabguard.distribution_evidence import select_training, group_summary, maximum_sensitivity
 
 ROOT=Path(__file__).resolve().parents[1]
 FEATURES=['feature_059','feature_247','feature_519','feature_065','feature_475']
@@ -54,6 +54,11 @@ def build(data_dir, output):
             for group,g in r['groups'].items():
                 months.append({'month':month,'feature':feature,'group':group,**{k:v for k,v in g.items() if k!='quantiles'},'fail_minus_pass_mean_difference':r['mean_difference']})
     pd.DataFrame(months).to_csv(output/'monthly_summary.csv',index=False)
+    sensitivity = maximum_sensitivity(train, 'feature_475')
+    sensitivity['source_sha256'] = source_hashes
+    sensitivity['frozen_input_sha256'] = hashes
+    (output/'feature_475_sensitivity.json').write_text(
+        json.dumps(sensitivity, ensure_ascii=False, indent=2, allow_nan=False)+'\n')
     plt.rcParams.update({'svg.fonttype':'none','svg.hashsalt':'fabguard-session5','font.size':9,'axes.spines.top':False,'axes.spines.right':False})
     for feature in FEATURES:
         fig,axes=plt.subplots(1,2,figsize=(9,3.2))
