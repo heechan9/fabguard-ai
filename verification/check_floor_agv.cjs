@@ -55,11 +55,14 @@ function framed(s){assert.ok([...s.corners,s.center].every(p=>Math.abs(p[0])<1&&
    return r.continue();
   });
   await page.clock.install({time:new Date('2026-10-30T00:00:00Z')});
+  await page.clock.pauseAt(new Date('2026-10-30T00:01:00Z'));
   const advance=async ms=>{for(let t=0;t<ms;t+=100)await page.clock.fastForward(Math.min(100,ms-t));};
+  // Keep fake time paused: render bounded frames without a wall-clock re-pause race.
   const capture=async name=>{
-   await page.clock.resume();await page.locator('#viewport').scrollIntoViewIfNeeded();
+   const frozen=await sample(page);assert.match(await page.locator('#run-status').innerText(),/일시정지/);
+   await page.clock.runFor(50);await page.locator('#viewport').scrollIntoViewIfNeeded();
    const bytes=await page.locator('#viewport').screenshot({path:path.join(output,`${width}-${theme}-${name}.png`)});
-   await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));return crypto.createHash('sha256').update(bytes).digest('hex');
+   const after=await sample(page);assert.equal(after.phase,frozen.phase);assert.deepEqual(after.position,frozen.position,'Capture must preserve AGV position');return crypto.createHash('sha256').update(bytes).digest('hex');
   };
   const snapshot=async name=>{const download=page.waitForEvent('download');await page.locator('#export').press('Enter');const d=await download;const file=path.join(output,`${width}-${theme}-${name}.json`);await d.saveAs(file);return JSON.parse(fs.readFileSync(file,'utf8'));};
   await page.goto(new URL('/smt/',base).href);await advance(200);

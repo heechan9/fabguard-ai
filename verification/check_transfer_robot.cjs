@@ -11,12 +11,15 @@ const checks=[],errors=[];let activePage;
   await page.clock.install({time:new Date('2026-10-30T00:00:00Z')});
   // install() keeps time running. Freeze before navigation so CDP/render latency
   // cannot skip the first 0.75 s synthetic pickup window at 4x playback.
-  await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));
+  await page.clock.pauseAt(new Date('2026-10-30T00:01:00Z'));
   const advance=async ms=>{for(let t=0;t<ms;t+=100)await page.clock.fastForward(Math.min(100,ms-t));};
+  // Keep fake time paused: render bounded frames without a wall-clock re-pause race.
   const capture=async name=>{
-   await page.clock.resume();const view=page.locator('#viewport');await view.scrollIntoViewIfNeeded();
+   const frozen=await page.locator('#transfer-robot-active').innerText();
+   assert.match(await page.locator('#run-status').innerText(),/일시정지/);
+   await page.clock.runFor(50);const view=page.locator('#viewport');await view.scrollIntoViewIfNeeded();
    const bytes=await view.screenshot({path:path.join(output,`${width}-${name}.png`)});
-   await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));return crypto.createHash('sha256').update(bytes).digest('hex');
+   assert.equal(await page.locator('#transfer-robot-active').innerText(),frozen,'Capture must preserve R02 phase');return crypto.createHash('sha256').update(bytes).digest('hex');
   };
   await page.goto(new URL('/smt/',base).href);assert.equal(await page.locator('#view-error').isVisible(),false);
   assert.equal(await page.locator('#viewport canvas').count(),1);assert.match(await page.locator('#transfer-robot-title').innerText(),/가상 이송 로봇 R-02/);
