@@ -9,6 +9,9 @@ const checks=[],errors=[];let activePage;
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage();activePage=page;
   page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
   await page.clock.install({time:new Date('2026-10-30T00:00:00Z')});
+  // install() keeps time running. Freeze before navigation so CDP/render latency
+  // cannot skip the first 0.75 s synthetic pickup window at 4x playback.
+  await page.clock.pauseAt(await page.evaluate(()=>Date.now()+1000));
   const advance=async ms=>{for(let t=0;t<ms;t+=100)await page.clock.fastForward(Math.min(100,ms-t));};
   const capture=async name=>{
    await page.clock.resume();const view=page.locator('#viewport');await view.scrollIntoViewIfNeeded();
