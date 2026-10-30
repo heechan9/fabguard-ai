@@ -5,3 +5,5 @@
 /* The in-page experience map must not inherit the global horizontal nav layout. */
 .smt-page .experience-map{display:block;max-width:100%;margin-left:0}.smt-page .experience-map>div{min-width:0}.smt-page .experience-map a{min-width:0;white-space:normal;overflow-wrap:anywhere}
 @media(max-width:700px){.smt-page .experience-map>div{grid-template-columns:minmax(0,1fr)}}
+
+.robot-review{padding:10px 14px;border-left:3px solid #6c8997;background:rgba(8,24,33,.25)}.robot-review p{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px}.robot-review[data-state="hold"]{border-color:#e8aa4e}.robot-review[data-state="review"]{border-color:#d75948}.robot-review[data-state="ok"]{border-color:#43b998}.robot-evidence-boundary{margin-top:14px}.robot-evidence-boundary summary{cursor:pointer;font-weight:600}@media(max-width:600px){.robot-review p{grid-template-columns:1fr;gap:2px}}

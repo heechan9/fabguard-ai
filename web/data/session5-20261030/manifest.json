@@ -1,0 +1,15 @@
+{
+  "source_revision": "86dc09f703fa83f76dc3bf36bc2665023898c24a",
+  "source_directory": "docs/review/session5-20261030",
+  "scope": "Exact byte copies of verified stored train-only evidence; no recomputation or model fit",
+  "files": {
+    "feature_059.svg": "c00d8fa14c34a85f1052de0c0c756989927c4735ced1cfd82aaca2f16b3529f6",
+    "feature_065.svg": "80430d905f2ace0e8a222b0ffce6c1a60c2dcb5daeb0bb8971206bb4390e0373",
+    "feature_247.svg": "6a09ee372d3eef19474f383e18188f2c0125f5e24dc88b7ed0f8d17a677f29d3",
+    "feature_475.svg": "c2b7b3a57c0d96a56654df66e3dc3de115273d2be874a1ec4916d61d3b058c85",
+    "feature_475_sensitivity.json": "cb3eb15b7c3a43763bad65a16b11c35eabfc730fb59050b3089658158255435e",
+    "feature_519.svg": "9d92e4458b8cbd914acd3a03b34c94c1f4c0102c5eeb9ee5ce5895fa41205ab8",
+    "monthly_summary.csv": "31ef117a9fd675b8a091c6c8f097c160b6510e7a27c9933b3c22bc3036b41c31",
+    "summary.json": "5ba5e5e0f169f5dbd68f2de6d14712c6ed146d81f537c019e40008c7a7e96b1b"
+  }
+}

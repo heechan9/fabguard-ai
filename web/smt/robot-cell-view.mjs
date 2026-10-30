@@ -9,14 +9,20 @@ export function mountRobotCell(scene,x,{box,cylinder,label}){
  const links=[0,1].map(()=>cylinder(root,.095,1,0,1,0,0xe4ecef));
  const gripper=box(root,.36,.18,.38,0,1.9,0,0xe8aa4e);
  for(const side of [-1,1])box(gripper,.055,.22,.34,side*.19,-.12,0,0x344e5c);
- const palettes={ok:0x43b998,ng:0xd75948,review:0xe8aa4e};
+ const palettes={ok:0x43b998,ng:0xd75948,review:0xe8aa4e},trays={},routes={};
  for(const [key,d] of Object.entries(DESTINATIONS)){
-  box(root,1.05,.12,1.2,d.x,.94,d.z,palettes[key]);
+  trays[key]=box(root,1.05,.12,1.2,d.x,.94,d.z,palettes[key]);
+  // A static schematic cue connects the selected board's disclosed route to its tray.
+  const geometry=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,.16,0),new THREE.Vector3(d.x,.16,d.z)]);
+  routes[key]=new THREE.Line(geometry,new THREE.LineBasicMaterial({color:palettes[key]}));
+  routes[key].visible=false;root.add(routes[key]);
   label(root,d.label,d.x,.45,d.z);
  }
  label(root,ROBOT_NAME,.85,3.1,1.15);
  function segment(mesh,a,b){mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.scale.y=a.distanceTo(b);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),b.clone().sub(a).normalize());}
- return {root,update(boards){
+ return {root,update(boards,selectedId){
+  const selected=boards.find(b=>b.id===selectedId),route=selected?robotPose(selected).route:null;
+  for(const key of Object.keys(DESTINATIONS)){routes[key].visible=route===key;trays[key].material.emissive.setHex(route===key?palettes[key]:0x000000);trays[key].material.emissiveIntensity=route===key?.35:0;}
   const active=boards.find(b=>b.stage===9),pose=active&&robotPose(active);
   const p=pose?.position||{x:0,y:1.8,z:0};
   const end=new THREE.Vector3(p.x,p.y+.26,p.z),elbow=new THREE.Vector3((shoulder.x+end.x)/2,2.5,(shoulder.z+end.z)/2);
