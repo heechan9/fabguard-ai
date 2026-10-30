@@ -1,3 +1,5 @@
+import {mountContextReview} from './context-review.mjs';
+import {holdReasons} from './context-review-model.mjs';
 import {robotPose,robotReview,DESTINATIONS,ROBOT_NAME,ROBOT_SCOPE} from './robot-cell-model.mjs';
 import {mountRobotCell} from './robot-cell-view.mjs';
 import {mountIntro} from './intro.mjs';
@@ -15,8 +17,9 @@ import {clampZoom,overviewDistance,stationZoom} from './camera-model.mjs';
 const $=id=>document.getElementById(id),sim=new Simulation();
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const inspection=mountInspection($('inspection-lab'));
+const updateContextReview=mountContextReview($('context-review'));
 let introBusy=false,robotCell;
-function selectRobot(){selectStation(9);$('robot-select').setAttribute('aria-pressed','true');$('station-info').textContent=ROBOT_NAME+' · '+ROBOT_SCOPE+'. 기판 집기 → 이송 → 정상/불량 위치에 내려놓기. 측정 누락은 검토 보류 위치로 이동합니다.';targetX=positions[9];targetY=1.25;zoom=.28;azimuth=.55;elevation=.8;cameraUpdate();}
+function selectRobot(){selectStation(9);$('robot-select').setAttribute('aria-pressed','true');$('station-info').textContent=ROBOT_NAME+' · '+ROBOT_SCOPE+'. 기판 집기 → 이송 → 정상/불량 위치에 내려놓기. 측정 누락·조건 변경·정비 후 검토 대기는 검토 보류 위치로 이동합니다.';targetX=positions[9];targetY=1.25;zoom=.28;azimuth=.55;elevation=.8;cameraUpdate();}
 $('robot-select').addEventListener('click',selectRobot);
 let selected='PCB-001',activeStation=2,followInjected=false,insideView=false;
 const compactView=matchMedia('(max-width: 900px)'),machineLabels=[];
@@ -40,20 +43,21 @@ function updateUI(){
  const options=sim.boards.map(b=>b.id).join(',');if(options!==prevOptions){$('board-select').replaceChildren(...sim.boards.map(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.id+(b.fault?` · ${plainCopy(FAULTS[b.fault])}`:'');return o;}));prevOptions=options;}
  inspection.selectBoard(selected);
  $('board-select').value=selected;const b=sim.boards.find(b=>b.id===selected)||sim.boards[0],a=assess(b);
- $('board-status').textContent=a.status.replace('가상 AOI NG','가상 불량').replace('가상 AOI OK','가상 최종검사 통과').replace('리플로우 온도 검토','납땜 가열 온도 확인 필요').replace('관측값 정상 범위','가상 측정값이 설정 범위 안에 있어요');$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':''}`;
+ $('board-status').textContent=a.status.replace('가상 AOI NG','가상 불량').replace('가상 AOI OK','가상 최종검사 통과').replace('리플로우 온도 검토','납땜 가열 온도 확인 필요').replace('관측값 정상 범위','가상 측정값이 설정 범위 안에 있어요');$('board-status').className=`board-status ${a.level==='warn'?'warn':a.level==='danger'?'danger':b.stage<2?'waiting':''}`;
  $('lot-status').textContent='선택한 기판의 생산 묶음 · '+lotId(sim.boards.indexOf(b));
  $('lot-summary').textContent=lotSummary(sim.boards).map(g=>`${g.lot_id} · 투입 ${g.inserted}/4 · 완료 ${g.completed} · 가상 불량(NG) ${g.virtual_ng} · 측정 누락 ${g.missing_measurement}`).join('\n');
  $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATION_TERMS[Math.max(0,b.stage)].plain}`;
  $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=plainCopy(a.reason);
  const evidence=measurementEvidence(b),evidenceKey=JSON.stringify(evidence);
  if(prevEvidence!==evidenceKey){$('measurement-evidence').replaceChildren(...evidence.map(item=>{const card=document.createElement('article');card.className='measurement-card';const title=document.createElement('h3');title.textContent=item.label;card.append(title);for(const [label,value] of [['데모 기준 범위',item.range],['가상 측정값',item.measurement],['비교 결과',item.difference],['다음 확인',item.next]]){const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=label+' · ';p.append(strong,document.createTextNode(value));card.append(p);}return card;}));prevEvidence=evidenceKey;}
+ updateContextReview(b);
  const review=robotReview(b);$('robot-review').dataset.state=review.state;
  for(const key of ['evidence','decision','next']){const node=$('robot-'+key);if(node.textContent!==review[key])node.textContent=review[key];}
  const moving=sim.boards.find(board=>board.stage===9);$('robot-active').textContent=moving?'지금 이송하는 기판 · '+moving.id:'지금 이송하는 기판 · 없음';
  const pose=robotPose(b);$('robot-phase').textContent='선택한 기판 · '+ROBOT_NAME+' · '+b.id+' · '+pose.phase+(pose.route?' → '+DESTINATIONS[pose.route].label:'');
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
  const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('export-review').disabled=!done;$('run-status').textContent=done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
- $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>b.stage>=2&&b.volume===null).length;
+ $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>holdReasons(b).length>0).length;
  $('pending').textContent=sim.pending?`다음 기판에 적용 · ${plainCopy(FAULTS[sim.pending])}`:sim.boards.length===12?'투입 완료 · 처음부터 다시 시작하세요':'문제를 선택해 보세요';
  document.querySelectorAll('[data-fault]').forEach(button=>{button.disabled=sim.boards.length>=12;button.classList.toggle('armed',sim.pending===button.dataset.fault);button.setAttribute('aria-pressed',String(sim.pending===button.dataset.fault));});
 }

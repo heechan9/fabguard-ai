@@ -1,5 +1,7 @@
 name: Synthetic robot sorting UI
 on:
+  pull_request:
+    paths: ['web/**', 'verification/check_robot_sort_cell.cjs', '.github/workflows/robot-sort-ui.yml']
   push:
     branches: [feat/synthetic-robot-sort-cell]
     paths: ['web/smt/**', 'verification/check_robot_sort_cell.cjs', '.github/workflows/robot-sort-ui.yml']

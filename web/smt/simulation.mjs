@@ -1,3 +1,4 @@
+import {contextReview,holdReasons} from './context-review-model.mjs';
 import {lotId,lotSummary} from './lot-model.mjs';
 export const STATIONS=[
  {name:'Loader',label:'투입',duration:3,description:'PCB 투입. 각 보드에 고유 ID를 부여합니다.'},
@@ -12,7 +13,7 @@ export const STATIONS=[
  {name:'NG buffer',label:'검사 버퍼',duration:3,description:'검사 후 대기. NG는 붉은색으로 표시하며 옆의 별도 가상 로봇이 합성 분류 동작을 보여줍니다. 실제 분기 장치와 연결되지 않습니다.'},
  {name:'Unloader',label:'배출',duration:3,description:'PCB 배출. 전체 12장 완료 시 시뮬레이션이 정지합니다.'}
 ];
-export const FAULTS={paste:'납 도포량 부족',heat:'리플로우 과열',missing:'SPI 센서 데이터 누락'};
+export const FAULTS={paste:'납 도포량 부족',heat:'리플로우 과열',missing:'SPI 센서 데이터 누락',condition:'가상 조건 변경 · 비교 검토',review:'가상 정비 후 · 검토 기록 없음'};
 export const TOTAL=STATIONS.reduce((sum,s)=>sum+s.duration,0);
 const starts=STATIONS.map((_,i)=>STATIONS.slice(0,i).reduce((sum,s)=>sum+s.duration,0));
 export function manufacturingEvents(snapshot){
@@ -32,6 +33,8 @@ export function assess(b){
  if(b.stage<2)return {status:'측정 대기',level:'normal',reason:'SPI 측정을 기다리는 중입니다.'};
  if(b.aoi==='NG')return {status:'가상 AOI NG',level:'danger',reason:b.volume<80?'도포량 부족 규칙으로 생성된 NG입니다. 실제 불량 판정이 아닙니다.':'과열 규칙으로 생성된 NG입니다. 실제 불량 판정이 아닙니다.'};
  if(b.volume===null)return {status:'데이터 검토 필요',level:'warn',reason:'SPI 값이 누락되어 정상 판정을 보류합니다. 가상 AOI가 OK여도 이 경보는 남습니다.'};
+ const contextHold=holdReasons(b).filter(r=>r.code!=='missing_measurement');
+ if(contextHold.length)return {status:'HOLD · 맥락 검토 필요',level:'warn',reason:contextHold.map(r=>r.label+' · '+r.next).join(' ')};
  if(b.volume<80)return {status:'납 도포량 검토',level:'warn',reason:'가상 SPI 도포량이 설정 하한 80% 미만입니다.'};
  if(b.peak!==null&&b.peak>250)return {status:'리플로우 온도 검토',level:'warn',reason:'가상 최고 온도가 설정 상한 250°C를 초과했습니다.'};
  return {status:b.aoi==='OK'?'가상 AOI OK':'관측값 정상 범위',level:'normal',reason:b.peak===null?'SPI 측정은 설정 범위 안입니다. 리플로우 결과는 아직 도착하지 않았습니다.':'현재까지 관측된 값이 데모 규칙 범위 안입니다. 실제 품질 보증은 아닙니다.'};
@@ -48,5 +51,5 @@ export class Simulation{
    b.stage=stage;b.done=stage===11;b.progress=b.done?1:Math.max(0,(age-starts[stage])/STATIONS[stage].duration);
   }if(this.boards.length===12&&this.boards.every(b=>b.done))this.running=false;
  }
- snapshot(){return {schema_version:'fabguard-smt-synthetic/v1',data_source:'synthetic',decision_engine:'demo-rules-not-fabguard-model',seed:42,simulation_seconds:this.time,thresholds:{paste_percent:[80,120],peak_celsius:[235,250]},pending_fault:this.pending,lot_policy:{kind:"synthetic-insertion-order",boards_per_lot:4,id_scope:"current-run",counts_may_overlap:true},lot_summary:lotSummary(this.boards),boards:this.boards.map((b,i)=>({...b,lot_id:lotId(i),assessment:assess(b)}))};}
+ snapshot(){return {schema_version:'fabguard-smt-synthetic/v1',data_source:'synthetic',decision_engine:'demo-rules-not-fabguard-model',seed:42,simulation_seconds:this.time,thresholds:{paste_percent:[80,120],peak_celsius:[235,250]},pending_fault:this.pending,lot_policy:{kind:"synthetic-insertion-order",boards_per_lot:4,id_scope:"current-run",counts_may_overlap:true},lot_summary:lotSummary(this.boards),boards:this.boards.map((b,i)=>({...b,lot_id:lotId(i),assessment:assess(b),context_review:contextReview(b)}))};}
 }

@@ -45,10 +45,26 @@ const output=process.env.FABGUARD_UI_OUTPUT;fs.mkdirSync(output,{recursive:true}
   const pending=page.waitForEvent('download');await page.locator('#export').press('Enter');const file=await pending,runPath=path.join(output,width+'-missing-run.json');await file.saveAs(runPath);const snapshot=JSON.parse(fs.readFileSync(runPath,'utf8')),missing=snapshot.boards.find(b=>b.id==='PCB-002');assert.equal(missing.volume,null);assert.equal(missing.aoi,'OK');assert.equal(missing.fault,'missing');
   const {robotPose}=await import('../web/smt/robot-cell-model.mjs');const pose=robotPose(missing);assert.equal(pose.route,'review');assert.equal(pose.position.x,1.3);assert.equal(pose.position.z,2.8);
   await page.locator('#reset').press('Enter');assert.match(await page.locator('#run-status').innerText(),/일시정지/);assert.equal(await page.locator('#completed').innerText(),'0');
+  // Context-only examples keep valid measurements but cannot silently release HOLD.
+  for(const fault of ['condition','review']){
+   await page.locator('[data-fault='+fault+']').press('Enter');await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');await advance(1100);
+   await page.locator('#play').press('Enter');await page.locator('#board-select').selectOption('PCB-002');
+   assert.equal(await page.locator('#context-review ol').count(),0);assert.equal(await page.locator('.context-hypotheses article').count(),0);
+   assert.match(await page.locator('#context-review').innerText(),/측정 전/);
+   await page.locator('#play').press('Enter');await advance(10000);await page.locator('#play').press('Enter');
+   assert.notEqual(await page.locator('#volume').innerText(),'누락');assert.match(await page.locator('#robot-phase').innerText(),/검토 보류 위치/);
+   assert.equal(await page.locator('#robot-review').getAttribute('data-state'),'hold');assert.equal(await page.locator('#context-review ol li').count(),1);assert.equal(await page.locator('.context-hypotheses article').count(),3);
+   assert.match(await page.locator('#context-review').innerText(),/변경 전:.*변경 후:/s);assert.match(await page.locator('#robot-next').innerText(),/자동 해제하지/);
+   await capture(page.locator('#context-review'),width+'-'+fault+'-context.png');
+   await page.locator('#context-review').evaluate(el=>scrollTo({top:el.getBoundingClientRect().top+scrollY-document.querySelector('.topbar').getBoundingClientRect().height-12,behavior:'instant'}));
+   await page.screenshot({path:path.join(output,width+'-'+fault+'-review-viewport.png')});await capture(page.locator('#viewport'),width+'-'+fault+'-hold.png');
+   await page.locator('#board-select').selectOption('PCB-001');assert.equal(await page.locator('#context-review ol').count(),0);assert.equal(await page.locator('#robot-review').getAttribute('data-state'),'ok');
+   await page.locator('#reset').press('Enter');assert.equal(await page.locator('#context-review ol').count(),0);assert.equal(await page.locator('.context-hypotheses article').count(),0);assert.equal(await page.locator('#review-count').innerText(),'0');
+  }
   // Existing camera and separate inspection/intro paths must remain usable.
   await page.locator('#top-view').press('Enter');await page.locator('#camera-reset').press('Enter');await page.locator('#intro-open').press('Enter');assert.equal(await page.locator('#intro-dialog').isVisible(),true);await page.locator('#intro-close').press('Enter');assert.ok(await page.locator('#inspection-lab button').count()>0);
   await page.clock.resume();await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('#reset').press('Enter');assert.match(await page.locator('#run-status').innerText(),/실행 중/);await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>document.getElementById('run-status').textContent==='일시정지');assert.match(await page.locator('#run-status').innerText(),/일시정지/);
-  checks.push({width,status:'pass',assertions:'WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG/missing-to-review; exported null measurement and review coordinates; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow'});
+  checks.push({width,status:'pass',assertions:'WebGL; reduced motion initial/reset; robot Enter/Tab/link; pick/transfer/place; normal/NG/missing-to-review; condition/post-maintenance HOLD timeline/hypotheses/selection/reset; exported null measurement and review coordinates; pause; 12 complete/export; reset; camera; intro; inspection; no document overflow'});
   await context.close();
  }
  fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({base_url:base,commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),browser:browser.version(),checks,errors,scope:'synthetic robot cell UI only; no detection performance or equipment control'},null,2));await browser.close();if(errors.length)process.exitCode=1;
