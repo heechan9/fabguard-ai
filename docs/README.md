@@ -49,6 +49,9 @@
 
 ## 외부 검토 준비
 
+- [CPI 중심 네 직무 데이터 비교 적용표](DATA_COMPARABILITY_CONTRACT.md) · [저장 분석 전달 준비도](ANALYSIS_HANDOFF_READINESS.md)
+- [English technical handoff](TECHNICAL_HANDOFF_EN.md) · [日本語要約](TECHNICAL_HANDOFF_JA.md) — 로컬 준비 문서, 현장 승인·실적 아님.
+
 - [외부 검토 요약·질문 5개](review/EXTERNAL_REVIEW_BRIEF.md)
 - [검토 답변·후속 처리 양식](review/REVIEW_RESPONSE_TEMPLATE.md)
 

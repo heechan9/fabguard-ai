@@ -149,3 +149,24 @@ V1은 실제 공장에 배포되지 않았고 수율·원가·가동률을 측�
 ## 반도체 업무 흐름으로 구체화
 
 [공정 이상 검토·검증·승인 사용 사례](SEMICONDUCTOR_REVIEW_WORKFLOW.md)에 공정·설비 점검, PE 추가 검사, 적층·패키징 변경 검토의 목표 흐름과 데이터 요구사항을 정리했다. 현재 구현과 향후 설계를 구분하며, 실제 SPC/FDC 연동·원인 규명·승인 저장·제조 효과를 완료했다고 주장하지 않는다.
+
+## 2026-10-31 목표 정렬: CPI 중심 + MAE·ATE·RDA 공통 역량
+
+기존 직무 설명은 보존한다. 현재 우선 목표는 **2. Central Product Integration(CPI)**이며,
+**1. Manufacturing Alignment Engineering(MAE)**의 표준화,
+**3. Alpha Technology Engineering(ATE)**의 이전 준비,
+**4. RDA/Metrology**의 측정·데이터 검토 역량을 함께 준비한다.
+이 번호는 목표 직무 목록이며 위 기존 장 번호를 바꾸지 않는다.
+
+- CPI: 검사 예산·포착/누락·물리 원인 불명을 설명하는 [분석 전달 준비도](ANALYSIS_HANDOFF_READINESS.md).
+- MAE: 기존 게이트를 일관되게 적용하는 [비교 가능성 계약](DATA_COMPARABILITY_CONTRACT.md).
+- ATE: 출처·버전·미확인 조건을 넘기는 [영문 기술 전달서](TECHNICAL_HANDOFF_EN.md). 실제 공정 이전 아님.
+- RDA/Metrology: 단위·측정 시점·label 의미가 없을 때 비교를 보류하는 같은 계약. 계측 recipe 실무 아님.
+
+관련 경력·DRAM/소자 물리·전기검사·공정/계측 전문성은 이 포트폴리오로 대체하지 않는다.
+Micron 또는 다른 기업의 평가·제휴·채용 보장을 뜻하지 않으며 실제 지원 시 최신 공고를 다시 확인한다.
+기존 SMT/로봇/AGV/별도 OHT/UR3 화면과 Silver/Dark 디자인을 보존하고 기업 로고나 리브랜딩을 추가하지 않는다.
+
+위 기존 표의 피드백 미구현 표현은 현재 상태와 구별해 읽는다. PR194 이후 자가 기입·비인증
+오프라인 검토 메모의 JSON export/import는 구현되어 있으나, 실제 현장 조치·인증된 승인·
+영구 감사 DB는 여전히 입증되지 않았다. 본 추가 문서는 기존 기여 기록을 변경하지 않는다.
