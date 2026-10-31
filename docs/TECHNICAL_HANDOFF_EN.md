@@ -186,3 +186,13 @@ metrology calibration/repeatability and packaging mechanisms using legitimate le
 Optional web change, not implemented: add a handoff link to the existing review page. Any UI/code work needs a
 separate scope report; do not create a second review system. dot coordinates actual Claude/Jules review;
 no duplicate requests, external outreach, coauthorship commitment or large experiment was made.
+
+## Two audiences, one evidence spine
+
+See the [two-route requirement/evidence/gap matrices and five-minute demos](ROLE_ALIGNMENT.md#2026-11-01-두-경로로-설명하기).
+Route A explains process/yield review and technical handoff; Route B explains manufacturing-analysis software,
+data contracts, UI, failure isolation and reproducibility. The owner's long-term target is not the same as the
+skills most directly demonstrated by today's artifacts. AI-assisted implementation does not establish the owner's
+unaided programming proficiency. Product Agent/RAG, enterprise databases, AMHS control and factory qualification
+remain unimplemented or unvalidated. Domestic graduate job descriptions are not U.S. hiring requirements.
+Public employer links support the mapping; privately supplied lecture pages and captures are not redistributed.
