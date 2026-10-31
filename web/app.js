@@ -248,6 +248,12 @@ function detailView(id) {
   const scope = explanationScope(row.evidence_scope);
   const features = scope.showFeatures ? String(row.suggested_features).split(";") : [];
   app.innerHTML = `<section class="page-hero detail-hero"><div><p class="kicker">우선순위 ${String(row.rank).padStart(2, "0")}</p><h1>${esc(row.sample_id)}</h1><p class="lead">${esc(row.timestamp)} · 시간순 검증구간의 생산 건</p></div><a class="text-link" href="#risks">← 우선점검 목록</a></section><section class="detail-grid"><article><span>AI 위험점수</span><strong>${pct(row.risk_score)}</strong></article><article><span>고정 기준 예측</span><strong>${row.prediction === 1 ? "불량" : "정상"}</strong></article><article><span>데이터의 실제 결과</span><strong>${row.label === 1 ? "불량" : "정상"}</strong></article></section><section class="evidence-panel"><div><p class="kicker">${esc(scope.label)}</p><h2>${esc(scope.title)}</h2><p>${esc(scope.description)}</p></div><div class="features">${features.map((feature, index) => `<span><b>0${index + 1}</b>${esc(feature)}</span>`).join("")}</div></section><section class="review-prompt"><span>엔지니어 확인</span><p><b>다음 단계:</b> 익명 변수의 실제 센서·공정 매핑 → 4M 및 변동점 기록 → 품질 이력 대조 → 재검사·설비점검 여부를 사람이 결정합니다.</p></section><div class="caution full"><span>해석할 때 주의</span><p>${esc(row.limitation)}</p></div>`;
+  const reviewLink = document.createElement("a");
+  reviewLink.className = "button";
+  reviewLink.href = `/review/?sample=${encodeURIComponent(row.sample_id)}${isEnglish ? "&lang=en" : ""}`;
+  reviewLink.textContent = isEnglish ? "Offline review note · export / import" : "오프라인 검토 메모 · 저장 / 불러오기";
+  app.querySelector(".review-prompt").append(reviewLink);
+
 }
 
 function limitationsView() {
