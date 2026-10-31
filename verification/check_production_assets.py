@@ -21,6 +21,8 @@ FILES = [
     'equipment/context-review-model.mjs', 'equipment/data/maintenance-synthetic.json',
     'robot/ur3/index.html', 'robot/ur3/style.css', 'robot/ur3/app.mjs',
     'robot/ur3/core.mjs', 'robot/ur3/data-hash.mjs', 'robot/ur3/data.json',
+    'robot/offline-evidence.mjs', 'robot/offline-report-data.mjs',
+    'robot/offline-report.json', 'robot/app.mjs', 'robot/style.css',
     'robot/index.html', 'robot/window-core.mjs', 'research/index.html',
 ]
 

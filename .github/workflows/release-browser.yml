@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kind: [robot, context, silver, theme, transfer, floor-agv, ur3, oht]
+        kind: [robot, context, silver, theme, transfer, floor-agv, ur3, oht, offline-report]
         width: [1366, 390, 360]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -57,7 +57,9 @@ jobs:
           FABGUARD_UI_OUTPUT: ${{ runner.temp }}/release-ui
           REVIEW_KIND: ${{ matrix.kind }}
         run: |
-          if [ "$REVIEW_KIND" = robot ]; then
+          if [ "$REVIEW_KIND" = offline-report ]; then
+            FABGUARD_PRODUCTION_CHECK=1 NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 240s node verification/check_robot_offline_evidence.cjs
+          elif [ "$REVIEW_KIND" = robot ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_robot_sort_cell.cjs
           elif [ "$REVIEW_KIND" = theme ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_theme_ui.cjs

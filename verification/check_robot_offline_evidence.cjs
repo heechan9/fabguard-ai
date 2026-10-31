@@ -2,6 +2,7 @@
 const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process');
 const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764';
 const output=process.env.FABGUARD_UI_OUTPUT;
+const production=process.env.FABGUARD_PRODUCTION_CHECK==='1';
 if(!output)throw Error('FABGUARD_UI_OUTPUT required');
 (async()=>{
  fs.mkdirSync(output,{recursive:true});
@@ -37,6 +38,9 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
   await wrap.evaluate(e=>e.scrollLeft=0);await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:path.join(output,`offline-${width}.png`),fullPage:true});
   await page.locator('.offline-evidence').screenshot({path:path.join(output,`report-card-${width}.png`)});
+  if(production){
+   assert.equal(errors.length,0,JSON.stringify(errors));await context.close();continue;
+  }
   // Renderer itself is optional too, not only its data dependency.
   await page.route('**/offline-evidence.mjs',r=>r.fulfill({status:404,body:'renderer not found'}));
   await page.reload();await page.locator('#offline-results[data-status=withheld]').waitFor();
@@ -63,6 +67,6 @@ if(!output)throw Error('FABGUARD_UI_OUTPUT required');
   }
   assert.equal(errors.length,0,JSON.stringify(errors));await context.close();
  }
- fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({status:'pass',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),widths,browser:browser.version(),report_sha256:expectedHash,checks:['download bytes = historical report','table rows = downloaded JSON','visible hash','7 file rows','null performance','overflow','keyboard table/scroll/download Enter','reduced motion','renderer 404 withheld; CSV keyboard Enter generates 4 rows; no pageerror','malformed JSON withheld','missing file withheld','CSV demo generates 4 rows after each error; no pageerror'],scope:'stored exploratory report display only'},null,2));
+ fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({status:'pass',commit:cp.execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),widths,base_url:base,mode:production?'production-read-only':'loopback-with-fault-injection',browser:browser.version(),report_sha256:expectedHash,checks:['download bytes = historical report','table rows = downloaded JSON','visible hash','7 file rows','null performance','overflow','keyboard table/scroll/download Enter','reduced motion',...(production?[]:['renderer 404 withheld; CSV keyboard Enter generates 4 rows; no pageerror','malformed JSON withheld','missing file withheld','CSV demo generates 4 rows after each error; no pageerror'])],scope:'stored exploratory report display only'},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
