@@ -1,3 +1,4 @@
+import { translateEnglish } from "./english-copy.mjs";
 import { explanationScope } from "./explanation-scope.mjs";
 import { mountEvidence } from "./smt/evidence.mjs";
 import { renderHeroEvidence, renderPortfolioStory, storyEvidence } from "./portfolio-story.mjs";
@@ -11,6 +12,7 @@ document.querySelector('.skip-link')?.addEventListener('click', event => {
 const language = new URLSearchParams(location.search).get("lang") === "en" ? "en" : "ko";
 const isEnglish = language === "en";
 document.documentElement.lang = language;
+if (isEnglish) document.querySelector('meta[name="description"]')?.setAttribute("content", "Offline semiconductor manufacturing risk prioritisation and human review on public data");
 let state = { summary: null, risks: null, phase1: null, dkasc: null, globalE2E: null, globalCandidates: null };
 let professionalEvidenceHtml = "";
 
@@ -141,6 +143,7 @@ async function load() {
     route();
   } catch (error) {
     app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" onclick="location.reload()">다시 시도</button></section>`;
+    if (isEnglish) { translateEnglish(); app.querySelector(".state>p:not(.kicker)").textContent = "Result data could not be verified. Check the source files and retry."; }
   }
 }
 
@@ -212,7 +215,7 @@ function summaryView() {
   if (requestedView === "global") {
     [...app.children].forEach(section => { if (!section.classList.contains("global-section")) section.remove(); });
     app.insertAdjacentHTML("beforeend", `<section id="country-evidence" class="panel evidence-section"></section>`);
-    mountEvidence();
+    mountEvidence().then(() => { if (isEnglish) translateEnglish(); });
   } else {
     app.querySelector(".global-section")?.remove();
     app.querySelectorAll(expertSelectors).forEach(section => section.remove());
@@ -306,6 +309,7 @@ function route() {
   if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
   if (hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  if (isEnglish) translateEnglish();
   finishRoute(hash);
 }
 

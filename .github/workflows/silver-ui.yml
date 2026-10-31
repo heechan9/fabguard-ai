@@ -1,10 +1,10 @@
 name: Silver reader surface verification
 on:
   pull_request:
-    paths: ['web/**', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
+    paths: ['web/**', 'verification/check_english_ui.cjs', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
   push:
     branches: [main]
-    paths: ['web/**', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
+    paths: ['web/**', 'verification/check_english_ui.cjs', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
 permissions:
   contents: read
 jobs:
@@ -41,6 +41,7 @@ jobs:
           python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/robot-server.log" 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/silver-ui/english" NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_english_ui.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_silver_ui.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_theme_ui.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_oht.cjs

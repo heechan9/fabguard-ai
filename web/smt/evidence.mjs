@@ -1,3 +1,4 @@
+import { translateEnglish } from "../english-copy.mjs";
 import {DATASETS, datasetEvidence, sourceUrl} from './evidence-model.mjs';
 const esc = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const num = value => Number(value).toLocaleString('ko-KR');
@@ -33,6 +34,7 @@ function renderCard(root, snapshot, id) {
     <tr><th scope="row">Clearness score</th><td>${score(sdt['clearness score'])}</td></tr><tr><th scope="row">Clipped fraction</th><td>${score(sdt['clipped fraction'])}</td></tr><tr><th scope="row">클리핑 신호</th><td>${yesNo(sdt['inverter clipping'])}</td></tr><tr><th scope="row">용량 변화 신호</th><td>${yesNo(sdt['capacity change'])}</td></tr><tr><th scope="row">SDT 품질 경고</th><td>${yesNo(sdt['data quality warning'])}</td></tr></tbody></table></div><p>SDT ${esc(report.runtime.solar_data_tools_version)} · ${esc(report.runtime.solver)}. 집계·모델 기준 자료에서도 신호가 발생할 수 있습니다.</p></details>` : ''}
     <details class="evidence-details"><summary>단위·검증 상태·출처 확인</summary><p>${esc(meta.unit)}</p><p>저장된 상태: ${esc(report?.status ?? audit.status)}<br>기록된 수집·분석 시점: ${esc(audit.retrieved_at ?? report?.source.observed_at ?? audit.source_accessed_at)}</p><p>감사와 ${report ? '분석 보고서' : '웹 요약'}의 행 수·SHA-256 선언: <b>${d.lineageMatches ? '일치' : '불일치 · 확인 필요'}</b>. 원본 CSV를 다시 해시하거나 분석을 재실행한 검증은 아닙니다.</p><code class="evidence-hash">${esc(d.hash)}</code></details>
     <div class="evidence-links"><a href="${sourceUrl(snapshot,d.auditPath)}" target="_blank" rel="noopener">${id === 'dkasc' ? '정규화 감사' : '수집 감사'} ↗</a><a href="${sourceUrl(snapshot,d.reportPath)}" target="_blank" rel="noopener">${report ? '원본 분석 보고서' : '저장소 웹 요약'} ↗</a></div>`;
+  if (document.documentElement.lang === 'en') translateEnglish(root);
   for(const button of root.querySelectorAll('[data-evidence-source]')) button.setAttribute('aria-pressed',String(button.dataset.evidenceSource === id));
 }
 export async function mountEvidence(root = document.querySelector('#country-evidence')) {
@@ -54,7 +56,8 @@ export async function mountEvidence(root = document.querySelector('#country-evid
       <details class="evidence-details"><summary>SMT 3D 시나리오의 가정과 계산 근거</summary><p>고정 난수 시드 42로 가상 측정값을 만듭니다. r은 0 이상 1 미만의 의사난수이며 각 측정에 다음 난수를 사용합니다. 실제 장비 규격이나 물리 예측 모델은 포함하지 않습니다.</p><div class="evidence-table-wrap"><table class="evidence-table"><thead><tr><th scope="col">시나리오</th><th scope="col">값 생성</th><th scope="col">표시 규칙</th></tr></thead><tbody>
       <tr><th scope="row">기본 PCB</th><td>납 round(94 + 12r)%<br>최고 온도 round(239 + 8r)°C</td><td>SPI·리플로우 측정 시점 이후 공개</td></tr><tr><th scope="row">납 부족</th><td>round(58 + 9r)%</td><td>80% 미만이면 검토 · AOI에서 가상 NG</td></tr><tr><th scope="row">과열</th><td>round(264 + 8r)°C</td><td>250°C 초과이면 검토 · AOI에서 가상 NG</td></tr><tr><th scope="row">센서 누락</th><td>SPI 값 null</td><td>AOI OK여도 데이터 검토 유지</td></tr><tr><th scope="row">배치 시간</th><td>11공정 체류 합 42초 + (12−1)×4초 = 86초</td><td>시뮬레이션 시간 · 실제 생산성 계산 아님</td></tr></tbody></table></div><p>AOI도 같은 규칙으로 생성되므로 독립적인 정답 검증이나 예측 정확도를 계산할 수 없습니다. 상단의 범위 표시는 데모 설정이며 구현된 이상은 납 하한·온도 상한·누락에 한정됩니다.</p><a href="/smt/simulation.mjs" target="_blank" rel="noopener">시나리오 계산 코드 ↗</a></details>
       <div class="evidence-links"><a href="/data/evidence_snapshot.json" download="fabguard-evidence-snapshot.json">표시 근거 JSON 저장 ↓</a><a href="${sourceUrl(snapshot,'results/catalog.json')}" target="_blank" rel="noopener">FabGuard 자료 목록 ↗</a><a href="/secom/">SECOM 반도체 분석 →</a></div><p class="evidence-muted">${snapshot.checked_at} 저장소 확인 · 자료 목록 갱신 ${snapshot.files['results/catalog.json'].updated_at}. 자동 갱신·실 API 호출 없이 동일한 저장본을 표시합니다.</p>`;
-    for(const button of root.querySelectorAll('[data-evidence-source]')) button.addEventListener('click',()=>renderCard(root,snapshot,button.dataset.evidenceSource));
+    if (document.documentElement.lang === 'en') translateEnglish(root);
+  for(const button of root.querySelectorAll('[data-evidence-source]')) button.addEventListener('click',()=>renderCard(root,snapshot,button.dataset.evidenceSource));
     renderCard(root,snapshot,'dkasc');
   } catch(error) {
     root.replaceChildren();

@@ -22,3 +22,7 @@
   .smt-page .scene-caption{font-size:12px;flex-wrap:wrap;max-width:calc(100% - 24px)}
   .smt-page #fault-controls,.smt-page #board-inspector,.smt-page #smt-lab,.smt-page #country-evidence{scroll-margin-top:115px}
 }
+/* English words must wrap within the same narrow cards and navigation cells. */
+html[lang="en"] :is(h1,h2,h3,p,a,small,summary,span,dt,dd){overflow-wrap:anywhere}
+html[lang="en"] :is(.hero-copy,.section-heading>*,.evidence-entry>*,.global-heading>*){min-width:0}
+html[lang="en"] :is(.button,.smt-entry .button,.topbar nav a){white-space:normal}
