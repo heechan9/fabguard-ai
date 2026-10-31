@@ -34,5 +34,5 @@ test('camera frames transport bounds at mobile and desktop, without altering sta
 });
 test('source preserves standalone scope, text fallback, accessible clock and independent startup',async()=>{
  const app=await readFile(new URL('../../web/oht/app.mjs',import.meta.url),'utf8'),html=await readFile(new URL('../../web/oht/index.html',import.meta.url),'utf8');
- assert.match(html,/src="\/theme.js"/);assert.match(html,/id="view-error"/);assert.match(html,/aria-live="off"/);assert.match(app,/visibilitychange/);assert.match(app,/webglcontextlost/);assert.ok(app.indexOf('requestAnimationFrame(tick)')<app.indexOf('await Promise.all'));assert.doesNotMatch(app,/fetch\(|ur3\/|fledge\/|secom\/|smt\/simulation/);
+ assert.match(html,/src="\/theme.js"/);assert.match(html,/id="view-error"/);assert.match(html,/aria-live="off"/);assert.match(app,/visibilitychange/);assert.match(app,/webglcontextlost/);const startup=[...app.matchAll(/^frame=requestAnimationFrame\(tick\);$/gm)];assert.equal(startup.length,1,'exactly one top-level startup schedule');assert.ok(startup[0].index<app.indexOf('await Promise.all'));assert.equal((app.match(/requestAnimationFrame\(tick\)/g)||[]).length,3,'startup, recursive tick, and persisted pageshow only');assert.doesNotMatch(app,/fetch\(|ur3\/|fledge\/|secom\/|smt\/simulation/);
 });
