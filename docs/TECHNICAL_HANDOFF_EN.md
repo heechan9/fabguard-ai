@@ -118,3 +118,71 @@ then updated administratively; those status-only bytes were not resubmitted. Jul
 public release were pending at preparation time. Consult the associated PR for subsequent publication;
 Jules and field review were not performed for this document.
 See the [Japanese summary](TECHNICAL_HANDOFF_JA.md).
+
+## November 2026 review route
+
+Updated 2026-11-01 KST. Documentation baseline: `0eb1df1507972f98f188c076e987bf425cd02e35`.
+PR196 merged the four handoff documents plus two links; the earlier preparation notes above are historical.
+The earlier d534d6e baseline and historical analysis-source SHA retain their distinct roles.
+The live site can advance independently: pin a checkout for arithmetic review, not a moving URL.
+
+Common spine: manufacturing-data validation → risk ordering → human review → reproducible handoff.
+First career orientation: Hiroshima; the same evidence remains usable for Korea/U.S. semiconductor roles.
+Company terminology and qualifications are not interchangeable. See [role mapping](ROLE_ALIGNMENT.md#2026-11-01-공통-기반과-기업별-설명).
+
+| Minutes | Existing route | What is actually implemented |
+|---|---|---|
+| 0:00–0:40 | [README](../README.md) → [demo](https://fabguard-ai.vercel.app/) | Saved SECOM result: top40 captures 5/24, 35 normal records inspected, 19 failures outside budget; provisional |
+| 0:40–1:30 | [queue](https://fabguard-ai.vercel.app/#risks) → [case](https://fabguard-ai.vercel.app/#detail/secom_1397) | Rank1 is retrospectively normal; score is not calibrated failure probability. Display top50 ≠ evaluation top40 |
+| 1:30–2:40 | Case button → [review note](https://fabguard-ai.vercel.app/review/?sample=secom_1397) | Self-declared offline note, JSON export/import; no authenticated approval or permanent factory database |
+| 2:40–3:30 | [readiness](ANALYSIS_HANDOFF_READINESS.md) → this handoff in a separate tab | Existing documents; review page has no direct handoff link or automatic packet assembly |
+| 3:30–4:20 | [UR3](https://fabguard-ai.vercel.app/robot/ur3/) / [IMAD report](https://fabguard-ai.vercel.app/robot/) / [SMT](https://fabguard-ai.vercel.app/smt/) / [OHT](https://fabguard-ai.vercel.app/oht/) | Separate historical sensor replay, saved normal-development exploration, and synthetic scenes |
+| 4:20–5:00 | Explain missing evidence | No real DRAM/HBM/foundry work, verified root cause, production qualification or field improvement is established |
+
+Transition: “These are separate sources, not one connected factory. UR3 replays historical measurements;
+IMAD shows saved normal-development exploratory alarms. SMT/AGV/OHT motion is synthetic and is not generated
+from those sensor records. Sensor change, input-quality failure and recorded protective stop are different observations.”
+
+### One small public-data review task
+
+Question: Do the six pinned saved files support the reported top40 counts and AP without overstating them?
+Use a trusted public checkout, Python standard library, and the six `results/v1` files listed above.
+No raw dataset, model download, credentials, training, inference or threshold selection is required.
+
+```sh
+git checkout --detach 0eb1df1507972f98f188c076e987bf425cd02e35
+git rev-parse HEAD
+python3 verification/recompute_v1.py --results results/v1
+```
+
+First confirm the full SHA and compare all six printed hashes with the table above.
+Expected: consistent, 392 records, AP 0.09347718147533737, top40=5 failures +35 normal,
+24 total failures, 19 outside budget, provisional exposure status. The script checks arithmetic,
+not the expected pinned hash list; the reviewer must compare hashes separately.
+Return only: checked SHA, environment, hash match/mismatch, observed counts and one misleading/missing caveat.
+Stop/withhold on mismatched identity, hashes, denominator or unavailable files. Do not tune values to match.
+Success means saved-evidence consistency only, not independent performance or a hiring endorsement.
+
+For this documentation update Codex executed this existing audit once on the baseline with Python 3.12.14:
+consistent, 392, AP 0.09347718147533737, top40 5/24 and 35 normal. It was not a new experiment.
+
+### Rights and access boundary
+
+Public repository code/docs/saved-result audit and public web inspection can be reviewed now; preserve existing
+code license, source attributions and AI/human contributions. SECOM/UR3 retain their source-specific rights;
+public availability does not license every included or third-party asset for unrestricted reuse.
+IMAD raw archives/features/models, private fab logs, training slides, identifiable review notes and new site data
+are not part of this task. Check ownership, permitted purpose, redistribution and access separately before transfer.
+Do not publish private records in issues or expand Drive sharing. Existing overseas-collaboration PDFs remain dated
+snapshots; this Git handoff is the current navigation layer, not a duplicate folder or a new partnership claim.
+
+### Remaining work; proposed only
+
+Prioritize analysis evidence over new equipment models: (1) independent normal/abnormal sessions and onset labels
+with fixed split/threshold/metrics; (2) SPC subgroup/normality/autocorrelation and control-limit vs specification-limit
+understanding; (3) an approved DOE plan defining factors, response, blocking, randomization, replication and safety.
+No DOE or field trial was run here. Device/process study must cover DRAM basics, process steps, electrical test,
+metrology calibration/repeatability and packaging mechanisms using legitimate learning/measurement evidence.
+Optional web change, not implemented: add a handoff link to the existing review page. Any UI/code work needs a
+separate scope report; do not create a second review system. dot coordinates actual Claude/Jules review;
+no duplicate requests, external outreach, coauthorship commitment or large experiment was made.

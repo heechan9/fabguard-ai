@@ -170,3 +170,53 @@ Micron 또는 다른 기업의 평가·제휴·채용 보장을 뜻하지 않으
 위 기존 표의 피드백 미구현 표현은 현재 상태와 구별해 읽는다. PR194 이후 자가 기입·비인증
 오프라인 검토 메모의 JSON export/import는 구현되어 있으나, 실제 현장 조치·인증된 승인·
 영구 감사 DB는 여전히 입증되지 않았다. 본 추가 문서는 기존 기여 기록을 변경하지 않는다.
+
+## 2026-11-01 공통 기반과 기업별 설명
+
+문서 기준 main `0eb1df1507972f98f188c076e987bf425cd02e35` / #196 병합 확인.
+목표는 히로시마를 1차 방향으로 두되 국내·미주 삼성전자·SK하이닉스에도 설명 가능한
+**제조 데이터 검증 → 위험 우선순위 → 사람 검토 → 재현 가능한 기술 인계**다.
+기업별 별도 프로젝트·실제 기업 데이터 경험·채용 보장은 만들지 않는다.
+
+| 설명 경로 | 현재 근거 | 현재 증명하지 못하는 것 |
+|---|---|---|
+| 공정·품질 | SECOM 고정 저장결과, 시간순 평가, Top40=불량5/24·정상35·누락19, 비교계약 | 노출 holdout의 독립 성능, 실제 공정 원인·DRAM/HBM 수율 개선 |
+| 설비·자동화 | UR3 실제 과거 센서 재생, 입력 품질/오류 보류, IMAD 저장 탐색 보고서 | UR3 고장 예측·제어, IMAD 경보9/0/3의 우열; AGV/OHT는 별도 합성 |
+| 기술 인계·사업장 협업 | 고정 SHA·파일 해시·표준 검산·영문/일문 전달·비교 불가 사유 | 실제 사업장 이전, qualification, 인증된 승인, 공동연구 참여 |
+
+### 공식 자료 대조 — 확인일 2026-11-01 KST
+
+다음은 업무/학습 연결 해석이며 채용 적격 판정이 아니다. 현재 공고와 과거 모집 기록을 구분한다.
+동적 Workday는 검색에 노출된 공식 설명을 사용했으며 본문 직접 열기는 텍스트가 비어 있어
+정확한 공고 지속 여부·전체 자격은 지원 시 다시 확인해야 한다.
+
+| 기업·자료 | 공식 업무와 연결되는 현재 증거 | 추가 지식·경험 및 자격 경계 |
+|---|---|---|
+| Micron Hiroshima CPI, JR90854 | Test/Product/Yield 조직 간 근거 설명에 Top-K·한계·영문 인계 패턴 연결 | 해당 공고는 Senior/Staff/Principal/Engineer 및 2+년 경험 요구가 노출됨. 경력 참고이며 신입 적격 주장 아님. DRAM·전기적 특성·제품/공정 통합·NPI/qualification 경험 부족 |
+| 삼성전자 DS 메모리 반도체공정기술·평가 및 분석 | 공정/품질 데이터 해석·통계·검토 우선순위 설명 | 실제 8대 공정·소자/메모리 동작·신뢰성·검사 이해와 실습 필요. Micron CPI/MAE/ATE/RDA를 삼성 공식 직무명으로 쓰지 않음 |
+| Samsung Austin Photo Process Engineer R110473 | 데이터 경향·변동점·정비 후 점검·기술 발표라는 업무와 연결 | 실제 Photo 공정·tool qualification·SOP 및 문제해결 필요. 공식 설명의 new grads GPA 3.0+는 해당 공고 조건이며 포트폴리오로 면제되거나 모든 삼성 직무에 적용되는 기준이 아님 |
+| SK하이닉스 국내 2026 상반기 신입 R260521 | Product Engineering·양산기술·양산기술(P&T) 등 공식 분류에 공통 분석 근거 연결 | 종료된 과거 신입 공고이며 현재 모집으로 소개하지 않음. 첨부 상세 JD는 검색 도구에서 읽지 못해 세부 요건 확정 보류. 실제 공정·제품·검사·설비 지식은 지원 직무별 보완 |
+| SK hynix America Advanced Package Design Engineer | 근거 인계·재현·부서 간 소통의 공통 습관만 연결 | 설계/layout 3+년, EDA 및 interposer·SI/PI 지식 요구. 팹가드는 해당 설계 역량 증거가 아니며 인디애나 제조 신입 공고로 대체 해석하지 않음 |
+
+공식 출처:
+- [Micron JR90854](https://micron.wd1.myworkdayjobs.com/en-US/External/job/Front-End-Central-Product-Integration-Senior---Staff---Principal---Engineer--Test---Product-Yield-Integration_JR90854)
+- [삼성 DS 직무소개](https://www.samsung-dsrecruit.com/recruits/job_intro/) · [메모리 평가 및 분석](https://www.samsung-dsrecruit.com/recruits/job_intro/memory/analysis.php)
+- [Samsung Austin R110473](https://sec.wd3.myworkdayjobs.com/en-US/Samsung_Careers/job/Photo-Process-Engineer_R110473-1)
+- [SK하이닉스 과거 신입 R260521](https://www.skcareers.com/Recruit/Detail/R260521)
+- [SK hynix America package design](https://job-boards.greenhouse.io/skhynixamerica/jobs/5117958008)
+
+MAE·ATE·RDA는 기존 목표 정렬 문서의 Micron 업무 관점이며 타사 공식 명칭이 아니다.
+이번 조사에서 해당 세 역할의 최신 개별 공식 JD 전체를 확인하지 못했으므로 자격 요건을 새로 확정하지 않는다.
+글로벌 조직 협업은 문서·원격 회의·시차 조율을 포함하며 출장 빈도·비자 지원을 뜻하지 않는다.
+
+### 우선 보완할 지식과 근거 — 계획, 미실행
+
+1. SPC: 관리한계와 규격한계, 정상 기준선·합리적 부분군·자기상관, 결측/시간 공백을 학습한다.
+   독립 정상·이상 세션과 onset 확보 전 오탐률·재현율·지연을 채우지 않는다.
+2. DOE: 인자·반응·교호작용·블록·반복·무작위화와 표본/안전 계획부터 설명한다.
+   실제 공정 자료·허가 없는 레시피 변경이나 합성 개선율을 현장 결과로 쓰지 않는다.
+3. 공정·소자/계측: DRAM 기본 동작, 공정 흐름과 전기검사, 측정 교정·반복성,
+   패키징과 불량 메커니즘을 별도 학습·실습 근거로 보완한다. 익명 변수·장비 모형이 이를 대체하지 않는다.
+
+이번 범위는 기존 문서 연결만이다. 향후 웹 변경 후보는 검토 메모의 기술 인계서 바로가기 하나로 제한해
+범위를 먼저 보고한다. 새 모델·장비 추가·연락·교차검토 요청은 수행하지 않는다.
