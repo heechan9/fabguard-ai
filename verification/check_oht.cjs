@@ -1,0 +1,33 @@
+// Authorized CI browser checks; source tests alone are not rendered validation.
+const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764';
+const output=path.join(process.env.FABGUARD_UI_OUTPUT||'/tmp/fabguard-ui','oht');fs.mkdirSync(output,{recursive:true});
+const width=Number(process.env.FABGUARD_UI_WIDTH||1366),checks=[];
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ try{
+  for(const theme of ['silver','dark']){
+   const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+   await page.goto(base);await page.evaluate(value=>localStorage.setItem('fabguard-theme',value),theme);await page.clock.install();
+   await page.goto(`${base}/oht/`);await page.waitForSelector('#viewport canvas');await page.clock.runFor(100);
+   assert.equal(await page.locator('#view-error').isVisible(),false);assert.equal(await page.locator('html').getAttribute('data-theme'),theme);assert.equal(await page.locator('#status').getAttribute('data-phase'),'approach');
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+   await page.screenshot({path:path.join(output,`${width}-${theme}-initial.png`),fullPage:true});
+   await page.locator('#play').focus();await page.keyboard.press('Enter');await page.clock.runFor(6000);await page.locator('#play').click();const paused=await page.locator('#clock').textContent();await page.clock.runFor(2000);assert.equal(await page.locator('#clock').textContent(),paused);
+   await page.locator('[data-camera=b]').click();assert.equal(await page.locator('#clock').textContent(),paused);await page.locator('#theme-toggle').click();assert.equal(await page.locator('#clock').textContent(),paused);await page.locator('#theme-toggle').click();
+   await page.locator('#language').click();assert.equal(await page.locator('html').getAttribute('lang'),'en');assert.match(await page.locator('#status').textContent(),/Paused/);
+   await page.locator('#replay').click();await page.clock.runFor(28000);assert.equal(await page.locator('#status').getAttribute('data-phase'),'complete');assert.match(await page.locator('#carrier-location').textContent(),/B/);
+   await page.locator('#scenario').selectOption('delay');await page.locator('#play').click();await page.clock.runFor(17000);assert.equal(await page.locator('#status').getAttribute('data-phase'),'long-stop');await page.clock.runFor(8000);assert.equal(await page.locator('#status').getAttribute('data-phase'),'delayed');
+   await page.locator('#ack').focus();await page.keyboard.press('Enter');assert.equal(await page.evaluate(()=>document.activeElement.id),'ack-state');await page.clock.runFor(2000);assert.match(await page.locator('#ack-state').textContent(),/Check recorded.*delay remains/);assert.equal(await page.locator('#status').getAttribute('data-phase'),'delayed');
+   await page.locator('[data-camera=overview]').click();await page.screenshot({path:path.join(output,`${width}-${theme}-delayed.png`),fullPage:true});
+   await page.locator('#reset').click();assert.equal(await page.locator('#clock').textContent(),'0.0');assert.match(await page.locator('#ack-state').textContent(),/No check/);assert.equal(await page.locator('#ack').isDisabled(),true);
+   await page.locator('#scenario').selectOption('normal');await page.locator('#replay').click();await page.clock.runFor(12000);await page.locator('#play').click();await page.locator('[data-camera=a]').click();await page.screenshot({path:path.join(output,`${width}-${theme}-transfer.png`),fullPage:true});
+   for(let i=0;i<6;i++)await page.locator('#play').click();await page.locator('#reset').click();assert.equal(await page.locator('#clock').textContent(),'0.0');
+   await page.locator('#theme-toggle').click();const savedTheme=theme==='silver'?'dark':'silver';await page.reload();await page.waitForSelector('#viewport canvas');assert.equal(await page.locator('html').getAttribute('data-theme'),savedTheme);assert.equal(await page.locator('html').getAttribute('lang'),'en');assert.equal(await page.locator('#scenario').inputValue(),'normal');
+   await page.evaluate(()=>document.querySelector('#viewport canvas').dispatchEvent(new Event('webglcontextlost',{cancelable:true})));assert.equal(await page.locator('#view-error').isVisible(),true);await page.locator('#play').click();await page.clock.runFor(1000);assert.ok(Number(await page.locator('#clock').textContent())>0);await page.locator('#reset').click();
+   assert.deepEqual(errors,[]);checks.push({width,theme,status:'passed'});await page.close();
+  }
+  const fallback=await browser.newPage();await fallback.route('**/smt/vendor/three.module.js',route=>route.abort());await fallback.goto(`${base}/oht/`);await fallback.waitForSelector('#view-error:not([hidden])');await fallback.locator('#play').click();await fallback.waitForFunction(()=>Number(document.querySelector('#clock').textContent)>0);await fallback.locator('#reset').click();assert.equal(await fallback.locator('#clock').textContent(),'0.0');checks.push({fallback:'passed'});await fallback.close();
+  const stalled=await browser.newPage();let release;const intercepted=new Promise(resolve=>{release=resolve;});await stalled.route('**/smt/vendor/three.module.js',route=>release(route));await stalled.goto(`${base}/oht/`,{waitUntil:'commit'});const held=await intercepted;await stalled.locator('#play').click();await stalled.waitForFunction(()=>Number(document.querySelector('#clock').textContent)>0);await stalled.locator('#reset').click();assert.equal(await stalled.locator('#clock').textContent(),'0.0');await held.abort();await stalled.waitForSelector('#view-error:not([hidden])');checks.push({stalledImportTextControls:'passed'});await stalled.close();
+ }finally{await browser.close();fs.writeFileSync(path.join(output,`checks-${width}.json`),JSON.stringify(checks,null,2));}
+})().catch(e=>{console.error(e);process.exitCode=1;});
