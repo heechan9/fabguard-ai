@@ -58,8 +58,11 @@ test('UI only translates enum fields, never authored text matching enum tokens',
 test('accepted multibyte and escaped records always roundtrip within exact export byte budget',()=>{
  for(const rationale of ['한'.repeat(2000),'😀'.repeat(1000),'"\\'.repeat(1000)]) {
   const f={...fields(),rationale,available_evidence:rationale,missing_evidence:rationale};let doc=fresh(),blocked=false;
-  for(let i=0;i<100;i++){try{const next=appendRecord(doc,f,source,now);const raw=serializeDocument(next);assert.ok(new TextEncoder().encode(raw).length<=MAX_BYTES);assert.deepEqual(parseDocument(raw,source,id,{now}),next);doc=next;}catch(error){assert.match(error.message,/exceed|history/);blocked=true;break;}}
-  assert.ok(doc.history.length>0);if(rationale.startsWith('한'))assert.equal(blocked,true);
+  for(let i=0;i<100;i++){
+   let next;try{next=appendRecord(doc,f,source,now);}catch(error){assert.equal(error.message,'Exported JSON would exceed 1 MiB');blocked=true;break;}
+   const raw=serializeDocument(next);assert.ok(new TextEncoder().encode(raw).length<=MAX_BYTES);assert.deepEqual(parseDocument(raw,source,id,{now}),next);doc=next;
+  }
+  assert.ok(doc.history.length>0);assert.equal(blocked,true);
  }
 });
 test('formatting direction controls rejected without rejecting natural language text',()=>{

@@ -70,6 +70,6 @@ A maximum-length multilingual history could exceed the import byte limit. Accept
 validate the exact shared pretty-JSON export representation including its newline, so accepted exports
 remain reimportable within 1 MiB. Multibyte and escaping regression checks cover this boundary.
 File inputs clear immediately after capture to permit same-file retry after superseded reads;
-UTF-8 decoding is fatal rather than replacement-based. Bidi formatting controls are rejected without
+UTF-8 decoding is fatal rather than replacement-based. Bidi formatting controls U+202A–U+202E and U+2066–U+2069 are rejected without
 rejecting natural Korean/Arabic text. The dedicated asset gate also checks shared theme.js bytes
 without changing that file or the shared release workflow. New exact-head hosted evidence is required.
