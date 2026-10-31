@@ -1,0 +1,232 @@
+{
+  "scope": "reused_training_data_descriptive_only",
+  "feature_order": [
+    "feature_059",
+    "feature_247",
+    "feature_519",
+    "feature_065",
+    "feature_475"
+  ],
+  "train_n": 1175,
+  "train_pass": 1095,
+  "train_fail": 80,
+  "train_start": "2008-07-19 11:55:00",
+  "train_end": "2008-09-29 11:13:00",
+  "test_statistics_computed": false,
+  "model_fit": false,
+  "performance_changed": false,
+  "source_sha256": {
+    "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+    "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+    "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+  },
+  "frozen_input_sha256": {
+    "results/v1/train_split.csv": "d47b5254102519050844e21f0076537644d45dfe7262d596ad5c7887e6e81aec",
+    "results/v1/final_model_importance.csv": "844cdc475f21263b26f6078617e3bce7613aba7432979c7424b80d0b18accb4e"
+  },
+  "seed": null,
+  "seed_reason": "no_stochastic_algorithm",
+  "environment": {
+    "python": "3.12.14",
+    "pandas": "2.2.3",
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8"
+  },
+  "features": [
+    {
+      "feature": "feature_059",
+      "groups": {
+        "pass": {
+          "n_total": 1095,
+          "n_observed": 1090,
+          "n_missing": 5,
+          "missing_rate": 0.0045662100456621,
+          "mean": 3.600376880733945,
+          "std": 10.349918912392125,
+          "quantiles": {
+            "0.05": -6.05045,
+            "0.25": -1.285925,
+            "0.5": 1.2236500000000001,
+            "0.75": 4.907975,
+            "0.95": 24.14052499999999
+          }
+        },
+        "fail": {
+          "n_total": 80,
+          "n_observed": 80,
+          "n_missing": 0,
+          "missing_rate": 0.0,
+          "mean": 11.27375,
+          "std": 10.717877821918368,
+          "quantiles": {
+            "0.05": -1.6155899999999992,
+            "0.25": 3.245,
+            "0.5": 9.543199999999999,
+            "0.75": 18.339075,
+            "0.95": 26.806454999999996
+          }
+        }
+      },
+      "difference_direction": "fail_minus_pass",
+      "mean_difference": 7.673373119266055,
+      "standardized_mean_difference": 0.7395866863732997,
+      "standardized_difference_unavailable_reason": null
+    },
+    {
+      "feature": "feature_247",
+      "groups": {
+        "pass": {
+          "n_total": 1095,
+          "n_observed": 728,
+          "n_missing": 367,
+          "missing_rate": 0.33515981735159817,
+          "mean": 0.05338489010989011,
+          "std": 0.06808252228107423,
+          "quantiles": {
+            "0.05": 0.0138,
+            "0.25": 0.0191,
+            "0.5": 0.0269,
+            "0.75": 0.051,
+            "0.95": 0.2030999999999999
+          }
+        },
+        "fail": {
+          "n_total": 80,
+          "n_observed": 67,
+          "n_missing": 13,
+          "missing_rate": 0.1625,
+          "mean": 0.07415970149253731,
+          "std": 0.06578720069791022,
+          "quantiles": {
+            "0.05": 0.021820000000000003,
+            "0.25": 0.0271,
+            "0.5": 0.0438,
+            "0.75": 0.0868,
+            "0.95": 0.22089999999999996
+          }
+        }
+      },
+      "difference_direction": "fail_minus_pass",
+      "mean_difference": 0.020774811382647203,
+      "standardized_mean_difference": 0.305986899436218,
+      "standardized_difference_unavailable_reason": null
+    },
+    {
+      "feature": "feature_519",
+      "groups": {
+        "pass": {
+          "n_total": 1095,
+          "n_observed": 728,
+          "n_missing": 367,
+          "missing_rate": 0.33515981735159817,
+          "mean": 11.596192170329672,
+          "std": 15.06766744886575,
+          "quantiles": {
+            "0.05": 2.9901500000000003,
+            "0.25": 4.129225,
+            "0.5": 5.78745,
+            "0.75": 10.9336,
+            "0.95": 43.737384999999996
+          }
+        },
+        "fail": {
+          "n_total": 80,
+          "n_observed": 67,
+          "n_missing": 13,
+          "missing_rate": 0.1625,
+          "mean": 16.02441194029851,
+          "std": 14.334033140476532,
+          "quantiles": {
+            "0.05": 4.73084,
+            "0.25": 5.8228,
+            "0.5": 9.3158,
+            "0.75": 18.604100000000003,
+            "0.95": 48.012509999999985
+          }
+        }
+      },
+      "difference_direction": "fail_minus_pass",
+      "mean_difference": 4.4282197699688375,
+      "standardized_mean_difference": 0.29505774786978456,
+      "standardized_difference_unavailable_reason": null
+    },
+    {
+      "feature": "feature_065",
+      "groups": {
+        "pass": {
+          "n_total": 1095,
+          "n_observed": 1090,
+          "n_missing": 5,
+          "missing_rate": 0.0045662100456621,
+          "mean": 26.84585339449541,
+          "std": 6.5183832275908555,
+          "quantiles": {
+            "0.05": 18.428665,
+            "0.25": 22.96335,
+            "0.5": 25.97355,
+            "0.75": 29.62695,
+            "0.95": 38.660689999999995
+          }
+        },
+        "fail": {
+          "n_total": 80,
+          "n_observed": 80,
+          "n_missing": 0,
+          "missing_rate": 0.0,
+          "mean": 29.160829999999997,
+          "std": 9.955430326277568,
+          "quantiles": {
+            "0.05": 15.327885,
+            "0.25": 21.79845,
+            "0.5": 27.97485,
+            "0.75": 37.474975,
+            "0.95": 45.894425
+          }
+        }
+      },
+      "difference_direction": "fail_minus_pass",
+      "mean_difference": 2.3149766055045866,
+      "standardized_mean_difference": 0.340147248406432,
+      "standardized_difference_unavailable_reason": null
+    },
+    {
+      "feature": "feature_475",
+      "groups": {
+        "pass": {
+          "n_total": 1095,
+          "n_observed": 1091,
+          "n_missing": 4,
+          "missing_rate": 0.0036529680365296802,
+          "mean": 4.297289367552703,
+          "std": 1.604246545305733,
+          "quantiles": {
+            "0.05": 2.67945,
+            "0.25": 3.80175,
+            "0.5": 4.4005,
+            "0.75": 4.8037,
+            "0.95": 5.351649999999999
+          }
+        },
+        "fail": {
+          "n_total": 80,
+          "n_observed": 80,
+          "n_missing": 0,
+          "missing_rate": 0.0,
+          "mean": 4.8601425,
+          "std": 4.280019075634026,
+          "quantiles": {
+            "0.05": 2.65021,
+            "0.25": 3.38095,
+            "0.5": 4.489850000000001,
+            "0.75": 4.993525,
+            "0.95": 5.873124999999999
+          }
+        }
+      },
+      "difference_direction": "fail_minus_pass",
+      "mean_difference": 0.5628531324472972,
+      "standardized_mean_difference": 0.29511099132460633,
+      "standardized_difference_unavailable_reason": null
+    }
+  ]
+}

@@ -1,4 +1,7 @@
 /* Scoped to the robot extension page only (.robot-page). Shared site CSS stays authoritative. */
+.robot-page .offline-evidence{border-color:var(--amber)}
+.robot-page .offline-evidence a{color:var(--cyan);text-underline-offset:3px}
+.robot-page #offline-results p,.robot-page #offline-results th{overflow-wrap:anywhere}
 .robot-page{--ok:#39d6c4;--gap:#ff746b;--short:#e4a83d;--nonfinite:#c58af9;--tail:#5b6b78;--ink:#d6e2ea}
 .robot-page .skip-link{position:absolute;left:-9999px;top:8px;z-index:50;padding:10px 14px;background:#0d141a;color:var(--text);border:1px solid var(--cyan)}
 .robot-page .skip-link:focus{left:12px}

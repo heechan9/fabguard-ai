@@ -1,4 +1,4 @@
-// Robot extension demo UI. Browser-only; no fetch, no upload, no equipment I/O.
+// Browser-only CSV demo plus bundled read-only report; no network API, upload or equipment I/O.
 import {decodeCSVBytes, parseCSV} from '../equipment/contract.mjs';
 import * as core from './window-core.mjs';
 import {syntheticFiles, toCSV, SYNTHETIC_CONFIG} from './synthetic.mjs';
@@ -363,3 +363,11 @@ $('clear').addEventListener('click', () => clearAll());
 $('run').addEventListener('click', runProtocol);
 labelScrollRegions();
 document.querySelector('.skip-link').addEventListener('click', e => { e.preventDefault(); $('robot-main').focus(); });
+// Reporting is optional: a missing renderer must not block the CSV event handlers above.
+import('./offline-evidence.mjs')
+  .then(({renderOfflineEvidence}) => renderOfflineEvidence($('offline-results')))
+  .catch(() => {
+    const root = $('offline-results');
+    root.replaceChildren(el('p', {text: '보고서 표시 보류: 보고서 렌더러를 불러오지 못했습니다. 기존 CSV 시연은 계속 사용할 수 있습니다. 경보 0건이나 정상이라는 뜻이 아닙니다.'}));
+    root.dataset.status = 'withheld';
+  });
