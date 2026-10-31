@@ -1,0 +1,67 @@
+name: Stored robot report and existing UI verification
+on:
+  pull_request:
+    paths: ['web/robot/**', 'verification/check_robot_offline_evidence.cjs', '.github/workflows/robot-offline-ui.yml']
+  push:
+    branches: [feat/robot-offline-evidence-20261025]
+permissions:
+  contents: read
+jobs:
+  browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1366, 360, 390]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Use the existing CI Chrome, without browser download
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          python -m pip install .
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Isolated driver only, same as the earlier local UI workflow
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/offline-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Loopback-only report, robot and maintenance checks
+        env:
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_BASE_URL: http://127.0.0.1:8764
+          FABGUARD_TEST_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/offline-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8764/robot/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          export NODE_PATH="$RUNNER_TEMP/offline-driver/node_modules"
+          if [ "$FABGUARD_UI_WIDTH" = 1366 ]; then
+            FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/secom" timeout 420s node verification/check_secom_review.cjs
+          fi
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/report" timeout 240s node verification/check_robot_offline_evidence.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/robot-$FABGUARD_UI_WIDTH" timeout 360s node verification/check_robot_sort_cell.cjs
+          FABGUARD_UI_OUTPUT="$RUNNER_TEMP/offline-evidence/context-$FABGUARD_UI_WIDTH" timeout 180s node verification/check_context_review.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: offline-evidence-${{ matrix.width }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/offline-evidence
+            ${{ runner.temp }}/offline-server.log
+          retention-days: 14

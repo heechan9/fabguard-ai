@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "status": "proposed_input_contract_not_model_or_experiment_approval",
+  "source": {
+    "record": "https://zenodo.org/records/17122442",
+    "audit_pr": 182,
+    "audit_head": "b10b684e9e5094311a32055bde26c22fe99e46e6",
+    "audit_path": "docs/review/BOSCH_SOURCE_AUDIT_20261027.json",
+    "process_sha256": "fd304fbc08a9641f182f71f11064b8fe00a01c24a100ae8211536ad0cd404f49",
+    "dictionary_sha256": "51c9bebfad14f0a0558bf8e5831579b6a3308a2ff5b330ae5b8f8f32bc4b4302"
+  },
+  "grain": {
+    "process": "one row per recorded time coordinate within experiment_key",
+    "metrology": "one row per experiment_key and spatial X,Y",
+    "independent_evaluation_unit": "lot/date, not individual time rows or spatial sites"
+  },
+  "join": {
+    "mapping_regex": "Day_(YYYY)_(MM)_(DD)_Wafer_(NN) -> YYYY-MM-DD_NN",
+    "expected_process_keys": 96,
+    "expected_89point_keys": 88,
+    "expected_89point_rows": 7832,
+    "unmatched_process_keys": [
+      "2024-07-02_07",
+      "2024-08-21_09",
+      "2024-08-22_05",
+      "2024-08-22_06",
+      "2024-08-22_07",
+      "2024-08-22_08",
+      "2024-08-22_09",
+      "2024-08-22_10"
+    ],
+    "blank_key_9point_rows": 9,
+    "orphan_and_blank_keys": "retain as excluded with reason; no key inference; no many-to-many join"
+  },
+  "features": {
+    "policy": "use only exact common channel-name intersection; no filling extra channels",
+    "common_channels": [
+      "Stat3_Etch_MV_EpdIntensity",
+      "Stat3_Etch_MV_ForeLinePressure",
+      "Stat3_Etch_MV_Gas1Flow",
+      "Stat3_Etch_MV_Gas2Flow",
+      "Stat3_Etch_MV_Gas3Flow",
+      "Stat3_Etch_MV_Gas4Flow",
+      "Stat3_Etch_MV_Gas5Flow",
+      "Stat3_Etch_MV_Gas7Flow",
+      "Stat3_Etch_MV_Gas8Flow",
+      "Stat3_Etch_MV_Heater1Temp",
+      "Stat3_Etch_MV_Heater2Temp",
+      "Stat3_Etch_MV_Heater3Temp",
+      "Stat3_Etch_MV_Heater4Temp",
+      "Stat3_Etch_MV_HeliumBPFlow",
+      "Stat3_Etch_MV_HeliumBPPressure",
+      "Stat3_Etch_MV_PlatenDcBias",
+      "Stat3_Etch_MV_PlatenRFLoadCapacitor",
+      "Stat3_Etch_MV_PlatenRFLoadPower",
+      "Stat3_Etch_MV_PlatenRFPeakToPeak",
+      "Stat3_Etch_MV_PlatenRFReflectedPower",
+      "Stat3_Etch_MV_PlatenRFTuningCapacitor",
+      "Stat3_Etch_MV_Pressure",
+      "Stat3_Etch_MV_SourceRF2LoadPower",
+      "Stat3_Etch_MV_SourceRF2PeakToPeak",
+      "Stat3_Etch_MV_SourceRF2ReflectedPower",
+      "Stat3_Etch_MV_SourceRF2TuningCapacitor",
+      "Stat3_Etch_MV_SourceRFLoadPower",
+      "Stat3_Etch_MV_SourceRFPeakToPeak",
+      "Stat3_Etch_MV_SourceRFReflectedPower",
+      "Stat3_Etch_MV_SourceRFTuningCapacitor",
+      "Stat3_Etch_MV_moriInnerCurrent"
+    ],
+    "extra_channel_count": 13,
+    "units": "unverified; do not infer units from channel names"
+  },
+  "time": {
+    "published_units": "seconds since 1970-01-01 00:00:00 UTC",
+    "absolute_time": "unverified; must not treat as 2024 UTC",
+    "retain": "group name date and raw time coordinate separately",
+    "gap_check_s": 0.3,
+    "gap_rule_status": "descriptive quality check, not detection threshold",
+    "gap_handling": "retain flags; no interpolation or derivatives/windows across gaps; no OES synchronization until time semantics verified"
+  },
+  "measurements": {
+    "primary_candidate": "si_etch, a derived metrology quantity, not Yield or ET",
+    "primary_candidate_status": "target definition requires review before any experiment",
+    "raw_missing_mask": "postox_thickness_nan missing => observed post-etch value unavailable; interpolated value must remain labeled",
+    "preox_thickness": "provider interpolated; not all 89 sites independent measurements",
+    "other_outcomes": "do not combine 9-point experiment-day and 89-point later measurements as contemporaneous targets"
+  },
+  "split": {
+    "status": "not_frozen_no_experiment_authorized",
+    "must_fix_before_fit": [
+      "target and mask handling",
+      "sensor units/time interpretation",
+      "phase selection/window rules",
+      "train/dev/test lot/date IDs",
+      "evaluation metrics and threshold policy"
+    ],
+    "forbidden": [
+      "random adjacent row split",
+      "different sites of same wafer in train and test",
+      "mixing SECOM/UR3/IMAD rows",
+      "threshold tuning on test results"
+    ]
+  },
+  "readiness": {
+    "source_hashes_verified": "in PR182 selected files only",
+    "input_structure_audited": true,
+    "time_semantics_resolved": false,
+    "target_mask_policy_approved": false,
+    "lot_split_frozen": false,
+    "model_experiment_ready": false
+  },
+  "performance": {
+    "false_alarm_rate": null,
+    "anomaly_recall": null,
+    "detection_delay": null
+  }
+}
