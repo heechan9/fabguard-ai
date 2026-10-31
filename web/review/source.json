@@ -1,0 +1,3926 @@
+{
+  "source_repo_sha": "78a8f61bf8319a5da01f4b2eb81fa6778cd7fde5",
+  "priority_table_sha256": "73a14b4a64a257f32ddef5924d79f3e6729ba9db6f0c402acdfe0c1708d6c563",
+  "rows": [
+    {
+      "sample_id": "secom_1397",
+      "rank": 1,
+      "risk_score": 0.28177356090705113,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 11:16:00"
+    },
+    {
+      "sample_id": "secom_1326",
+      "rank": 2,
+      "risk_score": 0.2748489037001845,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 16:15:00"
+    },
+    {
+      "sample_id": "secom_1458",
+      "rank": 3,
+      "risk_score": 0.2668209718877065,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 07:39:00"
+    },
+    {
+      "sample_id": "secom_1192",
+      "rank": 4,
+      "risk_score": 0.2243506020867065,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 08:44:00"
+    },
+    {
+      "sample_id": "secom_1207",
+      "rank": 5,
+      "risk_score": 0.20787126739246922,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 23:58:00"
+    },
+    {
+      "sample_id": "secom_1363",
+      "rank": 6,
+      "risk_score": 0.20443996410351065,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 13:38:00"
+    },
+    {
+      "sample_id": "secom_1565",
+      "rank": 7,
+      "risk_score": 0.2020127839979176,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-17 06:01:00"
+    },
+    {
+      "sample_id": "secom_1489",
+      "rank": 8,
+      "risk_score": 0.19625356094711324,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 20:53:00"
+    },
+    {
+      "sample_id": "secom_1292",
+      "rank": 9,
+      "risk_score": 0.1894619882064492,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 15:16:00"
+    },
+    {
+      "sample_id": "secom_1323",
+      "rank": 10,
+      "risk_score": 0.18934141238159002,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 14:34:00"
+    },
+    {
+      "sample_id": "secom_1233",
+      "rank": 11,
+      "risk_score": 0.18612806277883212,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 07:35:00"
+    },
+    {
+      "sample_id": "secom_1513",
+      "rank": 12,
+      "risk_score": 0.18540501514878813,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 00:47:00"
+    },
+    {
+      "sample_id": "secom_1539",
+      "rank": 13,
+      "risk_score": 0.18167769344568865,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 19:24:00"
+    },
+    {
+      "sample_id": "secom_1519",
+      "rank": 14,
+      "risk_score": 0.17957764080136865,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 02:42:00"
+    },
+    {
+      "sample_id": "secom_1364",
+      "rank": 15,
+      "risk_score": 0.17418738378418105,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 13:55:00"
+    },
+    {
+      "sample_id": "secom_1236",
+      "rank": 16,
+      "risk_score": 0.17383118142469678,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 08:52:00"
+    },
+    {
+      "sample_id": "secom_1248",
+      "rank": 17,
+      "risk_score": 0.17359434765871698,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 16:58:00"
+    },
+    {
+      "sample_id": "secom_1467",
+      "rank": 18,
+      "risk_score": 0.1735017487236476,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 01:50:00"
+    },
+    {
+      "sample_id": "secom_1503",
+      "rank": 19,
+      "risk_score": 0.17329746273753707,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 14:43:00"
+    },
+    {
+      "sample_id": "secom_1327",
+      "rank": 20,
+      "risk_score": 0.17221500473484844,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 16:37:00"
+    },
+    {
+      "sample_id": "secom_1254",
+      "rank": 21,
+      "risk_score": 0.17181503887971397,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 21:32:00"
+    },
+    {
+      "sample_id": "secom_1547",
+      "rank": 22,
+      "risk_score": 0.17174756799345117,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 02:17:00"
+    },
+    {
+      "sample_id": "secom_1333",
+      "rank": 23,
+      "risk_score": 0.17060477912803265,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 20:30:00"
+    },
+    {
+      "sample_id": "secom_1425",
+      "rank": 24,
+      "risk_score": 0.169064906815193,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 15:37:00"
+    },
+    {
+      "sample_id": "secom_1304",
+      "rank": 25,
+      "risk_score": 0.16861727939708515,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 00:33:00"
+    },
+    {
+      "sample_id": "secom_1307",
+      "rank": 26,
+      "risk_score": 0.16745105566593788,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 04:20:00"
+    },
+    {
+      "sample_id": "secom_1289",
+      "rank": 27,
+      "risk_score": 0.16676037651580622,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 04:12:00"
+    },
+    {
+      "sample_id": "secom_1344",
+      "rank": 28,
+      "risk_score": 0.1666857623128358,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 04:26:00"
+    },
+    {
+      "sample_id": "secom_1228",
+      "rank": 29,
+      "risk_score": 0.16617268739621346,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 03:27:00"
+    },
+    {
+      "sample_id": "secom_1276",
+      "rank": 30,
+      "risk_score": 0.16458704357964554,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 20:11:00"
+    },
+    {
+      "sample_id": "secom_1256",
+      "rank": 31,
+      "risk_score": 0.1616540370702841,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 22:23:00"
+    },
+    {
+      "sample_id": "secom_1410",
+      "rank": 32,
+      "risk_score": 0.16117810114469375,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 20:48:00"
+    },
+    {
+      "sample_id": "secom_1311",
+      "rank": 33,
+      "risk_score": 0.1609733503040655,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 06:15:00"
+    },
+    {
+      "sample_id": "secom_1396",
+      "rank": 34,
+      "risk_score": 0.1603318612530078,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 11:15:00"
+    },
+    {
+      "sample_id": "secom_1427",
+      "rank": 35,
+      "risk_score": 0.1601071278345249,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 17:14:00"
+    },
+    {
+      "sample_id": "secom_1257",
+      "rank": 36,
+      "risk_score": 0.15873452074533798,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 22:33:00"
+    },
+    {
+      "sample_id": "secom_1523",
+      "rank": 37,
+      "risk_score": 0.1579644377485075,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 05:16:00"
+    },
+    {
+      "sample_id": "secom_1404",
+      "rank": 38,
+      "risk_score": 0.15553723329008473,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 17:06:00"
+    },
+    {
+      "sample_id": "secom_1482",
+      "rank": 39,
+      "risk_score": 0.15493538015624667,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 15:42:00"
+    },
+    {
+      "sample_id": "secom_1340",
+      "rank": 40,
+      "risk_score": 0.15462259247461071,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 02:49:00"
+    },
+    {
+      "sample_id": "secom_1177",
+      "rank": 41,
+      "risk_score": 0.1540665118420369,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 14:03:00"
+    },
+    {
+      "sample_id": "secom_1542",
+      "rank": 42,
+      "risk_score": 0.153939562968309,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 22:54:00"
+    },
+    {
+      "sample_id": "secom_1494",
+      "rank": 43,
+      "risk_score": 0.15380222235661908,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 22:54:00"
+    },
+    {
+      "sample_id": "secom_1385",
+      "rank": 44,
+      "risk_score": 0.15337270025835187,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 03:39:00"
+    },
+    {
+      "sample_id": "secom_1348",
+      "rank": 45,
+      "risk_score": 0.15243093538959532,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 06:26:00"
+    },
+    {
+      "sample_id": "secom_1368",
+      "rank": 46,
+      "risk_score": 0.15171784035327224,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 16:42:00"
+    },
+    {
+      "sample_id": "secom_1261",
+      "rank": 47,
+      "risk_score": 0.15166561495949804,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 00:55:00"
+    },
+    {
+      "sample_id": "secom_1225",
+      "rank": 48,
+      "risk_score": 0.15129409263678448,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 00:21:00"
+    },
+    {
+      "sample_id": "secom_1361",
+      "rank": 49,
+      "risk_score": 0.15044331394357166,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 12:42:00"
+    },
+    {
+      "sample_id": "secom_1336",
+      "rank": 50,
+      "risk_score": 0.15016939568393825,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 01:25:00"
+    },
+    {
+      "sample_id": "secom_1187",
+      "rank": 51,
+      "risk_score": 0.14959246282593464,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 01:33:00"
+    },
+    {
+      "sample_id": "secom_1196",
+      "rank": 52,
+      "risk_score": 0.14906396745488576,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 14:36:00"
+    },
+    {
+      "sample_id": "secom_1219",
+      "rank": 53,
+      "risk_score": 0.14740057745102658,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 16:43:00"
+    },
+    {
+      "sample_id": "secom_1337",
+      "rank": 54,
+      "risk_score": 0.14721126018827643,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 01:27:00"
+    },
+    {
+      "sample_id": "secom_1238",
+      "rank": 55,
+      "risk_score": 0.14669049746431165,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 09:10:00"
+    },
+    {
+      "sample_id": "secom_1278",
+      "rank": 56,
+      "risk_score": 0.146654899602531,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 20:35:00"
+    },
+    {
+      "sample_id": "secom_1435",
+      "rank": 57,
+      "risk_score": 0.14621815319927622,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 23:13:00"
+    },
+    {
+      "sample_id": "secom_1346",
+      "rank": 58,
+      "risk_score": 0.14565441765259737,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 05:24:00"
+    },
+    {
+      "sample_id": "secom_1244",
+      "rank": 59,
+      "risk_score": 0.14547324446891802,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 15:10:00"
+    },
+    {
+      "sample_id": "secom_1453",
+      "rank": 60,
+      "risk_score": 0.14506548133393235,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 21:07:00"
+    },
+    {
+      "sample_id": "secom_1436",
+      "rank": 61,
+      "risk_score": 0.14500859309969222,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 23:50:00"
+    },
+    {
+      "sample_id": "secom_1390",
+      "rank": 62,
+      "risk_score": 0.14448328395430898,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 09:11:00"
+    },
+    {
+      "sample_id": "secom_1496",
+      "rank": 63,
+      "risk_score": 0.14377293614569242,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 03:21:00"
+    },
+    {
+      "sample_id": "secom_1412",
+      "rank": 64,
+      "risk_score": 0.14354564553860477,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 05:35:00"
+    },
+    {
+      "sample_id": "secom_1464",
+      "rank": 65,
+      "risk_score": 0.1432671998085454,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 23:16:00"
+    },
+    {
+      "sample_id": "secom_1426",
+      "rank": 66,
+      "risk_score": 0.14286326985525843,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 16:26:00"
+    },
+    {
+      "sample_id": "secom_1293",
+      "rank": 67,
+      "risk_score": 0.14223162162666808,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 16:58:00"
+    },
+    {
+      "sample_id": "secom_1330",
+      "rank": 68,
+      "risk_score": 0.14215516058632796,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 18:59:00"
+    },
+    {
+      "sample_id": "secom_1560",
+      "rank": 69,
+      "risk_score": 0.1411263408273074,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 05:58:00"
+    },
+    {
+      "sample_id": "secom_1328",
+      "rank": 70,
+      "risk_score": 0.14077653901307263,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 16:49:00"
+    },
+    {
+      "sample_id": "secom_1455",
+      "rank": 71,
+      "risk_score": 0.1407649758902095,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 02:55:00"
+    },
+    {
+      "sample_id": "secom_1263",
+      "rank": 72,
+      "risk_score": 0.14066220293563095,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 03:52:00"
+    },
+    {
+      "sample_id": "secom_1217",
+      "rank": 73,
+      "risk_score": 0.1402527068167014,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 14:22:00"
+    },
+    {
+      "sample_id": "secom_1360",
+      "rank": 74,
+      "risk_score": 0.13953302496288023,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 12:39:00"
+    },
+    {
+      "sample_id": "secom_1298",
+      "rank": 75,
+      "risk_score": 0.13906416983109707,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 19:47:00"
+    },
+    {
+      "sample_id": "secom_1190",
+      "rank": 76,
+      "risk_score": 0.13901440896632192,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 04:01:00"
+    },
+    {
+      "sample_id": "secom_1401",
+      "rank": 77,
+      "risk_score": 0.13897734471017967,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 13:48:00"
+    },
+    {
+      "sample_id": "secom_1558",
+      "rank": 78,
+      "risk_score": 0.13888027523503357,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 05:13:00"
+    },
+    {
+      "sample_id": "secom_1398",
+      "rank": 79,
+      "risk_score": 0.13875819903767375,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 11:36:00"
+    },
+    {
+      "sample_id": "secom_1485",
+      "rank": 80,
+      "risk_score": 0.13856392723702637,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 19:36:00"
+    },
+    {
+      "sample_id": "secom_1511",
+      "rank": 81,
+      "risk_score": 0.13851854624076515,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 00:03:00"
+    },
+    {
+      "sample_id": "secom_1512",
+      "rank": 82,
+      "risk_score": 0.13778983624580876,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 00:27:00"
+    },
+    {
+      "sample_id": "secom_1245",
+      "rank": 83,
+      "risk_score": 0.1377244636434143,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 15:44:00"
+    },
+    {
+      "sample_id": "secom_1240",
+      "rank": 84,
+      "risk_score": 0.13749562787946207,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 10:03:00"
+    },
+    {
+      "sample_id": "secom_1273",
+      "rank": 85,
+      "risk_score": 0.13693702660770102,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 18:45:00"
+    },
+    {
+      "sample_id": "secom_1260",
+      "rank": 86,
+      "risk_score": 0.13668962752115357,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 00:24:00"
+    },
+    {
+      "sample_id": "secom_1469",
+      "rank": 87,
+      "risk_score": 0.13665279000911354,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 03:21:00"
+    },
+    {
+      "sample_id": "secom_1422",
+      "rank": 88,
+      "risk_score": 0.13634585617166897,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 13:35:00"
+    },
+    {
+      "sample_id": "secom_1255",
+      "rank": 89,
+      "risk_score": 0.13605019641284674,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 21:33:00"
+    },
+    {
+      "sample_id": "secom_1461",
+      "rank": 90,
+      "risk_score": 0.13581899941119602,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 14:43:00"
+    },
+    {
+      "sample_id": "secom_1353",
+      "rank": 91,
+      "risk_score": 0.1355814663715088,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 07:38:00"
+    },
+    {
+      "sample_id": "secom_1540",
+      "rank": 92,
+      "risk_score": 0.13541808821761145,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 21:44:00"
+    },
+    {
+      "sample_id": "secom_1253",
+      "rank": 93,
+      "risk_score": 0.13526545859260683,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 20:54:00"
+    },
+    {
+      "sample_id": "secom_1312",
+      "rank": 94,
+      "risk_score": 0.13491468527890305,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 08:02:00"
+    },
+    {
+      "sample_id": "secom_1281",
+      "rank": 95,
+      "risk_score": 0.13465401026730292,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 21:52:00"
+    },
+    {
+      "sample_id": "secom_1359",
+      "rank": 96,
+      "risk_score": 0.13464205496352577,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 11:51:00"
+    },
+    {
+      "sample_id": "secom_1334",
+      "rank": 97,
+      "risk_score": 0.1337593066681348,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 22:13:00"
+    },
+    {
+      "sample_id": "secom_1199",
+      "rank": 98,
+      "risk_score": 0.13360887136593255,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 16:13:00"
+    },
+    {
+      "sample_id": "secom_1557",
+      "rank": 99,
+      "risk_score": 0.13352768211027402,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 05:08:00"
+    },
+    {
+      "sample_id": "secom_1490",
+      "rank": 100,
+      "risk_score": 0.1333402610386135,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 21:20:00"
+    },
+    {
+      "sample_id": "secom_1417",
+      "rank": 101,
+      "risk_score": 0.1333216092380894,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 07:16:00"
+    },
+    {
+      "sample_id": "secom_1316",
+      "rank": 102,
+      "risk_score": 0.13324674343521684,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 10:00:00"
+    },
+    {
+      "sample_id": "secom_1205",
+      "rank": 103,
+      "risk_score": 0.13268125411915063,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 21:42:00"
+    },
+    {
+      "sample_id": "secom_1242",
+      "rank": 104,
+      "risk_score": 0.1326075268971619,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 14:10:00"
+    },
+    {
+      "sample_id": "secom_1356",
+      "rank": 105,
+      "risk_score": 0.1325085385969836,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 09:11:00"
+    },
+    {
+      "sample_id": "secom_1421",
+      "rank": 106,
+      "risk_score": 0.13225199059485562,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 12:11:00"
+    },
+    {
+      "sample_id": "secom_1375",
+      "rank": 107,
+      "risk_score": 0.1321477558250282,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 19:42:00"
+    },
+    {
+      "sample_id": "secom_1378",
+      "rank": 108,
+      "risk_score": 0.13187251828770125,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 20:47:00"
+    },
+    {
+      "sample_id": "secom_1406",
+      "rank": 109,
+      "risk_score": 0.1318377488639679,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 18:39:00"
+    },
+    {
+      "sample_id": "secom_1399",
+      "rank": 110,
+      "risk_score": 0.13166707311992992,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 12:40:00"
+    },
+    {
+      "sample_id": "secom_1246",
+      "rank": 111,
+      "risk_score": 0.13159395435980537,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 15:58:00"
+    },
+    {
+      "sample_id": "secom_1184",
+      "rank": 112,
+      "risk_score": 0.13149996857091556,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 21:26:00"
+    },
+    {
+      "sample_id": "secom_1374",
+      "rank": 113,
+      "risk_score": 0.13133959471675555,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 18:55:00"
+    },
+    {
+      "sample_id": "secom_1379",
+      "rank": 114,
+      "risk_score": 0.1306453477428019,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 21:46:00"
+    },
+    {
+      "sample_id": "secom_1424",
+      "rank": 115,
+      "risk_score": 0.13060194791040441,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 14:48:00"
+    },
+    {
+      "sample_id": "secom_1472",
+      "rank": 116,
+      "risk_score": 0.130335134438463,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 18:47:00"
+    },
+    {
+      "sample_id": "secom_1543",
+      "rank": 117,
+      "risk_score": 0.13032484110750833,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 23:00:00"
+    },
+    {
+      "sample_id": "secom_1487",
+      "rank": 118,
+      "risk_score": 0.13023828874917395,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 20:10:00"
+    },
+    {
+      "sample_id": "secom_1299",
+      "rank": 119,
+      "risk_score": 0.1294205664256442,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 19:54:00"
+    },
+    {
+      "sample_id": "secom_1479",
+      "rank": 120,
+      "risk_score": 0.12917657044712022,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 14:30:00"
+    },
+    {
+      "sample_id": "secom_1553",
+      "rank": 121,
+      "risk_score": 0.12903927373760532,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 04:04:00"
+    },
+    {
+      "sample_id": "secom_1527",
+      "rank": 122,
+      "risk_score": 0.12849882249140146,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 08:21:00"
+    },
+    {
+      "sample_id": "secom_1283",
+      "rank": 123,
+      "risk_score": 0.12820174901039494,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 22:53:00"
+    },
+    {
+      "sample_id": "secom_1324",
+      "rank": 124,
+      "risk_score": 0.12810899439533557,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 15:30:00"
+    },
+    {
+      "sample_id": "secom_1296",
+      "rank": 125,
+      "risk_score": 0.1278192763235125,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 18:59:00"
+    },
+    {
+      "sample_id": "secom_1183",
+      "rank": 126,
+      "risk_score": 0.1275672862180092,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 17:21:00"
+    },
+    {
+      "sample_id": "secom_1470",
+      "rank": 127,
+      "risk_score": 0.1269249208299342,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 03:28:00"
+    },
+    {
+      "sample_id": "secom_1514",
+      "rank": 128,
+      "risk_score": 0.12666751443564098,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 01:52:00"
+    },
+    {
+      "sample_id": "secom_1497",
+      "rank": 129,
+      "risk_score": 0.12604671235513173,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 03:28:00"
+    },
+    {
+      "sample_id": "secom_1544",
+      "rank": 130,
+      "risk_score": 0.12591100901987473,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 23:45:00"
+    },
+    {
+      "sample_id": "secom_1473",
+      "rank": 131,
+      "risk_score": 0.12570080339062903,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 03:34:00"
+    },
+    {
+      "sample_id": "secom_1498",
+      "rank": 132,
+      "risk_score": 0.1256644903702883,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 03:35:00"
+    },
+    {
+      "sample_id": "secom_1532",
+      "rank": 133,
+      "risk_score": 0.12564290639443984,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 13:16:00"
+    },
+    {
+      "sample_id": "secom_1347",
+      "rank": 134,
+      "risk_score": 0.12535544290758854,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 06:11:00"
+    },
+    {
+      "sample_id": "secom_1229",
+      "rank": 135,
+      "risk_score": 0.1246411570663755,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 04:11:00"
+    },
+    {
+      "sample_id": "secom_1445",
+      "rank": 136,
+      "risk_score": 0.12457317222068642,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 10:05:00"
+    },
+    {
+      "sample_id": "secom_1465",
+      "rank": 137,
+      "risk_score": 0.12456869750789105,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 23:58:00"
+    },
+    {
+      "sample_id": "secom_1515",
+      "rank": 138,
+      "risk_score": 0.12446605116406434,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 01:52:00"
+    },
+    {
+      "sample_id": "secom_1191",
+      "rank": 139,
+      "risk_score": 0.12446230881481465,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 04:42:00"
+    },
+    {
+      "sample_id": "secom_1209",
+      "rank": 140,
+      "risk_score": 0.12366343397152396,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 01:11:00"
+    },
+    {
+      "sample_id": "secom_1377",
+      "rank": 141,
+      "risk_score": 0.12365431817158457,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 20:36:00"
+    },
+    {
+      "sample_id": "secom_1530",
+      "rank": 142,
+      "risk_score": 0.12360560479146633,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 12:53:00"
+    },
+    {
+      "sample_id": "secom_1384",
+      "rank": 143,
+      "risk_score": 0.12339161057860171,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 03:29:00"
+    },
+    {
+      "sample_id": "secom_1269",
+      "rank": 144,
+      "risk_score": 0.12329850471964737,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 08:35:00"
+    },
+    {
+      "sample_id": "secom_1564",
+      "rank": 145,
+      "risk_score": 0.12323304142204235,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-17 05:26:00"
+    },
+    {
+      "sample_id": "secom_1509",
+      "rank": 146,
+      "risk_score": 0.12209587514445884,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 21:36:00"
+    },
+    {
+      "sample_id": "secom_1285",
+      "rank": 147,
+      "risk_score": 0.12124838709074678,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 00:58:00"
+    },
+    {
+      "sample_id": "secom_1241",
+      "rank": 148,
+      "risk_score": 0.1206419553962177,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 14:07:00"
+    },
+    {
+      "sample_id": "secom_1297",
+      "rank": 149,
+      "risk_score": 0.12000787358484986,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 19:12:00"
+    },
+    {
+      "sample_id": "secom_1250",
+      "rank": 150,
+      "risk_score": 0.1199975660911636,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 17:19:00"
+    },
+    {
+      "sample_id": "secom_1270",
+      "rank": 151,
+      "risk_score": 0.11986173192057721,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 09:30:00"
+    },
+    {
+      "sample_id": "secom_1226",
+      "rank": 152,
+      "risk_score": 0.11966166636689697,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 00:22:00"
+    },
+    {
+      "sample_id": "secom_1528",
+      "rank": 153,
+      "risk_score": 0.11936564026395338,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 09:11:00"
+    },
+    {
+      "sample_id": "secom_1382",
+      "rank": 154,
+      "risk_score": 0.11863684077506813,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 23:03:00"
+    },
+    {
+      "sample_id": "secom_1407",
+      "rank": 155,
+      "risk_score": 0.11843183380959468,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 19:24:00"
+    },
+    {
+      "sample_id": "secom_1554",
+      "rank": 156,
+      "risk_score": 0.11779925260202645,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 04:47:00"
+    },
+    {
+      "sample_id": "secom_1443",
+      "rank": 157,
+      "risk_score": 0.11765263734770952,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 15:55:00"
+    },
+    {
+      "sample_id": "secom_1403",
+      "rank": 158,
+      "risk_score": 0.11764340519591927,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 16:32:00"
+    },
+    {
+      "sample_id": "secom_1195",
+      "rank": 159,
+      "risk_score": 0.1175528512649566,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 14:20:00"
+    },
+    {
+      "sample_id": "secom_1552",
+      "rank": 160,
+      "risk_score": 0.1170869079579477,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 04:02:00"
+    },
+    {
+      "sample_id": "secom_1484",
+      "rank": 161,
+      "risk_score": 0.1170016975630671,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 19:17:00"
+    },
+    {
+      "sample_id": "secom_1386",
+      "rank": 162,
+      "risk_score": 0.11641974919873672,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 07:32:00"
+    },
+    {
+      "sample_id": "secom_1481",
+      "rank": 163,
+      "risk_score": 0.11640300153384513,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 15:42:00"
+    },
+    {
+      "sample_id": "secom_1264",
+      "rank": 164,
+      "risk_score": 0.11631923743896103,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 03:56:00"
+    },
+    {
+      "sample_id": "secom_1331",
+      "rank": 165,
+      "risk_score": 0.1162686204622828,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 19:45:00"
+    },
+    {
+      "sample_id": "secom_1259",
+      "rank": 166,
+      "risk_score": 0.11623255318906428,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 23:32:00"
+    },
+    {
+      "sample_id": "secom_1280",
+      "rank": 167,
+      "risk_score": 0.11621468334938875,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 21:15:00"
+    },
+    {
+      "sample_id": "secom_1389",
+      "rank": 168,
+      "risk_score": 0.11609870038198641,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 08:26:00"
+    },
+    {
+      "sample_id": "secom_1409",
+      "rank": 169,
+      "risk_score": 0.11600683770066247,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 20:39:00"
+    },
+    {
+      "sample_id": "secom_1510",
+      "rank": 170,
+      "risk_score": 0.11575549279684369,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 23:07:00"
+    },
+    {
+      "sample_id": "secom_1449",
+      "rank": 171,
+      "risk_score": 0.11557121810192104,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 15:33:00"
+    },
+    {
+      "sample_id": "secom_1308",
+      "rank": 172,
+      "risk_score": 0.11549252361645405,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 04:48:00"
+    },
+    {
+      "sample_id": "secom_1466",
+      "rank": 173,
+      "risk_score": 0.11547143042356316,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 00:57:00"
+    },
+    {
+      "sample_id": "secom_1310",
+      "rank": 174,
+      "risk_score": 0.11544240594995223,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 05:53:00"
+    },
+    {
+      "sample_id": "secom_1561",
+      "rank": 175,
+      "risk_score": 0.11537479787857048,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 15:02:00"
+    },
+    {
+      "sample_id": "secom_1354",
+      "rank": 176,
+      "risk_score": 0.1153668240257855,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 08:24:00"
+    },
+    {
+      "sample_id": "secom_1535",
+      "rank": 177,
+      "risk_score": 0.11533016638726713,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 16:24:00"
+    },
+    {
+      "sample_id": "secom_1376",
+      "rank": 178,
+      "risk_score": 0.11525093425781273,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 20:02:00"
+    },
+    {
+      "sample_id": "secom_1460",
+      "rank": 179,
+      "risk_score": 0.11501858705464739,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 08:27:00"
+    },
+    {
+      "sample_id": "secom_1444",
+      "rank": 180,
+      "risk_score": 0.11450109209712475,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 15:56:00"
+    },
+    {
+      "sample_id": "secom_1400",
+      "rank": 181,
+      "risk_score": 0.11433754261327776,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 13:10:00"
+    },
+    {
+      "sample_id": "secom_1525",
+      "rank": 182,
+      "risk_score": 0.11430807414524305,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 07:36:00"
+    },
+    {
+      "sample_id": "secom_1450",
+      "rank": 183,
+      "risk_score": 0.11390993914278087,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 15:50:00"
+    },
+    {
+      "sample_id": "secom_1350",
+      "rank": 184,
+      "risk_score": 0.11368734206494589,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 07:12:00"
+    },
+    {
+      "sample_id": "secom_1243",
+      "rank": 185,
+      "risk_score": 0.11325762409512675,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 14:54:00"
+    },
+    {
+      "sample_id": "secom_1456",
+      "rank": 186,
+      "risk_score": 0.11322110005291955,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 06:56:00"
+    },
+    {
+      "sample_id": "secom_1201",
+      "rank": 187,
+      "risk_score": 0.1127150593953998,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 17:27:00"
+    },
+    {
+      "sample_id": "secom_1476",
+      "rank": 188,
+      "risk_score": 0.11202399710165675,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 12:18:00"
+    },
+    {
+      "sample_id": "secom_1452",
+      "rank": 189,
+      "risk_score": 0.11171885942911171,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 21:03:00"
+    },
+    {
+      "sample_id": "secom_1341",
+      "rank": 190,
+      "risk_score": 0.11109586466282743,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 03:31:00"
+    },
+    {
+      "sample_id": "secom_1457",
+      "rank": 191,
+      "risk_score": 0.11109108659044402,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 07:38:00"
+    },
+    {
+      "sample_id": "secom_1302",
+      "rank": 192,
+      "risk_score": 0.10996277941254064,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 23:18:00"
+    },
+    {
+      "sample_id": "secom_1474",
+      "rank": 193,
+      "risk_score": 0.10971278334621974,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 03:53:00"
+    },
+    {
+      "sample_id": "secom_1373",
+      "rank": 194,
+      "risk_score": 0.10939718100423662,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 18:54:00"
+    },
+    {
+      "sample_id": "secom_1533",
+      "rank": 195,
+      "risk_score": 0.10895507939143032,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 14:08:00"
+    },
+    {
+      "sample_id": "secom_1239",
+      "rank": 196,
+      "risk_score": 0.1082470701209776,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 09:42:00"
+    },
+    {
+      "sample_id": "secom_1230",
+      "rank": 197,
+      "risk_score": 0.10814183130775797,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 04:23:00"
+    },
+    {
+      "sample_id": "secom_1175",
+      "rank": 198,
+      "risk_score": 0.10808280327158218,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 11:53:00"
+    },
+    {
+      "sample_id": "secom_1556",
+      "rank": 199,
+      "risk_score": 0.10797471237320035,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 04:54:00"
+    },
+    {
+      "sample_id": "secom_1520",
+      "rank": 200,
+      "risk_score": 0.10732656337667223,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 03:24:00"
+    },
+    {
+      "sample_id": "secom_1339",
+      "rank": 201,
+      "risk_score": 0.10731598057364083,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 02:44:00"
+    },
+    {
+      "sample_id": "secom_1522",
+      "rank": 202,
+      "risk_score": 0.10729691687274504,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 05:13:00"
+    },
+    {
+      "sample_id": "secom_1506",
+      "rank": 203,
+      "risk_score": 0.10721796093193124,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 20:01:00"
+    },
+    {
+      "sample_id": "secom_1284",
+      "rank": 204,
+      "risk_score": 0.10704925742147542,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 23:46:00"
+    },
+    {
+      "sample_id": "secom_1440",
+      "rank": 205,
+      "risk_score": 0.10653968837634446,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 07:38:00"
+    },
+    {
+      "sample_id": "secom_1431",
+      "rank": 206,
+      "risk_score": 0.10621606778135337,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 20:27:00"
+    },
+    {
+      "sample_id": "secom_1208",
+      "rank": 207,
+      "risk_score": 0.10592687481056286,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 00:20:00"
+    },
+    {
+      "sample_id": "secom_1372",
+      "rank": 208,
+      "risk_score": 0.10580505336473994,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 17:35:00"
+    },
+    {
+      "sample_id": "secom_1294",
+      "rank": 209,
+      "risk_score": 0.10574296101001393,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 18:15:00"
+    },
+    {
+      "sample_id": "secom_1234",
+      "rank": 210,
+      "risk_score": 0.10554712605676954,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 07:58:00"
+    },
+    {
+      "sample_id": "secom_1454",
+      "rank": 211,
+      "risk_score": 0.10547916041148901,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 21:16:00"
+    },
+    {
+      "sample_id": "secom_1277",
+      "rank": 212,
+      "risk_score": 0.10544698415255946,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 20:26:00"
+    },
+    {
+      "sample_id": "secom_1416",
+      "rank": 213,
+      "risk_score": 0.10536663242545898,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 07:13:00"
+    },
+    {
+      "sample_id": "secom_1202",
+      "rank": 214,
+      "risk_score": 0.10479976028313148,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 19:17:00"
+    },
+    {
+      "sample_id": "secom_1369",
+      "rank": 215,
+      "risk_score": 0.10425947107440735,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 16:50:00"
+    },
+    {
+      "sample_id": "secom_1309",
+      "rank": 216,
+      "risk_score": 0.10421128722973005,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 05:31:00"
+    },
+    {
+      "sample_id": "secom_1459",
+      "rank": 217,
+      "risk_score": 0.10409764654288933,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 07:42:00"
+    },
+    {
+      "sample_id": "secom_1352",
+      "rank": 218,
+      "risk_score": 0.10408947753670646,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 07:35:00"
+    },
+    {
+      "sample_id": "secom_1475",
+      "rank": 219,
+      "risk_score": 0.10406940370938039,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 11:27:00"
+    },
+    {
+      "sample_id": "secom_1223",
+      "rank": 220,
+      "risk_score": 0.1034110992234201,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 22:47:00"
+    },
+    {
+      "sample_id": "secom_1274",
+      "rank": 221,
+      "risk_score": 0.10306747752309338,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 19:23:00"
+    },
+    {
+      "sample_id": "secom_1268",
+      "rank": 222,
+      "risk_score": 0.1029017801436635,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 06:15:00"
+    },
+    {
+      "sample_id": "secom_1266",
+      "rank": 223,
+      "risk_score": 0.10289727606276301,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 05:01:00"
+    },
+    {
+      "sample_id": "secom_1550",
+      "rank": 224,
+      "risk_score": 0.10281182746710216,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 03:56:00"
+    },
+    {
+      "sample_id": "secom_1524",
+      "rank": 225,
+      "risk_score": 0.102734344116209,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 06:49:00"
+    },
+    {
+      "sample_id": "secom_1548",
+      "rank": 226,
+      "risk_score": 0.10266723709891427,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 02:22:00"
+    },
+    {
+      "sample_id": "secom_1434",
+      "rank": 227,
+      "risk_score": 0.10255898708601978,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 22:08:00"
+    },
+    {
+      "sample_id": "secom_1430",
+      "rank": 228,
+      "risk_score": 0.10212053337565528,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 18:22:00"
+    },
+    {
+      "sample_id": "secom_1319",
+      "rank": 229,
+      "risk_score": 0.10206187698180118,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 11:30:00"
+    },
+    {
+      "sample_id": "secom_1357",
+      "rank": 230,
+      "risk_score": 0.10183808096857357,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 09:57:00"
+    },
+    {
+      "sample_id": "secom_1315",
+      "rank": 231,
+      "risk_score": 0.10136031869008136,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 09:47:00"
+    },
+    {
+      "sample_id": "secom_1499",
+      "rank": 232,
+      "risk_score": 0.100873951922568,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 13:13:00"
+    },
+    {
+      "sample_id": "secom_1227",
+      "rank": 233,
+      "risk_score": 0.100813586802208,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 03:17:00"
+    },
+    {
+      "sample_id": "secom_1203",
+      "rank": 234,
+      "risk_score": 0.10078038879793444,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 19:17:00"
+    },
+    {
+      "sample_id": "secom_1516",
+      "rank": 235,
+      "risk_score": 0.10044967398994771,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 01:52:00"
+    },
+    {
+      "sample_id": "secom_1429",
+      "rank": 236,
+      "risk_score": 0.09999471812261435,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 17:41:00"
+    },
+    {
+      "sample_id": "secom_1247",
+      "rank": 237,
+      "risk_score": 0.09985510512402401,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 16:32:00"
+    },
+    {
+      "sample_id": "secom_1291",
+      "rank": 238,
+      "risk_score": 0.09968233058691656,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 09:29:00"
+    },
+    {
+      "sample_id": "secom_1231",
+      "rank": 239,
+      "risk_score": 0.09928522194410935,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 04:24:00"
+    },
+    {
+      "sample_id": "secom_1365",
+      "rank": 240,
+      "risk_score": 0.09910199022327147,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 15:00:00"
+    },
+    {
+      "sample_id": "secom_1321",
+      "rank": 241,
+      "risk_score": 0.09880160976354327,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 12:17:00"
+    },
+    {
+      "sample_id": "secom_1252",
+      "rank": 242,
+      "risk_score": 0.09875241997085132,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 19:25:00"
+    },
+    {
+      "sample_id": "secom_1488",
+      "rank": 243,
+      "risk_score": 0.0986949517670068,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 20:30:00"
+    },
+    {
+      "sample_id": "secom_1526",
+      "rank": 244,
+      "risk_score": 0.09844373321029658,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 07:55:00"
+    },
+    {
+      "sample_id": "secom_1210",
+      "rank": 245,
+      "risk_score": 0.09812600750045451,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 02:53:00"
+    },
+    {
+      "sample_id": "secom_1437",
+      "rank": 246,
+      "risk_score": 0.09800047740521524,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 00:23:00"
+    },
+    {
+      "sample_id": "secom_1314",
+      "rank": 247,
+      "risk_score": 0.09775285620000926,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 09:04:00"
+    },
+    {
+      "sample_id": "secom_1500",
+      "rank": 248,
+      "risk_score": 0.0974342041067948,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 13:16:00"
+    },
+    {
+      "sample_id": "secom_1462",
+      "rank": 249,
+      "risk_score": 0.09740360430118848,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 15:33:00"
+    },
+    {
+      "sample_id": "secom_1405",
+      "rank": 250,
+      "risk_score": 0.09736124036685462,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 17:28:00"
+    },
+    {
+      "sample_id": "secom_1562",
+      "rank": 251,
+      "risk_score": 0.09709985157972288,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 15:13:00"
+    },
+    {
+      "sample_id": "secom_1493",
+      "rank": 252,
+      "risk_score": 0.09690877068663291,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 22:48:00"
+    },
+    {
+      "sample_id": "secom_1176",
+      "rank": 253,
+      "risk_score": 0.09683433793040329,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 12:25:00"
+    },
+    {
+      "sample_id": "secom_1507",
+      "rank": 254,
+      "risk_score": 0.09668770773850525,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 20:30:00"
+    },
+    {
+      "sample_id": "secom_1221",
+      "rank": 255,
+      "risk_score": 0.09668194511073064,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 21:15:00"
+    },
+    {
+      "sample_id": "secom_1387",
+      "rank": 256,
+      "risk_score": 0.0966814521231498,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 07:41:00"
+    },
+    {
+      "sample_id": "secom_1492",
+      "rank": 257,
+      "risk_score": 0.09656467931961113,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 21:57:00"
+    },
+    {
+      "sample_id": "secom_1267",
+      "rank": 258,
+      "risk_score": 0.09625324689435365,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 05:45:00"
+    },
+    {
+      "sample_id": "secom_1391",
+      "rank": 259,
+      "risk_score": 0.09612219038146942,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 09:20:00"
+    },
+    {
+      "sample_id": "secom_1265",
+      "rank": 260,
+      "risk_score": 0.09611800487849519,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 04:49:00"
+    },
+    {
+      "sample_id": "secom_1518",
+      "rank": 261,
+      "risk_score": 0.0960992467301576,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 02:40:00"
+    },
+    {
+      "sample_id": "secom_1275",
+      "rank": 262,
+      "risk_score": 0.09578354042785357,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 19:23:00"
+    },
+    {
+      "sample_id": "secom_1342",
+      "rank": 263,
+      "risk_score": 0.09577048410555161,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 03:50:00"
+    },
+    {
+      "sample_id": "secom_1381",
+      "rank": 264,
+      "risk_score": 0.09572108774938617,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 22:37:00"
+    },
+    {
+      "sample_id": "secom_1418",
+      "rank": 265,
+      "risk_score": 0.09511357076322247,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 09:01:00"
+    },
+    {
+      "sample_id": "secom_1287",
+      "rank": 266,
+      "risk_score": 0.09481010439354738,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 02:36:00"
+    },
+    {
+      "sample_id": "secom_1534",
+      "rank": 267,
+      "risk_score": 0.09472859835765424,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 15:11:00"
+    },
+    {
+      "sample_id": "secom_1371",
+      "rank": 268,
+      "risk_score": 0.09461555813053626,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 17:26:00"
+    },
+    {
+      "sample_id": "secom_1338",
+      "rank": 269,
+      "risk_score": 0.09439948147186221,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 01:30:00"
+    },
+    {
+      "sample_id": "secom_1249",
+      "rank": 270,
+      "risk_score": 0.0943246086069148,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 17:00:00"
+    },
+    {
+      "sample_id": "secom_1290",
+      "rank": 271,
+      "risk_score": 0.09426279577496609,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 04:45:00"
+    },
+    {
+      "sample_id": "secom_1179",
+      "rank": 272,
+      "risk_score": 0.09416338127896899,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 14:08:00"
+    },
+    {
+      "sample_id": "secom_1529",
+      "rank": 273,
+      "risk_score": 0.09382949188451134,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 10:00:00"
+    },
+    {
+      "sample_id": "secom_1237",
+      "rank": 274,
+      "risk_score": 0.09381564978829111,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 08:57:00"
+    },
+    {
+      "sample_id": "secom_1204",
+      "rank": 275,
+      "risk_score": 0.09357255241429306,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 21:39:00"
+    },
+    {
+      "sample_id": "secom_1502",
+      "rank": 276,
+      "risk_score": 0.0934278105335456,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 14:15:00"
+    },
+    {
+      "sample_id": "secom_1546",
+      "rank": 277,
+      "risk_score": 0.093221807801427,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 02:16:00"
+    },
+    {
+      "sample_id": "secom_1262",
+      "rank": 278,
+      "risk_score": 0.09316485916051882,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 02:41:00"
+    },
+    {
+      "sample_id": "secom_1402",
+      "rank": 279,
+      "risk_score": 0.09316179425969401,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 14:35:00"
+    },
+    {
+      "sample_id": "secom_1222",
+      "rank": 280,
+      "risk_score": 0.09314279276558149,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 21:50:00"
+    },
+    {
+      "sample_id": "secom_1303",
+      "rank": 281,
+      "risk_score": 0.09307614980260907,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 00:33:00"
+    },
+    {
+      "sample_id": "secom_1366",
+      "rank": 282,
+      "risk_score": 0.09257007523724245,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 15:01:00"
+    },
+    {
+      "sample_id": "secom_1271",
+      "rank": 283,
+      "risk_score": 0.09248618336936838,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 11:40:00"
+    },
+    {
+      "sample_id": "secom_1178",
+      "rank": 284,
+      "risk_score": 0.09225914485773369,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 14:04:00"
+    },
+    {
+      "sample_id": "secom_1235",
+      "rank": 285,
+      "risk_score": 0.09220417441159114,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 08:24:00"
+    },
+    {
+      "sample_id": "secom_1251",
+      "rank": 286,
+      "risk_score": 0.0918757320698431,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 19:21:00"
+    },
+    {
+      "sample_id": "secom_1182",
+      "rank": 287,
+      "risk_score": 0.09145054393998754,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 16:27:00"
+    },
+    {
+      "sample_id": "secom_1198",
+      "rank": 288,
+      "risk_score": 0.09134769957200464,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 15:26:00"
+    },
+    {
+      "sample_id": "secom_1551",
+      "rank": 289,
+      "risk_score": 0.09128508817269544,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 04:02:00"
+    },
+    {
+      "sample_id": "secom_1279",
+      "rank": 290,
+      "risk_score": 0.09113368394304183,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 20:46:00"
+    },
+    {
+      "sample_id": "secom_1463",
+      "rank": 291,
+      "risk_score": 0.0910860065046839,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-11 16:25:00"
+    },
+    {
+      "sample_id": "secom_1537",
+      "rank": 292,
+      "risk_score": 0.0899704868887299,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 18:16:00"
+    },
+    {
+      "sample_id": "secom_1325",
+      "rank": 293,
+      "risk_score": 0.0894660117517508,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 15:35:00"
+    },
+    {
+      "sample_id": "secom_1286",
+      "rank": 294,
+      "risk_score": 0.08941722352109661,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 01:49:00"
+    },
+    {
+      "sample_id": "secom_1505",
+      "rank": 295,
+      "risk_score": 0.0893378379355435,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 19:15:00"
+    },
+    {
+      "sample_id": "secom_1215",
+      "rank": 296,
+      "risk_score": 0.08901203955433062,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 09:15:00"
+    },
+    {
+      "sample_id": "secom_1301",
+      "rank": 297,
+      "risk_score": 0.08843108088876897,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 22:06:00"
+    },
+    {
+      "sample_id": "secom_1563",
+      "rank": 298,
+      "risk_score": 0.08839156477649486,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 20:49:00"
+    },
+    {
+      "sample_id": "secom_1232",
+      "rank": 299,
+      "risk_score": 0.08808817204381097,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 06:49:00"
+    },
+    {
+      "sample_id": "secom_1420",
+      "rank": 300,
+      "risk_score": 0.08792757116691371,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 10:37:00"
+    },
+    {
+      "sample_id": "secom_1521",
+      "rank": 301,
+      "risk_score": 0.08681043766189374,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 04:08:00"
+    },
+    {
+      "sample_id": "secom_1216",
+      "rank": 302,
+      "risk_score": 0.08679657181618584,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 09:16:00"
+    },
+    {
+      "sample_id": "secom_1419",
+      "rank": 303,
+      "risk_score": 0.08669951733241955,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 09:06:00"
+    },
+    {
+      "sample_id": "secom_1318",
+      "rank": 304,
+      "risk_score": 0.086335009927789,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 11:05:00"
+    },
+    {
+      "sample_id": "secom_1517",
+      "rank": 305,
+      "risk_score": 0.08589193811041042,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 02:40:00"
+    },
+    {
+      "sample_id": "secom_1186",
+      "rank": 306,
+      "risk_score": 0.08581686441745985,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 22:13:00"
+    },
+    {
+      "sample_id": "secom_1313",
+      "rank": 307,
+      "risk_score": 0.08571885433503869,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 08:40:00"
+    },
+    {
+      "sample_id": "secom_1362",
+      "rank": 308,
+      "risk_score": 0.08505266670815033,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 13:08:00"
+    },
+    {
+      "sample_id": "secom_1272",
+      "rank": 309,
+      "risk_score": 0.08475749502258377,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 12:31:00"
+    },
+    {
+      "sample_id": "secom_1441",
+      "rank": 310,
+      "risk_score": 0.08474087360448906,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 14:15:00"
+    },
+    {
+      "sample_id": "secom_1408",
+      "rank": 311,
+      "risk_score": 0.08427566106058841,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 20:19:00"
+    },
+    {
+      "sample_id": "secom_1471",
+      "rank": 312,
+      "risk_score": 0.08403327175471624,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 08:19:00"
+    },
+    {
+      "sample_id": "secom_1566",
+      "rank": 313,
+      "risk_score": 0.08379943452016665,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-17 06:07:00"
+    },
+    {
+      "sample_id": "secom_1212",
+      "rank": 314,
+      "risk_score": 0.08343493739709189,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 07:19:00"
+    },
+    {
+      "sample_id": "secom_1197",
+      "rank": 315,
+      "risk_score": 0.08318533354660931,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 15:16:00"
+    },
+    {
+      "sample_id": "secom_1224",
+      "rank": 316,
+      "risk_score": 0.08295818538466813,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 23:34:00"
+    },
+    {
+      "sample_id": "secom_1345",
+      "rank": 317,
+      "risk_score": 0.08273221697453839,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 05:21:00"
+    },
+    {
+      "sample_id": "secom_1355",
+      "rank": 318,
+      "risk_score": 0.08248813938366041,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 08:57:00"
+    },
+    {
+      "sample_id": "secom_1305",
+      "rank": 319,
+      "risk_score": 0.0821223006886079,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 01:35:00"
+    },
+    {
+      "sample_id": "secom_1349",
+      "rank": 320,
+      "risk_score": 0.08199344558140928,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 06:49:00"
+    },
+    {
+      "sample_id": "secom_1423",
+      "rank": 321,
+      "risk_score": 0.08198602313924958,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 13:38:00"
+    },
+    {
+      "sample_id": "secom_1306",
+      "rank": 322,
+      "risk_score": 0.08181096542641014,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 04:01:00"
+    },
+    {
+      "sample_id": "secom_1214",
+      "rank": 323,
+      "risk_score": 0.08175951042659431,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 08:15:00"
+    },
+    {
+      "sample_id": "secom_1188",
+      "rank": 324,
+      "risk_score": 0.08170237616180913,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 01:36:00"
+    },
+    {
+      "sample_id": "secom_1536",
+      "rank": 325,
+      "risk_score": 0.08141130260602791,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 17:19:00"
+    },
+    {
+      "sample_id": "secom_1468",
+      "rank": 326,
+      "risk_score": 0.0813960432710026,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-12 02:59:00"
+    },
+    {
+      "sample_id": "secom_1300",
+      "rank": 327,
+      "risk_score": 0.08121684805467534,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 20:39:00"
+    },
+    {
+      "sample_id": "secom_1504",
+      "rank": 328,
+      "risk_score": 0.08094826419967448,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 17:36:00"
+    },
+    {
+      "sample_id": "secom_1329",
+      "rank": 329,
+      "risk_score": 0.08088761195130315,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 18:46:00"
+    },
+    {
+      "sample_id": "secom_1538",
+      "rank": 330,
+      "risk_score": 0.08023042592496503,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 19:15:00"
+    },
+    {
+      "sample_id": "secom_1477",
+      "rank": 331,
+      "risk_score": 0.08014333387105384,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 14:06:00"
+    },
+    {
+      "sample_id": "secom_1483",
+      "rank": 332,
+      "risk_score": 0.07995305970997614,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 16:13:00"
+    },
+    {
+      "sample_id": "secom_1367",
+      "rank": 333,
+      "risk_score": 0.07980215998299618,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 15:52:00"
+    },
+    {
+      "sample_id": "secom_1185",
+      "rank": 334,
+      "risk_score": 0.07959095627452364,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 21:48:00"
+    },
+    {
+      "sample_id": "secom_1282",
+      "rank": 335,
+      "risk_score": 0.07952788395762132,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-03 22:08:00"
+    },
+    {
+      "sample_id": "secom_1332",
+      "rank": 336,
+      "risk_score": 0.07869178578309215,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 20:12:00"
+    },
+    {
+      "sample_id": "secom_1545",
+      "rank": 337,
+      "risk_score": 0.07796335514491885,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 02:16:00"
+    },
+    {
+      "sample_id": "secom_1448",
+      "rank": 338,
+      "risk_score": 0.07771499396946407,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 12:30:00"
+    },
+    {
+      "sample_id": "secom_1358",
+      "rank": 339,
+      "risk_score": 0.07677692376710168,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 10:07:00"
+    },
+    {
+      "sample_id": "secom_1442",
+      "rank": 340,
+      "risk_score": 0.0762901958553354,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 15:04:00"
+    },
+    {
+      "sample_id": "secom_1351",
+      "rank": 341,
+      "risk_score": 0.07581994254701296,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 07:17:00"
+    },
+    {
+      "sample_id": "secom_1388",
+      "rank": 342,
+      "risk_score": 0.07581819801055127,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 08:25:00"
+    },
+    {
+      "sample_id": "secom_1320",
+      "rank": 343,
+      "risk_score": 0.07556333845179582,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 12:03:00"
+    },
+    {
+      "sample_id": "secom_1428",
+      "rank": 344,
+      "risk_score": 0.07524318003021992,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 17:31:00"
+    },
+    {
+      "sample_id": "secom_1414",
+      "rank": 345,
+      "risk_score": 0.07518954105891641,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 06:25:00"
+    },
+    {
+      "sample_id": "secom_1193",
+      "rank": 346,
+      "risk_score": 0.07445434158081457,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 12:31:00"
+    },
+    {
+      "sample_id": "secom_1555",
+      "rank": 347,
+      "risk_score": 0.07437407998444279,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 04:50:00"
+    },
+    {
+      "sample_id": "secom_1447",
+      "rank": 348,
+      "risk_score": 0.07435726271576538,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 10:53:00"
+    },
+    {
+      "sample_id": "secom_1322",
+      "rank": 349,
+      "risk_score": 0.07390594558498288,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 13:49:00"
+    },
+    {
+      "sample_id": "secom_1451",
+      "rank": 350,
+      "risk_score": 0.07373822767073275,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 20:02:00"
+    },
+    {
+      "sample_id": "secom_1478",
+      "rank": 351,
+      "risk_score": 0.0736986991986282,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 14:29:00"
+    },
+    {
+      "sample_id": "secom_1415",
+      "rank": 352,
+      "risk_score": 0.07354049126456452,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 07:10:00"
+    },
+    {
+      "sample_id": "secom_1433",
+      "rank": 353,
+      "risk_score": 0.07319021391232719,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 21:45:00"
+    },
+    {
+      "sample_id": "secom_1549",
+      "rank": 354,
+      "risk_score": 0.07268087863618203,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 02:55:00"
+    },
+    {
+      "sample_id": "secom_1413",
+      "rank": 355,
+      "risk_score": 0.07252496617827972,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 05:38:00"
+    },
+    {
+      "sample_id": "secom_1189",
+      "rank": 356,
+      "risk_score": 0.07239827137234595,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 02:44:00"
+    },
+    {
+      "sample_id": "secom_1380",
+      "rank": 357,
+      "risk_score": 0.07224429617709346,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 21:48:00"
+    },
+    {
+      "sample_id": "secom_1480",
+      "rank": 358,
+      "risk_score": 0.07213195166027506,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 14:55:00"
+    },
+    {
+      "sample_id": "secom_1486",
+      "rank": 359,
+      "risk_score": 0.0719816632123207,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 19:40:00"
+    },
+    {
+      "sample_id": "secom_1501",
+      "rank": 360,
+      "risk_score": 0.07147229568008635,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 14:07:00"
+    },
+    {
+      "sample_id": "secom_1495",
+      "rank": 361,
+      "risk_score": 0.0712436703167336,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 00:35:00"
+    },
+    {
+      "sample_id": "secom_1335",
+      "rank": 362,
+      "risk_score": 0.0706340310354408,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 00:41:00"
+    },
+    {
+      "sample_id": "secom_1206",
+      "rank": 363,
+      "risk_score": 0.07015781750174774,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 23:34:00"
+    },
+    {
+      "sample_id": "secom_1439",
+      "rank": 364,
+      "risk_score": 0.06977396455269323,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 06:06:00"
+    },
+    {
+      "sample_id": "secom_1343",
+      "rank": 365,
+      "risk_score": 0.06848167596239094,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 03:57:00"
+    },
+    {
+      "sample_id": "secom_1383",
+      "rank": 366,
+      "risk_score": 0.06558412488312777,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 01:46:00"
+    },
+    {
+      "sample_id": "secom_1180",
+      "rank": 367,
+      "risk_score": 0.06480774294194304,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 15:09:00"
+    },
+    {
+      "sample_id": "secom_1541",
+      "rank": 368,
+      "risk_score": 0.06449767355112515,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 22:45:00"
+    },
+    {
+      "sample_id": "secom_1395",
+      "rank": 369,
+      "risk_score": 0.06391408898917166,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 10:51:00"
+    },
+    {
+      "sample_id": "secom_1432",
+      "rank": 370,
+      "risk_score": 0.06386053076097958,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 21:19:00"
+    },
+    {
+      "sample_id": "secom_1508",
+      "rank": 371,
+      "risk_score": 0.0637436652005678,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-14 20:48:00"
+    },
+    {
+      "sample_id": "secom_1200",
+      "rank": 372,
+      "risk_score": 0.06347744690195493,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 16:50:00"
+    },
+    {
+      "sample_id": "secom_1491",
+      "rank": 373,
+      "risk_score": 0.06339281682860012,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-13 21:47:00"
+    },
+    {
+      "sample_id": "secom_1211",
+      "rank": 374,
+      "risk_score": 0.062344372444622986,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 05:56:00"
+    },
+    {
+      "sample_id": "secom_1181",
+      "rank": 375,
+      "risk_score": 0.062055887074934986,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-29 15:16:00"
+    },
+    {
+      "sample_id": "secom_1370",
+      "rank": 376,
+      "risk_score": 0.05995655669086235,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-06 17:26:00"
+    },
+    {
+      "sample_id": "secom_1220",
+      "rank": 377,
+      "risk_score": 0.059427439904000685,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 19:57:00"
+    },
+    {
+      "sample_id": "secom_1394",
+      "rank": 378,
+      "risk_score": 0.05910583897474766,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 10:10:00"
+    },
+    {
+      "sample_id": "secom_1218",
+      "rank": 379,
+      "risk_score": 0.057887235611384764,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 15:16:00"
+    },
+    {
+      "sample_id": "secom_1531",
+      "rank": 380,
+      "risk_score": 0.05788625139495014,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-15 13:14:00"
+    },
+    {
+      "sample_id": "secom_1317",
+      "rank": 381,
+      "risk_score": 0.0571824820777191,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-05 10:43:00"
+    },
+    {
+      "sample_id": "secom_1288",
+      "rank": 382,
+      "risk_score": 0.056786212884088146,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 03:53:00"
+    },
+    {
+      "sample_id": "secom_1559",
+      "rank": 383,
+      "risk_score": 0.0560911894936158,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-16 05:44:00"
+    },
+    {
+      "sample_id": "secom_1411",
+      "rank": 384,
+      "risk_score": 0.055338246427138756,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-08 04:47:00"
+    },
+    {
+      "sample_id": "secom_1295",
+      "rank": 385,
+      "risk_score": 0.054460466410510576,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-04 18:25:00"
+    },
+    {
+      "sample_id": "secom_1393",
+      "rank": 386,
+      "risk_score": 0.04958402418695119,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 10:04:00"
+    },
+    {
+      "sample_id": "secom_1446",
+      "rank": 387,
+      "risk_score": 0.04680289197412134,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-10 10:46:00"
+    },
+    {
+      "sample_id": "secom_1438",
+      "rank": 388,
+      "risk_score": 0.04646946584644875,
+      "prediction": 0,
+      "retrospective_label": 1,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-09 04:34:00"
+    },
+    {
+      "sample_id": "secom_1194",
+      "rank": 389,
+      "risk_score": 0.045379760471267766,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-09-30 13:29:00"
+    },
+    {
+      "sample_id": "secom_1213",
+      "rank": 390,
+      "risk_score": 0.03588193328922061,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-01 07:28:00"
+    },
+    {
+      "sample_id": "secom_1258",
+      "rank": 391,
+      "risk_score": 0.034170484239658336,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-02 23:32:00"
+    },
+    {
+      "sample_id": "secom_1392",
+      "rank": 392,
+      "risk_score": 0.008105953224663358,
+      "prediction": 0,
+      "retrospective_label": 0,
+      "model": "random_forest_depth_none_leaf_8",
+      "evidence_scope": "global_model_importance",
+      "measurement_timestamp": "2008-10-07 09:59:00"
+    }
+  ]
+}
