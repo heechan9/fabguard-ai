@@ -1,10 +1,10 @@
 name: SECOM offline review browser verification
 on:
   pull_request:
-    paths: ['web/review/**', 'web/app.js', 'verification/check_secom_review*', 'tests/web/secom-review.test.mjs', 'scripts/build_secom_review_source.py', '.github/workflows/secom-offline-review-ui.yml']
+    paths: ['web/theme.js', 'web/review/**', 'web/app.js', 'verification/check_secom_review*', 'tests/web/secom-review.test.mjs', 'scripts/build_secom_review_source.py', '.github/workflows/secom-offline-review-ui.yml']
   push:
     branches: [main]
-    paths: ['web/review/**', 'web/app.js', 'verification/check_secom_review*', '.github/workflows/secom-offline-review-ui.yml']
+    paths: ['web/theme.js', 'web/review/**', 'web/app.js', 'verification/check_secom_review*', '.github/workflows/secom-offline-review-ui.yml']
 permissions:
   contents: read
 jobs:

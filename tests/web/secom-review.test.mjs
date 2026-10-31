@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {webcrypto} from 'node:crypto';
-import {loadSource,newDocument,appendRecord,validateDocument,parseDocument,strictJSON,MAX_BYTES} from '../../web/review/model.mjs';
+import {loadSource,newDocument,appendRecord,validateDocument,parseDocument,strictJSON,MAX_BYTES,serializeDocument} from '../../web/review/model.mjs';
 globalThis.crypto??=webcrypto;
 const bytes=readFileSync(new URL('../../web/review/source.json',import.meta.url));
 const source=await loadSource(bytes),id='secom_1397',now='2026-10-31T04:30:00.000Z';
@@ -53,4 +53,16 @@ test('UI only translates enum fields, never authored text matching enum tokens',
  assert.match(app,/\['outcome','proposed_action'\]\.includes\(key\) && enums\[entry\[key\]\]/);
  const d=appendRecord(fresh(),{...fields(),reviewer_role:'reference_only',rationale:'hold'},source,now);
  assert.equal(d.history[0].reviewer_role,'reference_only');assert.equal(d.history[0].rationale,'hold');
+});
+
+test('accepted multibyte and escaped records always roundtrip within exact export byte budget',()=>{
+ for(const rationale of ['한'.repeat(2000),'😀'.repeat(1000),'"\\'.repeat(1000)]) {
+  const f={...fields(),rationale,available_evidence:rationale,missing_evidence:rationale};let doc=fresh(),blocked=false;
+  for(let i=0;i<100;i++){try{const next=appendRecord(doc,f,source,now);const raw=serializeDocument(next);assert.ok(new TextEncoder().encode(raw).length<=MAX_BYTES);assert.deepEqual(parseDocument(raw,source,id,{now}),next);doc=next;}catch(error){assert.match(error.message,/exceed|history/);blocked=true;break;}}
+  assert.ok(doc.history.length>0);if(rationale.startsWith('한'))assert.equal(blocked,true);
+ }
+});
+test('formatting direction controls rejected without rejecting natural language text',()=>{
+ for(const control of ['\u202e','\u2066','\u2069'])assert.throws(()=>appendRecord(fresh(),{...fields(),rationale:'text'+control},source,now));
+ assert.equal(appendRecord(fresh(),{...fields(),rationale:'한국어 العربية'},source,now).history[0].rationale,'한국어 العربية');
 });

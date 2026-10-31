@@ -20,7 +20,7 @@ function instant(value) {
   require(typeof value==='string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value),'Use canonical UTC ISO time with milliseconds');
   const d=new Date(value); require(Number.isFinite(d.getTime()) && d.toISOString()===value,'Invalid calendar time');return d.getTime();
 }
-function text(value,max) { require(typeof value==='string' && value.trim().length>0 && value.length<=max && !/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(value),'Missing, oversized or invalid text'); }
+function text(value,max) { require(typeof value==='string' && value.trim().length>0 && value.length<=max && !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u202a-\u202e\u2066-\u2069]/.test(value),'Missing, oversized or invalid text'); }
 // Strict JSON parser: rejects duplicate keys, nonfinite values and excessive depth.
 export function strictJSON(input) {
   require(typeof input==='string' && new TextEncoder().encode(input).length<=MAX_BYTES,'JSON exceeds 1 MiB');
@@ -50,11 +50,16 @@ export async function loadSource(bytes) {
 }
 function evidence(source,sampleId) {require(trustedSources.has(source),'Load and verify bundled source first');const row=source.rows.find(x=>x.sample_id===sampleId);require(row,'Unknown sample ID');return {source_repo_sha:SOURCE_SHA,priority_table_sha256:CSV_SHA,...row,source_role:'observed_public',analysis_role:'offline_retrospective'};}
 export function newDocument(source,sampleId) {return {schema_version:'fabguard-secom-offline-review/v1',source:evidence(source,sampleId),history:[]};}
+export function serializeDocument(doc) {
+  const output=JSON.stringify(doc,null,2)+'\n';
+  require(new TextEncoder().encode(output).length<=MAX_BYTES,'Exported JSON would exceed 1 MiB');return output;
+}
 export function validateDocument(doc,source,sampleId,{now=new Date().toISOString(),current=null}={}) {
   const nowMs=instant(now);keys(doc,['schema_version','source','history']);require(doc.schema_version==='fabguard-secom-offline-review/v1','Unsupported review version');keys(doc.source,SOURCE_KEYS);require(equal(doc.source,evidence(source,sampleId)),'Review evidence mismatch');require(Array.isArray(doc.history)&&doc.history.length<=100,'Invalid revision history');
   let recorded=-Infinity,reviewed=-Infinity;
   doc.history.forEach((item,index)=>{keys(item,HISTORY_KEYS);require(item.revision===index+1,'Revision order mismatch');const at=instant(item.recorded_at),decision=instant(item.reviewed_at);require(at>=recorded&&decision>=reviewed&&decision>=instant(SOURCE_AVAILABLE_AT)&&decision<=at&&at<=nowMs,'Review time ordering/future time violation');recorded=at;reviewed=decision;text(item.reviewer_role,120);for(const k of ['rationale','available_evidence','missing_evidence'])text(item[k],2000);require(['insufficient_evidence','documented_observation'].includes(item.outcome),'Unsupported outcome');require(['hold','request_evidence','reinspect','reference_only'].includes(item.proposed_action),'Unsupported proposed action');require(item.outcome!=='insufficient_evidence'||item.proposed_action!=='reference_only','Insufficient evidence cannot clear a hold');});
   if(current){validateDocument(current,source,sampleId,{now});require(doc.history.length>=current.history.length,'Import would truncate local history');current.history.forEach((r,i)=>require(equal(r,doc.history[i]),'Import would replace local history'));}
+  serializeDocument(doc);
   return JSON.parse(JSON.stringify(doc));
 }
 export function parseDocument(text,source,sampleId,options={}) {return validateDocument(strictJSON(text),source,sampleId,options);}

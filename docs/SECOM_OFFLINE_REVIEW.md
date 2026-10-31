@@ -28,7 +28,8 @@ physical control, database or identity verification is added. Imported history i
 source hashes establish source-content matching, not reviewer authenticity or a tamper-proof journal.
 
 Schema `fabguard-secom-offline-review/v1` contains exactly `schema_version`, `source`, `history`.
-At most 100 revisions, 1 MiB input, 12 nested levels; unknown/duplicate fields, nonfinite numbers, wrong source,
+At most 100 revisions, 1 MiB input and canonical exported UTF-8 bytes (including formatting/newline),
+12 nested levels; malformed UTF-8, directional formatting controls, unknown/duplicate fields, nonfinite numbers, wrong source,
 unknown IDs, modified saved values and noncontiguous revisions fail closed. Review and recorded times are
 canonical UTC ISO with milliseconds; reviewer time cannot exceed record time or current clock, both must
 be nondecreasing. Review time cannot predate this pinned evidence version's commit time
@@ -62,3 +63,13 @@ including actual downloaded file round trips, keyboard, language/theme changes, 
 slow import invalidation, canceled selection and back/forward case isolation. This is not a production
 result; production steps are correctly skipped for a PR run. Screenshots require separate inspection.
 No physical phone, screen reader, identity authentication or field effectiveness claim is made.
+
+## Claude source-audit correction
+
+A maximum-length multilingual history could exceed the import byte limit. Accepted histories now
+validate the exact shared pretty-JSON export representation including its newline, so accepted exports
+remain reimportable within 1 MiB. Multibyte and escaping regression checks cover this boundary.
+File inputs clear immediately after capture to permit same-file retry after superseded reads;
+UTF-8 decoding is fatal rather than replacement-based. Bidi formatting controls are rejected without
+rejecting natural Korean/Arabic text. The dedicated asset gate also checks shared theme.js bytes
+without changing that file or the shared release workflow. New exact-head hosted evidence is required.

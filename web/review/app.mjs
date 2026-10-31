@@ -1,4 +1,4 @@
-import { loadSource, newDocument, parseDocument, appendRecord } from './model.mjs';
+import { loadSource, newDocument, parseDocument, appendRecord, serializeDocument } from './model.mjs';
 const $ = id => document.getElementById(id);
 let language = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'ko';
 let source = null, current = null, sampleId = null;
@@ -82,7 +82,7 @@ $('review-form').addEventListener('submit', async event => {
 $('export-record').addEventListener('click', () => {
   if (!current) return;
   clearError();
-  const blob = new Blob([JSON.stringify(current, null, 2) + '\n'], {type:'application/json'});
+  const blob = new Blob([serializeDocument(current)], {type:'application/json'});
   const url = URL.createObjectURL(blob), anchor = document.createElement('a');
   anchor.href = url; anchor.download = `fabguard-${sampleId}-review-v${current.history.length}.json`;
   document.body.append(anchor); anchor.click(); anchor.remove();
@@ -91,17 +91,18 @@ $('export-record').addEventListener('click', () => {
 });
 $('import-record').addEventListener('change', async event => {
   const file = event.target.files?.[0], token = ++operation;
+  event.target.value = ''; // Capture first, then allow same-file retry even if this read is superseded.
   if (!file || !current) return;
   clearError();
   try {
     if (file.size > 1024 * 1024) throw new Error(t('tooLarge'));
-    const text = await file.text();
+    const bytes = await file.arrayBuffer();
+    const text = new TextDecoder('utf-8', {fatal:true}).decode(bytes);
     if (token !== operation) return;
     const next = await parseDocument(text, source, sampleId, {now:new Date().toISOString(),current});
     if (token !== operation) return;
     current = next; documentDirty = false; renderHistory(); status('imported');
   } catch(error) { if (token === operation) showError(error); }
-  finally { if (token === operation) event.target.value = ''; }
 });
 translate();
 try {
