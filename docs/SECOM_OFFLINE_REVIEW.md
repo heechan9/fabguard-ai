@@ -1,6 +1,7 @@
 # SECOM offline review notes
 
-Local implementation under review; not published or deployed by this change.
+Implementation and release status must be read from PR #194 and its exact-head CI/deployment records.
+The initial local browser attempt was blocked by environment isolation; hosted checks are recorded below.
 
 ## What is connected
 
@@ -51,3 +52,13 @@ The new tests cover original CSV/snapshot identity, exact source bindings, appen
 invalid input and duplicate keys, text/size/depth limits, chronology, tampered source fields, old/divergent
 history and max revision count. Browser checks and exact executed outcomes are recorded separately by the
 implementer; these commands do not themselves prove execution. No new model experiment or field result.
+
+## Executed hosted checkpoint
+
+At head `6f06bbe8bb223a4992c7c3db868cb4f43dffc1bc`,
+[run 41169059815](https://github.com/heechan9/fabguard-ai/actions/runs/41169059815)
+passed the source checks and actual loopback Chromium browser checks at 1366/390/360 widths,
+including actual downloaded file round trips, keyboard, language/theme changes, rejected imports,
+slow import invalidation, canceled selection and back/forward case isolation. This is not a production
+result; production steps are correctly skipped for a PR run. Screenshots require separate inspection.
+No physical phone, screen reader, identity authentication or field effectiveness claim is made.
