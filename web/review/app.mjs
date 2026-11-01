@@ -2,7 +2,7 @@ import { loadSource, newDocument, parseDocument, appendRecord, serializeDocument
 const $ = id => document.getElementById(id);
 let language = new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'ko';
 let source = null, current = null, sampleId = null;
-let documentDirty = false, draftDirty = false, operation = 0;
+let documentDirty = false, draftDirty = false, handoffDirty = false, operation = 0;
 const fields = ['reviewer_role', 'reviewed_at', 'outcome', 'proposed_action', 'rationale', 'available_evidence', 'missing_evidence'];
 const copy = {
 ko: {
@@ -53,6 +53,7 @@ function renderHistory() {
 }
 function translate() {
   document.documentElement.lang = language;
+  document.dispatchEvent(new Event('fabguard-review-language'));
   document.title = language === 'en' ? 'FabGuard · SECOM offline review' : 'FabGuard · SECOM 오프라인 검토';
   document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = t(element.dataset.i18n); });
   $('language-toggle').textContent = language === 'en' ? '한국어' : 'English';
@@ -68,7 +69,7 @@ $('reviewed-at').value = new Date().toISOString();
 $('review-form').addEventListener('input', () => { draftDirty = true; });
 $('review-form').addEventListener('change', () => { draftDirty = true; });
 $('set-now').addEventListener('click', () => { $('reviewed-at').value = new Date().toISOString(); draftDirty = true; });
-window.addEventListener('beforeunload', event => { if (documentDirty || draftDirty) { event.preventDefault(); event.returnValue = ''; } });
+window.addEventListener('beforeunload', event => { if (documentDirty || draftDirty || handoffDirty) { event.preventDefault(); event.returnValue = ''; } });
 $('review-form').addEventListener('submit', async event => {
   event.preventDefault(); if (!current || !$('review-form').reportValidity()) return;
   const token = ++operation; clearError();
@@ -114,3 +115,10 @@ try {
   current = newDocument(source, sampleId);
   $('workspace').hidden = false; $('review-fields').disabled = false; translate();
 } catch(error) { source = null; showError(error, true); $('load-status').textContent = t('loadError'); }
+
+// Optional handoff UI must never prevent the original source-bound review from loading.
+if (source) import('./handoff-ui.mjs').then(({mountHandoff}) => mountHandoff({
+  getState: () => ({source,current,sampleId,language,draftDirty}),
+  acceptReview: next => { current = next; documentDirty = false; renderHistory(); },
+  markDirty: value => { handoffDirty = value; if (!value) documentDirty = false; }
+})).catch(() => { $('handoff-host').textContent = language === 'en' ? 'Handoff display withheld. Existing review notes remain available.' : '인계 표시 보류. 기존 검토 메모 기능은 계속 사용할 수 있습니다.'; });
