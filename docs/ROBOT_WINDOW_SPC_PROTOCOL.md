@@ -1,8 +1,8 @@
-# 로봇 50 ms 창 SPC 실행 전 계약 (2026-10-23, 미실행 · 개정 v3 2026-10-24)
+# 로봇 50 ms 창 SPC 사전 계약 (2026-10-23 · 개정 v3 2026-10-24)
 
 > **v2 개정:** 독립 감사 필수 수정 2건 반영 — (1) 큰 유한 값의 제곱 overflow를 범위 제한으로 창 보류, (2) 시간 span에 비례하던 창 할당을 표본·gap 수에 비례하는 희소 표현으로 교체. 바이트 해시와 디코딩 결속(`run_protocol_from_bytes`)을 추가했다. 이 계약은 FabGuard 플랫폼의 기존 기능(반도체·제조 데이터 전처리, 공정 품질, 모델 평가, 장비 데이터 점검)을 대체하지 않는 별도 추가 기능이다.
 
-**상태:** 실행 전 계약과 합성 테스트만 있다. 실데이터로 실행하지 않았고, 아래 값 중 `미정`은 소유자가 데이터 확인 전에 고정해야 한다. 완료된 실행의 최고 상태는 `exploratory_alarm_activity_only`이며 성능·안정성·원인·운영 적합성 결과가 아니다. 구현: `src/fabguard/robot_window_spc.py`, 테스트: `tests/test_robot_window_spc.py`.
+**현재 상태 (2026-10-26):** Python 모듈과 정상 개발자료의 탐색 실행 근거는 main에 반영됐다. [실행 요약](review/pr173-validation-20261024/robot_spc_results/summary.json)과 [경보 해석·추적 안내](FDC_LECTURE_APPLICATION.md)를 따른다. 아래 `미정` 표는 2026-10-23 실행 전 이력이며 실제 고정 설정은 실행 매니페스트의 config_sha256과 실행 근거에 연결돼 있다. 저장 보고서 웹 연결 #179와 UR3 #180은 별도 Draft이며 main 배포 완료가 아니다. 완료된 실행의 최고 상태는 `exploratory_alarm_activity_only`이며 성능·안정성·원인·운영 적합성 결과가 아니다. 구현: `src/fabguard/robot_window_spc.py`, 테스트: `tests/test_robot_window_spc.py`.
 
 ## 1. 자료와 분할 (조건 1, 9)
 
@@ -65,7 +65,7 @@
 - **선택 설치 `pip install '.[robot]'`:** CI `robot-extra` 작업이 `FABGUARD_REQUIRE_ROBOT_EXTRA=1`로 실행한다. 이 변수가 있으면 pyarrow가 없을 때 skip 대신 실패하므로, Parquet 회귀가 조용히 빠질 수 없다.
 - **창 지수 상한:** 한 파일의 완전 창 수가 `MAX_WINDOWS_PER_FILE = 2**53 - 1`을 넘으면 `time_span_exceeds_window_index_limit`로 파일을 무효 처리한다. JSON·브라우저에서 지수와 개수가 정확히 표현되는 범위를 넘기지 않기 위한 상한이며, 브라우저 구현과 같은 계약이다.
 
-## 실행 전에 소유자가 고정할 값
+## 과거 이력: 실행 전에 소유자가 고정할 값 (2026-10-23)
 
 | 값 | 상태 |
 |---|---|
