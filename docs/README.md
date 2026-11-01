@@ -112,3 +112,15 @@
 3. 파일을 옮길 때는 참조하는 코드·문서·검증을 함께 수정한다.
 4. 구현 작업은 [AGENTS.md](../AGENTS.md), 재현 명령은 [REPRODUCIBILITY.md](validation/REPRODUCIBILITY.md)를 따른다.
 5. 아직 병합되지 않은 제안은 해당 PR에서 검토한다. 이 목록은 현재 브랜치에 존재하는 파일만 연결한다.
+
+## 2026-11 해외 검토·취업 활용 입구
+
+[README](../README.md) → [웹데모](https://fabguard-ai.vercel.app/) →
+[5분 시연·작은 검토 과제](TECHNICAL_HANDOFF_EN.md#november-2026-review-route) →
+[일문 요약](TECHNICAL_HANDOFF_JA.md#2026年11月の確認手順).
+[기업별 근거·학습 공백](ROLE_ALIGNMENT.md#2026-11-01-공통-기반과-기업별-설명),
+[외부 검토 요청 준비](review/EXTERNAL_REVIEW_BRIEF.md#2026-11-01-후속-준비)를 재사용한다.
+문서 연결의 보완이며 새 국제협력 성과·새 모델 성능·현장 승인이 아니다.
+
+같은 프로젝트를 [공정·양산→기술 인계 / 제조AI·SW·IT 두 경로](ROLE_ALIGNMENT.md#2026-11-01-두-경로로-설명하기)로
+설명할 수 있다. 각 경로의 요구·구현 근거·공백과 5분 시연은 이 기존 직무 문서에서 관리한다.
