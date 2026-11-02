@@ -17,6 +17,17 @@ const output=process.env.FABGUARD_UI_OUTPUT||'/tmp/secom-review-browser';fs.mkdi
    await page.locator('#import-record').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(corrupt))});await page.waitForSelector('#error:not([hidden])');assert.equal(await page.locator('#history-list>li').count(),1);assert.equal(await page.locator('#rationale').inputValue(),'Unappended draft preserved');assert.equal(await page.evaluate(()=>document.activeElement.id),'error');
    await page.locator('#import-record').setInputFiles(saved);await page.waitForFunction(()=>document.querySelector('#file-status').textContent.includes('Validated'));assert.equal(await page.locator('#rationale').inputValue(),'Unappended draft preserved');
    await page.locator('#rationale').fill('hold');await page.locator('#reviewer-role').fill('reference_only');await page.locator('#set-now').click();await page.locator('#add-record').click();await page.waitForFunction(()=>document.querySelectorAll('#history-list>li').length===2);assert.match(await page.locator('#history-list>li').last().textContent(),/Rationale: hold/);assert.match(await page.locator('#history-list>li').last().textContent(),/reference_only/);
+   const comparison=page.locator('#history-list>li').last().locator('.revision-comparison');
+   await comparison.locator('summary').focus();await page.keyboard.press('Enter');
+   assert.equal(await comparison.getAttribute('open'),'');
+   assert.match(await comparison.textContent(),/Inputs changed since previous revision/);
+   assert.match(await comparison.textContent(),/Self-declared reader/);
+   assert.match(await comparison.textContent(),/reference_only/);
+   assert.match(await comparison.textContent(),/<img src=x onerror=alert\(1\)>/);
+   assert.equal(await comparison.locator('img').count(),0);
+   assert.match(await comparison.textContent(),/effectiveness/);
+   await comparison.locator('summary').focus();await page.keyboard.press('Enter');
+   assert.equal(await comparison.getAttribute('open'),null);
    await page.locator('#import-record').setInputFiles(saved);await page.waitForSelector('#error:not([hidden])');assert.match(await page.locator('#error').textContent(),/truncate/);assert.equal(await page.locator('#history-list>li').count(),2);
    await page.screenshot({path:path.join(output,`${width}-dark-record.png`),fullPage:true});
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
