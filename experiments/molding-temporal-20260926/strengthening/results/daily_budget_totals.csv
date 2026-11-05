@@ -1,0 +1,6 @@
+candidate,inspection_count,captured_fail,false_inspections,total_fail,capture,precision,lift
+clipped_logistic,225.0,0.0,225.0,8.0,0.0,0.0,0.0
+logistic,225.0,0.0,225.0,8.0,0.0,0.0,0.0
+product_prior,225.0,0.0,225.0,8.0,0.0,0.0,0.0
+rf,225.0,2.0,223.0,8.0,0.25,0.008888888888888889,2.4544444444444444
+rf_no_product,225.0,0.0,225.0,8.0,0.0,0.0,0.0
