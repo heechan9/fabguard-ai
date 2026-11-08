@@ -10,6 +10,10 @@ import urllib.request
 BASE = 'https://fabguard-ai.vercel.app/'
 FILES = [
     'oht/index.html', 'oht/style.css', 'oht/app.mjs', 'oht/model.mjs', 'oht/view.mjs',
+    'app.js', 'english-copy.mjs', 'review-budget.mjs', 'review-budget-core.mjs',
+    'style.css', 'readability.css', 'smt/evidence.mjs', 'data/priority_top50.json',
+    'review/index.html', 'review/app.mjs', 'review/model.mjs', 'review/style.css',
+    'review/handoff-model.mjs', 'review/handoff-ui.mjs', 'review/handoff-summary.mjs',
     'index.html', 'silver.css', 'theme.js', 'secom/index.html',
     'smt/context-review-model.mjs', 'smt/context-review.mjs',
     'smt/index.html', 'smt/app.mjs', 'smt/style.css', 'smt/simulation.mjs',

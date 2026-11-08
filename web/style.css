@@ -190,3 +190,5 @@ tr[role="link"]:focus-visible{background:rgba(44,230,208,.08)}
 @media(max-width:760px){.evidence-entry{grid-template-columns:1fr;gap:24px;margin-bottom:100px;padding:26px 22px}.evidence-entry .button{width:100%;text-align:center}.validation-details>summary{align-items:flex-start;flex-direction:column}.professional-evidence{padding-top:64px}[data-section]:before,[data-validation-step]:before{font-size:26px;right:12px}}
 
 .field-effect-section .validation-grid article>b{font-size:16px;letter-spacing:.08em;opacity:.58}
+
+.review-budget-panel{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:22px;margin:24px 0;overflow-wrap:anywhere}.review-budget-panel h2{font-size:22px}.review-budget-panel p{max-width:85ch}.review-budget-panel :is(select,button){font:inherit;min-height:44px;max-width:100%;padding:8px 12px;margin:6px 0;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:6px}.review-budget-panel :focus-visible{outline:3px solid var(--cyan);outline-offset:3px}.table-shell tr[hidden]{display:none}
