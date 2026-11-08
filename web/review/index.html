@@ -32,6 +32,7 @@
 <button class="primary" id="add-record" type="submit" data-i18n="add">현재 메모를 새 버전으로 기록</button>
 </fieldset></form></section>
 <section aria-labelledby="history-heading"><h2 id="history-heading" data-i18n="history">메모 이력</h2><p id="history-status" role="status"></p><ol id="history-list"></ol></section>
+<section id="handoff-host" aria-live="polite"></section>
 <section aria-labelledby="files-heading"><h2 id="files-heading" data-i18n="files">파일로 보존·다시 열기</h2><p class="boundary" data-i18n="storage">현재 기록과 입력은 브라우저 메모리에만 있습니다. 새로고침·페이지 이동 시 사라집니다. JSON 파일을 내려받아 직접 보존하세요. 서버 업로드·자동 저장·다중사용자 데이터베이스가 없습니다.</p><p data-i18n="unsigned">파일은 서명되지 않았으며 외부에서 편집할 수 있습니다. 형식·출처 연결 검사는 기록 내용의 진실성이나 실제 사람의 검토를 증명하지 않습니다.</p><p data-i18n="privacy">민감한 개인정보나 내부 기밀은 입력하지 마세요. 내려받은 파일은 일반 텍스트이며 암호화되지 않습니다.</p><button id="export-record" type="button" data-i18n="export">기록 JSON 내려받기</button><p class="hint" data-i18n="exportHelp">아직 ‘새 버전으로 기록’하지 않은 입력란 내용은 내보내기에 포함되지 않습니다.</p><label for="import-record" data-i18n="import">같은 원본·생산 건의 기록 JSON 열기 (최대 1 MiB)</label><input id="import-record" type="file" accept="application/json,.json"><p data-i18n="importHelp">현재 이력과 다른 과거 버전은 덮어쓰지 않습니다. 검증 실패 시 현재 이력과 입력은 유지합니다.</p><p id="file-status" role="status"></p></section>
 </div>
 </main><footer data-i18n="footer">FabGuard · 공개 데이터 기반 오프라인 검토 보조 · 현장 검증 아님</footer>

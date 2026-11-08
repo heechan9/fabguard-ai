@@ -8,7 +8,7 @@ import urllib.error
 import urllib.request
 
 BASE = 'https://fabguard-ai.vercel.app/'
-FILES = ['theme.js', 'app.js', 'review/index.html', 'review/style.css', 'review/app.mjs', 'review/model.mjs', 'review/source.json']
+FILES = ['index.html', 'english-copy.mjs', 'review-budget.mjs', 'review-budget-core.mjs', 'style.css', 'readability.css', 'smt/evidence.mjs', 'data/priority_top50.json', 'theme.js', 'app.js', 'review/index.html', 'review/style.css', 'review/app.mjs', 'review/model.mjs', 'review/source.json', 'review/handoff-model.mjs', 'review/handoff-ui.mjs', 'review/handoff-summary.mjs']
 
 
 def main():

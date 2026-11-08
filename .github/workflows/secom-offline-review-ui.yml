@@ -1,10 +1,10 @@
 name: SECOM offline review browser verification
 on:
   pull_request:
-    paths: ['web/theme.js', 'web/review/**', 'web/app.js', 'verification/check_secom_review*', 'tests/web/secom-review.test.mjs', 'scripts/build_secom_review_source.py', '.github/workflows/secom-offline-review-ui.yml']
+    paths: ['web/theme.js', 'web/review/**', 'web/app.js', 'verification/check_secom_review*', 'tests/web/secom-review.test.mjs', 'tests/web/secom-handoff*.test.mjs', 'tests/web/review-budget.test.mjs', 'web/review-budget*.mjs', 'web/english-copy.mjs', 'verification/check_review_budget.cjs', 'verification/check_english_ui.cjs', 'scripts/build_secom_review_source.py', '.github/workflows/secom-offline-review-ui.yml']
   push:
     branches: [main]
-    paths: ['web/theme.js', 'web/review/**', 'web/app.js', 'verification/check_secom_review*', '.github/workflows/secom-offline-review-ui.yml']
+    paths: ['web/theme.js', 'web/review/**', 'web/app.js', 'web/review-budget*.mjs', 'web/english-copy.mjs', 'verification/check_review_budget.cjs', 'verification/check_english_ui.cjs', 'verification/check_secom_review*', '.github/workflows/secom-offline-review-ui.yml']
 permissions:
   contents: read
 jobs:
@@ -39,7 +39,7 @@ jobs:
           FABGUARD_UI_OUTPUT: ${{ runner.temp }}/secom-loopback
         run: |
           python scripts/build_secom_review_source.py
-          node --test tests/web/secom-review.test.mjs
+          node --test tests/web/secom-review.test.mjs tests/web/secom-handoff*.test.mjs tests/web/review-budget.test.mjs tests/web/english-copy.test.mjs
           python -m http.server 8769 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/secom-server.log" 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
@@ -48,6 +48,11 @@ jobs:
             sleep 0.25
           done
           NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 420s node verification/check_secom_review.cjs
+          NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 240s node verification/check_secom_review_handoff.cjs
+          for width in 1366 390 360; do
+            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$FABGUARD_UI_OUTPUT/budget-$width" NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 120s node verification/check_review_budget.cjs
+            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$FABGUARD_UI_OUTPUT/english-$width" NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 180s node verification/check_english_ui.cjs
+          done
       - name: Production owned-assets gate
         if: github.event_name == 'push'
         run: python verification/check_secom_review_assets.py --output "$RUNNER_TEMP/secom-production-assets.json"
@@ -57,7 +62,13 @@ jobs:
           FABGUARD_BASE_URL: https://fabguard-ai.vercel.app
           FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
           FABGUARD_UI_OUTPUT: ${{ runner.temp }}/secom-production
-        run: NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 420s node verification/check_secom_review.cjs
+        run: |
+          NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 420s node verification/check_secom_review.cjs
+          NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 240s node verification/check_secom_review_handoff.cjs
+          for width in 1366 390 360; do
+            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$FABGUARD_UI_OUTPUT/budget-$width" NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 120s node verification/check_review_budget.cjs
+            FABGUARD_UI_WIDTH="$width" FABGUARD_UI_OUTPUT="$FABGUARD_UI_OUTPUT/english-$width" NODE_PATH="$RUNNER_TEMP/secom-driver/node_modules" timeout 180s node verification/check_english_ui.cjs
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:

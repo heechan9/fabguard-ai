@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {webcrypto} from 'node:crypto';
-import {loadSource,newDocument,appendRecord,validateDocument,parseDocument,strictJSON,MAX_BYTES,serializeDocument} from '../../web/review/model.mjs';
+import {loadSource,newDocument,appendRecord,validateDocument,parseDocument,strictJSON,MAX_BYTES,serializeDocument,revisionChanges} from '../../web/review/model.mjs';
 globalThis.crypto??=webcrypto;
 const bytes=readFileSync(new URL('../../web/review/source.json',import.meta.url));
 const source=await loadSource(bytes),id='secom_1397',now='2026-10-31T04:30:00.000Z';
@@ -68,4 +68,27 @@ test('accepted multibyte and escaped records always roundtrip within exact expor
 test('formatting direction controls rejected without rejecting natural language text',()=>{
  for(const control of ['\u202e','\u2066','\u2069'])assert.throws(()=>appendRecord(fresh(),{...fields(),rationale:'text'+control},source,now));
  assert.equal(appendRecord(fresh(),{...fields(),rationale:'한국어 العربية'},source,now).history[0].rationale,'한국어 العربية');
+});
+
+
+test('adjacent revision comparison reports exact authored changes without mutating v1 history',()=>{
+ const a=first(), b=appendRecord(a,{...fields(),proposed_action:'reinspect',rationale:'hold'},source,now);
+ const original=serializeDocument(b);
+ assert.deepEqual(revisionChanges(null,a.history[0]),[]);
+ assert.deepEqual(revisionChanges(b.history[0],b.history[1]),[
+  {field:'proposed_action',before:'request_evidence',after:'reinspect'},
+  {field:'rationale',before:'No sensor map; do not infer cause.',after:'hold'}
+ ]);
+ assert.equal(serializeDocument(b),original);
+ assert.deepEqual(parseDocument(original,source,id,{now}),b);
+ const unchanged=appendRecord(a,fields(),source,'2026-10-31T04:31:00.000Z');
+ assert.deepEqual(revisionChanges(unchanged.history[0],unchanged.history[1]),[]);
+ assert.throws(()=>revisionChanges(b.history[1],b.history[0]));
+ assert.throws(()=>revisionChanges(null,{}));
+});
+test('comparison preserves free text and whitespace, not translated tokens or HTML',()=>{
+ const a=first(), b=appendRecord(a,{...fields(),available_evidence:'<img src=x onerror=alert(1)>',missing_evidence:'hold '},source,now);
+ const changes=revisionChanges(b.history[0],b.history[1]);
+ assert.equal(changes[0].after,'<img src=x onerror=alert(1)>');
+ assert.equal(changes[1].after,'hold ');
 });

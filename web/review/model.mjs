@@ -67,3 +67,14 @@ export function appendRecord(current,fields,source,now=new Date().toISOString())
   keys(fields,FIELD_KEYS);const checked=validateDocument(current,source,current.source.sample_id,{now});
   checked.history.push({revision:checked.history.length+1,recorded_at:now,...fields});return validateDocument(checked,source,current.source.sample_id,{now,current});
 }
+
+// Display-only comparison of already validated adjacent revisions. No authority or
+// effectiveness is inferred, and the persisted v1 document remains unchanged.
+export function revisionChanges(previous, current) {
+  keys(current, HISTORY_KEYS);
+  if (previous === null) return [];
+  keys(previous, HISTORY_KEYS);
+  require(current.revision === previous.revision + 1, 'Compare adjacent revisions only');
+  return FIELD_KEYS.filter(field => previous[field] !== current[field])
+    .map(field => ({field, before: previous[field], after: current[field]}));
+}
