@@ -26,3 +26,7 @@
 html[lang="en"] :is(h1,h2,h3,p,a,small,summary,span,dt,dd){overflow-wrap:anywhere}
 html[lang="en"] :is(.hero-copy,.section-heading>*,.evidence-entry>*,.global-heading>*){min-width:0}
 html[lang="en"] :is(.button,.smt-entry .button,.topbar nav a){white-space:normal}
+/* Keep language notes beneath labels instead of squeezing two flex items side by side. */
+html[lang="en"] .topbar nav a{flex-direction:column;justify-content:center;gap:2px}
+html[lang="en"] .topbar nav .language-note{display:block;font-size:11px;line-height:1.3;overflow-wrap:normal;word-break:normal}
+@media(max-width:620px){html[lang="en"] .topbar nav{grid-template-columns:repeat(2,minmax(0,1fr))}html[lang="en"] .topbar nav a{overflow-wrap:normal;word-break:normal}}
