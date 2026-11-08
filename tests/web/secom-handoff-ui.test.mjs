@@ -19,7 +19,7 @@ function harness(t){
  const priorDocument=globalThis.document,priorOption=globalThis.Option;
  const previousCreate=URL.createObjectURL,previousRevoke=URL.revokeObjectURL;
  const downloads=[];URL.createObjectURL=blob=>{downloads.push(blob);return 'blob:review-test';};URL.revokeObjectURL=()=>{};
- const ids=new Map();
+ const ids=new Map(),documentListeners=new Map();
  class Element{
   constructor(tag){this.tagName=tag;this.listeners=new Map();this.children=[];this.options=[];this.value='';this.textContent='';this.files=[];}
   set id(value){this._id=value;ids.set(value,this);}get id(){return this._id;}
@@ -31,7 +31,7 @@ function harness(t){
   async fire(type){return this.listeners.get(type)?.({target:this});}
  }
  const host=new Element('section');host.id='handoff-host';
- globalThis.document={body:new Element('body'),querySelector:selector=>ids.get(selector.slice(1)),createElement:tag=>new Element(tag),addEventListener(){}};
+ globalThis.document={body:new Element('body'),querySelector:selector=>ids.get(selector.slice(1)),createElement:tag=>new Element(tag),addEventListener:(type,listener)=>documentListeners.set(type,listener)};
  globalThis.Option=class{constructor(text,value){this.textContent=text;this.value=value;}};
  t.after(()=>{globalThis.document=priorDocument;globalThis.Option=priorOption;URL.createObjectURL=previousCreate;URL.revokeObjectURL=previousRevoke;});
  const state={source,current:newDocument(source,sampleId),sampleId,language:'en',draftDirty:false};
@@ -40,7 +40,8 @@ function harness(t){
  const file=ids.get('import-handoff'),status=ids.get('handoff-status');
  const select=input=>{file.files=input?[input]:[];return file.fire('change');};
  const packet=(note='new packet')=>{const rows=emptyChecklist();rows[0].note=note;return buildPacket(state.current,rows,source,sampleId,now);};
- return {ids,state,accepted,dirty,status,select,packet,downloads};
+ const language=value=>{state.language=value;documentListeners.get('fabguard-review-language')();};
+ return {ids,state,accepted,dirty,status,select,packet,downloads,language};
 }
 const fileFrom=packet=>{const bytes=encoded(serializeDocument(packet));return {size:bytes.byteLength,arrayBuffer:async()=>bytes};};
 
@@ -133,4 +134,71 @@ test('a later TXT request invalidates a stale file-read error without importing 
  await h.ids.get('export-handoff-summary').fire('click');const status=h.status.textContent;
  slow.reject(Error('old error'));await pending;
  assert.equal(h.status.textContent,status);assert.equal(h.accepted.length,0);assert.equal(h.downloads.length,1);
+});
+
+
+test('malformed handoff errors survive repeated language changes and cancelled selection',async t=>{
+ const h=harness(t);await h.select(fileFrom(h.packet('preserved checklist')));
+ const before=serializeDocument(h.state.current);
+ const broken=encoded('{');await h.select({size:broken.byteLength,arrayBuffer:async()=>broken});
+ assert.equal(h.status.textContent,'Handoff withheld: Expected JSON key');
+ for(let i=0;i<3;i++){
+  h.language('ko');assert.equal(h.status.textContent,'인계 처리 보류: JSON 항목 이름이 필요합니다.');
+  h.language('en');assert.equal(h.status.textContent,'Handoff withheld: Expected JSON key');
+ }
+ await h.select(null);h.language('ko');assert.match(h.status.textContent,/인계 처리 보류: JSON 항목/);
+ assert.equal(serializeDocument(h.state.current),before);assert.equal(h.accepted.length,1);
+ assert.equal(h.ids.get('handoff-note-physical_mapping').value,'preserved checklist');
+ await h.select(fileFrom(h.packet('recovered checklist')));
+ assert.match(h.status.textContent,/패킷을 불러왔습니다/);
+ h.language('en');assert.match(h.status.textContent,/Packet for the same evidence and case loaded/);
+ assert.doesNotMatch(h.status.textContent,/withheld/);assert.equal(h.accepted.length,2);
+});
+
+test('authority, invalid UTF-8 and JSON syntax errors retain localized causes',async t=>{
+ const h=harness(t),packet=h.packet();packet.readiness='approved';
+ await h.select(fileFrom(packet));h.language('ko');
+ assert.equal(h.status.textContent,'인계 처리 보류: 지원하지 않는 인계 형식 또는 권한 주장입니다.');
+ h.language('en');assert.match(h.status.textContent,/Unsupported handoff or authority claim/);
+ await h.select({size:1,arrayBuffer:async()=>new Uint8Array([255]).buffer});
+ assert.equal(h.status.textContent,'Handoff withheld: File is not valid UTF-8 text.');
+ h.language('ko');assert.equal(h.status.textContent,'인계 처리 보류: 파일이 올바른 UTF-8 텍스트가 아닙니다.');
+ const invalid=encoded('"'+String.fromCharCode(1)+'"');
+ await h.select({size:invalid.byteLength,arrayBuffer:async()=>invalid});
+ assert.equal(h.status.textContent,'인계 처리 보류: JSON 문법이 올바르지 않습니다.');
+ h.language('en');assert.equal(h.status.textContent,'Handoff withheld: Invalid JSON syntax.');
+ assert.equal(h.accepted.length,0);
+});
+
+test('dirty and draft guards translate from stable reasons rather than old language text',async t=>{
+ const h=harness(t),input=fileFrom(h.packet());h.state.draftDirty=true;
+ await h.select(input);h.language('ko');assert.match(h.status.textContent,/기존 메모 입력을 먼저 새 버전으로 기록/);
+ h.language('en');assert.match(h.status.textContent,/Append existing review-form inputs/);
+ h.state.draftDirty=false;
+ const note=h.ids.get('handoff-note-physical_mapping');note.value='unexported input';await note.fire('input');
+ h.language('ko');await h.select(input);assert.match(h.status.textContent,/현재 체크리스트 입력을 먼저 내보내거나/);
+ h.language('en');assert.match(h.status.textContent,/Export the current checklist/);
+ assert.equal(note.value,'unexported input');assert.equal(h.accepted.length,0);
+});
+
+test('successful export outcomes remain localized until the next edit',async t=>{
+ const h=harness(t);
+ await h.ids.get('export-handoff-summary').fire('click');h.language('ko');
+ assert.match(h.status.textContent,/TXT 요약 다운로드를 요청/);h.language('en');assert.match(h.status.textContent,/TXT summary requested/);
+ await h.ids.get('export-handoff').fire('click');h.language('ko');
+ assert.match(h.status.textContent,/다운로드를 요청했습니다. 실제 파일/);h.language('en');assert.match(h.status.textContent,/Download requested. Check the actual file/);
+ const note=h.ids.get('handoff-note-physical_mapping');note.value='new edit';await note.fire('input');
+ assert.match(h.status.textContent,/Always unvalidated/);h.language('ko');assert.match(h.status.textContent,/항상 미검증/);
+});
+
+test('language changes during a pending read keep the operation and use its latest language',async t=>{
+ const h=harness(t),slow=deferred(),packet=h.packet('pending packet');
+ const pending=h.select({size:1,arrayBuffer:()=>slow.promise});h.language('ko');
+ slow.resolve(encoded(serializeDocument(packet)));await pending;
+ assert.match(h.status.textContent,/패킷을 불러왔습니다/);assert.equal(h.accepted.length,1);
+ const failed=deferred(),next=h.select({size:1,arrayBuffer:()=>failed.promise});h.language('en');
+ failed.reject(Error('current disk read failed'));await next;
+ assert.equal(h.status.textContent,'Handoff withheld: current disk read failed');
+ h.language('ko');assert.equal(h.status.textContent,'인계 처리 보류: current disk read failed');
+ assert.equal(h.ids.get('handoff-note-physical_mapping').value,'pending packet');
 });
