@@ -22,7 +22,7 @@ const $=id=>document.getElementById(id),sim=new Simulation();
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const inspection=mountInspection($('inspection-lab'));
 const updateContextReview=mountContextReview($('context-review'));
-let introBusy=false,robotCell,transferRobot,floorAgvView;
+let introBusy=false,robotCell,transferRobot,floorAgvView,spiHud;
 const floorAgv=new FloorAgv();
 function selectFloorAgv(){
  $('floor-agv-select').setAttribute('aria-pressed','true');
@@ -33,6 +33,7 @@ function selectFloorAgv(){
  insideView=false;updateInterior();targetX=0;targetY=.6;targetZ=5.5;
  zoom=stationZoom(18,viewport.clientWidth/Math.max(1,viewport.clientHeight));azimuth=0;elevation=1.15;cameraUpdate();
  $('selected-station-caption').textContent=AGV_NAME+' · 고정 바닥 경로';
+ spiHud?.update({station:-1});
 }
 $('floor-agv-select').addEventListener('click',selectFloorAgv);
 $('floor-agv-reset').addEventListener('click',()=>{floorAgv.reset(sim.time);updateUI();draw();});
@@ -47,7 +48,7 @@ function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visibl
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i,focus=true){$('equipment-reference').hidden=false;$('inside-view').disabled=false;$('floor-agv-select').setAttribute('aria-pressed','false');$('transfer-robot-select').setAttribute('aria-pressed','false');$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
+function selectStation(i,focus=true){$('equipment-reference').hidden=false;$('inside-view').disabled=false;$('floor-agv-select').setAttribute('aria-pressed','false');$('transfer-robot-select').setAttribute('aria-pressed','false');$('robot-select').setAttribute('aria-pressed','false');activeStation=i;spiHud?.update({station:i});stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
@@ -73,6 +74,7 @@ function updateUI(){
  $('lot-summary').textContent=lotSummary(sim.boards).map(g=>`${g.lot_id} · 투입 ${g.inserted}/4 · 완료 ${g.completed} · 가상 불량(NG) ${g.virtual_ng} · 측정 누락 ${g.missing_measurement}`).join('\n');
  $('board-location').textContent=b.done?'배출 완료':`현재 공정 · ${STATION_TERMS[Math.max(0,b.stage)].plain}`;
  $('volume').textContent=b.stage<2?'—':b.volume===null?'누락':`${b.volume}%`;$('peak').textContent=b.peak===null?'—':`${b.peak}°C`;$('reason').textContent=plainCopy(a.reason);
+ spiHud?.update({board:b,station:$('floor-agv-select').getAttribute('aria-pressed')==='true'?-1:activeStation,suppressed:introBusy,available:Boolean(renderer)});
  const evidence=measurementEvidence(b),evidenceKey=JSON.stringify(evidence);
  if(prevEvidence!==evidenceKey){$('measurement-evidence').replaceChildren(...evidence.map(item=>{const card=document.createElement('article');card.className='measurement-card';const title=document.createElement('h3');title.textContent=item.label;card.append(title);for(const [label,value] of [['데모 기준 범위',item.range],['가상 측정값',item.measurement],['비교 결과',item.difference],['다음 확인',item.next]]){const p=document.createElement('p'),strong=document.createElement('strong');strong.textContent=label+' · ';p.append(strong,document.createTextNode(value));card.append(p);}return card;}));prevEvidence=evidenceKey;}
  updateContextReview(b);
@@ -144,6 +146,12 @@ try{
  new ResizeObserver(resize).observe(viewport);resize();
 }catch(error){$('view-error').hidden=false;console.error('3D initialization failed',error);}
 
+// Optional presentation: a missing HUD asset must not stop the existing simulation.
+import('./hud.mjs').then(({mountSpiHud})=>{
+ spiHud=mountSpiHud({viewport,panel:$('spi-hud'),selectStation});updateUI();
+}).catch(error=>{console.warn('SPI HUD unavailable; simulation remains available',error);});
+const hudPoint=new THREE.Vector3();
+
 function updateInterior(){for(const m of machines)m.userData.cover.visible=!(insideView&&m.userData.station===activeStation);$('inside-view').setAttribute('aria-pressed',String(insideView));$('inside-note').hidden=!insideView;updateLabelVisibility();}
 $('inside-view').addEventListener('click',()=>{insideView=!insideView;focusStation(activeStation);updateInterior();});
 $('camera-reset').addEventListener('click',()=>{insideView=false;updateInterior();targetX=0;targetY=.6;targetZ=0;azimuth=.55;elevation=.78;zoom=1;cameraUpdate();});$('top-view').addEventListener('click',()=>{azimuth=0;elevation=1.53;cameraUpdate();});
@@ -159,7 +167,7 @@ function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferB
  robotCell?.update(source.boards,selected);
  transferRobot?.update(source.boards,source.time);
  floorAgvView?.update(floorAgv.pose);
- for(const {head} of heads){head.position.x=Math.sin(source.time*3)*.62;head.position.z=Math.cos(source.time*2)*.25;}if(paint)renderer.render(scene,camera);
+ for(const {head} of heads){head.position.x=Math.sin(source.time*3)*.62;head.position.z=Math.cos(source.time*2)*.25;}if(paint){renderer.render(scene,camera);camera.updateMatrixWorld();hudPoint.set(positions[2],1.45,.1).project(camera);spiHud?.project({x:(hudPoint.x+1)*viewport.clientWidth/2,y:(1-hudPoint.y)*viewport.clientHeight/2,z:hudPoint.z});}
 }
 if(reducedMotion.matches)sim.running=false;
 reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){sim.running=false;updateUI();}});
@@ -175,7 +183,7 @@ if(document.modelContext?.registerTool){const lifecycle=new AbortController();ad
 // The introduction uses its own seeded run and camera. Restore the live view on every exit.
 let introBoardIds;
 mountIntro({scene,positions,available:()=>Boolean(renderer&&scene&&machines.length===11),
- begin(){introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;},
+ begin(){introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;spiHud?.update({suppressed:true});},
  update(sample,station){
   const ids=new Set(sample.boards.map(b=>b.id));
   for(const [id,mesh] of boardMeshes)if(!ids.has(id))mesh.visible=false;
@@ -187,6 +195,6 @@ mountIntro({scene,positions,available:()=>Boolean(renderer&&scene&&machines.leng
   for(const [id,mesh] of boardMeshes)if(!introBoardIds.has(id)){
    scene.remove(mesh);mesh.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});boardMeshes.delete(id);
   }
-  introBusy=false;selectionRing.visible=true;updateInterior();draw();
+  introBusy=false;selectionRing.visible=true;spiHud?.update({suppressed:false});updateInterior();draw();
  }
 });
