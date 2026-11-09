@@ -62,3 +62,14 @@ test('HUD uses non-intercepting decoration and inherits existing controls withou
  assert.match(app,/spiHud\?\.update\(\{suppressed:false\}\)/);
  assert.match(html,/id="spi-hud" class="spi-hud" hidden/);
 });
+
+
+test('silver HUD selection label keeps AA text contrast on its opaque panel', async () => {
+ const css=await readFile(new URL('../../web/smt/hud.css',import.meta.url),'utf8');
+ const silver=css.match(/html\[data-theme="silver"\] \.spi-hud\{([^}]+)\}/)[1];
+ const foreground=silver.match(/--hud-accent:(#[0-9a-f]{6})/)[1];
+ const background=silver.match(/background:(#[0-9a-f]{6})/)[1];
+ const luminance=hex=>hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[0.2126,0.7152,0.0722][i],0);
+ const values=[luminance(foreground),luminance(background)].sort((a,b)=>b-a);
+ assert.ok((values[0]+0.05)/(values[1]+0.05)>=4.5,'small cyan badge text must meet AA contrast');
+});

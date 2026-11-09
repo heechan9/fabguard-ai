@@ -17,10 +17,12 @@ This small UI slice adds an original, restrained selection HUD to process 03 (SP
 
 Baseline: public main `0493fc88138a75500f939c04d11cac46ea463471`.
 
-Local final checks: 227 Node tests passed (219 existing plus 8 HUD tests); Python 307 run, 301 passed and 6 existing optional-data/dependency skips. JS syntax, `git diff --check`, shared evidence check, persisted-evidence recomputation and source-registry structural check passed. No new model fit or inference was run.
+Local final checks: 228 Node tests passed (219 existing plus 9 HUD tests); Python 307 run, 301 passed and 6 existing optional-data/dependency skips. JS syntax, `git diff --check`, shared evidence check, persisted-evidence recomputation and source-registry structural check passed. No new model fit or inference was run.
 
 A source review found a narrow-layout `[hidden]` CSS specificity bug; it was fixed and regression coverage added. Local Chromium launch was blocked by the execution sandbox's UNIX-socket restriction, including an approved escalation. Therefore no local visual pass is claimed.
 
 `verification/check_smt_hud.cjs` is included in the existing Silver CI at 1366/390/360 widths. It covers both themes, HUD languages, selection and toggles, mobile docking, missing values, pause/reset, intro interruption, and optional HUD module failure. CI results and image inspection must be checked separately for the exact published head. Actual hardware, mobile devices and screen readers are outside this prototype verification.
+
+The first published CI run caught a small-label contrast issue (4.33:1 in silver). The accent was darkened and an AA contrast regression test added. This is a fix, not a relaxed threshold.
 
 No merge or production deployment is part of this prototype.
