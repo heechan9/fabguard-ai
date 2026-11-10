@@ -20,7 +20,7 @@ const documents = [
   {file:'secom/research.html', name:'secom-research', route:'/secom/research.html', ready:'#fold-table tbody tr'},
   {file:'smt/references.html', name:'references', route:'/smt/references.html', ready:'main h1'},
   {file:'oht/index.html', name:'oht', route:'/oht/', ready:'#viewport canvas', english:true},
-  {file:'review/index.html', name:'review', route:'/review/?sample=secom_1397', ready:'#workspace:not([hidden])', english:true},
+  {file:'review/index.html', name:'review', route:'/review/?sample=secom_1397', ready:'#workspace:not([hidden]) #handoff-note-change_history', english:true},
 ];
 const hashViews = [
   {name:'summary', route:'/#summary', ready:'.absolute-beginner', english:true},
@@ -129,6 +129,63 @@ function renderedAudit() {
   }
   const canvas=[...document.querySelectorAll('canvas')].map(el=>({id:el.id,width:el.width,height:el.height,filter:getComputedStyle(el).filter,opacity:getComputedStyle(el).opacity}));
   return {tested,issues,unknownBackgrounds,excluded,controls,colors,overflowing,scrollRegions,canvas,palette,body:getComputedStyle(document.body).backgroundColor,scrollWidth:document.documentElement.scrollWidth,innerWidth};
+}
+
+// Shared with the normal outside-dismissal assertion; no controls are excluded.
+function navigationState() {
+  return {href:location.href,theme:document.documentElement.dataset.theme,language:document.documentElement.lang,history:history.length,controls:[...document.querySelectorAll('main input,main select,main textarea')].map(e=>({id:e.id,value:e.value,checked:e.checked}))};
+}
+
+// Hold the real optional module until after the legacy readiness signal. This
+// reproduces the old snapshot race without sleeps, DOM fabrication or app changes.
+async function assertDelayedReviewReady(browser,{base,width,theme,language}) {
+  const context=await browser.newContext({viewport:{width,height:941},reducedMotion:'reduce'});
+  const page=await context.newPage(),errors=[];
+  page.setDefaultTimeout(15000);page.on('pageerror',error=>errors.push(error.message));
+  let release;
+  const held=new Promise(resolve=>{release=resolve;});
+  try {
+    const origin=new URL(base).origin;
+    await page.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+    await page.route('**/review/handoff-ui.mjs',async route=>{await held;await route.continue();});
+    const requested=page.waitForRequest(request=>new URL(request.url()).pathname==='/review/handoff-ui.mjs');
+    await Promise.all([
+      page.goto(new URL(`/review/?sample=secom_1397&lang=${language}`,base).href,{waitUntil:'domcontentloaded'}),
+      page.locator('#workspace:not([hidden])').waitFor(),requested
+    ]);
+    const ready=page.locator(documents.find(spec=>spec.name==='review').ready);
+    assert.equal(await ready.count(),0,'review readiness must not pass while the handoff module is held');
+    const early=await page.evaluate(navigationState);
+    release();await ready.waitFor();
+    const loaded=await page.evaluate(navigationState),legacyIDs=new Set(early.controls.map(control=>control.id));
+    const added=loaded.controls.filter(control=>!legacyIDs.has(control.id)).map(control=>control.id);
+    const items=['physical_mapping','process_context','time_and_label','measurement_quality','change_history'];
+    assert.deepEqual(added,[...items.flatMap(id=>[`handoff-${id}`,`handoff-role-${id}`,`handoff-note-${id}`]),'import-handoff']);
+    assert.deepEqual({...loaded,controls:loaded.controls.filter(control=>legacyIDs.has(control.id))},early,'module completion only adds the expected handoff controls');
+    assert.notDeepEqual(loaded,early,'legacy readiness reproduces a changed snapshot without any outside click');
+    if(theme==='silver')await page.locator('#theme-toggle').press('Enter');
+    await page.locator('#reviewer-role').fill('QA synthetic reviewer');
+    await page.locator('#rationale').fill('Unsubmitted local readiness regression');
+    await page.locator('#handoff-physical_mapping').selectOption('requested');
+    await page.locator('#handoff-role-physical_mapping').selectOption('equipment');
+    await page.locator('#handoff-note-physical_mapping').fill('Synthetic missing-mapping note');
+    const stable=await page.evaluate(navigationState),more=page.locator('.cc-more'),summary=more.locator('summary');
+    for(let repeat=0;repeat<2;repeat++){
+      await summary.press('Enter');assert.equal(await more.evaluate(element=>element.open),true);
+      await page.locator('.topbar').click({position:{x:1,y:1}});
+      assert.equal(await more.evaluate(element=>element.open),false);
+      assert.deepEqual(await page.evaluate(navigationState),stable,'outside dismissal preserves every initialized form value');
+      await summary.press('Enter');await page.keyboard.press('Escape');
+      assert.equal(await more.evaluate(element=>element.open),false);
+      assert.equal(await summary.evaluate(element=>element===document.activeElement),true);
+      assert.deepEqual(await page.evaluate(navigationState),stable,'Escape preserves every initialized form value');
+    }
+    const themeToggle=page.locator('#theme-toggle');await themeToggle.press('Enter');await themeToggle.press('Space');
+    const languageToggle=page.locator('#language-toggle');await languageToggle.press('Enter');await languageToggle.press('Enter');
+    assert.deepEqual(await page.evaluate(navigationState),stable,'repeated theme and language changes preserve initialized form state');
+    assert.deepEqual(errors,[]);
+    return {language,width,theme,status:'passed',legacyControls:early.controls.length,initializedControls:loaded.controls.length,addedControlIDs:added};
+  } finally { release();await context.close(); }
 }
 
 async function main() {
@@ -258,13 +315,12 @@ async function main() {
         if(!spec.nativeTheme){
           await summary.press('Enter');await page.keyboard.press('Escape');assert.equal(await more.evaluate(e=>e.open),false);
           await summary.press('Enter');
-          const snapshot=()=>({href:location.href,theme:document.documentElement.dataset.theme,language:document.documentElement.lang,history:history.length,controls:[...document.querySelectorAll('main input,main select,main textarea')].map(e=>({id:e.id,value:e.value,checked:e.checked}))});
-          const beforeOutside=await page.evaluate(snapshot);
+          const beforeOutside=await page.evaluate(navigationState);
           // On narrow screens the expanded menu overlays main headings. Click actual
           // empty topbar padding, outside More and every action, without force-clicking.
           await page.locator('.topbar').click({position:{x:1,y:1}});
           assert.equal(await more.evaluate(e=>e.open),false);
-          assert.deepEqual(await page.evaluate(snapshot),beforeOutside,'outside dismissal preserves navigation, theme and form state');
+          assert.deepEqual(await page.evaluate(navigationState),beforeOutside,'outside dismissal preserves navigation, theme and form state');
           const toggle=page.locator('#theme-toggle');await toggle.focus();
           // Programmatic focus after a pointer click retains pointer modality in Chrome.
           // Traverse away and back with real keys before checking the keyboard indicator.
@@ -367,11 +423,13 @@ async function main() {
       }catch(error){report.failures.push({name,error:error.stack,errors,requests});await page.screenshot({path:path.join(output,`${name}-failure.png`),fullPage:true}).catch(()=>{});save();}
       finally{await context.close();}
     }
+    report.reviewReadiness=[];
+    for(const language of ['ko','en']){report.reviewReadiness.push(await assertDelayedReviewReady(browser,{base,width,theme,language}));save();}
     report.status=report.failures.length?'failed':'passed';save();
     assert.deepEqual(report.failures,[],`Inspect ${output}/results.json`);
     console.log(`All-page audit passed: ${report.results.length} rendered views, 12 HTML documents, 5 root hash views, 2 forced WebGL fallback views, ${report.links.length} navigation destinations; ${width}px ${theme}.`);
   }catch(error){report.status='failed';report.fatal=error.stack;save();throw error;}
   finally{await browser?.close();}
 }
-module.exports={documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,semanticStyles};
+module.exports={documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,semanticStyles,navigationState,assertDelayedReviewReady};
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
