@@ -1,0 +1,53 @@
+name: Equipment CSV offline screening UI
+on:
+  pull_request:
+    paths: ['web/equipment/**', 'web/theme.js', 'web/style.css', 'web/command-center.css', 'web/sitewide-command.css', 'web/site-shell.mjs', 'web/navigation.css', 'verification/check_equipment_screening.cjs', '.github/workflows/equipment-screening-ui.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing Chrome and isolated test driver
+        timeout-minutes: 3
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          timeout 120s npm install --prefix "$RUNNER_TEMP/equipment-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Synthetic file upload, pending JSON, source hash and invalidation
+        timeout-minutes: 4
+        env:
+          FABGUARD_BASE_URL: http://127.0.0.1:8775
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/equipment-screening
+        run: |
+          node --test tests/web/equipment-*.test.mjs
+          python3 -m http.server 8775 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/equipment-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent "$FABGUARD_BASE_URL/equipment/" > /dev/null; then break; fi
+            sleep 0.25
+          done
+          curl --fail --silent "$FABGUARD_BASE_URL/equipment/" > /dev/null
+          NODE_PATH="$RUNNER_TEMP/equipment-driver/node_modules" timeout 210s node verification/check_equipment_screening.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: equipment-screening-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/equipment-screening
+            ${{ runner.temp }}/equipment-server.log
+          retention-days: 14
+          if-no-files-found: warn

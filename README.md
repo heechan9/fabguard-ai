@@ -88,14 +88,13 @@
 
 ### 프로젝트 상태
 
-**2026-10-30 기준:** main은 [`c0d8622343249f0e633021d87b95279c7ed9ba76`](https://github.com/heechan9/fabguard-ai/commit/c0d8622343249f0e633021d87b95279c7ed9ba76)입니다. 아래 배포 기능·오프라인 연구·미병합 Draft를 구분합니다. 웹 화면이 풍부해진 것은 모델 성능이나 실제 공장 효과가 개선됐다는 뜻이 아닙니다.
+**2026-11-10 소스 확인:** 아래 기능 설명은 [#210 병합 커밋 `9c6de6b`](https://github.com/heechan9/fabguard-ai/commit/9c6de6bcf01a1e21f19e0739eff0d58641fb51a0)을 기준으로 갱신했습니다. 문서에 기록한 소스 상태와 실제 배포 검증은 구분합니다. 공개 배포의 일치·브라우저 검증은 [Sitewide UI 실행 기록](https://github.com/heechan9/fabguard-ai/actions/workflows/sitewide-command-ui.yml)에서 대상 커밋별로 확인하세요. 화면 확장은 모델 성능이나 현장 효과 개선을 뜻하지 않습니다.
 
-- **배포된 화면:** [#187](https://github.com/heechan9/fabguard-ai/pull/187)·[#188](https://github.com/heechan9/fabguard-ai/pull/188)의 PCB 전후 맥락 타임라인, 조건 변경·정비 후 HOLD 설명, 설비·자재·측정 가설과 다음 확인 항목을 제공합니다. 모두 설명용 예시이며 원인 확정·자동 HOLD 해제가 아닙니다.
-- **현재 테마·이송 시연:** [#189](https://github.com/heechan9/fabguard-ai/pull/189)의 더 어두운 Silver / Dark 전환과 선택 유지, Cooling 단계 R-02 이송·빈 복귀가 반영됐습니다. [배포 검증 기록](https://github.com/heechan9/fabguard-ai/actions/runs/41096943657)은 24개 정적 자산과 1366/390/360px의 15개 브라우저 검사입니다. 실제 장비 제어·충돌 안전·디지털 트윈 검증이 아닙니다.
-- **사용 순서:** [웹 데모](https://fabguard-ai.vercel.app/)에서 위험순위의 근거를 보고, [SMT 실험실](https://fabguard-ai.vercel.app/smt/)에서 PCB를 선택해 맥락·HOLD·검토 가설을 확인합니다. Silver / Dark는 읽기 테마이고, 3D 움직임은 합성 시연입니다. 코드·단위검사는 아래 [빠른 시작](#빠른-시작)을 따릅니다.
-- **main의 UR3 기록과 별도 AGV 시연:** [#190](https://github.com/heechan9/fabguard-ai/pull/190)에서 공개 실험실의 실제 UR3 센서 기록 **7,409행·19채널**을 결측·시간 공백을 유지해 탐색·재생하는 화면과 별도의 합성 A-01 고정경로 이송·대기·차단 시연을 통합했습니다. UR3 기록은 실제 장비의 실시간 연결·자세 재구성·AGV 제어 입력이 아니며, A-01은 AMR/SLAM·물리 충돌 안전 검증이 아닙니다. 소스 병합과 배포 검증은 [PR 기록](https://github.com/heechan9/fabguard-ai/pull/190)에서 구분합니다.
-- **main의 저장 결과 비교:** [#191 저장 우선점검 CSV 비교](https://github.com/heechan9/fabguard-ai/pull/191)는 같은 ID·시각·라벨·모델 계약의 저장 결과에서 점수·순위·예측·Top-K 차이를 보고하는 CLI입니다. 잘못된 CSV 따옴표는 BLOCKED/2로 차단합니다. 자기비교·저장 결과 감사는 새 추론·독립 재현·모델 성능 검증이 아니며, 웹 기능·모델·정본 결과는 바꾸지 않습니다.
-- **실제 기록과 합성 화면의 경계:** Fledge의 WSL 연동·합성 입력 검증은 실제 반도체 공장 연결 증거가 아닙니다. 공개 로봇 실험실 센서 기록, SECOM 오프라인 평가, SMT 3D 합성 움직임은 서로 다른 자료이며 하나의 현장 성능으로 합치지 않습니다.
+- **소개와 탐색:** `/`는 프로젝트 소개, `/#overview`는 저장 결과 운영 개요입니다. [#209](https://github.com/heechan9/fabguard-ai/pull/209)·[#210](https://github.com/heechan9/fabguard-ai/pull/210)에 따라 소개·운영 개요·3D·우선점검·반도체 분석·검증과 한계를 상단에서 이동하고, 전문 설명은 펼쳐 봅니다. 모든 스크립트 화면은 저장 선택이 없으면 다크이며 실버 선택을 유지합니다. 무스크립트 연구 화면의 테마는 해당 화면에만 적용됩니다.
+- **저장 순위와 사람 검토:** `/#risks`의 저장된 상위 50건에서 20·40·50건을 표시합니다. `/review/`의 검토 메모·체크리스트·인계 JSON은 브라우저에서 사용자가 저장하는 기록입니다. 입력·저장 완료가 현장 승인이나 검토의 진위를 입증하지 않습니다.
+- **장비 CSV 오프라인 점검:** `/equipment/`는 CSV 열·단위를 연결하고 시간순 측정에 고정 SPC 기준을 적용해 `pending` 목록과 원본 바이트 SHA-256 JSON을 저장합니다. 입력을 바꾸면 이전 결과를 지웁니다. 서버 업로드·실장비 진위 확인·불량 확정·설비 제어 기능이 아닙니다.
+- **자료별 경계:** SMT·AGV·OHT는 합성 설명용 시연입니다. UR3 화면은 공개 실험실 센서 기록 **7,409행·19채널**을 결측·시간 공백과 함께 탐색·재생합니다. SECOM은 별도 오프라인 평가이며 이 자료들을 하나의 현장 성능으로 합산하지 않습니다. 기존 [#190](https://github.com/heechan9/fabguard-ai/pull/190)의 선별 통합은 원본 Draft 전체의 병합을 뜻하지 않습니다.
+- **별도 검증 작업:** [#211](https://github.com/heechan9/fabguard-ai/pull/211)은 확인 당시 폰트 설치 대기 상한만 조정하는 open Draft입니다. 앱·데이터·모델 변경이나 배포 완료로 해석하지 않습니다. 아래 연구 PR 상태는 별도로 날짜를 붙인 과거 확인 기록입니다.
 
 
 | 구분 | 현재 상태 |
@@ -110,13 +109,13 @@
 
 > **중요한 경계:** 태양광 데이터 연계는 데이터 수집·품질·감사 파이프라인의 호환성 데모입니다. SECOM 반도체 모델의 외부 성능 검증으로 사용하지 않습니다.
 
-### 진행 중인 실험 (Draft PR · main 미반영)
+### 연구 Draft 확인 이력 (2026-10-30 스냅샷)
 
-2026-10-30 확인: 다음 원본 PR은 **open Draft**입니다. 아래에 명시한 선별 통합 외에 원본 Draft 전체가 main·배포에 반영된 것은 아닙니다.
+2026-10-30 확인 당시 다음 원본 PR은 **open Draft**였습니다. 이 목록은 현재 PR 상태의 자동 조회가 아닙니다. 최신 병합 여부는 각 PR에서 확인하세요. 아래에 명시한 선별 통합은 원본 Draft 전체의 채택과 구분합니다.
 
 - [#179](https://github.com/heechan9/fabguard-ai/pull/179)·[#180](https://github.com/heechan9/fabguard-ai/pull/180)의 로봇 기록 작업, [#182](https://github.com/heechan9/fabguard-ai/pull/182)의 BOSCH/voraus 자료 자격 감사, [#183](https://github.com/heechan9/fabguard-ai/pull/183)의 학습 분포·P-A-D-A·입력 계약, [#184](https://github.com/heechan9/fabguard-ai/pull/184)의 현장 대응·알람 부담 평가 계획도 원본 PR 기준 별도 미병합입니다. #180에서 선별한 UR3 재생 부분만 #190으로 통합했으며 원본 Draft 전체를 병합한 것은 아닙니다. 제안·검사 통과를 현장 검증이나 채택으로 바꾸지 않습니다.
 
-아래 세 데이터 실험 역시 기존 Draft 상태를 유지합니다.
+아래 세 데이터 실험도 같은 확인 시점의 Draft 연구 기록입니다.
 
 | 실험 | 확인한 내용 | 해석 경계 |
 |---|---|---|

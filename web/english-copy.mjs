@@ -169,3 +169,7 @@ patterns.push(
 );
 englishCopy.set('결과에서 검토 요청까지의 증거 흐름','Evidence flow from result to review request');
 englishCopy.set('분석 자료 선택','Select an evidence source');
+
+englishCopy.set('저장된 생산 기록','Saved production records');
+englishCopy.set('현재 표시','Currently shown');
+patterns.push([/^저장 목록 전체 (\d+)건$/,(_,n)=>`${n} records in the saved list`]);

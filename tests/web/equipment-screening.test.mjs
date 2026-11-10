@@ -53,3 +53,10 @@ test('an unstable baseline blocks later interpretation',()=>{
   assert.deepEqual(report.spc.baselineFlaggedRows,[10]);
   assert.equal(report.queue[0].screening_status,'baseline_review_required');
 });
+test('Equipment title describes offline screening without implying authenticity validation',()=>{
+  const html=readFileSync(new URL('../../web/equipment/index.html',import.meta.url),'utf8');
+  assert.match(html,/<title>FabGuard · 장비 CSV 오프라인 점검<\/title>/);
+  assert.match(html,/<h1>장비 CSV 오프라인 점검<\/h1>/);
+  assert.doesNotMatch(html,/<(?:title|h1)>[^<]*실장비 데이터 검증/);
+  assert.match(html,/실장비 진위·제품 불량·현장 효과는 검증하지 않습니다/);
+});
