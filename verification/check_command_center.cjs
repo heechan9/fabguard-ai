@@ -5,6 +5,9 @@ fs.mkdirSync(output,{recursive:true});
 const risks=JSON.parse(fs.readFileSync('web/data/priority_top50.json','utf8'));
 const results=[];let browser,page;
 async function audit(width,mode,lang){
+ // Route rendering does not imply network-loaded SVGs are decoded, especially on production.
+ // Preserve the six-image assertion and fail on missing/broken images after a bounded wait.
+ await page.waitForFunction(()=>{const images=[...document.querySelectorAll('.cc-stage img')];return images.length===6&&images.every(i=>i.complete&&i.naturalWidth>0);},null,{timeout:15000});
  const info=await page.evaluate(()=>{
   const rgba=s=>{const c=(s.match(/[\d.]+/g)||[]).map(Number);if(c.length===3)c.push(1);return c;};
   const lum=c=>c.slice(0,3).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
