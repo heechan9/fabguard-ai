@@ -49,9 +49,11 @@
   <main id="app" tabindex="-1" aria-live="polite"><section class="state"><div class="loader"></div><p>FABGUARD SYSTEM INITIALIZING</p></section></main>
   <aside aria-label="별도 확장 실험" style="max-width:1240px;margin:24px auto;padding:0 4vw"><a href="/robot/index.html" style="color:var(--cyan)">로봇 확장 실험 (별도 · 합성 시연) →</a><p style="color:var(--muted)">기존 제조 분석과 분리된 프로토타입입니다. 실제 로봇 데이터 검증·제어 기능이 아닙니다.</p></aside>
 <aside style="max-width:1240px;margin:24px auto;padding:0 4vw"><section class="ur3-record-entry" aria-label="별도 실제 센서 기록"><h2>UR3 · 실제 센서 기록</h2><p>UCI 공개 기록 7,409행 · 관절 전류·온도·속도와 툴 전류 19채널. 결측과 시간 공백을 유지한 탐색·재생이며 실시간 연결·예측·제어가 아닙니다. 합성 R-01·R-02 동작과 SECOM 익명 변수 분석에 연결하거나 합산하지 않습니다.</p><a href="/robot/ur3/index.html">실제 센서 기록 살펴보기 →</a></section></aside>
+  <aside id="learning-entry" aria-label="선택형 학습 / Optional learning" style="max-width:1240px;margin:24px auto;padding:0 4vw"><button type="button" id="open-learning" aria-haspopup="dialog" style="color:var(--cc-ink);background:var(--cc-panel);border:1px solid var(--cc-accent);border-radius:6px;padding:12px 16px;min-height:44px;max-width:100%;font:inherit;text-align:left">선택형 학습 · 근거부터 확인하기 / Optional learning →</button><p style="color:var(--muted)">합성 사례 3개로 정상·이상, 데이터 품질, 상관과 인과를 살펴봐요. 실제 안전 판정·운영 지시·능력 평가가 아닙니다. Synthetic practice, not safety advice or ability assessment.</p></aside>
   <footer><span>FABGUARD AI · SEOUL → MELBOURNE</span><span>Auditable industrial data pipeline · public-data prototype</span><span>AI prioritizes. Engineers decide.</span></footer>
   <script type="module" src="/app.js"></script>
   <script type="module" src="/review-budget.mjs"></script>
 <script type="module" src="/site-shell.mjs"></script>
+<script type="module" src="/learn/entry.mjs"></script>
 </body>
 </html>

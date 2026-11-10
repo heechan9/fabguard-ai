@@ -12,3 +12,29 @@ test('placement geometry follows board stage/progress, never arbitrary wall time
 test('explicit boundary values preserve existing greater-than-250 AOI contract',()=>{for(const [peak,expected] of [[235,'OK'],[250,'OK'],[251,'NG'],[280,'NG']]){const s=new Simulation();s.armPeak(peak);s.advance(100);assert.equal(s.boards[1].peak,peak);assert.equal(s.boards[1].aoi,expected);}});
 
 test('temperature assumptions require their dedicated value-bearing action',()=>{const s=new Simulation();assert.throws(()=>s.arm('temperature'));assert.equal(s.pending,null);assert.equal(s.controlEvents.length,0);s.armPeak(260);assert.equal(s.pendingPeak,260);});
+
+const peakEvents=s=>s.snapshot().control_events.filter(e=>e.kind.startsWith('next_peak_assumption'));
+const strip=b=>({id:b.id,born:b.born,fault:b.fault,rawVolume:b.rawVolume,rawPeak:b.rawPeak});
+
+test('temperature replaced by temperature records queued/replaced and applies only the final value',()=>{const s=new Simulation();s.armPeak(260);s.armPeak(245);s.advance(100);
+ assert.deepEqual(peakEvents(s).map(e=>[e.kind,e.status,e.assumption_seq,e.peak_celsius]),[['next_peak_assumption','queued',1,260],['next_peak_assumption_replaced','replaced',1,260],['next_peak_assumption','queued',2,245],['next_peak_assumption_applied','applied',2,245]]);
+ assert.equal(peakEvents(s)[1].replaced_by,'temperature');const applied=peakEvents(s).filter(e=>e.status==='applied');assert.equal(applied.length,1);assert.equal(applied[0].board_id,'PCB-002');assert.equal(s.boards[1].rawPeak,245);assert.ok(s.boards.every(b=>b.rawPeak!==260));});
+
+test('temperature replaced by another fault is never recorded as applied',()=>{const s=new Simulation();s.armPeak(260);s.arm('missing');s.advance(100);
+ assert.deepEqual(peakEvents(s).map(e=>[e.kind,e.status]),[['next_peak_assumption','queued'],['next_peak_assumption_replaced','replaced']]);assert.equal(peakEvents(s)[1].replaced_by,'missing');assert.equal(peakEvents(s)[1].next_board_id,'PCB-002');
+ assert.equal(s.boards[1].fault,'missing');assert.notEqual(s.boards[1].rawPeak,260);assert.equal(s.pendingPeak,null);
+ const t=new Simulation();t.arm('heat');t.arm('paste');assert.equal(t.controlEvents.length,0);});
+
+test('applied time is the new PCB insertion time even when one large advance overshoots it',()=>{const s=new Simulation();s.armPeak(270);s.advance(100);const [queued,applied]=peakEvents(s);assert.equal(queued.simulation_seconds,0);assert.equal(applied.simulation_seconds,4);assert.equal(applied.simulation_seconds,s.boards[1].born);assert.ok(s.time>applied.simulation_seconds);
+ const t=new Simulation();t.advance(9);t.armPeak(255);assert.equal(peakEvents(t)[0].next_board_id,'PCB-004');t.advance(100);const late=peakEvents(t).at(-1);assert.equal(late.status,'applied');assert.equal(late.board_id,'PCB-004');assert.equal(late.simulation_seconds,12);assert.equal(t.boards[3].born,12);assert.equal(t.boards[3].rawPeak,255);
+ const times=t.controlEvents.map(e=>e.simulation_seconds);assert.deepEqual(times,[...times].sort((a,b)=>a-b));});
+
+test('queued/replaced bookkeeping leaves seed-42 RNG and all other boards unchanged',()=>{const base=new Simulation();base.advance(100);const s=new Simulation();s.armPeak(260);s.armPeak(275);s.advance(100);
+ assert.deepEqual(s.boards.map(strip).filter((_,i)=>i!==1),base.boards.map(strip).filter((_,i)=>i!==1));assert.equal(s.boards[1].rawVolume,base.boards[1].rawVolume);assert.equal(s.boards[1].rawPeak,275);
+ for(const fault of ['paste','heat','missing','condition','review']){const a=new Simulation();a.arm(fault);a.advance(100);const b=new Simulation();b.armPeak(250);b.arm(fault);b.advance(100);assert.deepEqual(b.boards.map(strip),a.boards.map(strip));}});
+
+test('reset from a latched stop starts a paused fresh run; normal reset and constructor keep auto-run',()=>{const fresh=new Simulation();assert.equal(fresh.running,true);
+ const s=new Simulation();s.armPeak(260);s.advance(20);s.armPeak(265);s.emergencyStop();s.reset();
+ assert.equal(s.running,false);assert.equal(s.emergencyStopped,false);assert.deepEqual(s.controlEvents,[]);assert.equal(s.pendingPeak,null);assert.equal(s.pending,null);assert.equal(s.time,0);assert.deepEqual(s.boards,fresh.boards);
+ s.advance(10);assert.equal(s.time,0);s.running=true;s.advance(100);const ref=new Simulation();ref.advance(100);assert.deepEqual(s.boards,ref.boards);assert.deepEqual(s.controlEvents,[]);
+ const n=new Simulation();n.advance(5);n.reset();assert.equal(n.running,true);n.emergencyStop();n.releaseStop();n.reset();assert.equal(n.running,true);});
