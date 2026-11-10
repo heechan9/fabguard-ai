@@ -53,3 +53,12 @@ test('six original illustrations are self-contained and have no fake status indi
     assert.doesNotMatch(svg,/<script|<foreignObject|<image|href=|https?:\/\/(?!www.w3.org)/);
   }
 });
+test('silver command-room accent and selection text maintain 4.5:1 contrast',()=>{
+  const css=read('web/command-center.css');
+  const rule=css.match(/html\[data-theme="silver"\]:has\(\.command-shell\)\{([^}]+)\}/)[1];
+  const token=name=>rule.match(new RegExp(`--cc-${name}:(#[0-9a-f]{6})`))[1];
+  const luminance=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((n,v,i)=>n+v*[.2126,.7152,.0722][i],0);
+  for(const ink of ['accent','warm','muted','ink'])for(const surface of ['bg','panel','raised','active']){
+    const a=luminance(token(ink)),b=luminance(token(surface));assert.ok((Math.max(a,b)+.05)/(Math.min(a,b)+.05)>=4.5,`${ink} on ${surface}`);
+  }
+});

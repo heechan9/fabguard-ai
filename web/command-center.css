@@ -1,6 +1,6 @@
 /* Original command-room visual treatment. All colors are presentation only. */
 html:has(.command-shell){--cc-bg:#04170f;--cc-panel:#071e15;--cc-raised:#0c291c;--cc-ink:#f2efdc;--cc-muted:#a2bba8;--cc-line:#386c49;--cc-accent:#71ed8b;--cc-warm:#efc268;--cc-active:#153e26}
-html[data-theme="silver"]:has(.command-shell){--cc-bg:#aab6c5;--cc-panel:#c2cdda;--cc-raised:#b8c4d2;--cc-ink:#182c25;--cc-muted:#354b43;--cc-line:#597468;--cc-accent:#175d33;--cc-warm:#70500a;--cc-active:#afc6b9}
+html[data-theme="silver"]:has(.command-shell){--cc-bg:#aab6c5;--cc-panel:#c2cdda;--cc-raised:#b8c4d2;--cc-ink:#182c25;--cc-muted:#354b43;--cc-line:#597468;--cc-accent:#124d2a;--cc-warm:#583b04;--cc-active:#afc6b9}
 body.command-shell{background:var(--cc-bg);color:var(--cc-ink)}
 .command-shell .ambient{display:none}
 .command-shell .topbar{height:76px;min-height:76px;display:flex;gap:24px;padding:0 28px;background:var(--cc-bg);border-bottom:1px solid var(--cc-line);backdrop-filter:none}
