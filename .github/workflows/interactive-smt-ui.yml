@@ -1,0 +1,53 @@
+name: Interactive SMT browser verification
+on:
+  pull_request:
+    paths: ['web/smt/**', 'tests/web/interactive-mission.test.mjs', 'verification/check_interactive_mission.cjs', '.github/workflows/interactive-smt-ui.yml']
+permissions:
+  contents: read
+jobs:
+  interactive-smt:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install screenshot fonts and isolated browser driver
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          fc-cache -f
+          npm install --prefix "$RUNNER_TEMP/interactive-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Verify synthetic controls on desktop and mobile
+        env:
+          FABGUARD_BASE_URL: http://127.0.0.1:8775
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/interactive-smt
+        run: |
+          node --test tests/web/*.test.mjs
+          python scripts/build_web_evidence.py --check
+          python -m http.server 8775 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/interactive-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:8775/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          NODE_PATH="$RUNNER_TEMP/interactive-driver/node_modules" timeout 600s node verification/check_interactive_mission.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: interactive-smt-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/interactive-smt
+            ${{ runner.temp }}/interactive-server.log
+          retention-days: 14

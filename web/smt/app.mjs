@@ -1,3 +1,4 @@
+import {lotMissionSummary,placementPose,LOT_COLORS} from './interactive-model.mjs';
 import {mountContextReview} from './context-review.mjs';
 import {holdReasons} from './context-review-model.mjs';
 import {robotPose,robotReview,DESTINATIONS,ROBOT_NAME,ROBOT_SCOPE} from './robot-cell-model.mjs';
@@ -51,14 +52,25 @@ function selectStation(i,focus=true){$('equipment-reference').hidden=false;$('in
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
-$('play').addEventListener('click',()=>{if(sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
+$('play').addEventListener('click',()=>{if(sim.emergencyStopped||sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
 $('reset').addEventListener('click',()=>{inspection.reset();sim.reset();floorAgv.reset(sim.time);if(reducedMotion.matches)sim.running=false;selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
+$('peak-assumption').addEventListener('input',()=>{$('peak-assumption-value').textContent=$('peak-assumption').value+'°C';});
+$('apply-peak').addEventListener('click',()=>{sim.armPeak(Number($('peak-assumption').value));followInjected=true;updateUI();});
+$('simulation-stop').addEventListener('click',()=>{sim.emergencyStop();updateUI();draw();});
+$('release-stop').addEventListener('click',()=>{sim.releaseStop();updateUI();});
+$('lot-mission').addEventListener('click',event=>{const button=event.target.closest('[data-lot-index]');if(!button)return;const members=sim.boards.slice(Number(button.dataset.lotIndex)*4,Number(button.dataset.lotIndex)*4+4);selected=(members.find(b=>!b.done)||members[0]).id;updateUI();draw();});
 $('speed').addEventListener('change',e=>{sim.speed=Number(e.target.value);});
 $('board-select').addEventListener('change',e=>{selected=e.target.value;updateUI();});
 $('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(sim.snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-synthetic-run.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('export-review').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(manufacturingEvents(sim.snapshot()),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-manufacturing-events.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
-let prevOptions='',prevHistory='',prevEvidence='';
+let prevOptions='',prevHistory='',prevEvidence='',prevLotMission='';
 function updateUI(){
+ const lots=lotMissionSummary(sim.boards),lotKey=JSON.stringify([lots,lotId(sim.boards.findIndex(b=>b.id===selected))]);
+ if(lotKey!==prevLotMission){const states={ng:'가상 NG',hold:'HOLD 포함 · 근거 필요',review:'검토 필요',complete:'4장 완료',running:'진행 중'};const focused=document.activeElement?.dataset?.lotIndex;
+ $('lot-mission').replaceChildren(...lots.map((lot,index)=>{const button=document.createElement('button');button.type='button';button.dataset.lotIndex=String(index);button.dataset.state=lot.state;button.style.setProperty('--lot-color','#'+LOT_COLORS[index].toString(16));button.setAttribute('aria-pressed',String(lotId(sim.boards.findIndex(b=>b.id===selected))===lot.lot_id));button.innerHTML=`<b>${lot.lot_id} · ${states[lot.state]}</b><span>투입 ${lot.inserted}/4 · 완료 ${lot.completed} · 측정 대기 ${lot.waiting}</span><span>가상 NG ${lot.virtual_ng} · HOLD ${lot.hold}</span>`;return button;}));if(focused!==undefined)$('lot-mission').querySelector(`[data-lot-index="${focused}"]`)?.focus({preventScroll:true});prevLotMission=lotKey;}
+ $('apply-peak').disabled=sim.boards.length>=12;$('simulation-stop').disabled=sim.emergencyStopped;$('release-stop').disabled=!sim.emergencyStopped;
+ $('mission-status').textContent=sim.emergencyStopped?'합성 정지 잠금 · 정지 해제 후 계속 실행을 눌러야 재개됩니다. HOLD와 기록은 유지됩니다.':sim.pendingPeak!==null?`다음 기판 가정 · ${sim.pendingPeak}°C · 측정 단계 전에는 결과가 표시되지 않습니다.`:sim.controlEvents.at(-1)?.kind==='simulation_stop_released'&&!sim.running?'정지 해제됨 · 계속 실행을 눌러 재개하세요.':sim.boards.length===12?'12개 투입 완료 · 새 가정은 처음부터 실행 후 적용하세요.':'가정 입력 대기 · 235–250°C는 데모 규칙이며 실제 공정·안전 기준이 아닙니다.';
+ const placing=sim.boards.filter(board=>[3,4].includes(board.stage));$('placement-status').textContent='실장 동작 · '+(placing.length?placing.map(board=>`${board.id} · ${placementPose(board).phase} · ${placementPose(board).placed}/4개`).join(' / '):'실장 공정의 기판 없음')+' · 정해진 공정 진행률에 맞춘 설명용 동작';
  const agv=floorAgv.pose;
  const agvStatus=agv.cause+(floorAgv.running?'':' · AGV 일시정지');
  if($('floor-agv-status').textContent!==agvStatus)$('floor-agv-status').textContent=agvStatus;
@@ -83,7 +95,7 @@ function updateUI(){
  const moving=sim.boards.find(board=>board.stage===9);$('robot-active').textContent=moving?'지금 이송하는 기판 · '+moving.id:'지금 이송하는 기판 · 없음';
  const pose=robotPose(b);$('robot-phase').textContent='선택한 기판 · '+ROBOT_NAME+' · '+b.id+' · '+pose.phase+(pose.route?' → '+DESTINATIONS[pose.route].label:'');
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
- const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done;$('export-review').disabled=!done;$('run-status').textContent=done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
+ const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done||sim.emergencyStopped;$('export-review').disabled=!done;$('run-status').textContent=sim.emergencyStopped?'합성 E-stop · 정지 잠금':done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
  $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>holdReasons(b).length>0).length;
  $('pending').textContent=sim.pending?`다음 기판에 적용 · ${plainCopy(FAULTS[sim.pending])}`:sim.boards.length===12?'투입 완료 · 처음부터 다시 시작하세요':'문제를 선택해 보세요';
  document.querySelectorAll('[data-fault]').forEach(button=>{button.disabled=sim.boards.length>=12;button.classList.toggle('armed',sim.pending===button.dataset.fault);button.setAttribute('aria-pressed',String(sim.pending===button.dataset.fault));});
@@ -112,7 +124,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
   box(cover,w-.18,.98,.035,0,1.58,-.85,0x71a3ac,.16);
   box(cover,w-.18,.98,.035,0,1.58,.85,0x739aa7,.1);
   if(i===6){for(let k=0;k<6;k++){box(group,.46,.1,1.25,-1.7+k*.68,1.75,0,0xea9561,.62);}for(let k=0;k<8;k++)box(cover,.04,.1,.6,-1.7+k*.48,2.26,0,0x8ca3ad);}
-  if(i===3||i===4){box(group,w-.25,.09,.14,0,1.9,0,color.dark);const head=cylinder(group,.11,.48,0,1.59,0,0x3d7485);heads.push({head,group});}
+  if(i===3||i===4){box(group,w-.25,.09,.14,0,1.9,0,color.dark);const head=cylinder(group,.11,.48,0,1.59,0,0x3d7485);heads.push({head,group,stage:i});}
   if(i===2||i===8){box(group,.34,.23,.34,0,1.92,0,color.dark);const scan=box(group,w-.35,.012,1.02,0,1.3,0,i===2?0x47c5c1:0x689fd3,.27);group.userData.scan=scan;}
   if(i===1){box(group,w-.3,.09,.82,0,1.63,0,0x869fab);}
   box(cover,.45,.35,.1,w*.23,2.47,.28,color.dark);box(cover,.34,.24,.015,w*.23,2.47,.341,0x75c7bb);
@@ -123,7 +135,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
  detailMachine(i,group,cover,w,box,cylinder);
  const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
 }
-function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;for(let k=0;k<4;k++){box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46);}for(let k=0;k<5;k++)box(group,.48,.006,.013,0,.041,-.31+k*.14,0xcbb776);scene.add(group);boardMeshes.set(b.id,group);return group;}
+function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;group.userData.chips=[];for(let k=0;k<4;k++){group.userData.chips.push(box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46));}box(group,.64,.015,.065,0,.05,.34,LOT_COLORS[Math.floor((Number(b.id.slice(-3))-1)/4)]);for(let k=0;k<5;k++)box(group,.48,.006,.013,0,.041,-.31+k*.14,0xcbb776);scene.add(group);boardMeshes.set(b.id,group);return group;}
 function cameraUpdate(){updateLabelVisibility();if(!camera)return;const aspect=viewport.clientWidth/Math.max(1,viewport.clientHeight),distance=overviewDistance(aspect)*zoom;camera.position.set(targetX+Math.sin(azimuth)*Math.cos(elevation)*distance,targetY+Math.sin(elevation)*distance,targetZ+Math.cos(azimuth)*Math.cos(elevation)*distance);camera.lookAt(targetX,targetY,targetZ);camera.aspect=aspect;camera.updateProjectionMatrix();}
 function resize(){if(!renderer)return;renderer.setSize(viewport.clientWidth,viewport.clientHeight);cameraUpdate();}
 try{
@@ -154,12 +166,12 @@ function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{tapGuard.end(event.pointerId,true);pointers.delete(event.pointerId);pinchDistance=0;});
 viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(-.15,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
 function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferBoard=activeTransferBoard(source.boards);for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const transfer=b===transferBoard?transferPose(b):null;if(transfer?.position){const p=transfer.position;mesh.position.set(positions[TRANSFER_STAGE]+p.x,p.y,p.z);}const pose=robotPose(b);if(pose.position){const stack=pose.phase==='내려놓기 완료'?(Number(b.id.slice(-3))-1)*.025:0;mesh.position.set(positions[9]+pose.position.x,pose.position.y+stack,pose.position.z);}
- mesh.visible=!b.done||b.id===selected;const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
+ mesh.visible=!b.done||b.id===selected;const placed=placementPose(b).placed;mesh.userData.chips.forEach((chip,index)=>{chip.visible=index<placed;});const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
  for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=source.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(source.time*4));}
  robotCell?.update(source.boards,selected);
  transferRobot?.update(source.boards,source.time);
  floorAgvView?.update(floorAgv.pose);
- for(const {head} of heads){head.position.x=Math.sin(source.time*3)*.62;head.position.z=Math.cos(source.time*2)*.25;}if(paint)renderer.render(scene,camera);
+ for(const {head,stage} of heads){const board=source.boards.find(b=>b.stage===stage),pose=placementPose(board);head.position.set(board?(-widths[stage]/2-.24+(widths[stage]+.48)*board.progress)+pose.x:0,pose.y,pose.z);}if(paint)renderer.render(scene,camera);
 }
 if(reducedMotion.matches)sim.running=false;
 reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){sim.running=false;updateUI();}});
@@ -169,7 +181,7 @@ function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;if(introBusy)
 // Optional browser agent surface. Uses the same validated actions as the visible UI.
 if(document.modelContext?.registerTool){const lifecycle=new AbortController();addEventListener('pagehide',()=>lifecycle.abort(),{once:true});for(const tool of[
  {name:'read_smt_simulation',description:'Read the synthetic SMT run. No real factory or AI model is connected.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>sim.snapshot()},
- {name:'stage_smt_fault',description:'Arm one synthetic fault for the next PCB, replacing any pending fault.',inputSchema:{type:'object',properties:{fault:{type:'string',enum:Object.keys(FAULTS)}},required:['fault'],additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>{if(!input||Object.keys(input).length!==1||!Object.hasOwn(FAULTS,input.fault))throw new Error('Invalid fault');arm(input.fault);return {pending_fault:sim.pending};}}
+ {name:'stage_smt_fault',description:'Arm one synthetic fault for the next PCB, replacing any pending fault.',inputSchema:{type:'object',properties:{fault:{type:'string',enum:Object.keys(FAULTS).filter(fault=>fault!=='temperature')}},required:['fault'],additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>{if(!input||Object.keys(input).length!==1||!Object.hasOwn(FAULTS,input.fault))throw new Error('Invalid fault');arm(input.fault);return {pending_fault:sim.pending};}}
  ]){try{Promise.resolve(document.modelContext.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}}}
 
 // The introduction uses its own seeded run and camera. Restore the live view on every exit.
