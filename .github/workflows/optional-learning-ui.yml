@@ -22,10 +22,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Existing Chrome
+      - name: Existing Chrome and Korean fallback font
+        timeout-minutes: 3
         run: |
           command -v google-chrome
           google-chrome --version
+          # External font requests are blocked by the offline learning test.
+          # Match the existing sitewide CI's Korean fallback so screenshots
+          # and text wrapping exercise actual glyphs instead of missing boxes.
+          if ! fc-list :lang=ko | grep -q .; then
+            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list :lang=ko)"
+          fc-match :lang=ko
       - name: Isolated browser driver
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
