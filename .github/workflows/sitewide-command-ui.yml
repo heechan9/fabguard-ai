@@ -25,12 +25,14 @@ jobs:
         with:
           node-version: '22'
       - name: Check existing Chrome and bounded Korean font setup
-        timeout-minutes: 3
+        timeout-minutes: 6
         run: |
           command -v google-chrome
           google-chrome --version
           if ! fc-list :lang=ko | grep -q .; then
-            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+            # The 61 MB package can exceed 120s on the hosted Ubuntu mirror.
+            # Only dependency setup gets a larger bound; rendered-font checks stay mandatory.
+            sudo timeout 300s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
           fi
           test -n "$(fc-list :lang=ko)"
           fc-match :lang=ko
@@ -107,12 +109,13 @@ jobs:
         with:
           node-version: '22'
       - name: Existing Chrome and bounded Korean font setup
-        timeout-minutes: 3
+        timeout-minutes: 6
         run: |
           command -v google-chrome
           google-chrome --version
           if ! fc-list :lang=ko | grep -q .; then
-            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+            # Match loopback setup; fail rather than substitute an unverified fallback.
+            sudo timeout 300s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
           fi
           test -n "$(fc-list :lang=ko)"
       - name: Isolated driver only
