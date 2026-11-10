@@ -218,3 +218,9 @@ SECOM 측정 방법, SMT AOI 준비 조건, OHT 이송 순서, UR3 원본 근거
 `progressive-disclosure.mjs`는 직접 링크가 가리키는 요소의 모든 상위 패널을 열고
 해당 위치로 이동합니다. `/research/`의 무스크립트 정책은 변경하지 않습니다.
 키보드·반복 열기·닫기·뒤로·직접 링크와 펼친 뒤의 대비·넘침을 별도로 검사합니다.
+
+The repeated four-card answer overview is retained inside the expert disclosure.
+Direct `#answer-overview` links open it automatically. The first view keeps the
+project purpose, review/3D entry points, measured counts and failure/uncertainty
+limits visible; the mobile concept illustration is shorter without removing its
+feature count or synthetic-image disclaimer.

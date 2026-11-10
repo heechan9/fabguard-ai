@@ -246,7 +246,7 @@ function summaryView() {
     professional.id = "professional-details";
     professional.innerHTML = `<summary><span>${isEnglish ? "Expert explanation and evidence" : "전문 설명과 근거 보기"}</span><small>${isEnglish ? "Evaluation · methods · limits · source records" : "평가 수치 · 검증 방법 · 한계 · 원자료"}</small></summary><div class="professional-body"></div>`;
     const body = professional.querySelector('.professional-body');
-    [...app.children].filter(section => !section.matches('.hero,.answer-strip')).forEach(section => body.append(section));
+    [...app.children].filter(section => !section.matches('.hero')).forEach(section => body.append(section));
     app.append(professional);
   }
 }

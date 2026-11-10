@@ -13,6 +13,7 @@ async function assertProfessionalDisclosure(page){
  const panel=page.locator('#app details.professional-details');
  assert.equal(await panel.count(),1,'one optional detailed introduction');
  assert.equal(await panel.evaluate(e=>e.open),false,'fresh introduction is concise');
+ assert.equal(await page.locator('#answer-overview').isVisible(),false,'duplicate summary belongs to optional expert detail');
  const summary=panel.locator(':scope > summary');
  assert.equal(await summary.isVisible(),true);
  assert.equal(await page.locator('.project-intro .hero-actions').isVisible(),true);
@@ -37,7 +38,7 @@ async function assertProfessionalDisclosure(page){
   const target=new URL(initial);target.hash=hash;
   await page.goto(target.href);await page.locator('#app .absolute-beginner').waitFor();
   const element=page.locator('#'+hash);await element.waitFor({state:'visible'});
-  if(hash!=='answer-overview')assert.equal(await panel.evaluate(e=>e.open),true,`${hash} reveals detailed evidence`);
+  assert.equal(await panel.evaluate(e=>e.open),true,`${hash} reveals detailed evidence`);
   try {
    await page.waitForFunction(id=>{const target=document.getElementById(id),header=document.querySelector('.topbar');return target&&target.getBoundingClientRect().top>=header.getBoundingClientRect().bottom-2&&target.getBoundingClientRect().top<innerHeight;},hash);
   } catch(error) {
@@ -52,7 +53,7 @@ async function assertProfessionalDisclosure(page){
   }
   await page.locator('.cc-navigation > a[data-route=risks]').press('Enter');await page.locator('.table-shell tbody tr').first().waitFor();
   await page.goBack();await element.waitFor({state:'visible'});
-  if(hash!=='answer-overview')assert.equal(await panel.evaluate(e=>e.open),true,'Back reveals the target again');
+  assert.equal(await panel.evaluate(e=>e.open),true,'Back reveals the target again');
  }
  await page.goto(initial.href);await page.locator('.absolute-beginner').waitFor();assert.equal(await panel.evaluate(e=>e.open),false);
 }

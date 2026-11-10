@@ -300,3 +300,8 @@ html[data-default-theme]:has(body.command-shell){scroll-padding-top:var(--site-h
 
 /* Keep the complete review counts on one line at desktop widths. */
 @media(min-width:901px){body.command-shell .cc-capture-rows>div{grid-template-columns:170px minmax(0,1fr) 85px}}
+
+/* Keep decorative media compact so the expert toggle is easier to reach. */
+@media(max-width:900px){body.command-shell .project-intro .hero-visual{min-height:200px;max-height:220px}}
+/* Preserve full record labels while keeping all desktop panels in view. */
+@media(min-width:901px){body.command-shell .cc-records li a{padding-top:3px;padding-bottom:3px}}
