@@ -112,3 +112,6 @@ body.command-shell .cc-navigation a[href],body.command-shell .cc-dashboard a[hre
 body.command-shell .cc-navigation a[href]:hover,body.command-shell .cc-dashboard a[href]:hover{color:var(--cc-accent)}
 body.command-shell .cc-navigation a[aria-current="page"]{color:var(--cc-ink)}
 body.command-shell .cc-panel-link[href],body.command-shell .cc-bottom-line a[href]{color:var(--cc-muted)}
+
+/* Keep external-page language notices readable in the mobile navigation rail. */
+.command-shell .cc-navigation .language-note{min-width:75px;flex-shrink:0}
