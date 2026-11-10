@@ -1,0 +1,135 @@
+name: Sitewide command-room UI verification
+on:
+  pull_request:
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+  push:
+    branches: [main, feat/sitewide-command-style-20261110]
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1366, 390, 360]
+        theme: [dark, silver]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check existing Chrome and bounded Korean font setup
+        timeout-minutes: 3
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          if ! fc-list :lang=ko | grep -q .; then
+            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list :lang=ko)"
+          fc-match :lang=ko
+      - name: Isolated pinned test driver, no browser download
+        timeout-minutes: 3
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: timeout 120s npm install --prefix "$RUNNER_TEMP/sitewide-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Static inventory and existing web contracts
+        timeout-minutes: 3
+        run: |
+          node --check verification/check_sitewide_command.cjs
+          node --test tests/web/*.test.mjs
+      - name: All documents, all root views, bilingual views, controls and contrast
+        timeout-minutes: 11
+        env:
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
+          FABGUARD_UI_THEME: ${{ matrix.theme }}
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/sitewide-command
+        run: |
+          python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/sitewide-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8764/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          curl --fail --silent http://127.0.0.1:8764/ > /dev/null
+          NODE_PATH="$RUNNER_TEMP/sitewide-driver/node_modules" timeout 600s node verification/check_sitewide_command.cjs
+      - name: Preserve screenshots and complete audit, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitewide-command-${{ matrix.width }}-${{ matrix.theme }}-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/sitewide-command
+            ${{ runner.temp }}/sitewide-server.log
+          retention-days: 14
+          if-no-files-found: warn
+  production-assets:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require deployed owned assets to match this exact commit
+        run: python3 verification/check_production_assets.py --output "$RUNNER_TEMP/sitewide-production-assets.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sitewide-production-assets-${{ github.sha }}
+          path: ${{ runner.temp }}/sitewide-production-assets.json
+          retention-days: 14
+  production-browser:
+    needs: production-assets
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1366, 390, 360]
+        theme: [dark, silver]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Existing Chrome and bounded Korean font setup
+        timeout-minutes: 3
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          if ! fc-list :lang=ko | grep -q .; then
+            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list :lang=ko)"
+      - name: Isolated driver only
+        timeout-minutes: 3
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: timeout 120s npm install --prefix "$RUNNER_TEMP/sitewide-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Verify every deployed page and root view in actual Chrome
+        timeout-minutes: 11
+        env:
+          FABGUARD_BASE_URL: https://fabguard-ai.vercel.app
+          FABGUARD_UI_WIDTH: ${{ matrix.width }}
+          FABGUARD_UI_THEME: ${{ matrix.theme }}
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_UI_OUTPUT: ${{ runner.temp }}/sitewide-production
+        run: NODE_PATH="$RUNNER_TEMP/sitewide-driver/node_modules" timeout 600s node verification/check_sitewide_command.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sitewide-production-${{ matrix.width }}-${{ matrix.theme }}-${{ github.sha }}
+          path: ${{ runner.temp }}/sitewide-production
+          retention-days: 14

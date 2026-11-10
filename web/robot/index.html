@@ -1,11 +1,38 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101b25">
+<html lang="ko" data-default-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#04170f">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <title>FabGuard 확장 · 로봇 팔 50 ms 진동 창 점검</title>
 <meta name="description" content="FabGuard 별도 확장 실험. 가속도 CSV를 브라우저에서 50 ms 창으로 나누고 보류 사유를 보여 주는 오프라인 시연. SECOM 반도체 분석 본체와 별개.">
-<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/navigation.css"><link rel="stylesheet" href="/readability.css"><link rel="stylesheet" href="./style.css"></head>
-<body class="robot-page"><a class="skip-link" href="#robot-main">본문으로 건너뛰기</a><div class="ambient" aria-hidden="true"></div>
-<header class="topbar"><a class="brand" href="/#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a><nav aria-label="주요 화면"><a href="/#summary">프로젝트 소개</a><a href="/secom/">반도체 분석 (본체)</a><a href="/smt/">3D 공정 체험</a></nav></header>
+<script src="/theme.js"></script><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/navigation.css"><link rel="stylesheet" href="/readability.css"><link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="/command-center.css">
+  <link rel="stylesheet" href="/sitewide-command.css">
+</head>
+<body class="robot-page command-shell site-shell"><a class="skip-link" href="#robot-main">본문으로 건너뛰기</a><div class="ambient" aria-hidden="true"></div>
+<header class="topbar" data-site-nav-owner="shared">
+    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <span class="cc-demo-badge">OFFLINE EXPERIMENT</span>
+    <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button></div>
+    <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#overview">운영 개요</a>
+      <a href="/#risks">우선점검 목록</a>
+      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="/#limitations">검증과 한계</a>
+      <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
+        <a href="/#summary">프로젝트 소개</a>
+        <a href="/#global">국가별 자료</a>
+        <a href="/smt/index.html">3D 공정 체험</a>
+        <a href="/equipment/index.html">장비 CSV 점검</a>
+        <a href="/robot/ur3/index.html">UR3 센서 기록</a>
+        <a href="/research/index.html">연구 근거·적용 상태</a>
+        <a href="/oht/index.html">OHT 천장 이송 체험</a>
+        <a href="/robot/index.html" class="active" aria-current="page">로봇 진동·SPC 실험</a>
+        <a href="/equipment/context-review.html">정비 이력·기준선 검토</a>
+        <a href="/secom/research.html">학습 구간 비교 기록</a>
+        <a href="/smt/references.html">3D 참고자료·재현 범위</a>
+        <a href="/review/index.html">SECOM 검토 메모</a>
+      </div></details>
+    </nav>
+  </header>
 <main id="robot-main" class="robot-main" tabindex="-1">
 <p class="track-banner"><b>별도 추가 기능 · 로봇 확장 실험</b> FabGuard 플랫폼은 반도체·제조 데이터 전처리, 공정 품질, 모델 평가, 기존 장비 데이터 점검 기능으로 이루어져 있습니다. 이 화면은 그 기능들을 대체하지 않습니다. 로봇 팔 가속도 신호의 변화감지 계약을 설명하는 별도 오프라인 시연입니다. <a href="/secom/">반도체 분석 화면으로 가기 →</a></p>
 <section class="ur3-record-entry" aria-label="별도 실제 센서 기록"><h2>UR3 · 실제 센서 기록</h2><p>UCI 공개 기록 7,409행 · 관절 전류·온도·속도와 툴 전류 19채널. 결측과 시간 공백을 유지한 탐색·재생이며 실시간 연결·예측·제어가 아닙니다. 합성 R-01·R-02 동작과 SECOM 익명 변수 분석에 연결하거나 합산하지 않습니다.</p><a href="/robot/ur3/index.html">실제 센서 기록 살펴보기 →</a></section><section class="robot-hero" aria-labelledby="robot-title">
@@ -109,4 +136,5 @@
 </ul>
 </section>
 </main>
-<script type="module" src="./app.mjs"></script></body></html>
+<script type="module" src="./app.mjs"></script><script type="module" src="/site-shell.mjs"></script>
+</body></html>

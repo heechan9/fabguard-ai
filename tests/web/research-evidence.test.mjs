@@ -14,7 +14,14 @@ test('claims distinguish abstention, adverse target result, synthetic scope and 
  assert.ok(page.includes('104·28·32') && page.includes('49/50·50/50·50/50'));
 });
 test('static research page has no executable code or private artifact links',()=>{
- assert.doesNotMatch(page, /<(script|iframe|form|input)\b/i);
+ // A native, presentation-only checkbox changes CSS without enabling scripts or data entry.
+ assert.doesNotMatch(page, /<(script|iframe|form)\b/i);
+ const inputs=[...page.matchAll(/<input\b[^>]*>/gi)].map(match=>match[0]);
+ assert.equal(inputs.length,1);
+ assert.match(inputs[0], /id="research-theme"/);
+ assert.match(inputs[0], /type="checkbox"/);
+ assert.doesNotMatch(inputs[0], /\bon[a-z]+=|\bname=|\bform=/i);
+ assert.doesNotMatch(page, /\bscript-src\b/i);
  assert.doesNotMatch(page, /(?:file:\/\/|\/Users\/|\/workspace\/|drive\.google\.com|\.joblib|\.pkl)/i);
  assert.ok(page.includes("default-src 'none'"));
 });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#aab6c5">
+  <meta name="theme-color" content="#04170f">
   <meta name="description" content="반도체 제조 데이터 기반 위험 생산 건 우선점검 의사결정 지원 프로젝트">
   <title>FabGuard AI — Manufacturing Risk Intelligence</title>
   <script src="/theme.js"></script><link rel="stylesheet" href="/smt/evidence.css">
@@ -13,19 +13,36 @@
 <link rel="stylesheet" href="/readability.css">
   <link rel="stylesheet" href="/portfolio-story.css">
 <link rel="stylesheet" href="/silver.css">
+
   <link rel="stylesheet" href="/command-center.css">
+  <link rel="stylesheet" href="/sitewide-command.css">
 </head>
 <body class="command-shell">
   <a class="skip-link" href="#app">본문으로 건너뛰기</a>
   <div class="ambient" aria-hidden="true"></div>
-  <header class="topbar">
+  <header class="topbar" data-site-nav-owner="app">
     <a class="brand" href="#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
     <span class="cc-demo-badge">OFFLINE DEMO</span>
     <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button><button id="language-toggle" class="language-toggle" type="button" aria-label="Switch to English">EN</button></div>
     <nav class="cc-navigation" aria-label="주요 화면">
-      <a href="#overview" data-route="overview">운영 개요</a><a href="#risks" data-route="risks">우선점검 목록</a><a href="/secom/index.html">반도체 분석 결과</a><a href="#limitations" data-route="limitations">검증과 한계</a>
+      <a href="#overview" data-route="overview">운영 개요</a>
+      <a href="#risks" data-route="risks">우선점검 목록</a>
+      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="#limitations" data-route="limitations">검증과 한계</a>
       <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
-      <a href="#summary" data-route="summary">프로젝트 소개</a><a href="#global" data-route="global">국가별 자료</a><a href="/smt/index.html">3D 공정 체험</a><a href="/equipment/index.html">장비 CSV 점검</a><a href="/robot/ur3/index.html">UR3 센서 기록</a><a href="/research/index.html">연구 근거·적용 상태</a></div></details>
+        <a href="#summary" data-route="summary">프로젝트 소개</a>
+        <a href="#global" data-route="global">국가별 자료</a>
+        <a href="/smt/index.html">3D 공정 체험</a>
+        <a href="/equipment/index.html">장비 CSV 점검</a>
+        <a href="/robot/ur3/index.html">UR3 센서 기록</a>
+        <a href="/research/index.html">연구 근거·적용 상태</a>
+        <a href="/oht/index.html">OHT 천장 이송 체험</a>
+        <a href="/robot/index.html">로봇 진동·SPC 실험</a>
+        <a href="/equipment/context-review.html">정비 이력·기준선 검토</a>
+        <a href="/secom/research.html">학습 구간 비교 기록</a>
+        <a href="/smt/references.html">3D 참고자료·재현 범위</a>
+        <a href="/review/index.html">SECOM 검토 메모</a>
+      </div></details>
     </nav>
   </header>
   <div class="cc-legacy-entry" style="max-width:1240px;margin:16px auto;padding:0 4vw"><a href="/equipment/index.html" style="color:var(--cyan)">장비 CSV 입력·SPC 점검 →</a> <span style="color:var(--muted)">브라우저 내 오프라인 분석 · 현장 검증 아님</span></div>
@@ -35,5 +52,6 @@
   <footer><span>FABGUARD AI · SEOUL → MELBOURNE</span><span>Auditable industrial data pipeline · public-data prototype</span><span>AI prioritizes. Engineers decide.</span></footer>
   <script type="module" src="/app.js"></script>
   <script type="module" src="/review-budget.mjs"></script>
+<script type="module" src="/site-shell.mjs"></script>
 </body>
 </html>

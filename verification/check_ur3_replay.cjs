@@ -6,6 +6,8 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH});
  const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});page=await context.newPage();page.setDefaultTimeout(20000);
  page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
+ // This legacy interaction sequence explicitly starts from a saved silver preference.
+ await page.addInitScript(()=>{if(localStorage.getItem('fabguard-theme')===null)localStorage.setItem('fabguard-theme','silver');});
  await page.goto(base+'/robot/ur3/');await page.locator('#load-status[data-status=ready]').waitFor();
  assert.match(await page.locator('#quality-summary').innerText(),/7,409행.*24열/);
  assert.equal(await page.locator('#theme-toggle').isEnabled(),true);

@@ -21,7 +21,7 @@
       button.setAttribute('aria-label', english ? 'Silver / Dark theme (dark on when pressed)' : '실버 / 다크 테마 (눌림 상태는 다크)');
       button.title = english ? (dark ? 'Switch to silver theme' : 'Switch to dark theme') : (dark ? '실버 테마로 전환' : '다크 테마로 전환');
       const color = document.querySelector('meta[name="theme-color"]');
-      if (color) color.setAttribute('content', dark ? '#070b0f' : '#aab6c5');
+      if (color) color.setAttribute('content', dark ? '#04170f' : '#aab6c5');
     };
     button.addEventListener('click', () => {
       root.dataset.theme = root.dataset.theme === 'dark' ? 'silver' : 'dark';
