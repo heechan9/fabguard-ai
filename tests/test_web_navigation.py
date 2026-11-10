@@ -49,7 +49,7 @@ class WebNavigationTest(unittest.TestCase):
         nav_routes = re.findall(r'<a href="#([^"]+)" data-route="([^"]+)">', INDEX)
         self.assertEqual(
             nav_routes,
-            [("summary", "summary"), ("global", "global"), ("risks", "risks"), ("limitations", "limitations")],
+            [("overview", "overview"), ("risks", "risks"), ("limitations", "limitations"), ("summary", "summary"), ("global", "global")],
         )
         for route, _ in nav_routes:
             with self.subTest(route=route):

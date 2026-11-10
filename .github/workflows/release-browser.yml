@@ -72,6 +72,7 @@ jobs:
           elif [ "$REVIEW_KIND" = transfer ]; then
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 360s node verification/check_transfer_robot.cjs
           elif [ "$REVIEW_KIND" = silver ]; then
+            NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 180s node verification/check_command_center.cjs
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 180s node verification/check_silver_ui.cjs
           else
             NODE_PATH="$RUNNER_TEMP/release-driver/node_modules" timeout 180s node verification/check_context_review.cjs

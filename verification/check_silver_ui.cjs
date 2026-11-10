@@ -8,6 +8,7 @@ fs.mkdirSync(output,{recursive:true});
  for(const width of process.env.FABGUARD_UI_WIDTH?[Number(process.env.FABGUARD_UI_WIDTH)]:[1366,390,360]){
   const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'}),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
+  await page.addInitScript(()=>localStorage.setItem('fabguard-theme','silver')); // This audit explicitly exercises the saved silver preference.
   await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
   for(const [name,route,ready] of [['home','/','#app h1'],['smt','/smt/','#context-review h3'],['secom','/secom/','#distribution-evidence select'],['limits','/#limitations','#app h1'],['global','/#global','.country-card'],['risks','/#risks','table']]){
    await page.goto(new URL(route,base).href);await page.locator(ready).first().waitFor();
