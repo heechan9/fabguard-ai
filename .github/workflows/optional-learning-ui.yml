@@ -1,0 +1,65 @@
+name: Optional learning browser verification
+on:
+  pull_request:
+    paths: ['web/index.html', 'web/learn/**', 'tests/web/learning*.test.mjs', 'verification/check_learning_mode.cjs', '.github/workflows/optional-learning-ui.yml']
+  push:
+    branches: [main]
+    paths: ['web/index.html', 'web/learn/**', 'tests/web/learning*.test.mjs', 'verification/check_learning_mode.cjs', '.github/workflows/optional-learning-ui.yml']
+permissions:
+  contents: read
+jobs:
+  learning-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Existing Chrome and Korean fallback font
+        timeout-minutes: 3
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          # External font requests are blocked by the offline learning test.
+          # Match the existing sitewide CI's Korean fallback so screenshots
+          # and text wrapping exercise actual glyphs instead of missing boxes.
+          if ! fc-list :lang=ko | grep -q .; then
+            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list :lang=ko)"
+          fc-match :lang=ko
+      - name: Isolated browser driver
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm install --prefix "$RUNNER_TEMP/learning-driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Synthetic learning flow matrix
+        env:
+          FABGUARD_LOCAL_URL: http://127.0.0.1:8764
+          FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
+          FABGUARD_LEARNING_OUTPUT: ${{ runner.temp }}/learning-browser
+        run: |
+          node --test tests/web/*.test.mjs
+          python scripts/build_web_evidence.py --check
+          python -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/learning-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:8764/ > /dev/null; then break; fi
+            sleep 0.25
+          done
+          NODE_PATH="$RUNNER_TEMP/learning-driver/node_modules" timeout 480s node verification/check_learning_mode.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: optional-learning-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            ${{ runner.temp }}/learning-browser
+            ${{ runner.temp }}/learning-server.log
+          retention-days: 14
