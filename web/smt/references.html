@@ -1,15 +1,44 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-default-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>참고자료와 재현 범위 · FabGuard</title>
-  <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script><link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/readability.css">
   <style>main{width:min(800px,90vw);margin:48px auto}h1{font-size:clamp(28px,5vw,40px);line-height:1.4}h2{font-size:22px;margin-top:36px}p,li{color:var(--reader-muted);font-size:16px;line-height:1.9}a{color:var(--cyan);text-underline-offset:4px}li{margin:12px 0}a:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}</style>
+<meta name="theme-color" content="#04170f">
+  <link rel="stylesheet" href="/command-center.css">
+  <link rel="stylesheet" href="/sitewide-command.css">
 </head>
-<body>
-<main>
+<body class="command-shell site-shell references-page">
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<header class="topbar" data-site-nav-owner="shared">
+    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <span class="cc-demo-badge">REFERENCE NOTES</span>
+    <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button></div>
+    <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#overview">운영 개요</a>
+      <a href="/#risks">우선점검 목록</a>
+      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="/#limitations">검증과 한계</a>
+      <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
+        <a href="/#summary">프로젝트 소개</a>
+        <a href="/#global">국가별 자료</a>
+        <a href="/smt/index.html">3D 공정 체험</a>
+        <a href="/equipment/index.html">장비 CSV 점검</a>
+        <a href="/robot/ur3/index.html">UR3 센서 기록</a>
+        <a href="/research/index.html">연구 근거·적용 상태</a>
+        <a href="/oht/index.html">OHT 천장 이송 체험</a>
+        <a href="/robot/index.html">로봇 진동·SPC 실험</a>
+        <a href="/equipment/context-review.html">정비 이력·기준선 검토</a>
+        <a href="/secom/research.html">학습 구간 비교 기록</a>
+        <a href="/smt/references.html" class="active" aria-current="page">3D 참고자료·재현 범위</a>
+        <a href="/review/index.html">SECOM 검토 메모</a>
+      </div></details>
+    </nav>
+  </header>
+<main id="main" tabindex="-1">
   <a href="./">← 3D 공정 체험으로 돌아가기</a>
   <h1>참고자료와 재현 범위</h1>
   <p>FabGuard는 개인 프로젝트입니다. 아래 학교 장비 자료는 공정 구성과 검사 역할을 설명하기 위해 참고했으며, 학교 공식 서비스나 실제 장비 연동을 의미하지 않습니다.</p>
@@ -29,5 +58,6 @@
   <p>국가별 실제 데이터 분석과 SECOM 반도체 모델 결과는 별도 근거로 표시하며, SMT 가상 기판의 예측값으로 사용하지 않습니다.</p>
   <p><a href="./">3D 공정 체험으로 돌아가기</a></p>
 </main>
+<script type="module" src="/site-shell.mjs"></script>
 </body>
 </html>

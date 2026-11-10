@@ -1,16 +1,44 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-default-theme="dark">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#aab6c5">
+<meta name="theme-color" content="#04170f">
 <meta name="description" content="SECOM 공개 저장 결과에 연결하는 오프라인 검토 메모. 실제 공장 승인이나 인증된 감사 기록이 아닙니다.">
 <title>FabGuard · SECOM offline review</title>
 <script src="/theme.js"></script><link rel="stylesheet" href="./style.css">
+
+  <link rel="stylesheet" href="/command-center.css">
+  <link rel="stylesheet" href="/sitewide-command.css">
 </head>
-<body>
+<body class="command-shell site-shell review-page">
 <a class="skip-link" href="#main" data-i18n="skip">본문으로 건너뛰기</a>
-<header><a href="/">FABGUARD AI</a><div class="tools"><a id="back-link" href="/#risks" data-i18n="back">SECOM 상세로</a><button id="theme-toggle" type="button" aria-pressed="false">실버 / 다크</button><button id="language-toggle" type="button">English</button></div></header>
+<header class="topbar" data-site-nav-owner="shared">
+    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <span class="cc-demo-badge">REVIEW NOTES</span>
+    <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button><button id="language-toggle" class="language-toggle" type="button">English</button></div>
+    <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#overview">운영 개요</a>
+      <a href="/#risks">우선점검 목록</a>
+      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="/#limitations">검증과 한계</a>
+      <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
+        <a href="/#summary">프로젝트 소개</a>
+        <a href="/#global">국가별 자료</a>
+        <a href="/smt/index.html">3D 공정 체험</a>
+        <a href="/equipment/index.html">장비 CSV 점검</a>
+        <a href="/robot/ur3/index.html">UR3 센서 기록</a>
+        <a href="/research/index.html">연구 근거·적용 상태</a>
+        <a href="/oht/index.html">OHT 천장 이송 체험</a>
+        <a href="/robot/index.html">로봇 진동·SPC 실험</a>
+        <a href="/equipment/context-review.html">정비 이력·기준선 검토</a>
+        <a href="/secom/research.html">학습 구간 비교 기록</a>
+        <a href="/smt/references.html">3D 참고자료·재현 범위</a>
+        <a href="/review/index.html" class="active" aria-current="page">SECOM 검토 메모</a>
+      </div></details>
+    </nav>
+  </header>
 <main id="main" tabindex="-1">
+<p class="site-context-link"><a id="back-link" href="/#risks" data-i18n="back">SECOM 상세로</a></p>
 <p class="eyebrow">SECOM · OFFLINE RETROSPECTIVE REVIEW</p>
 <h1 data-i18n="title">근거에 연결된 검토 메모</h1>
 <p class="lead" data-i18n="lead">저장된 SECOM 위험순위 한 건을 읽고, 확인한 내용과 부족한 근거를 따로 기록합니다.</p>
@@ -37,4 +65,5 @@
 </div>
 </main><footer data-i18n="footer">FabGuard · 공개 데이터 기반 오프라인 검토 보조 · 현장 검증 아님</footer>
 <script type="module" src="./app.mjs"></script>
+<script type="module" src="/site-shell.mjs"></script>
 </body></html>

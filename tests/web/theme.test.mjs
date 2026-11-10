@@ -44,12 +44,12 @@ test('back-forward cache restore reconciles saved theme but blocked storage reta
  const blocked=boot(null,true);blocked.ready();blocked.click();blocked.restore('silver');assert.equal(blocked.root.dataset.theme,'dark');
 });
 
-// The requested command-room landing page opts into dark; labs keep silver.
-test('home dark default respects explicit saved choices and blocked storage',()=>{
+// The requested whole-site command-room style opts every scripted page into dark.
+test('sitewide dark defaults respect explicit saved choices and blocked storage',()=>{
  for(const [saved,blocked,expected] of [[null,false,'dark'],['invalid',false,'dark'],['silver',false,'silver'],['dark',false,'dark'],['silver',true,'dark']]){
   const app=boot(saved,blocked,'dark');app.ready();assert.equal(app.root.dataset.theme,expected);app.click();assert.equal(app.root.dataset.theme,expected==='dark'?'silver':'dark');
  }
  assert.match(read('web/index.html'),/data-default-theme="dark"/);
- for(const page of ['smt/index.html','secom/index.html'])assert.doesNotMatch(read('web/'+page),/data-default-theme="dark"/);
+ for(const page of ['smt/index.html','secom/index.html','robot/index.html','robot/ur3/index.html','oht/index.html','equipment/index.html','equipment/context-review.html','review/index.html','secom/research.html','smt/references.html'])assert.match(read('web/'+page),/data-default-theme="dark"/);
  const app=boot('silver',false,'dark');app.ready();app.restore('invalid');assert.equal(app.root.dataset.theme,'dark');
 });

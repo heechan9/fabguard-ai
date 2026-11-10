@@ -158,3 +158,33 @@ DOM 순서도 바꿨습니다. 공정 선택은 녹색과 ‘선택한 설명’
 재현율을 원본 JSON에서 표시합니다. 기존 값·평가·데이터는 바꾸지 않았습니다.
 시안의 가상 정상/주의 상태, 실시간 센서 파형과 최근 알림은 실제 데이터처럼 구현하지 않았습니다.
 Claude 검토는 코드·캡처 검토이며 브라우저 실행·키보드·대비 검증은 별도 자동검사로 확인합니다.
+
+## Sitewide command-room presentation (2026-11-10)
+
+The shared `command-center.css`, `sitewide-command.css`, and `site-shell.mjs`
+now cover all 12 HTML documents and the retained root views (summary, global,
+risks, limitations, and sample detail). This includes SECOM and its training
+comparison, equipment CSV and maintenance context, review notes, robot SPC,
+UR3 records, OHT, SMT and its references, and the static research snapshot.
+
+All pages use the same four primary links and a keyboard-accessible secondary
+menu. Neutral reader text, links, controls, panels and focus rings use one
+emerald/cream palette with a corresponding high-contrast silver palette.
+Warnings, errors, historical outcomes, missing-data states and diagnostic
+color legends remain distinct. No data, model, evaluation, simulation or
+physical-equipment control was changed by this presentation layer.
+
+Scripted pages default to dark when no valid preference exists and preserve
+an explicit saved silver choice. The research snapshot deliberately retains
+its no-script Content Security Policy: its native checkbox switches its own
+palette using CSS, without reading or persisting preferences. Its secondary
+menu uses native disclosure keyboard behavior rather than JavaScript Escape
+or outside-click handling.
+
+`verification/check_sitewide_command.cjs` inventories every document and root
+view, enters destinations using real shared-navigation links, captures both
+palettes at 1366/390/360 pixels, and checks supported English views, controls,
+contrast, scrolling and data-boundary text. It reports graphics/HUD and inactive
+control exclusions explicitly; it is not a screen-reader certification.
+`sitewide-command-ui.yml` runs the same checks on loopback and, after a main
+merge, on the public deployment behind a static-byte equality gate.

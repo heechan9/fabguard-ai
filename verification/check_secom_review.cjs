@@ -6,6 +6,8 @@ const output=process.env.FABGUARD_UI_OUTPUT||'/tmp/secom-review-browser';fs.mkdi
  try {
   for(const width of [1366,390,360]) {
    const page=await browser.newPage({viewport:{width,height:900}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
+   // This legacy interaction sequence explicitly starts from a saved silver preference.
+   await page.addInitScript(()=>{if(localStorage.getItem('fabguard-theme')===null)localStorage.setItem('fabguard-theme','silver');});
    await page.goto(base+'/review/?sample=secom_1397');await page.waitForSelector('#workspace:not([hidden])');
    assert.match(await page.locator('#history-status').textContent(),/pending/);assert.match(await page.locator('#retrospective-label').textContent(),/정상/);
    for(const [id,value] of Object.entries({'reviewer-role':'Self-declared reader',rationale:'<img src=x onerror=alert(1)>','available-evidence':'Saved CSV and score','missing-evidence':'Sensor dictionary and actual process log'}))await page.locator('#'+id).fill(value);

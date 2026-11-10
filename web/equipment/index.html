@@ -1,7 +1,34 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'"><title>FabGuard · 실장비 데이터 검증</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/navigation.css"><link rel="stylesheet" href="./style.css"></head>
-<body><header class="topbar"><a class="brand" href="/">FABGUARD AI</a><nav aria-label="주요 화면"><a href="/">프로젝트 소개</a><a href="/smt/">3D 공정 체험</a><a href="/secom/">반도체 분석</a><a href="/research/index.html">연구 근거·적용 상태</a></nav></header>
-<main><p class="eyebrow">LOCAL FILE SCREENING · SPI v1</p><h1>실장비 데이터 검증</h1><p>파일 선택 → 열 매핑 → 입력 검증 → 조건을 갖춘 CSV의 오프라인 SPC 점검. 파일 내용은 이 브라우저 메모리에서만 처리하며 서버로 보내거나 저장하지 않습니다.</p><p class="notice">사용자가 선언한 출처의 SPI 측정 CSV를 통계적으로 선별합니다. 실장비 진위·제품 불량·현장 효과는 검증하지 않습니다. SECOM 모델이나 아래 합성 SPC 체험과 연결되지 않습니다. AOI 영상·XLSX는 지원하지 않습니다.</p>
+<html lang="ko" data-default-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'"><title>FabGuard · 실장비 데이터 검증</title><script src="/theme.js"></script><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/navigation.css"><link rel="stylesheet" href="./style.css"><meta name="theme-color" content="#04170f">
+  <link rel="stylesheet" href="/command-center.css">
+  <link rel="stylesheet" href="/sitewide-command.css">
+</head>
+<body class="command-shell site-shell equipment-page"><a class="skip-link" href="#main">본문으로 건너뛰기</a><header class="topbar" data-site-nav-owner="shared">
+    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <span class="cc-demo-badge">LOCAL CSV</span>
+    <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button></div>
+    <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#overview">운영 개요</a>
+      <a href="/#risks">우선점검 목록</a>
+      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="/#limitations">검증과 한계</a>
+      <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
+        <a href="/#summary">프로젝트 소개</a>
+        <a href="/#global">국가별 자료</a>
+        <a href="/smt/index.html">3D 공정 체험</a>
+        <a href="/equipment/index.html" class="active" aria-current="page">장비 CSV 점검</a>
+        <a href="/robot/ur3/index.html">UR3 센서 기록</a>
+        <a href="/research/index.html">연구 근거·적용 상태</a>
+        <a href="/oht/index.html">OHT 천장 이송 체험</a>
+        <a href="/robot/index.html">로봇 진동·SPC 실험</a>
+        <a href="/equipment/context-review.html">정비 이력·기준선 검토</a>
+        <a href="/secom/research.html">학습 구간 비교 기록</a>
+        <a href="/smt/references.html">3D 참고자료·재현 범위</a>
+        <a href="/review/index.html">SECOM 검토 메모</a>
+      </div></details>
+    </nav>
+  </header>
+<main id="main" tabindex="-1"><p class="eyebrow">LOCAL FILE SCREENING · SPI v1</p><h1>실장비 데이터 검증</h1><p>파일 선택 → 열 매핑 → 입력 검증 → 조건을 갖춘 CSV의 오프라인 SPC 점검. 파일 내용은 이 브라우저 메모리에서만 처리하며 서버로 보내거나 저장하지 않습니다.</p><p class="notice">사용자가 선언한 출처의 SPI 측정 CSV를 통계적으로 선별합니다. 실장비 진위·제품 불량·현장 효과는 검증하지 않습니다. SECOM 모델이나 아래 합성 SPC 체험과 연결되지 않습니다. AOI 영상·XLSX는 지원하지 않습니다.</p>
 <p><a href="./context-review.html">정비·변경 이력과 기준선 검토 → 사람 검토 초안</a></p><section><h2>1. CSV 파일 선택</h2><p>UTF-8, 쉼표 구분, 최대 5MB·20,000행·200열. 압축·바이너리 파일은 지원하지 않습니다. 파일 하나에 같은 장비·Recipe·실행의 측정 항목 한 종류만 넣으세요. 반복측정은 실행별 파일로 분리하세요.</p><label>측정 파일 <input id="file" type="file" accept=".csv,text/csv"></label><button id="example" type="button">입력 검증 합성 예제</button><button id="clear" type="button">입력 지우기</button><a href="./data/spc-synthetic.csv" download>SPC 연결 합성 CSV 내려받기</a><p id="file-status" role="status"></p><div id="preview"></div></section>
 <section id="mapping-panel" hidden><h2>2. 열 이름과 단위 연결</h2><div id="mapping"></div><label>장비 식별자 <input id="equipment" maxlength="120" placeholder="예: SPI-01"></label><label>데이터 출처 <select id="role"><option value="">선택하세요</option><option value="observed">실장비 측정 (사용자 지정·진위 미확인)</option><option value="synthetic">합성 데이터</option><option value="public">공개 데이터</option></select></label><label>측정 항목·원본 단위 <select id="metric"><option value="paste_height_um">납 높이 · µm</option><option value="paste_volume_pct">납 도포량 · %</option><option value="paste_area_pct">납 면적 · %</option></select></label><p>단위는 자동 변환하지 않습니다. 장비 판정값을 측정값에 연결하지 마세요. 시각·LOT·Recipe 열은 아래 SPC 분석에 필수이며 입력 검증만 할 때는 선택하지 않아도 됩니다.</p><button id="validate" type="button">입력 검증 실행</button><label>SPC 기준 행 수 (파일 앞부분, 최소 10) <input id="baseline-count" type="number" min="10" step="1" value="10"></label><button id="screen" type="button">CSV → SPC 점검 목록</button><p>동일 장비·Recipe·패드 위치의 시간순 측정만 분석합니다. 오류 행이 있으면 전체 분석을 보류하고, 앞부분으로 고정한 관리한계를 이후 값에 적용합니다.</p></section>
 <section id="result" aria-live="polite"></section><section id="spc-demo" aria-labelledby="spc-title">
@@ -10,4 +37,5 @@
 <div class="spc-controls"><button type="button" data-spc="initial" aria-pressed="false">예제 불러오기 / 초기화</button><button type="button" data-spc="high" aria-pressed="false">높은 값 넣기</button><button type="button" data-spc="low" aria-pressed="false">낮은 값 넣기</button><button type="button" data-spc="missing" aria-pressed="false">결측값 넣기</button></div>
 <p id="spc-summary" role="status">버튼을 누르면 그래프와 결과가 표시됩니다.</p>
 <div id="spc-output" hidden><div class="spc-chart"><svg viewBox="0 0 730 300" role="img" aria-label="합성 측정값 관리도"></svg></div><p>가로축: 측정 순서 · 세로축: 무단위 합성값 · 음영: 기준 구간 · 금색 점선: 관리한계와 중심선 · ?: 결측</p><table><caption>이후 측정값의 판정</caption><thead><tr><th scope="col">순서</th><th scope="col">측정값</th><th scope="col">결과</th></tr></thead><tbody></tbody></table></div>
-<p class="notice">통계적 이탈 ≠ 불량 확정. 관리한계는 제품 규격이 아니며, 범위 안이어도 품질을 보증하지 않습니다. 현장 검증·설비 제어는 수행하지 않습니다.</p><a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/SPC_SCREENING.md">계산 방법과 Python 실행 안내 →</a></section><p><a href="/smt/">← 기존 SMT 3D 실험실로</a></p></main><script type="module" src="./app.mjs"></script><script type="module" src="./spc-demo.mjs"></script></body></html>
+<p class="notice">통계적 이탈 ≠ 불량 확정. 관리한계는 제품 규격이 아니며, 범위 안이어도 품질을 보증하지 않습니다. 현장 검증·설비 제어는 수행하지 않습니다.</p><a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/SPC_SCREENING.md">계산 방법과 Python 실행 안내 →</a></section><p><a href="/smt/">← 기존 SMT 3D 실험실로</a></p></main><script type="module" src="./app.mjs"></script><script type="module" src="./spc-demo.mjs"></script><script type="module" src="/site-shell.mjs"></script>
+</body></html>
