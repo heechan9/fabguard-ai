@@ -1,0 +1,60 @@
+// Original, fixed synthetic teaching examples. No models, user data or imported code.
+export const text = (ko, en) => ({ko, en});
+export const lessons = [
+  {
+    id:'signal', title:text('정상·이상 신호의 한계','Limits of normal / abnormal signals'),
+    prerequisite:text('비교 기준 → 관측 신호 → 판단 보류','Reference → observed signal → withhold judgment'),
+    probe:text('알람이 없으면 장비가 안전하다고 확정할 수 있나요?','Does no alarm prove equipment is safe?'),
+    probeOptions:[text('아니요. 관측 범위와 누락을 확인해야 해요.','No. Check coverage and missing observations.'),text('네. 알람이 없으면 안전해요.','Yes. No alarm means safe.')],
+    correct:0,
+    scene:text('합성 사례 A: 가상 센서의 평소 범위는 10~12이고 마지막 표시값은 11입니다. 하지만 최근 5개 시점은 기록이 없습니다. 아직 알람 결과는 보지 않았습니다.','Synthetic case A: a fictional sensor usually reads 10–12. The last displayed value is 11, but the five most recent timestamps have no records. The alarm result is still hidden.'),
+    question:text('알람보다 먼저 무엇을 확인할까요?','What should you inspect before the alarm?'),
+    options:[text('최근 기록의 누락과 비교 기준의 적용 범위','Missing recent records and applicability of the reference'),text('마지막 값만 보고 정상으로 확정','Declare normal from the last value alone')],
+    reasons:[text('오래된 정상 범위 값은 현재 상태의 근거가 아니기 때문','An old in-range value is not evidence of the current state'),text('화면의 숫자가 정상 범위에 있기 때문','The displayed number is within the normal range')],
+    hints:[text('값의 크기보다 먼저 시각을 보세요.','Look at the timestamp before the magnitude.'),text('지금 관측되지 않은 구간을 정상이라고 말할 수 있을까요?','Can an unobserved interval be called normal?')],
+    observation:text('기록된 마지막 값 11만 범위 안입니다. 가상 알람 표시는 “없음”이지만 최신 관측이 빠졌습니다.','Only the last recorded value, 11, is in range. The fictional alarm shows “none”, but recent observations are absent.'),
+    limit:text('알람 없음 ≠ 안전. 누락된 구간의 상태는 알 수 없습니다.','No alarm ≠ safe. The unobserved interval remains unknown.'),
+    next:text('최근 시각, 수집 누락, 기준 범위를 확인한 뒤 담당자가 별도로 판단합니다.','Check recent timestamps, collection gaps and the reference scope before separate human review.'),
+    misconception:text('알람 없음은 안전 보증이다','No alarm guarantees safety'),
+    transfer:text('새 합성 사례: 상태등은 초록이지만 최신 측정 시각은 1시간 전입니다. 다음 확인은?','New synthetic case: the status light is green, but the latest measurement is one hour old. What next?'),
+    transferOptions:[text('초록색만 보고 운영을 계속한다고 결론 내림','Conclude operations should continue from the green light'),text('측정 시각·갱신 여부를 확인하고 현재 상태 판단은 보류','Check timestamps and updates; withhold a current-state judgment')],
+    transferCorrect:1, link:'/#limitations', source:'fabguard-limitations', sourceUrl:'https://github.com/heechan9/fabguard-ai/blob/9c6de6bcf01a1e21f19e0739eff0d58641fb51a0/web/app.js'
+  },
+  {
+    id:'quality', title:text('데이터 품질부터 확인','Check data quality first'),
+    prerequisite:text('시각·단위 → 누락·중복 → 비교 가능성','Time and units → gaps and duplicates → comparability'),
+    probe:text('측정값이 갑자기 1,000배 커졌다면 가장 먼저 무엇을 볼까요?','If a reading suddenly rises by a factor of 1,000, what comes first?'),
+    probeOptions:[text('즉시 실제 고장으로 확정','Immediately declare a real fault'),text('단위·시각·입력 형식 확인','Check units, timestamps and input format')],correct:1,
+    scene:text('합성 사례 B: 가상 진동 기록이 0.8에서 800으로 바뀌었습니다. 파일 앞부분의 단위는 m/s², 뒷부분은 mm/s²입니다. 알람 결과는 아직 보지 않았습니다.','Synthetic case B: a fictional vibration reading changes from 0.8 to 800. Earlier rows use m/s²; later rows use mm/s². The alarm result is still hidden.'),
+    question:text('알람보다 먼저 무엇을 확인할까요?','What should you inspect before the alarm?'),
+    options:[text('표시 숫자의 크기만으로 위험 확정','Declare danger from magnitude alone'),text('단위가 섞였는지와 변환 근거 확인','Check mixed units and the basis for conversion')],
+    reasons:[text('숫자가 커지면 물리량도 반드시 커지기 때문','A larger number always means a larger physical quantity'),text('같은 물리량도 단위에 따라 숫자가 달라지기 때문','The same physical quantity can have different numerical units')],
+    correct:1,
+    hints:[text('숫자 옆에 적힌 단위를 비교해 보세요.','Compare the units next to the numbers.'),text('1 m는 1,000 mm입니다. 자동 변환 전에 출처와 열 의미를 확인하세요.','1 m equals 1,000 mm. Confirm provenance and column meaning before conversion.')],
+    observation:text('0.8 m/s²와 800 mm/s²는 같은 크기입니다. 가상 단순 임계값 알람은 단위 혼합을 구분하지 못했습니다.','0.8 m/s² and 800 mm/s² have the same magnitude. The fictional naive threshold alarm did not distinguish mixed units.'),
+    limit:text('단위 설명만으로 데이터의 진위·센서 정확도·장비 정상 여부를 입증하지 못합니다.','A unit explanation proves neither authenticity, sensor accuracy nor normal equipment condition.'),
+    next:text('원본 단위와 열 정의, 시각, 누락·중복을 확인합니다. 이 체험은 실제 CSV를 변환하거나 판정하지 않습니다.','Check original units, column definitions, time, gaps and duplicates. This exercise does not transform or classify real CSV files.'),
+    misconception:text('큰 숫자는 반드시 실제 이상이다','A large number necessarily means a real anomaly'),
+    transfer:text('새 합성 사례: 온도 파일 두 개 중 하나는 °C, 다른 하나는 °F입니다. 평균을 비교하기 전에?','New synthetic case: one temperature file uses °C and another °F. Before comparing averages?'),
+    transferOptions:[text('단위·변환 정의와 같은 시간 범위인지 확인','Check units, conversion definition and comparable time windows'),text('열 이름이 같으니 바로 평균 비교','Compare immediately because column names match')],transferCorrect:0,
+    link:'/equipment/index.html',source:'fabguard-equipment-boundaries',sourceUrl:'https://github.com/heechan9/fabguard-ai/blob/9c6de6bcf01a1e21f19e0739eff0d58641fb51a0/web/equipment/index.html'
+  },
+  {
+    id:'causality', title:text('상관과 원인은 달라요','Association is not causation'),
+    prerequisite:text('관측 관계 → 다른 설명 → 독립 확인','Observed association → alternative explanations → independent checks'),
+    probe:text('익명 변수와 불량이 함께 증가하면 그 변수가 원인인가요?','If an anonymous variable and defects rise together, is the variable the cause?'),
+    probeOptions:[text('네. 함께 변하면 원인이에요.','Yes. Co-movement establishes cause.'),text('아니요. 다른 설명과 독립 근거가 필요해요.','No. Alternative explanations and independent evidence are needed.')],correct:1,
+    scene:text('합성 사례 C: 가상 집계에서 익명 열 X가 높은 구간에 불량 비율도 높았습니다. 두 구간의 생산 품목과 시기는 다릅니다. 실제 SECOM 수치나 센서 대응 관계가 아닙니다.','Synthetic case C: a fictional aggregate shows more defects where anonymous column X is higher. Product types and periods differ between groups. These are not real SECOM figures or sensor mappings.'),
+    question:text('알람보다 먼저 무엇을 확인할까요?','What should you inspect before the alarm?'),
+    options:[text('X에 연결된 실제 장비를 조정한다고 결론 내림','Conclude a real machine associated with X must be adjusted'),text('품목·시기 차이와 변수 의미가 확인됐는지 검토','Review product and time differences and whether X has a known meaning')],
+    reasons:[text('관측된 관계만으로 실제 원인이 결정되기 때문','The observed relationship alone identifies a real cause'),text('다른 조건과 선택 효과가 관계를 설명할 수 있기 때문','Other conditions and selection effects may explain the relationship')],
+    hints:[text('두 구간에서 X 말고 달라진 조건을 찾아보세요.','Look for conditions other than X that differ.'),text('익명 열은 실제 공정 원인이나 센서 이름을 알려주지 않습니다.','An anonymous column does not identify a real process cause or sensor.')],
+    observation:text('가상 알람은 X와 불량의 동반 변화를 보여 줄 뿐입니다. 품목과 시기도 동시에 달랐습니다.','The fictional alarm only highlights co-movement of X and defects. Product type and time also differed.'),
+    limit:text('상관 ≠ 인과. 익명 변수의 물리적 의미와 현장 개선 효과는 확인되지 않았습니다.','Association ≠ causation. The physical meaning of X and field improvement effects are not established.'),
+    next:text('비교 조건과 분모·시기를 검토하고 독립 근거를 요청합니다. 실제 공정 조치는 담당자의 별도 검토 사항입니다.','Review comparison conditions, denominators and time, then seek independent evidence. Real process actions require separate expert review.'),
+    misconception:text('함께 변하면 원인이다','Co-movement establishes cause'),
+    transfer:text('새 합성 사례: 정비 직후 불량률이 줄었지만 생산 품목도 바뀌었습니다. 무엇을 말할 수 있나요?','New synthetic case: defects fall after maintenance, but product type also changes. What can be said?'),
+    transferOptions:[text('정비의 효과라고 확정','Maintenance caused the improvement'),text('동반 변화는 관측됐지만 정비 효과는 분리되지 않음','A change was observed, but the maintenance effect is not isolated')],transferCorrect:1,
+    link:'/#limitations',source:'fabguard-limitations', sourceUrl:'https://github.com/heechan9/fabguard-ai/blob/9c6de6bcf01a1e21f19e0739eff0d58641fb51a0/web/app.js'
+  }
+];
