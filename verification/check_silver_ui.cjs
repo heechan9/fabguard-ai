@@ -1,5 +1,6 @@
 // Read-only rendered checks: no remote requests, models or browser downloads.
 const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),assert=require('assert/strict');
+const {openProfessionalDetails}=require('./check_professional_disclosure.cjs');
 const output=process.env.FABGUARD_UI_OUTPUT,base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764';
 fs.mkdirSync(output,{recursive:true});
 (async()=>{
@@ -12,6 +13,7 @@ fs.mkdirSync(output,{recursive:true});
   await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
   for(const [name,route,ready] of [['home','/','#app h1'],['smt','/smt/','#context-review h3'],['secom','/secom/','#distribution-evidence select'],['limits','/#limitations','#app h1'],['global','/#global','.country-card'],['risks','/#risks','table']]){
    await page.goto(new URL(route,base).href);await page.locator(ready).first().waitFor();
+   await openProfessionalDetails(page);
    assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),'rgb(170, 182, 197)');
    if(name==='smt'||name==='secom'){
     const selectors=name==='smt'?['.workspace','.panel','.scenario-buttons button','.station-strip button:not(.active)']:['.panel'];

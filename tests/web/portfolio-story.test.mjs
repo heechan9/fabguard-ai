@@ -29,8 +29,10 @@ test('headline counts match canonical evaluation CSV, including missed and norma
   assert.match(renderPortfolioStory(summary), /\(5 ÷ 40\) ÷ \(24 ÷ 392\) = 2\.04/);
   assert.match(renderPortfolioStory(summary), /전후 개선율이나 인과효과가 아닙니다/);
   assert.match(renderPortfolioStory(summary), /github\.com\/heechan9\/fabguard-ai\/issues/);
-  assert.match(app, /실패한 성능을 숨기지 않고, 제한된 자원에서 쓸 수 있는 판단 근거로 다시 설계했습니다/);
+  assert.match(app, /실패한 성능을 감추지 않고, 제한된 점검 예산에서 활용 가능한 의사결정 근거로 재정의했습니다/);
   assert.match(app, /위험도 순으로 추천하고<br>근거의 한계까지 표시/);
+  assert.match(app, /SECOM 공개 데이터로 점검 순서와 판단 근거를 보여주는 연구 프로젝트/);
+  assert.match(app, /자동 불량 판정·공정 제어는 하지 않습니다. 3D는 별도 합성 체험/);
   assert.match(app, /현장 요구 정의/);
   assert.match(app, /하루에 몇 건을 실제로 확인할 수 있는지 먼저 정합니다/);
   assert.match(app, /다음 운영규칙을 검토할 근거로 남깁니다/);
@@ -45,11 +47,11 @@ test('headline counts match canonical evaluation CSV, including missed and norma
     assert.doesNotMatch(beginner.join('\n'), new RegExp(term));
   }
   assert.match(app, /new URLSearchParams\(location\.search\)/);
-  assert.match(app, /location\.hash \|\| "#overview"/);
+  assert.match(app, /location\.hash \|\| "#summary"/);
   assert.match(app, /hash === "answer-overview"/);
   assert.match(style, /grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(style, /@media\(max-width:1400px\)/);
-  assert.match(index, /반도체 분석 결과<\/a>/);
+  assert.match(index, /반도체 분석<\/a>/);
   assert.match(index, /id="language-toggle"/);
 
   const onePageUrl = new URL('../../docs/ONE_PAGE_SUMMARY.md', import.meta.url);

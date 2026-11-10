@@ -49,7 +49,7 @@ class WebNavigationTest(unittest.TestCase):
         nav_routes = re.findall(r'<a href="#([^"]+)" data-route="([^"]+)">', INDEX)
         self.assertEqual(
             nav_routes,
-            [("overview", "overview"), ("risks", "risks"), ("limitations", "limitations"), ("summary", "summary"), ("global", "global")],
+            [("summary", "summary"), ("overview", "overview"), ("risks", "risks"), ("limitations", "limitations"), ("global", "global")],
         )
         for route, _ in nav_routes:
             with self.subTest(route=route):
@@ -61,7 +61,8 @@ class WebNavigationTest(unittest.TestCase):
         self.assertIn('hash === "result"', APP)
         self.assertIn('hash === "global"', APP)
         self.assertIn('scrollIntoView({ behavior: "auto", block: "start" })', APP)
-        self.assertIn('document.querySelector("#result")?.removeAttribute("id")', APP)
+        self.assertNotIn('document.querySelector("#result")?.removeAttribute("id")', APP)
+        self.assertIn("openDetailsForHash('#' + hash)", APP)
 
     def test_navigation_exposes_active_page(self):
         self.assertIn('link.setAttribute("aria-current", "page")', APP)

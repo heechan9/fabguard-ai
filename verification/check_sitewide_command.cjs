@@ -1,12 +1,14 @@
 // Read-only all-page Chrome acceptance audit. No project dependencies or remote browsing.
 const fs = require('node:fs');
+const {openProfessionalDetails}=require('./check_professional_disclosure.cjs');
+const {assertTopNavigation,assertIntroduction}=require('./check_top_navigation.cjs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const {execFileSync} = require('node:child_process');
 
 // An exact inventory is independently compared with every web/**/*.html by node:test.
 const documents = [
-  {file:'index.html', name:'overview', route:'/', ready:'.cc-queue a', english:true},
+  {file:'index.html', name:'overview', route:'/#overview', ready:'.cc-queue a', english:true},
   {file:'secom/index.html', name:'secom', route:'/secom/', ready:'#distribution-evidence select'},
   {file:'smt/index.html', name:'smt', route:'/smt/', ready:'#station-strip button'},
   {file:'equipment/index.html', name:'equipment', route:'/equipment/', ready:'#example'},
@@ -131,7 +133,7 @@ function renderedAudit() {
 async function main() {
   const {chromium}=require('playwright');
   const width=Number(process.env.FABGUARD_UI_WIDTH||1366),theme=process.env.FABGUARD_UI_THEME||'dark';
-  assert.ok([1366,390,360].includes(width));assert.ok(['dark','silver'].includes(theme));
+  assert.ok([1920,1672,1366,1024,900,720,390,360].includes(width));assert.ok(['dark','silver'].includes(theme));
   const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764',origin=new URL(base).origin;
   const output=path.join(process.env.FABGUARD_UI_OUTPUT||'/tmp/sitewide-command',`${width}-${theme}`);
   fs.mkdirSync(output,{recursive:true});
@@ -174,11 +176,12 @@ async function main() {
         // Reach every screen through the actual shared navigation (detail via saved queue).
         const home=new URL('/',base);if(lang==='en')home.searchParams.set('lang','en');
         const response=await page.goto(home.href);assert.equal(response.status(),200);
-        await page.locator('.cc-queue a').first().waitFor();
+        await assertIntroduction(page);await assertTopNavigation(page);
         assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','fresh browser defaults to command-room dark');
         assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-theme')),null);
         if(theme==='silver')await page.locator('#theme-toggle').press('Enter');
         if(spec.name==='detail'||spec.name==='review') {
+          await page.locator('.cc-navigation > a[data-route=overview]').press('Enter');await page.locator('.cc-queue a').first().waitFor();
           await page.locator('.cc-queue a[href="#detail/secom_1397"]').press('Enter');
           await page.locator('.detail-hero').waitFor();
           if(spec.name==='review'){
@@ -188,7 +191,7 @@ async function main() {
             assert.equal(target.searchParams.get('lang'),lang==='en'?'en':null);
             await review.press('Enter');
           }
-        }else if(spec.name!=='overview') {
+        }else {
           const links=await page.locator('.cc-navigation a').evaluateAll(es=>es.map(e=>({raw:e.getAttribute('href'),href:e.href,secondary:Boolean(e.closest('.cc-more'))})));
           const target=links.find(link=>canonicalPath(link.href)===canonicalPath(url.href)&&(canonicalPath(url.href)!=='/'||new URL(link.href).hash===url.hash));
           assert.ok(target,`actual navigation target for ${spec.name}`);
@@ -220,11 +223,15 @@ async function main() {
           assert.equal(await page.locator('html').getAttribute('data-theme'),theme);
           if(theme==='dark')assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-theme')),null,'every scripted page defaults dark without a stored preference');
         }
-        // Preserve complete page visuals/contrast even if a later interaction assertion fails.
+        // Fresh overview/introduction and subpage routes keep optional explanations closed.
+        assert.equal(await page.locator('details.professional-details[open]').count(),0);
+        // Preserve both simple and complete evidence visuals/contrast.
         await capture('');
+        if(await openProfessionalDetails(page))await capture('-professional-expanded');
         assert.equal(await page.locator('body.command-shell').count(),1);
         assert.equal(await page.locator('.topbar').count(),1);
-        assert.equal(await page.locator('.cc-navigation > a').count(),4);
+        assert.equal(await page.locator('.cc-navigation > a').count(),6);
+        await assertTopNavigation(page);
         assert.equal(await page.locator('link[href="/sitewide-command.css"]').count(),1);
         assert.equal(await page.locator('html').getAttribute('lang'),lang);
         const loaded=await page.evaluate(()=>[...document.styleSheets].some(s=>s.href?.endsWith('/sitewide-command.css')&&s.cssRules.length>0));assert.equal(loaded,true);

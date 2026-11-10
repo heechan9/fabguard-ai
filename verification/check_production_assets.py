@@ -9,14 +9,14 @@ import urllib.request
 
 BASE = 'https://fabguard-ai.vercel.app/'
 FILES = [
-    'sitewide-command.css', 'site-shell.mjs',
+    'sitewide-command.css', 'site-shell.mjs', 'progressive-disclosure.mjs',
     'secom/research.html', 'secom/research/research.mjs', 'smt/references.html',
     'command-center.mjs', 'command-center.css',
     'assets/command-center/wafer-in.svg', 'assets/command-center/lithography.svg',
     'assets/command-center/etch.svg', 'assets/command-center/deposition.svg',
     'assets/command-center/inspection.svg', 'assets/command-center/test.svg',
     'oht/index.html', 'oht/style.css', 'oht/app.mjs', 'oht/model.mjs', 'oht/view.mjs',
-    'app.js', 'english-copy.mjs', 'review-budget.mjs', 'review-budget-core.mjs',
+    'app.js', 'home-copy.mjs', 'english-copy.mjs', 'review-budget.mjs', 'review-budget-core.mjs',
     'style.css', 'readability.css', 'smt/evidence.mjs', 'data/priority_top50.json',
     'review/index.html', 'review/app.mjs', 'review/model.mjs', 'review/style.css',
     'review/handoff-model.mjs', 'review/handoff-ui.mjs', 'review/handoff-summary.mjs',

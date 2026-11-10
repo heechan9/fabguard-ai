@@ -6,18 +6,18 @@
   <link rel="stylesheet" href="/sitewide-command.css">
 </head>
 <body class="command-shell site-shell ur3-page"><a class="skip" href="#main">본문으로 건너뛰기</a><header class="topbar" data-site-nav-owner="shared">
-    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <a class="brand" href="/#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
     <span class="cc-demo-badge">STORED RECORDS</span>
     <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button></div>
     <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#summary">프로젝트 소개</a>
       <a href="/#overview">운영 개요</a>
-      <a href="/#risks">우선점검 목록</a>
-      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="/smt/index.html">3D 모델링</a>
+      <a href="/#risks">우선점검</a>
+      <a href="/secom/index.html">반도체 분석</a>
       <a href="/#limitations">검증과 한계</a>
       <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
-        <a href="/#summary">프로젝트 소개</a>
         <a href="/#global">국가별 자료</a>
-        <a href="/smt/index.html">3D 공정 체험</a>
         <a href="/equipment/index.html">장비 CSV 점검</a>
         <a href="/robot/ur3/index.html" class="active" aria-current="page">UR3 센서 기록</a>
         <a href="/research/index.html">연구 근거·적용 상태</a>
@@ -37,7 +37,7 @@
 <p><a href="https://archive.ics.uci.edu/dataset/963/ur3+cobotops">UCI 공식 UR3 CobotOps</a> · Tyrovolas, Aliev, Antonelli, Stylios (2024) · DOI 10.24432/C5J891 · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></p>
 <p>원본 XLSX를 JSON으로 변환했습니다. 원래 행 순서와 결측을 유지하고 시각 문자열 일부의 바깥따옴표만 제거했습니다. 자동 보간·중복 제거·모델 학습은 없습니다.</p>
 <p id="load-status" role="status">데이터 확인 중 — 아직 결과를 표시하지 않습니다.</p><p id="load-error" role="alert" hidden></p>
-<div id="quality-summary" hidden></div><details><summary>원본 해시·변환 근거</summary><p>UCI ZIP SHA-256 <code>233334eeb5370e594ea621796ca2d693bd4980cc2bb24fa749b1b633a4993c8d</code></p><p>XLSX SHA-256 <code>f0f10917de9056908a82cec1aa459ddf9da2d2db70d269b128f99241c8796091</code></p><p id="data-hash">화면 데이터 해시 확인 전</p><a href="https://archive.ics.uci.edu/static/public/963/ur3+cobotops.zip">UCI 원본 ZIP</a></details></section>
+<div id="quality-summary" hidden></div><details class="professional-details" id="expert-ur3-source"><summary>전문 설명과 근거 보기 · 원본 해시·변환 근거</summary><p>UCI ZIP SHA-256 <code>233334eeb5370e594ea621796ca2d693bd4980cc2bb24fa749b1b633a4993c8d</code></p><p>XLSX SHA-256 <code>f0f10917de9056908a82cec1aa459ddf9da2d2db70d269b128f99241c8796091</code></p><p id="data-hash">화면 데이터 해시 확인 전</p><a href="https://archive.ics.uci.edu/static/public/963/ur3+cobotops.zip">UCI 원본 ZIP</a></details></section>
 <section aria-labelledby="replay-title"><h2 id="replay-title">2. 센서 기록 재생</h2>
 <p>1행/초의 탐색 재생입니다. 시간 공백을 실제 시간만큼 기다리거나 압축해서 연결하지 않고, 공백 직후 행에서 자동 일시정지합니다. 5초 초과는 화면 공백 표시 기준이며 이상 탐지 임계값이 아닙니다.</p>
 <div class="controls"><label for="sensor">실제 제공 센서 <select id="sensor" disabled></select></label><button id="play" disabled>재생</button><button id="pause" disabled>정지</button><button id="reset" disabled>처음으로</button><button id="previous" disabled>이전 행</button><button id="next" disabled>다음 행</button></div>
