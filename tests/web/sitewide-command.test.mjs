@@ -83,6 +83,7 @@ test('browser audit and workflow retain actual Chrome, every viewport, both them
  assert.match(workflow,/if: always\(\)/);
  // Bound dependency setup separately from the unchanged browser assertion budget.
  assert.equal((workflow.match(/timeout 300s apt-get/g)||[]).length,2);
+ assert.equal((workflow.match(/max-parallel: 4/g)||[]).length,2);
  assert.equal((workflow.match(/font setup\n        timeout-minutes: 6/g)||[]).length,2);
  assert.equal((workflow.match(/test -n "\$\(fc-list :lang=ko\)"/g)||[]).length,2);
  assert.equal((workflow.match(/FABGUARD_WEB_FONTS: '1'/g)||[]).length,2);
