@@ -1,1 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-labelledby="title"><title id="title">Thin film deposition system</title><defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6d8c6"/><stop offset=".48" stop-color="#a5b1a2"/><stop offset="1" stop-color="#697e72"/></linearGradient><linearGradient id="side" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#5b7165"/><stop offset="1" stop-color="#93a18e"/></linearGradient><linearGradient id="glass" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#072b21"/><stop offset=".65" stop-color="#244a3a"/><stop offset="1" stop-color="#55705b"/></linearGradient></defs><ellipse cx="81" cy="105" rx="58" ry="5" fill="#00170f" opacity=".65"/><g stroke="#526b5c" stroke-width=".8" stroke-linejoin="round"><path d="M22 34 49 26 138 34 112 42Z" fill="#cfd6c1"/><path d="M22 34 49 41V102L22 96Z" fill="url(#side)"/><path d="M49 41 138 34v66l-89 3Z" fill="url(#metal)"/><path d="M67 28v-8l37 3v9" fill="#aebda6"/><path d="M51 77 138 74M79 39v63m31-65v64" fill="none"/><path d="M86 49 104 48v21l-18 1Zm31-2 15-1v21l-15 1Z" fill="url(#glass)" stroke="#d2dac5" stroke-width="2"/><path d="M90 66V52l10-1M120 64V50l8-1" fill="none" stroke="#5e8066"/><path d="M59 64h11v7H59Z" fill="#355440"/><path d="M72 81v7m29-8v7m28-8v7M29 71v17m4-17v18m4-18v19" fill="none"/><path d="M55 103v4m75-7v6" stroke="#557362" stroke-width="4"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" role="img" aria-labelledby="title">
+  <title id="title">Thin film deposition system</title>
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2=".85" y2="1"><stop stop-color="#e1e3d2"/><stop offset=".46" stop-color="#b9c3af"/><stop offset="1" stop-color="#8fa18b"/></linearGradient>
+    <linearGradient id="side" x1="0" y1="0" x2="1" y2=".15"><stop stop-color="#6a806e"/><stop offset=".54" stop-color="#8c9f87"/><stop offset="1" stop-color="#a8b69b"/></linearGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e8e7d5"/><stop offset="1" stop-color="#b4c0a8"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#051e18"/><stop offset=".5" stop-color="#173b2e"/><stop offset="1" stop-color="#091f19"/></linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#6b8171"/><stop offset=".25" stop-color="#c7cfb9"/><stop offset=".48" stop-color="#e2e5d2"/><stop offset=".7" stop-color="#a2b29a"/><stop offset="1" stop-color="#647e6a"/></linearGradient>
+    <linearGradient id="recess" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#254234"/><stop offset="1" stop-color="#647b61"/></linearGradient>
+  </defs>
+  <g stroke="#536b56" stroke-width=".65" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 110c18-6 119-6 146 0 0 6-134 8-146 0" fill="#00130d" stroke="none" opacity=".55"/>
+    <path d="m19 104 9 2v6l-9-1Zm113 1 10-1v6l-10 1Z" fill="#3a5344"/>
+    <path d="M9 32 121 25l26 7-112 7Z" fill="url(#top)"/>
+    <path d="M9 32 35 39v68l-26-8Z" fill="url(#side)"/>
+    <path d="m35 39 112-7v72l-112 5Z" fill="url(#shell)"/>
+    <path d="m47 18 52-6 18 4-52 6Z" fill="url(#top)"/>
+    <path d="m47 18 18 4v12l-18-4Z" fill="url(#side)"/>
+    <path d="m65 22 52-6v15l-52 4Z" fill="url(#shell)"/>
+    <path d="m69 25 41-4m-41 6 41-4m-41 6 41-4" stroke="#7e9477" stroke-width=".65"/>
+    <path d="m37 41 107-7M38 106l106-5" stroke="#e5e8d1" stroke-width=".7"/>
+    <path d="m65 38v69M37 83l108-6m-39 2v27" fill="none"/>
+    <path d="m72 45 68-4.3v32l-68 4.3Z" fill="#627b62" stroke="#dce2ca" stroke-width="1.1"/>
+    <path d="m75 48 62-4v26l-62 4Z" fill="url(#glass)" stroke="#254333"/>
+    <path d="m82 56 4-2v-5m30 5 4-2v-5" stroke="#849b7f" stroke-width="1.3"/>
+    <path d="m83 56 19-1v12l-19 1Zm30-2 18-1v12l-18 1Z" fill="url(#steel)" stroke="#92a58a"/>
+    <path d="M83 55.5a9.5 3 0 1 0 19 0a9.5 3 0 1 0 -19 0" fill="url(#top)" stroke="#b3c2a6" stroke-width=".55"/>
+    <path d="M85.4 54.3a7.1 2.2 0 1 0 14.2 0a7.1 2.2 0 1 0 -14.2 0" fill="#879d7d" stroke="#ced7bf" stroke-width=".5"/>
+    <path d="M83.0 63.5q9.5 4 19.0 -1" fill="none" stroke="#65835e" stroke-width=".65"/>
+    <path d="M113 53.5a9 3 0 1 0 18 0a9 3 0 1 0 -18 0" fill="url(#top)" stroke="#b3c2a6" stroke-width=".55"/>
+    <path d="M115.4 52.3a6.6 2.2 0 1 0 13.2 0a6.6 2.2 0 1 0 -13.2 0" fill="#879d7d" stroke="#ced7bf" stroke-width=".5"/>
+    <path d="M113 61.5q9 4 18 -1" fill="none" stroke="#65835e" stroke-width=".65"/>
+    <path d="m81 70 53-3m-44 1v-3m34 1v-3" stroke="#98ac8c" stroke-width="1.1"/>
+    <path d="m78 49 1 22m2-22v20" stroke="#c5d2b8" stroke-width=".6" opacity=".3"/>
+    <path d="m43 50 14-.8v10l-14 .8Z" fill="#607a5d" stroke="#d5dec4"/>
+    <path d="m46 52 8-.5v5l-8 .5Z" fill="#183626"/>
+    <path d="m43 68 14-.8v9l-14 .8Z" fill="none" stroke="#8a9e80"/>
+    <path d="m46 71 8-.5m-8 2.5 8-.5" stroke="#748c6c"/>
+    <path d="m58 85v8m42-10v8m39-10v8" stroke="#526c54" stroke-width="1.2"/>
+    <path d="m73 87 21-1.2v14L73 101Zm41-2.6 24-1.3v14l-24 1.3Z" fill="none" stroke="#8a9e80" stroke-width=".5"/>
+    <path d="m16 43 12 3.5v48L16 91Z" fill="none" stroke="#b5c2a8" stroke-width=".5"/>
+    <path d="m19 60 6 1.7m-6 1.3 6 1.7m-6 1.3 6 1.7m-6 1.3 6 1.7m-6 1.3 6 1.7m-6 1.3 6 1.7m-6 1.3 6 1.7m-6 1.3 6 1.7" stroke="#607b5d" stroke-width=".7"/>
+    <path d="M38.28 45a0.72 0.72 0 1 0 1.44 0a0.72 0.72 0 1 0 -1.44 0" fill="#526b57" stroke="#d1d7c3" stroke-width=".28"/>
+    <path d="M142.28 38a0.72 0.72 0 1 0 1.44 0a0.72 0.72 0 1 0 -1.44 0" fill="#526b57" stroke="#d1d7c3" stroke-width=".28"/>
+    <path d="M38.28 103a0.72 0.72 0 1 0 1.44 0a0.72 0.72 0 1 0 -1.44 0" fill="#526b57" stroke="#d1d7c3" stroke-width=".28"/>
+    <path d="M142.28 99a0.72 0.72 0 1 0 1.44 0a0.72 0.72 0 1 0 -1.44 0" fill="#526b57" stroke="#d1d7c3" stroke-width=".28"/>
+    <path d="M18.28 48a0.72 0.72 0 1 0 1.44 0a0.72 0.72 0 1 0 -1.44 0" fill="#526b57" stroke="#d1d7c3" stroke-width=".28"/>
+    <path d="M25.28 50a0.72 0.72 0 1 0 1.44 0a0.72 0.72 0 1 0 -1.44 0" fill="#526b57" stroke="#d1d7c3" stroke-width=".28"/>
+  </g>
+</svg>

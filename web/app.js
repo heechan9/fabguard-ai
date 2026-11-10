@@ -35,6 +35,18 @@ if (isEnglish) {
   document.querySelectorAll('.cc-navigation a').forEach(link => { if (externalLabels[link.getAttribute('href')]) link.textContent = externalLabels[link.getAttribute('href')]; });
 }
 
+// Keep secondary destinations available without crowding the four primary screens.
+const moreNavigation = document.querySelector('.cc-more');
+if (moreNavigation) {
+  const trigger = moreNavigation.querySelector('summary');
+  if (isEnglish) trigger.textContent = 'More screens';
+  moreNavigation.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { moreNavigation.open = false; }));
+  document.addEventListener('click', event => { if (!moreNavigation.contains(event.target)) moreNavigation.open = false; });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && moreNavigation.open) { moreNavigation.open = false; trigger.focus(); event.preventDefault(); }
+  });
+}
+
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
 const num = (value, digits = 3) => Number(value).toFixed(digits);
 const esc = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));

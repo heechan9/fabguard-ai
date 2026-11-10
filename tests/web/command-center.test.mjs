@@ -62,3 +62,16 @@ test('silver command-room accent and selection text maintain 4.5:1 contrast',()=
     const a=luminance(token(ink)),b=luminance(token(surface));assert.ok((Math.max(a,b)+.05)/(Math.min(a,b)+.05)>=4.5,`${ink} on ${surface}`);
   }
 });
+
+test('refined overview is localised, priority-first and explicit about historical outcomes',()=>{
+ const ko=renderCommandCenter(summary,risks,'ko'),en=renderCommandCenter(summary,risks,'en');
+ for(const heading of ['반도체 제조 공정','우선점검 순위','저장된 분석 결과','최근 원본 기록'])assert.ok(ko.includes(heading));
+ assert.ok(ko.indexOf('cc-priority')<ko.indexOf('cc-flow'));
+ assert.match(ko,/2008년 저장 순위/);assert.equal((ko.match(/과거 Pass/g)||[]).length,5);
+ assert.match(ko,/기준 0.5 · Fail 재현율 0%/);assert.match(en,/threshold 0.5 · Fail recall 0%/);
+ assert.match(ko,/선택한 설명: 검사/);assert.match(ko,/선택한 개념도/);
+ const css=read('web/command-center.css');assert.match(css,/\.cc-stage\.is-selected\{border-color:var\(--cc-accent\)/);
+ assert.match(css,/body\.command-shell \.brand-mark\{width:24px/);assert.match(css,/body\.command-shell \.brand-mark\{width:20px/);
+ const index=read('web/index.html');assert.match(index,/<details class="cc-more"><summary>다른 화면<\/summary>/);
+ for(const mutate of [s=>s.status='verified',s=>s.test=null,s=>s.test.find(x=>x.candidate===s.selected_model).fail_recall=NaN]){const copy=structuredClone(summary);mutate(copy);assert.throws(()=>commandCenterData(copy,risks));}
+});
