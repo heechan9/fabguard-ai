@@ -4,18 +4,18 @@
   <link rel="stylesheet" href="/sitewide-command.css">
 </head>
 <body class="analysis-page command-shell site-shell"><a class="skip-link" href="#secom-evidence">분석으로 건너뛰기</a><div class="ambient" aria-hidden="true"></div><header class="topbar" data-site-nav-owner="shared">
-    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <a class="brand" href="/#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
     <span class="cc-demo-badge">STORED EVIDENCE</span>
     <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button></div>
     <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#summary">프로젝트 소개</a>
       <a href="/#overview">운영 개요</a>
-      <a href="/#risks">우선점검 목록</a>
-      <a href="/secom/index.html" class="active" aria-current="page">반도체 분석 결과</a>
+      <a href="/smt/index.html">3D 모델링</a>
+      <a href="/#risks">우선점검</a>
+      <a href="/secom/index.html" class="active" aria-current="page">반도체 분석</a>
       <a href="/#limitations">검증과 한계</a>
       <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
-        <a href="/#summary">프로젝트 소개</a>
         <a href="/#global">국가별 자료</a>
-        <a href="/smt/index.html">3D 공정 체험</a>
         <a href="/equipment/index.html">장비 CSV 점검</a>
         <a href="/robot/ur3/index.html">UR3 센서 기록</a>
         <a href="/research/index.html">연구 근거·적용 상태</a>
@@ -105,13 +105,13 @@
 <h3 id="tour-metrology-title">잘 만들어졌는지는 무엇으로 확인할까요?</h3>
 <p>지금까지는 장비의 역할과 상태를 살펴봤어요. 결과를 확인하려면 알고 싶은 것에 맞는 측정이 필요해요. 높이 차이, 얇은 막의 두께, 재료 특성, 휨은 서로 다른 질문입니다.</p>
 <p class="tour-flow"><b>현재 상태: 실제 측정 결과는 아직 없어요</b><span>아래는 측정 방법 안내예요. 사진과 영상에서 수치·스펙트럼·측정 지도를 추출한 분석 결과가 아닙니다.</span></p>
-<div class="tour-table-wrap" role="region" aria-label="질문별 측정 방법 비교" tabindex="0">
+<details class="professional-details" id="expert-metrology"><summary>전문 설명과 근거 보기 · 측정 방법 비교</summary><div class="professional-body"><div class="tour-table-wrap" role="region" aria-label="질문별 측정 방법 비교" tabindex="0">
 <table class="tour-measurements"><caption>알고 싶은 것에 맞춰 측정 방법 고르기</caption><thead><tr><th scope="col">알고 싶은 것</th><th scope="col">어떻게 확인하나요?</th><th scope="col">참고 장비</th></tr></thead><tbody>
 <tr><th scope="row">표면의 높이 차이는?</th><td>가느다란 탐침으로 표면을 따라가며 높이를 기록해요.</td><td>접촉식 프로파일러<br><span>Dektak 150</span></td></tr>
 <tr><th scope="row">얇은 막의 두께는?</th><td>반사된 빛을 측정하고 재료·층 구조 모델에 맞춰 두께를 구해요.</td><td>광학식 막 두께 측정<br><span>NanoSpec 계열</span></td></tr>
 <tr><th scope="row">재료에 어떤 결합 특성이 있나요?</th><td>적외선을 흡수하는 양상을 스펙트럼으로 살펴봐요.</td><td>적외선 분광<br><span>FTIR · VERTEX 70v</span></td></tr>
 <tr><th scope="row">웨이퍼가 얼마나 휘었나요?</th><td>여러 레이저 빔이 반사되는 모습을 이용해 휨을 측정해요.</td><td>곡률·휨 측정<br><span>kSA MOS Ultra-Scan</span></td></tr>
-</tbody></table></div>
+</tbody></table></div></div></details>
 <div class="tour-measurement-details">
 <details><summary>높이 차이와 막 두께가 항상 같은 것은 아니에요</summary><p>사진에는 Veeco Dektak 150과 3D profiler 표기가 보여요. 접촉식 프로파일러는 표면의 높이 변화와 단차를 살펴보는 장비예요. 높이 차이를 막 두께로 해석하려면 비교할 기준면과 시료 구조가 맞아야 합니다.</p><p>스캔 위치·길이·측정 조건·교정 기록과 원본 높이 데이터를 함께 남겨야 해요. 위치를 맞추는 십자 표시 화면만으로 측정 완료나 전체 표면의 정상 여부를 판단하지 않아요.</p><p><a href="https://www.bruker.com/en/products-and-solutions/test-and-measurement/stylus-profilometers/dektak-pro.html">일반 원리 참고 · Bruker 접촉식 프로파일러</a> — 다른 세대의 장비 설명이며 사진 속 장비의 사양 검증 자료는 아니에요.</p></details>
 <details><summary>빛으로 구한 두께에는 재료와 층 구조의 가정이 들어가요</summary><p>사진의 Nanospec 표기와 광학 측정 장면을 참고했어요. 정확한 장비 모델은 확인하지 않았습니다. NanoSpec 계열의 분광 반사 측정은 파장별 반사광과 재료·층 구조 모델을 이용하는 방식이에요.</p><p>분석하려면 반사광 원본, 기준 시료·교정 기록, 재료의 광학 특성, 층 구조, 측정 위치와 모델 적합 상태가 필요해요. 모니터에 숫자가 보인다는 사실만으로 두께의 정확성을 검증할 수는 없습니다. 이 계산은 미래의 불량을 예측하는 AI와도 다른 개념이에요.</p><p><a href="https://nnci.net/tools/nanospec-film-thickness-measurement-system">일반 원리 참고 · NNCI NanoSpec 측정 안내</a> — 동일 설치 장비의 모델 확인 자료는 아니에요.</p></details>

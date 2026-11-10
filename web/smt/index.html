@@ -4,18 +4,18 @@
   <link rel="stylesheet" href="/sitewide-command.css">
 </head>
 <body class="smt-page command-shell site-shell"><a class="skip-link" href="#smt-lab">실험실로 건너뛰기</a><div class="ambient" aria-hidden="true"></div><header class="topbar" data-site-nav-owner="shared">
-    <a class="brand" href="/#overview" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
+    <a class="brand" href="/#summary" aria-label="FabGuard AI 홈"><span class="brand-mark"><i></i></span><span>FABGUARD <b>AI</b></span></a>
     <span class="cc-demo-badge">SYNTHETIC DEMO</span>
     <div class="cc-header-controls"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="실버 / 다크 테마 (눌림 상태는 다크)" aria-pressed="false">실버 / 다크</button></div>
     <nav class="cc-navigation" aria-label="주요 화면">
+      <a href="/#summary">프로젝트 소개</a>
       <a href="/#overview">운영 개요</a>
-      <a href="/#risks">우선점검 목록</a>
-      <a href="/secom/index.html">반도체 분석 결과</a>
+      <a href="/smt/index.html" class="active" aria-current="page">3D 모델링</a>
+      <a href="/#risks">우선점검</a>
+      <a href="/secom/index.html">반도체 분석</a>
       <a href="/#limitations">검증과 한계</a>
       <details class="cc-more"><summary>다른 화면</summary><div class="cc-more-links">
-        <a href="/#summary">프로젝트 소개</a>
         <a href="/#global">국가별 자료</a>
-        <a href="/smt/index.html" class="active" aria-current="page">3D 공정 체험</a>
         <a href="/equipment/index.html">장비 CSV 점검</a>
         <a href="/robot/ur3/index.html">UR3 센서 기록</a>
         <a href="/research/index.html">연구 근거·적용 상태</a>
@@ -38,10 +38,13 @@
 <section id="nvidia-aoi-plan" class="panel nvidia-aoi-plan" aria-labelledby="nvidia-aoi-title" data-contract-status="planned_blocked_pending_data_and_gpu">
   <div class="aoi-plan-heading"><div><p class="eyebrow">③ 후속 시각검사 · 실행 전 계약</p><h2 id="nvidia-aoi-title">NVIDIA TAO로 무엇을 확인해야 할까요?</h2></div><span class="status-chip">데이터·GPU 대기</span></div>
   <p>기준 이미지와 검사 이미지를 비교하는 NVIDIA TAO Optical Inspection 후보입니다. 지금 보이는 기판과 가상 이상값을 학습 데이터로 사용하지 않으며, 모델이 이 시뮬레이션을 판정하고 있지 않습니다.</p>
+  <details class="professional-details" id="expert-aoi-requirements"><summary>전문 설명과 근거 보기 · AOI 준비 조건</summary><div class="professional-body">
   <div class="aoi-gates" aria-label="NVIDIA AOI 실행 전 확인 항목">
     <article><span>01 · 데이터</span><b>기판·lot 단위 분리</b><p>실제 이미지, 결함 라벨, golden 기준과 촬영 조건이 필요합니다.</p></article>
     <article><span>02 · 환경</span><b>GPU 실행 확인</b><p>Docker, NVIDIA Container Toolkit, NVIDIA GPU 1개와 VRAM 8GB 이상을 확인합니다.</p></article>
     <article><span>03 · 검증</span><b>미탐부터 공개</b><p>정확도만 보지 않고 미탐·오탐·결함별 재현율과 독립 test를 기록합니다.</p></article>
+  </div></div></details>
+  <div class="aoi-gates">
     <article><span>04 · 상태</span><b>아직 실행 전</b><p>학습·평가·ONNX·TensorRT·현장 성능을 완료했다고 주장하지 않습니다.</p></article>
   </div>
   <p class="aoi-boundary"><b>기존 근거와 분리:</b> SECOM 위험순위, 이 화면의 합성 SMT 사례, 향후 AOI 영상 모델은 서로 다른 증거입니다.</p>

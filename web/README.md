@@ -188,3 +188,39 @@ contrast, scrolling and data-boundary text. It reports graphics/HUD and inactive
 control exclusions explicitly; it is not a screen-reader certification.
 `sitewide-command-ui.yml` runs the same checks on loopback and, after a main
 merge, on the public deployment behind a static-byte equality gate.
+
+## 2026-11-10 소개 우선 · 상단 탐색
+
+후속 사용자 요청에 따라 빈 경로 `/`의 첫 화면은 이제 `#summary` 프로젝트 소개입니다.
+기존 운영 개요는 `#overview`에 보존됩니다. 로고도 소개로 돌아갑니다.
+12개 문서에서 프로젝트 소개 → 운영 개요 → 3D 모델링 → 우선점검 → 반도체 분석 →
+검증과 한계를 기본 메뉴로 제공하고, 나머지 화면은 기존 ‘다른 화면’에 유지합니다.
+넓은 PC에서도 메뉴를 왼쪽으로 이동하지 않으며, 900px 이하에서는 가로 스크롤 없이
+두 줄로 표시합니다. 스크립트 없는 연구 화면의 기본 disclosure 동작도 그대로입니다.
+
+소개 첫 화면은 목적·하는 일·사람의 판단·연구용 한계와 바로가기부터 보여줍니다.
+잠정 평가 수치·분모·미포착 건수·홀드아웃 사전 노출·실패 기록과 상세 근거는 유지됩니다.
+읽기 쉬운 문장과 글자 크기만 조정하며 데이터, 모델, 시뮬레이션, 계산 결과는 바꾸지 않습니다.
+3D 모델링은 기존 합성 SMT 체험으로 연결되며 실제 장비 제어나 SECOM 분석을 뜻하지 않습니다.
+
+`verification/check_top_navigation.cjs`는 기본 진입, 상단 메뉴의 위치·스크롤·줄바꿈,
+모든 기본 링크, 키보드/반복 열기/닫기/뒤로, 직접 3D 이동을 확인합니다.
+사이트 전체 검사에도 이 위치 검사를 적용합니다. 실제 실행 상태는 PR 및 CI 기록으로 구분합니다.
+
+### 쉬운 설명과 전문 설명
+
+소개 첫 화면은 쉬운 안내를 기본으로, 긴 평가·설계·원자료 설명은
+‘전문 설명과 근거 보기’에서 펼칩니다. 분류 기준 0.5의 Fail 재현율 0%, 주요
+점검 수치·분모·미포착 수, 잠정 상태·홀드아웃 노출·현장 미검증은 접지 않습니다.
+SECOM 측정 방법, SMT AOI 준비 조건, OHT 이송 순서, UR3 원본 근거도 네이티브
+펼치기 요소를 사용합니다. 입력·현재 결과·3D·경고는 숨기지 않습니다.
+
+`progressive-disclosure.mjs`는 직접 링크가 가리키는 요소의 모든 상위 패널을 열고
+해당 위치로 이동합니다. `/research/`의 무스크립트 정책은 변경하지 않습니다.
+키보드·반복 열기·닫기·뒤로·직접 링크와 펼친 뒤의 대비·넘침을 별도로 검사합니다.
+
+The repeated four-card answer overview is retained inside the expert disclosure.
+Direct `#answer-overview` links open it automatically. The first view keeps the
+project purpose, review/3D entry points, measured counts and failure/uncertainty
+limits visible; the mobile concept illustration is shorter without removing its
+feature count or synthetic-image disclaimer.

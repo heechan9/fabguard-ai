@@ -3,3 +3,6 @@
 :root[data-theme="silver"]{color-scheme:light;--bg:#e5eaf0;--panel:#f5f7fa;--ink:#182c3f;--muted:#42566a;--cyan:#00695f;--amber:#865000;--line:#a1b0bf}
 #chart circle{fill:var(--amber)}#chart .missing{fill:var(--muted)}
 #chart .gap{fill:var(--amber);fill-opacity:.12;stroke:var(--amber);stroke-width:1;opacity:1}
+
+/* Source hashes must remain readable and selectable on narrow screens. */
+#expert-ur3-source{overflow-wrap:anywhere}

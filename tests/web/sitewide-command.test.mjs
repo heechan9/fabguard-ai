@@ -29,7 +29,8 @@ test('every HTML document loads the final command stylesheet and one complete sh
   assert.deepEqual(styles.slice(-2),['/command-center.css','/sitewide-command.css'],file);
   assert.equal((html.match(/class="topbar"/g)||[]).length,1,file);
   const nav=html.match(/<nav class="cc-navigation"[^>]*>([\s\S]*?)<\/nav>/)?.[1];assert.ok(nav,file);
-  const primary=nav.split('<details')[0];assert.equal((primary.match(/<a\b/g)||[]).length,4,file);
+  const primary=nav.split('<details')[0];assert.equal((primary.match(/<a\b/g)||[]).length,6,file);
+  assert.deepEqual([...primary.matchAll(/href="([^"]+)"/g)].map(m=>navigationKey(m[1])),['summary','overview','smt','risks','secom','limitations'],file);
   assert.match(nav,/<details class="cc-more"><summary>/,file);
   const links=[...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]);
   for(const target of documents)assert.ok(links.some(h=>canonicalPath(h)===canonicalPath(target.route)),`${file} links to ${target.file}`);
@@ -50,7 +51,7 @@ test('every HTML document loads the final command stylesheet and one complete sh
 test('shared route matching handles document aliases, nested views, query strings and external paths',()=>{
  assert.equal(normalizePagePath('/robot/ur3/index.html'),'/robot/ur3');
  assert.equal(normalizePagePath('/'),'/');
- for(const [href,key] of [['/#overview','overview'],['/#detail/secom_1397','risks'],['/?lang=en#summary','summary'],['/secom/index.html','secom'],['/robot/ur3/','ur3'],['/equipment/context-review.html','context'],['/secom/research.html','preprocessing'],['/smt/references.html','references'],['/research/','research'],['/review/?sample=secom_1397','review']])assert.equal(navigationKey(href),key,href);
+ for(const [href,key] of [['/','summary'],['/#overview','overview'],['/#detail/secom_1397','risks'],['/?lang=en#summary','summary'],['/secom/index.html','secom'],['/robot/ur3/','ur3'],['/equipment/context-review.html','context'],['/secom/research.html','preprocessing'],['/smt/references.html','references'],['/research/','research'],['/review/?sample=secom_1397','review']])assert.equal(navigationKey(href),key,href);
  assert.equal(navigationKey('/unknown/'),null);
  assert.equal(navigationHref('#risks','en'),'#risks');
  assert.equal(navigationHref('/review/?sample=secom_1397#history','en'),'/review/?sample=secom_1397&lang=en#history');
@@ -77,7 +78,7 @@ test('browser audit and workflow retain actual Chrome, every viewport, both them
  const scanner=readFileSync(new URL('../../verification/check_sitewide_command.cjs',import.meta.url),'utf8');
  for(const check of ['unknownBackgrounds','scrollWidth','renderedAudit','ArrowRight','Escape','context.request.get','fullPage:true','pageerror','report.failures','document.fonts.ready'])assert.ok(scanner.includes(check),check);
  const workflow=readFileSync(new URL('../../.github/workflows/sitewide-command-ui.yml',import.meta.url),'utf8');
- assert.match(workflow,/width: \[1366, 390, 360\]/);assert.match(workflow,/theme: \[dark, silver\]/);
+ assert.match(workflow,/width: \[1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360\]/);assert.match(workflow,/theme: \[dark, silver\]/);
  assert.match(workflow,/google-chrome --version/);assert.match(workflow,/PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD/);
  assert.match(workflow,/if: always\(\)/);assert.match(workflow,/timeout 120s.*apt-get/s);
  assert.doesNotMatch(workflow,/continue-on-error:\s*true|playwright install|apt-get update/);
