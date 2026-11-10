@@ -1,10 +1,10 @@
 name: Sitewide command-room UI verification
 on:
   pull_request:
-    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   push:
     branches: [main]
-    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        width: [1366, 390, 360]
+        width: [1920, 1672, 1366, 1024, 900, 720, 390, 360]
         theme: [dark, silver]
     runs-on: ubuntu-24.04
     timeout-minutes: 18
@@ -60,6 +60,7 @@ jobs:
             sleep 0.25
           done
           curl --fail --silent http://127.0.0.1:8764/ > /dev/null
+          NODE_PATH="$RUNNER_TEMP/sitewide-driver/node_modules" FABGUARD_UI_OUTPUT="$FABGUARD_UI_OUTPUT/navigation" timeout 120s node verification/check_top_navigation.cjs
           NODE_PATH="$RUNNER_TEMP/sitewide-driver/node_modules" timeout 600s node verification/check_sitewide_command.cjs
       - name: Preserve screenshots and complete audit, including failures
         if: always()
@@ -93,7 +94,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        width: [1366, 390, 360]
+        width: [1920, 1672, 1366, 1024, 900, 720, 390, 360]
         theme: [dark, silver]
     runs-on: ubuntu-24.04
     timeout-minutes: 18

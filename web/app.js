@@ -3,6 +3,7 @@ import { explanationScope } from "./explanation-scope.mjs";
 import { mountEvidence } from "./smt/evidence.mjs";
 import { renderHeroEvidence, renderPortfolioStory, storyEvidence } from "./portfolio-story.mjs";
 import { beginnerLines } from "./home-copy.mjs";
+import { openDetailsForHash } from "./progressive-disclosure.mjs";
 const app = document.querySelector("#app");
 document.querySelector('.skip-link')?.addEventListener('click', event => {
   event.preventDefault();
@@ -24,12 +25,12 @@ if (languageToggle) {
     const params = new URLSearchParams(location.search);
     if (isEnglish) params.delete("lang"); else params.set("lang", "en");
     const query = params.toString();
-    location.assign(`${location.pathname}${query ? `?${query}` : ""}${location.hash || "#overview"}`);
+    location.assign(`${location.pathname}${query ? `?${query}` : ""}${location.hash || "#summary"}`);
   });
 }
 
 if (isEnglish) {
-  const navLabels = { overview: "Overview", summary: "Project", global: "Global data", risks: "Inspection queue", limitations: "Validation & limits" };
+  const navLabels = { overview: "Overview", summary: "Project", global: "Global data", risks: "Review queue", limitations: "Validation & limits" };
   document.querySelectorAll("nav a[data-route]").forEach(link => { link.textContent = navLabels[link.dataset.route] || link.textContent; });
   const externalLabels = { '/secom/index.html': 'Semiconductor analysis', '/smt/index.html': '3D process lab', '/equipment/index.html': 'Equipment CSV check', '/robot/ur3/index.html': 'UR3 sensor records', '/research/index.html': 'Research evidence' };
   document.querySelectorAll('.cc-navigation a').forEach(link => { if (externalLabels[link.getAttribute('href')]) link.textContent = externalLabels[link.getAttribute('href')]; });
@@ -170,7 +171,7 @@ function waferVisual(featCount) {
 
 function beginnerEntry() {
   const lines = beginnerLines(language);
-  return `<section class="absolute-beginner" aria-labelledby="beginner-title"><div><p class="kicker">${isEnglish ? "START HERE" : "처음 오셨다면"}</p><h2 id="beginner-title">${isEnglish ? "FabGuard in three lines" : "FabGuard를 딱 세 줄로"}</h2></div><ol>${lines.map(line => `<li>${line}</li>`).join("")}</ol><div class="beginner-actions"><a class="button" href="#answer-overview">${isEnglish ? "Learn more" : "더 자세히 보기"} <span>→</span></a><a class="text-link" href="#result">${isEnglish ? "See the result only" : "그냥 결과만 보기"} <span>→</span></a></div></section>`;
+  return `<section class="absolute-beginner" aria-labelledby="beginner-title"><h2 id="beginner-title">${isEnglish ? "At a glance" : "한눈에 보기"}</h2><ol>${lines.map(line => `<li>${line}</li>`).join("")}</ol></section>`;
 }
 
 function summaryView() {
@@ -185,8 +186,7 @@ function summaryView() {
   const enedis = state.globalE2E.sources.enedis_france_2024;
   const meteo = state.globalE2E.sources.meteo_france_paris_2024;
   app.innerHTML = `
-    <section class="hero"><div class="hero-copy"><div class="status-chip"><i></i> ${isEnglish ? "PUBLIC SEMICONDUCTOR DATA · OFFLINE DEMO" : "공개 반도체 데이터 · 오프라인 데모"}</div><p class="kicker">FABGUARD AI</p><h1>${isEnglish ? "When you cannot inspect everything,<br><span>inspect what matters first.</span>" : "모두 볼 수 없다면,<br><span>위험한 것부터.</span>"}</h1><p class="hero-ko">${isEnglish ? "Rank semiconductor production records and<br><strong>suggest where an engineer should start.</strong>" : "반도체 생산 기록의 위험도를 정렬해<br><strong>엔지니어의 첫 점검 대상을 제안합니다.</strong>"}</p><p class="lead">${isEnglish ? "FabGuard does not make pass/fail decisions or control a process. It supports a constrained question: when inspection capacity is limited, which records should an engineer review first? Failed classification performance is disclosed and reframed as decision support rather than hidden." : "AI가 불량을 확정하거나 공정을 제어하지 않습니다. 제한된 점검 시간을 어디에 먼저 쓸지 보여주고, 최종 판단은 엔지니어가 합니다. 실패한 성능을 숨기지 않고, 제한된 자원에서 쓸 수 있는 판단 근거로 다시 설계했습니다."}</p>${renderHeroEvidence(state.summary, language)}<div class="hero-actions"><a class="button" href="#risks">${isEnglish ? "Open the review queue" : "점검 목록 직접 보기"} <span>→</span></a><a class="text-link" href="#process">${isEnglish ? "See the decision and validation process" : "판단과 검증 과정 보기"}</a></div></div>${waferVisual(ds.measurement_features)}</section>
-    ${beginnerEntry()}
+    <section class="hero project-intro"><div class="hero-copy"><div class="status-chip"><i></i> ${isEnglish ? "RESEARCH PROTOTYPE · SAVED DATA" : "연구용 프로토타입 · 저장 데이터"}</div><p class="kicker">${isEnglish ? "FABGUARD AI · PROJECT" : "FABGUARD AI · 프로젝트 소개"}</p><h1>${isEnglish ? "Production records.<br><span>What should we review first?</span>" : "반도체 생산 기록,<br><span>무엇부터 확인할까?</span>"}</h1><p class="lead">${isEnglish ? "A research project that shows review priorities and evidence using public SECOM data." : "SECOM 공개 데이터로 점검 순서와 판단 근거를 보여주는 연구 프로젝트입니다."}</p>${beginnerEntry()}<p class="intro-boundary">${isEnglish ? "No automatic defect decisions or process control. The 3D lab is a separate synthetic demonstration." : "자동 불량 판정·공정 제어는 하지 않습니다. 3D는 별도 합성 체험입니다."}</p><div class="hero-actions"><a class="button" href="#risks">${isEnglish ? "Open review queue" : "우선점검 시작"} <span>→</span></a><a class="button" href="/smt/">${isEnglish ? "Explore 3D models" : "3D 모델링 보기"} <span>→</span></a><a class="text-link" href="#overview">${isEnglish ? "Operations overview" : "운영 개요"} →</a></div>${renderHeroEvidence(state.summary, language)}<p class="intro-failure">${isEnglish ? `Fixed threshold ${test.threshold}: Fail recall ${pct(test.fail_recall)}. Automatic defect detection is not established.` : `분류 기준 ${test.threshold}에서 Fail 재현율 ${pct(test.fail_recall)}. 자동 불량 탐지 성능은 입증되지 않았습니다.`}</p></div>${waferVisual(ds.measurement_features)}</section>
     <section class="answer-strip" id="answer-overview" aria-label="${isEnglish ? "FabGuard summary" : "FabGuard 핵심 요약"}">${isEnglish ? `<article><span>PROBLEM</span><strong>Not every production record<br>can be inspected at once</strong></article><article class="active"><span>FABGUARD</span><strong>Ranks records for review<br>and shows evidence limits</strong></article><article><span>HUMAN ROLE</span><strong>Engineers inspect<br>and decide the action</strong></article><article class="boundary"><span>CURRENT BOUNDARY</span><strong>Public-data experiment<br>not field validated</strong></article>` : `<article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로 추천하고<br>근거의 한계까지 표시</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article>`}</section>
     <section class="global-section" id="global" aria-labelledby="global-title">
       <div class="global-heading">
@@ -241,12 +241,19 @@ function summaryView() {
     result?.insertAdjacentHTML("afterend", `<section class="evidence-entry smt-entry"><div><p class="kicker">SMT 3D LAB · SYNTHETIC SCENARIO</p><h2>공정 흐름을 직접 살펴보세요.</h2><p>PCB 이동·납 부족·과열·센서 누락을 조작하는 가상 실험실입니다. SECOM 모델을 SMT에 적용하지 않으며, 국가별 실제 분석 근거를 따로 확인할 수 있습니다.</p></div><a class="button" href="/smt/">SMT 3D 실험실 <span>→</span></a></section>`);
     result?.insertAdjacentHTML("afterend", `<section class="evidence-entry"><div><p class="kicker">FOR PROFESSIONAL REVIEW</p><h2>검증 설계와 한계를<br>더 확인하시겠어요?</h2><p>시간순 검증, 불확실성, 현장 적용 경계와 실패 기록을 한 화면에서 확인할 수 있습니다.</p></div><a class="button" href="#limitations">방법론과 한계 전체 보기 <span>→</span></a></section>`);
     result?.insertAdjacentHTML("afterend", renderPortfolioStory(state.summary));
+    const professional = document.createElement("details");
+    professional.className = "professional-details";
+    professional.id = "professional-details";
+    professional.innerHTML = `<summary><span>${isEnglish ? "Expert explanation and evidence" : "전문 설명과 근거 보기"}</span><small>${isEnglish ? "Evaluation · methods · limits · source records" : "평가 수치 · 검증 방법 · 한계 · 원자료"}</small></summary><div class="professional-body"></div>`;
+    const body = professional.querySelector('.professional-body');
+    [...app.children].filter(section => !section.matches('.hero,.answer-strip')).forEach(section => body.append(section));
+    app.append(professional);
   }
 }
 
 function risksView() {
   if (!state.risks.length) { app.innerHTML = `<section class="state"><h2>표시할 우선점검 생산 건이 없습니다.</h2></section>`; return; }
-  app.innerHTML = `<section class="page-hero"><div><p class="kicker">우선점검 목록</p><h1>먼저 확인할<br><span>생산 건 50개</span></h1><p class="lead">AI가 위험 신호가 큰 순서로 정렬한 목록입니다. 위험점수는 불량 확정값이 아니며, 행을 선택하면 변수 근거의 범위와 해석 한계를 볼 수 있습니다. RF 전체 중요 변수는 모든 건에 동일하며 해당 건의 개별 위험 원인이 아닙니다.</p></div><div class="queue-stat"><span>점검 후보</span><strong>${state.risks.length}</strong><small>위험도 순으로 정렬</small></div></section><section class="table-shell"><div class="panel-head"><span>시간순 검증구간 · 위험도 상위 목록</span><span class="live"><i></i> 데이터 준비됨</span></div><div class="scroll-hint">← 좌우로 밀어 전체 열 보기 →</div><div class="table-wrap"><table><thead><tr><th>순위</th><th>생산 건 ID</th><th>측정 시각</th><th>위험점수</th><th>실제 결과</th><th>근거 범위</th></tr></thead><tbody>${state.risks.map(row => `<tr data-id="${esc(row.sample_id)}" tabindex="0" role="link" aria-label="${esc(row.sample_id)} 상세 점검 결과 열기"><td><b>#${String(row.rank).padStart(2, "0")}</b></td><td>${esc(row.sample_id)}</td><td><span class="timestamp-full">${esc(row.timestamp)}</span><span class="timestamp-short">${esc(shortTimestamp(row.timestamp))}</span></td><td class="risk"><span>${pct(row.risk_score)}</span></td><td><i class="label-dot ${row.label === 1 ? "fail" : "pass"}"></i>${row.label === 1 ? "불량" : "정상"}</td><td>${esc(explanationScope(row.evidence_scope).label)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  app.innerHTML = `<section class="page-hero"><div><p class="kicker">우선점검 목록</p><h1>먼저 확인할<br><span>생산 건 50개</span></h1><p class="lead">위험점수 순으로 정렬한 저장 목록입니다. 한 건을 선택해 근거와 한계를 확인하세요.</p><p class="lead queue-boundary">위험점수는 불량 확정값이 아닙니다. RF 전체 중요 변수는 모든 건에 같으며, 개별 위험 원인을 뜻하지 않습니다.</p></div><div class="queue-stat"><span>점검 후보</span><strong>${state.risks.length}</strong><small>위험도 순으로 정렬</small></div></section><section class="table-shell"><div class="panel-head"><span>시간순 검증구간 · 위험도 상위 목록</span><span class="live"><i></i> 데이터 준비됨</span></div><div class="scroll-hint">← 좌우로 밀어 전체 열 보기 →</div><div class="table-wrap"><table><thead><tr><th>순위</th><th>생산 건 ID</th><th>측정 시각</th><th>위험점수</th><th>실제 결과</th><th>근거 범위</th></tr></thead><tbody>${state.risks.map(row => `<tr data-id="${esc(row.sample_id)}" tabindex="0" role="link" aria-label="${esc(row.sample_id)} 상세 점검 결과 열기"><td><b>#${String(row.rank).padStart(2, "0")}</b></td><td>${esc(row.sample_id)}</td><td><span class="timestamp-full">${esc(row.timestamp)}</span><span class="timestamp-short">${esc(shortTimestamp(row.timestamp))}</span></td><td class="risk"><span>${pct(row.risk_score)}</span></td><td><i class="label-dot ${row.label === 1 ? "fail" : "pass"}"></i>${row.label === 1 ? "불량" : "정상"}</td><td>${esc(explanationScope(row.evidence_scope).label)}</td></tr>`).join("")}</tbody></table></div></section>`;
   document.querySelectorAll("tr[data-id]").forEach(row => {
     const openDetail = () => { location.hash = `detail/${encodeURIComponent(row.dataset.id)}`; };
     row.addEventListener("click", openDetail);
@@ -311,28 +318,32 @@ function syncNavigation(hash) {
 
 function finishRoute(hash) {
   syncNavigation(hash);
-  if (hash === "result") document.querySelector("#result")?.removeAttribute("id");
+  openDetailsForHash('#' + hash);
   window.setTimeout(() => {
     const target = hash === "result" ? document.querySelector(".story-section") : hash === "answer-overview" ? document.querySelector("#answer-overview") : hash === "global" ? document.querySelector(".global-section") : hash === "process" ? document.querySelector("#process") : null;
-    if (target) target.scrollIntoView({ behavior: "auto", block: "start" });
+    if (target) {
+      target.scrollIntoView({ behavior: "auto", block: "start" });
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+    }
     else window.scrollTo({ top: 0, behavior: "auto" });
   }, 50);
 }
 
 function route() {
   if (!state.summary) return;
-  const hash = location.hash.replace(/^#/, "") || "overview";
+  const hash = location.hash.replace(/^#/, "") || "summary";
   document.body.classList.toggle('cc-overview-page', hash === 'overview');
   if (hash === "overview") {
     app.innerHTML = `<section class="state"><p>${isEnglish ? 'Loading saved records…' : '저장된 기록을 불러오는 중…'}</p></section>`;
     import('./command-center.mjs').then(({mountCommandCenter}) => {
-      if ((location.hash.replace(/^#/, '') || 'overview') !== 'overview') return;
+      if ((location.hash.replace(/^#/, '') || 'summary') !== 'overview') return;
       mountCommandCenter(app, state, language);
     }).catch(() => {
-      if ((location.hash.replace(/^#/, '') || 'overview') !== 'overview') return;
+      if ((location.hash.replace(/^#/, '') || 'summary') !== 'overview') return;
       app.innerHTML = `<section class="state"><h1>${isEnglish ? 'Overview unavailable' : '운영 개요를 표시할 수 없습니다'}</h1><p>${isEnglish ? 'No equipment status has been inferred.' : '장비 상태를 정상으로 추정하지 않습니다.'}</p><a class="button" href="#risks">${isEnglish ? 'Open the saved queue' : '기존 점검 목록 열기'}</a></section>`;
     });
-  } else if (hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#overview">처음으로</a></section>`;
+  } else if (hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
   if (isEnglish) translateEnglish();
   finishRoute(hash);
 }

@@ -1,5 +1,6 @@
 // Read-only theme QA. Existing silver and robot checks remain independent gates.
 const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),assert=require('assert/strict');
+const {openProfessionalDetails}=require('./check_professional_disclosure.cjs');
 const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764',output=process.env.FABGUARD_UI_OUTPUT;
 fs.mkdirSync(output,{recursive:true});const results=[],errors=[];let browser,activePage;
 async function audit(page,name,width,mode){
@@ -47,7 +48,7 @@ async function audit(page,name,width,mode){
   for(const mode of ['dark','silver']){
    if(await page.locator('html').getAttribute('data-theme')!==mode)await theme.click();
    for(const [name,route,ready] of [['home','/','#app h1'],['global','/#global','.country-card'],['risks','/#risks','table'],['limits','/#limitations','#app h1'],['secom','/secom/','#distribution-evidence select'],['smt','/smt/','#context-review h3']]){
-    await page.goto(new URL(route,base).href);await page.locator(ready).first().waitFor();assert.equal(await page.locator('html').getAttribute('data-theme'),mode);await audit(page,name,width,mode);
+    await page.goto(new URL(route,base).href);await page.locator(ready).first().waitFor();assert.equal(await page.locator('html').getAttribute('data-theme'),mode);await audit(page,name,width,mode);if(await openProfessionalDetails(page))await audit(page,name+'-professional-expanded',width,mode);
     if(name==='secom'){
      await page.locator('[data-action=begin][data-case=solution]').click();
      assert.equal(await page.locator('[data-condition]').getAttribute('data-state'),'active');

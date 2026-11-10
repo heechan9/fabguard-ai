@@ -1,14 +1,15 @@
+import { installProgressiveDisclosure } from './progressive-disclosure.mjs';
 /* Shared presentation only. Dataset loading, lab playback and page language
    controls stay owned by their existing modules. The research snapshot remains
    deliberately script-free and uses the same static navigation markup. */
 const labels = {
   overview: ['운영 개요', 'Overview'],
-  risks: ['우선점검 목록', 'Inspection queue'],
-  secom: ['반도체 분석 결과', 'Semiconductor analysis'],
+  risks: ['우선점검', 'Review queue'],
+  secom: ['반도체 분석', 'Analysis'],
   limitations: ['검증과 한계', 'Validation & limits'],
   summary: ['프로젝트 소개', 'Project'],
   global: ['국가별 자료', 'Global data'],
-  smt: ['3D 공정 체험', '3D process lab'],
+  smt: ['3D 모델링', '3D models'],
   equipment: ['장비 CSV 점검', 'Equipment CSV check'],
   ur3: ['UR3 센서 기록', 'UR3 sensor records'],
   research: ['연구 근거·적용 상태', 'Research evidence'],
@@ -36,10 +37,10 @@ export function navigationKey(href, base = 'https://fabguard.invalid/') {
   const url = new URL(href, base);
   const path = normalizePagePath(url.pathname);
   if (path !== '/') return pages[path] || null;
-  const route = url.hash.slice(1) || 'overview';
+  const route = url.hash.slice(1) || 'summary';
   if (route.startsWith('detail/')) return 'risks';
   if (['result', 'process', 'answer-overview'].includes(route)) return 'summary';
-  return labels[route] ? route : 'overview';
+  return labels[route] ? route : 'summary';
 }
 
 export function navigationHref(href, language, base = 'https://fabguard.invalid/') {
@@ -121,4 +122,4 @@ export function bindSiteShell(doc = document, win = window) {
   render();
 }
 
-if (typeof document !== 'undefined') bindSiteShell();
+if (typeof document !== 'undefined') { bindSiteShell(); installProgressiveDisclosure(); }

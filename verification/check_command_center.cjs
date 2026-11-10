@@ -2,6 +2,7 @@
 const {chromium}=require('playwright'),fs=require('fs'),path=require('path'),assert=require('assert/strict');
 const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764',output=path.join(process.env.FABGUARD_UI_OUTPUT,'command-center');
 fs.mkdirSync(output,{recursive:true});
+const {assertTopNavigation}=require('./check_top_navigation.cjs');
 const risks=JSON.parse(fs.readFileSync('web/data/priority_top50.json','utf8'));
 const results=[];let browser,page;
 async function audit(width,mode,lang){
@@ -24,7 +25,7 @@ async function audit(width,mode,lang){
   }
   return {scrollWidth:document.documentElement.scrollWidth,innerWidth,innerHeight,lowerPanelsBottom:document.querySelector('.cc-bottom-grid').getBoundingClientRect().bottom,priorityTop:document.querySelector('.cc-priority').getBoundingClientRect().top,flowTop:document.querySelector('.cc-flow').getBoundingClientRect().top,primaryNavigation:document.querySelectorAll('.cc-navigation>a').length,moreOpen:document.querySelector('.cc-more').open,contrast,images:[...document.querySelectorAll('.cc-stage img')].map(i=>({loaded:i.complete&&i.naturalWidth>0,src:i.getAttribute('src')})),navWrap:getComputedStyle(document.querySelector('.cc-navigation')).flexWrap};
  });
- assert.ok(info.scrollWidth<=width+1,JSON.stringify(info));assert.deepEqual(info.contrast,[]);assert.equal(info.images.length,6);assert.ok(info.images.every(i=>i.loaded));assert.equal(info.navWrap,'nowrap');assert.equal(info.primaryNavigation,4);assert.equal(info.moreOpen,false);if(width>=1280)assert.ok(info.lowerPanelsBottom<=info.innerHeight-8,'all four panels fit the desktop viewport: '+JSON.stringify(info));if(width<=620)assert.ok(info.priorityTop<info.flowTop,'mobile queue precedes process concepts');
+ assert.ok(info.scrollWidth<=width+1,JSON.stringify(info));assert.deepEqual(info.contrast,[]);assert.equal(info.images.length,6);assert.ok(info.images.every(i=>i.loaded));await assertTopNavigation(page);assert.equal(info.primaryNavigation,6);assert.equal(info.moreOpen,false);if(width>=1280)assert.ok(info.lowerPanelsBottom<=info.innerHeight-8,'all four panels fit the desktop viewport: '+JSON.stringify(info));if(width<=620)assert.ok(info.priorityTop<info.flowTop,'mobile queue precedes process concepts');
  await page.screenshot({path:path.join(output,`${width}-${mode}-${lang}-viewport.png`)});
  await page.screenshot({path:path.join(output,`${width}-${mode}-${lang}-full.png`),fullPage:true});
  results.push({width,mode,lang,...info});
@@ -35,12 +36,12 @@ async function audit(width,mode,lang){
  for(const width of process.env.FABGUARD_UI_WIDTH?[Number(process.env.FABGUARD_UI_WIDTH)]:[1672,1366,390,360]){
   const context=await browser.newContext({viewport:{width,height:941},reducedMotion:'reduce'});page=await context.newPage();const errors=[];
   page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
-  await page.goto(base);await page.locator('.cc-queue a').first().waitFor();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+  await page.goto(base+'/#overview');await page.locator('.cc-queue a').first().waitFor();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
   assert.equal(await page.locator('.cc-navigation [aria-current=page]').getAttribute('data-route'),'overview');
   for(const mode of ['dark','silver']){
    if(await page.locator('html').getAttribute('data-theme')!==mode)await page.locator('#theme-toggle').press('Enter');
    for(const lang of ['ko','en']){
-    await page.goto(base+(lang==='en'?'/?lang=en':'/'));await page.locator('.cc-queue a').first().waitFor();
+    await page.goto(base+(lang==='en'?'/?lang=en#overview':'/#overview'));await page.locator('.cc-queue a').first().waitFor();
     assert.equal(await page.locator('html').getAttribute('data-theme'),mode);
     for(let i=0;i<5;i++){assert.equal(await page.locator('.cc-queue a').nth(i).getAttribute('href'),`#detail/${risks[i].sample_id}`);assert.equal(await page.locator('.cc-queue small b').nth(i).innerText(),risks[i].risk_score.toFixed(3));}
     if(lang==='en')assert.doesNotMatch(await page.locator('.cc-dashboard').innerText(),/[가-힣]/);
@@ -51,18 +52,18 @@ async function audit(width,mode,lang){
     await page.goBack();await page.locator('.cc-queue a').first().waitFor();
    }
   }
-  // Secondary screens remain keyboard reachable from the four-item primary navigation.
+  // Secondary screens remain keyboard reachable from the six-item primary navigation.
   const more=page.locator('.cc-more');await more.locator('summary').press('Enter');assert.equal(await more.getAttribute('open'),'');await page.keyboard.press('Escape');assert.equal(await more.getAttribute('open'),null);await more.locator('summary').press('Enter');
   await page.locator('.cc-navigation a[data-route="summary"]').click();await page.locator('.absolute-beginner').waitFor();
   assert.equal(await more.getAttribute('open'),null);await more.locator('summary').press('Enter');await page.locator('.cc-navigation a[data-route="global"]').click();await page.locator('.country-card').first().waitFor();
   await page.locator('.cc-navigation a[data-route="risks"]').click();await page.locator('.table-shell table').waitFor();assert.equal(await page.locator('.table-shell tbody tr').count(),50);
-  await page.locator('.brand').click();await page.locator('.cc-queue a').first().waitFor();
+  await page.locator('.brand').click();await page.locator('.absolute-beginner').waitFor();
   assert.deepEqual(errors,[]);await context.close();
   const missing=await browser.newContext({viewport:{width,height:941}});page=await missing.newPage();
-  await page.route('**/command-center.mjs',r=>r.fulfill({status:404,body:'missing'}));await page.goto(base);await page.locator('#app .state h1').waitFor();assert.match(await page.locator('#app').innerText(),/표시할 수 없습니다|unavailable/);
+  await page.route('**/command-center.mjs',r=>r.fulfill({status:404,body:'missing'}));await page.goto(base+'/#overview');await page.locator('#app .state h1').waitFor();assert.match(await page.locator('#app').innerText(),/표시할 수 없습니다|unavailable/);
   await page.locator('.cc-navigation [data-route="risks"]').click();await page.locator('.table-shell table').waitFor();assert.equal(await page.locator('.table-shell tbody tr').count(),50);await missing.close();
   const broken=await browser.newContext({viewport:{width,height:941}});page=await broken.newPage();
-  await page.route('**/data/priority_top50.json',r=>{const copy=structuredClone(risks);copy[0].risk_score=null;return r.fulfill({contentType:'application/json',body:JSON.stringify(copy)});});await page.goto(base);await page.locator('#app .state h1').waitFor();assert.equal(await page.locator('.cc-queue').count(),0);await broken.close();
+  await page.route('**/data/priority_top50.json',r=>{const copy=structuredClone(risks);copy[0].risk_score=null;return r.fulfill({contentType:'application/json',body:JSON.stringify(copy)});});await page.goto(base+'/#overview');await page.locator('#app .state h1').waitFor();assert.equal(await page.locator('.cc-queue').count(),0);await broken.close();
  }
  await browser.close();console.log('Command center browser checks passed:',results.length,'rendered combinations, plus keyboard/navigation/data/error isolation.');
 })().catch(async error=>{fs.writeFileSync(path.join(output,'failure.json'),JSON.stringify({error:error.stack,results},null,2));await page?.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});await browser?.close().catch(()=>{});console.error(error);process.exitCode=1;});
