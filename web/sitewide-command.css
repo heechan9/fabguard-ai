@@ -297,3 +297,6 @@ html[data-default-theme]:has(body.command-shell){scroll-padding-top:var(--site-h
  body.command-shell .topbar nav.cc-navigation>a,body.command-shell .cc-more>summary{font-size:14px}
 }
 @media(min-width:901px){body.command-shell.cc-overview-page main{padding-top:16px;padding-bottom:20px}}
+
+/* Keep the complete review counts on one line at desktop widths. */
+@media(min-width:901px){body.command-shell .cc-capture-rows>div{grid-template-columns:170px minmax(0,1fr) 85px}}

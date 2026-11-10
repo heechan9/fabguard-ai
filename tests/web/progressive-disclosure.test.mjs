@@ -75,7 +75,7 @@ test('new static explanations are native closed details, with no controls or res
     const html = readFileSync(new URL(`../../web/${path}/index.html`, import.meta.url), 'utf8');
     const panel = html.match(new RegExp(`<details class="professional-details" id="${id}">([\\s\\S]*?)</details>`));
     assert.ok(panel, path);
-    assert.match(panel[1], /<summary>전문 설명과 근거 보기/);
+    assert.match(panel[1], /<summary(?: data-copy="expertSequence")?>전문 설명과 근거 보기/);
     assert.doesNotMatch(panel[1], /<(?:input|select|button|canvas|svg)\b|role="(?:status|alert)"/);
   }
 });
@@ -101,4 +101,11 @@ test('installer leaves legacy details, dialogs, malformed hashes and app-owned r
     assert.equal(scrollCount, 0, scenario);
     cleanup();
   }
+});
+
+test('OHT expert summary participates in the existing bilingual renderer', () => {
+  const html = readFileSync(new URL('../../web/oht/index.html', import.meta.url), 'utf8');
+  const app = readFileSync(new URL('../../web/oht/app.mjs', import.meta.url), 'utf8');
+  assert.match(html, /<summary data-copy="expertSequence">/);
+  assert.match(app, /expertSequence:'Expert details · transfer sequence'/);
 });

@@ -319,12 +319,17 @@ function syncNavigation(hash) {
 function finishRoute(hash) {
   syncNavigation(hash);
   openDetailsForHash('#' + hash);
+  const target = hash === "result" ? document.querySelector(".story-section") : hash === "answer-overview" ? document.querySelector("#answer-overview") : hash === "global" ? document.querySelector(".global-section") : hash === "process" ? document.querySelector("#process") : null;
+  // Focus belongs to this render, never to a delayed callback that could steal
+  // the next keyboard action from the navigation or a disclosure control.
+  if (target) {
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+  }
   window.setTimeout(() => {
-    const target = hash === "result" ? document.querySelector(".story-section") : hash === "answer-overview" ? document.querySelector("#answer-overview") : hash === "global" ? document.querySelector(".global-section") : hash === "process" ? document.querySelector("#process") : null;
+    if ((location.hash.replace(/^#/, "") || "summary") !== hash) return;
     if (target) {
-      target.scrollIntoView({ behavior: "auto", block: "start" });
-      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-      target.focus({ preventScroll: true });
+      if (target.isConnected) target.scrollIntoView({ behavior: "auto", block: "start" });
     }
     else window.scrollTo({ top: 0, behavior: "auto" });
   }, 50);

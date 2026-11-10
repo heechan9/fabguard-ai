@@ -63,6 +63,12 @@ async function main(){
   results.push({width,height,theme,lang,geometry});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(results,null,2));await context.close();
  }
  console.log(`PASS ${results.length} top-navigation combinations`);
- }catch(error){fs.writeFileSync(path.join(output,'failure.json'),JSON.stringify({error:error.stack,url:page?.url(),diagnostic:error.disclosureDiagnostic||null,completed:results},null,2));await page?.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});throw error;}finally{await browser.close();}
+ }catch(error){
+  const state=await page?.evaluate(()=>{
+   const rect=e=>e?.getBoundingClientRect().toJSON()||null;
+   const active=document.activeElement;
+   return {url:location.href,viewport:{width:innerWidth,height:innerHeight},scrollY,header:rect(document.querySelector('.topbar')),activeElement:{tag:active?.tagName,id:active?.id,route:active?.getAttribute('data-route'),href:active?.getAttribute('href'),text:active?.textContent?.trim().slice(0,150)},navigation:[...document.querySelectorAll('.cc-navigation > a')].map(e=>({text:e.textContent.trim(),href:e.getAttribute('href'),current:e.getAttribute('aria-current'),rect:rect(e)})),disclosures:[...document.querySelectorAll('details.professional-details')].map(e=>({id:e.id,open:e.open,rect:rect(e)}))};
+  }).catch(()=>null);
+  fs.writeFileSync(path.join(output,'failure.json'),JSON.stringify({error:error.stack,url:page?.url(),state,diagnostic:error.disclosureDiagnostic||null,completed:results},null,2));await page?.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});throw error;}finally{await browser.close();}
 }
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
