@@ -320,6 +320,7 @@ body.command-shell :is(main,dialog) :is(.kicker,.eyebrow,.tag,.status-chip,.fiel
 body.command-shell :is(footer,.cc-legacy-entry){font-size:14px;line-height:1.65;letter-spacing:normal}
 body.command-shell .cc-header-controls :is(button,label){font-size:13px;line-height:1.5}
 body.command-shell .cc-more>summary{font-size:14px;line-height:1.4}
+body.command-shell .topbar nav.cc-navigation .language-note{font-size:13px;line-height:1.4}
 body.command-shell:not(.cc-overview-page) main .project-intro p.lead{font-size:17px;line-height:1.7}
 body.command-shell .project-intro .absolute-beginner{padding:20px 24px}
 body.command-shell .project-intro .absolute-beginner h2{font-size:18px;line-height:1.5}
@@ -333,6 +334,12 @@ body.command-shell .project-intro .visual-stat :is(span,small){font-size:13px;li
 body.command-shell .professional-details>summary small{font-size:14px;line-height:1.6}
 body.command-shell :is(.validation-seal small,.queue-stat span,.queue-stat small,.validation-details>summary span,.principles-list b,.principles-note small,.evidence-levels article>span,.design-boundary>span,.review-prompt>span,.implementation-note>b){font-size:14px;line-height:1.6;letter-spacing:.03em}
 body.command-shell .validation-grid article>.kicker{font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell :is(.answer-strip span,.panel-head span,.pipeline span,.pipeline i,.decision-flow i,.budget-top,.budget-top span,.budget-top b,.detail-grid article>span,.features b,.boundary-quote>span){font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell :is(.evidence-levels p,.pipeline p,.decision-flow p,.budget-grid p){font-size:14px;line-height:1.7}
+body.command-shell.robot-page code.hash{font-size:13px;line-height:1.5}
+body.command-shell.smt-page :is(.scenario-buttons span,.scenario-buttons small,.history-heading span,.chip.subtle,footer>span){font-size:13px;line-height:1.5}
+body.command-shell.smt-page .station-strip button small{font-size:12px;line-height:1.5}
+body.command-shell.smt-page .station-strip button abbr{font-size:13px;line-height:1.5}
 body.command-shell :is(.tool-rail span,.tool-rail b,.country-top>b,.country-top em,.country-card dt,.country-card dd,.global-summary span,.dkasc-evidence span,.candidate-list article em,.candidate-registry summary>span){font-size:13px;line-height:1.5;letter-spacing:.03em}
 body.command-shell :is(.tool-rail p,.country-card>p,.global-summary p,.dkasc-evidence small,.candidate-list p,.candidate-list small,.candidate-registry summary>small,.candidate-boundary){font-size:14px;line-height:1.65}
 body.command-shell .global-boundary>span{font-size:13px;line-height:1.5;letter-spacing:.03em}
@@ -345,6 +352,8 @@ body.command-shell .cc-stage small{font-size:12px;line-height:1.5}
 body.command-shell .cc-dashboard .cc-stage strong{font-size:14px;white-space:normal;word-break:keep-all;overflow-wrap:break-word}
 /* Reduce decorative art rather than text to keep the four desktop panels visible. */
 @media(min-width:901px){
+ body.command-shell.cc-overview-page main{padding-top:12px}
+ body.command-shell .cc-bottom-grid{margin-top:12px}
  body.command-shell .cc-stage{min-height:150px}
  body.command-shell .cc-stage img{max-height:84px}
  body.command-shell .cc-queue{gap:4px}
@@ -355,7 +364,7 @@ body.command-shell .cc-dashboard .cc-stage strong{font-size:14px;white-space:nor
 }
 @media(max-width:900px){
  body.command-shell .topbar nav.cc-navigation>a,body.command-shell .cc-more>summary{font-size:14px;line-height:1.4}
- body.command-shell .cc-navigation .language-note{font-size:12px;line-height:1.4}
+ body.command-shell .topbar nav.cc-navigation .language-note{font-size:12px;line-height:1.4}
  body.command-shell .project-intro .absolute-beginner{padding:16px}
  body.command-shell .project-intro .hero-actions{gap:10px 12px}
  body.command-shell .cc-capture-rows>div{grid-template-columns:minmax(0,1fr) minmax(30px,.65fr) 82px;gap:8px}

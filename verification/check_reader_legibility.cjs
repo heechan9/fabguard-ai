@@ -45,6 +45,8 @@ function readerAudit(){
   ['.cc-queue .cc-outcome,.cc-concept-label,.cc-records time,.cc-bottom-line',13],
   ['.cc-panel-note,.cc-panel-foot,.cc-queue small,.cc-records small',14],
   ['.validation-seal small,.validation-details>summary span,.principles-list b,.principles-note small',14],
+  ['.evidence-levels p,.pipeline p,.decision-flow p,.budget-grid p',14],
+  ['.boundary-quote>span,.detail-grid article>span,.features b,.answer-strip span,.budget-top span,.budget-top b',13],
   ['.project-intro figcaption,.portfolio-result small,.professional-details>summary small',14],
   ['.intro-boundary,.intro-failure',15],['.project-intro .lead',17],
   ['main table th,main table td',innerWidth<=900?13:14],
