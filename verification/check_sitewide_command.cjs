@@ -49,7 +49,7 @@ function semanticStyles(selectors) {
   const rgb=token=>/^#[0-9a-f]{6}$/i.test(token)?`rgb(${[1,3,5].map(i=>parseInt(token.slice(i,i+2),16)).join(', ')})`:token;
   return selectors.flatMap(selector=>[...document.querySelectorAll(selector)].map(el=>{
     const style=getComputedStyle(el);
-    return {selector,text:el.textContent.trim(),color:style.color,fill:style.fill,borderColor:style.borderColor,borderStyle:style.borderStyle,background:style.backgroundColor,visible:el.getClientRects().length>0,tokens:Object.fromEntries(['--red','--normal','--amber','--synthetic','--cc-ink','--cc-muted','--cc-accent'].map(name=>[name,rgb(style.getPropertyValue(name).trim())]))};
+    return {selector,text:el.textContent.trim(),color:style.color,fill:style.fill,borderColor:style.borderColor,borderStyle:style.borderStyle,background:style.backgroundColor,visible:el.getClientRects().length>0,tokens:Object.fromEntries(['--red','--normal','--amber','--synthetic','--cc-ink','--cc-muted','--cc-accent','--cc-line'].map(name=>[name,rgb(style.getPropertyValue(name).trim())]))};
   }));
 }
 
@@ -286,7 +286,11 @@ async function main() {
           await page.locator('#lock').press('Enter');await page.locator('#contract-status span.bad').waitFor();
           const errorInk=(await page.evaluate(semanticStyles,['#contract-status span.bad']))[0];
           check(errorInk.color===errorInk.tokens['--red']&&/고정 실패/.test(errorInk.text),'invalid contract retains named red error state');
-          report.semanticAudits.push({name,state:'invalid-contract',styles:[errorInk]});await capture('-invalid-contract');
+          const invalidFields=await page.evaluate(semanticStyles,['#contract-fields input[aria-invalid="true"]']);
+          const validFields=await page.evaluate(semanticStyles,['#contract-fields input:not([type="checkbox"]):not([aria-invalid="true"])']);
+          check(invalidFields.length>0&&invalidFields.every(field=>field.borderColor===field.tokens['--red']),'invalid fields retain red borders matching aria-invalid');
+          check(validFields.length>0&&validFields.every(field=>field.borderColor===field.tokens['--cc-line']),'valid fields retain ordinary line borders');
+          report.semanticAudits.push({name,state:'invalid-contract',styles:[errorInk],invalidFields,validFields});await capture('-invalid-contract');
           await page.locator('#synthetic-error').press('Enter');
           await page.waitForFunction(()=>document.querySelector('#input-status').textContent.includes('무효 1개'));
           const pills=await page.evaluate(semanticStyles,['#file-table .pill-ok','#file-table .pill-bad']);

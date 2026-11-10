@@ -117,7 +117,7 @@ test('semantic legend fixtures produce real valid, gap, short, nonfinite, range 
 });
 test('semantic browser checks preserve explicit state meaning, warnings and keyboard-only research theme',()=>{
  const scanner=readFileSync(new URL('../../verification/check_sitewide_command.cjs',import.meta.url),'utf8');
- for(const marker of ['#contract-status span.bad','#file-table .pill-ok','#file-table .pill-bad','.strip .w-${kind}','#dataset-card p.plain-quality','#dataset-card p.evidence-note.evidence-warning','p.tag.synthetic','research-theme-note',"page.keyboard.press('Shift+Tab')"] )assert.ok(scanner.includes(marker),marker);
+ for(const marker of ['#contract-status span.bad','#contract-fields input[aria-invalid="true"]','invalid fields retain red borders','valid fields retain ordinary line borders','#file-table .pill-ok','#file-table .pill-bad','.strip .w-${kind}','#dataset-card p.plain-quality','#dataset-card p.evidence-note.evidence-warning','p.tag.synthetic','research-theme-note',"page.keyboard.press('Shift+Tab')"] )assert.ok(scanner.includes(marker),marker);
  const html=read('research/index.html');assert.match(html,/id="research-theme"[^>]*aria-describedby="research-theme-note"/);
  assert.match(html,/id="research-theme-note"[^>]*>[^<]*저장하지[^<]*다크/);
 });

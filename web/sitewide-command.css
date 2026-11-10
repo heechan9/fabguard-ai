@@ -163,3 +163,9 @@ body.command-shell :is(main,dialog) [hidden]{display:none!important}
   body.command-shell.site-shell :is(footer,.lead){overflow-wrap:anywhere}
 }
 @media(prefers-reduced-motion:reduce){html:has(body.command-shell){scroll-behavior:auto}body.command-shell *{transition:none!important;scroll-behavior:auto!important}}
+/* Expanded/active states must keep the same palette on small screens. */
+body.command-shell .scroll-hint{color:var(--cc-muted);background:var(--cc-raised);font-size:12px;letter-spacing:.02em}
+body.command-shell.equipment-page #spc-demo table{min-width:0;table-layout:fixed}
+body.command-shell.equipment-page #spc-demo :is(th,td){overflow-wrap:anywhere}
+body.command-shell.equipment-page #spc-demo button[aria-pressed=true]{background:var(--cc-active);color:var(--cc-ink);border-color:var(--cc-accent)}
+body.command-shell input[aria-invalid=true]:not([type=checkbox]):not([type=radio]):not([type=file]){border-color:var(--red)}
