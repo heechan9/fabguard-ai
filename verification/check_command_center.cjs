@@ -51,12 +51,12 @@ async function audit(width,mode,lang){
   // Keep original routes reachable, including a long mobile navigation rail.
   await page.locator('.cc-navigation a[data-route="summary"]').click();await page.locator('.absolute-beginner').waitFor();
   await page.locator('.cc-navigation a[data-route="global"]').click();await page.locator('.country-card').first().waitFor();
-  await page.locator('.cc-navigation a[data-route="risks"]').click();await page.locator('table').waitFor();assert.equal(await page.locator('tbody tr').count(),50);
+  await page.locator('.cc-navigation a[data-route="risks"]').click();await page.locator('.table-shell table').waitFor();assert.equal(await page.locator('.table-shell tbody tr').count(),50);
   await page.locator('.brand').click();await page.locator('.cc-queue a').first().waitFor();
   assert.deepEqual(errors,[]);await context.close();
   const missing=await browser.newContext({viewport:{width,height:941}});page=await missing.newPage();
   await page.route('**/command-center.mjs',r=>r.fulfill({status:404,body:'missing'}));await page.goto(base);await page.locator('#app .state h1').waitFor();assert.match(await page.locator('#app').innerText(),/표시할 수 없습니다|unavailable/);
-  await page.locator('.cc-navigation [data-route="risks"]').click();await page.locator('table').waitFor();assert.equal(await page.locator('tbody tr').count(),50);await missing.close();
+  await page.locator('.cc-navigation [data-route="risks"]').click();await page.locator('.table-shell table').waitFor();assert.equal(await page.locator('.table-shell tbody tr').count(),50);await missing.close();
   const broken=await browser.newContext({viewport:{width,height:941}});page=await broken.newPage();
   await page.route('**/data/priority_top50.json',r=>{const copy=structuredClone(risks);copy[0].risk_score=null;return r.fulfill({contentType:'application/json',body:JSON.stringify(copy)});});await page.goto(base);await page.locator('#app .state h1').waitFor();assert.equal(await page.locator('.cc-queue').count(),0);await broken.close();
  }
