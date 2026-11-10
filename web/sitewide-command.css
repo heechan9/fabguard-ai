@@ -14,7 +14,7 @@ html[data-default-theme]:has(body.command-shell){
   color-scheme:dark;background:var(--cc-bg);scroll-padding-top:90px;
 }
 html[data-theme="silver"]:has(body.command-shell),html:has(#research-theme:checked){
-  --cc-bg:#aab6c5;--cc-panel:#c2cdda;--cc-raised:#b8c4d2;--cc-ink:#182c25;--cc-muted:#354b43;
+  --cc-bg:#aab6c5;--cc-panel:#c2cdda;--cc-raised:#b8c4d2;--cc-ink:#182c25;--cc-muted:#2c3f37;
   --cc-line:#496452;--cc-accent:#124d2a;--cc-warm:#583b04;--cc-active:#afc6b9;
   --synthetic:#4e347b;--red:#7a241b;--error:#7a241b;--normal:#164b2c;--success-ink:#164b2c;
   --danger-bg:#ead3ce;--caution-bg:#ead3ce;--caution-ink:#6c261c;--caution-line:#955b50;
@@ -305,3 +305,68 @@ html[data-default-theme]:has(body.command-shell){scroll-padding-top:var(--site-h
 @media(max-width:900px){body.command-shell .project-intro .hero-visual{min-height:200px;max-height:220px}}
 /* Preserve full record labels while keeping all desktop panels in view. */
 @media(min-width:901px){body.command-shell .cc-records li a{padding-top:3px;padding-bottom:3px}}
+
+/* Reader hierarchy: scope prose separately from plots, tables and scene labels.
+   Existing content, disclosure order and semantic state colors are preserved. */
+body.command-shell :is(main,dialog,footer,aside){word-break:keep-all;overflow-wrap:break-word}
+body.command-shell :is(h1,h2,h3){text-wrap:balance}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.lead,.panel>p,.card>p,.robot-step>p,.professional-body>section>p,.limits p,.notice,.boundary,.retrospective,.queue-boundary,.uncertainty-note p,.design-boundary p,.implementation-note p,.review-prompt p,.principles-list p,.candidate-boundary,.global-boundary p){max-width:42em;text-wrap:pretty}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.panel>p,.card>p,.robot-step>p,.validation-grid article>p:last-child,.principles-list p,.evidence-ladder>div>p:last-child,.limits p,.notice,.boundary,.retrospective){font-size:16px;line-height:1.7}
+body.command-shell :is(code,pre,kbd,samp,.sources a,#source-details dd,#expert-ur3-source,.file-card,.revision-comparison dd,#history-list p){word-break:normal;overflow-wrap:anywhere}
+body.command-shell :is(main,dialog) table :is(th,td){font-size:14px;line-height:1.6;letter-spacing:normal}
+body.command-shell :is(main,dialog) table :is(th,td) :is(small,span){font-size:inherit}
+body.command-shell :is(main,dialog) :is(.hint,.micro,.micro-note,.help,.evidence-note,.evidence-load,.snapshot,.site-theme-note,.scroll-hint){font-size:14px;line-height:1.6}
+body.command-shell :is(main,dialog) :is(.kicker,.eyebrow,.tag,.status-chip,.field-label,.metrics span,.metrics small){font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell :is(footer,.cc-legacy-entry){font-size:14px;line-height:1.65;letter-spacing:normal}
+body.command-shell .cc-header-controls :is(button,label){font-size:13px;line-height:1.5}
+body.command-shell .cc-more>summary{font-size:14px;line-height:1.4}
+body.command-shell .topbar nav.cc-navigation .language-note{font-size:13px;line-height:1.4}
+body.command-shell:not(.cc-overview-page) main .project-intro p.lead{font-size:17px;line-height:1.7}
+body.command-shell .project-intro .absolute-beginner{padding:20px 24px}
+body.command-shell .project-intro .absolute-beginner h2{font-size:18px;line-height:1.5}
+body.command-shell .project-intro .absolute-beginner ol{font-size:16px;line-height:1.7}
+body.command-shell .project-intro :is(.intro-boundary,.intro-failure){font-size:15px;line-height:1.7}
+/* Matches the specificity of the earlier reader palette normalization. */
+body.command-shell:not(.cc-overview-page) main .project-intro p.intro-failure{color:var(--cc-warm)}
+body.command-shell .project-intro :is(.portfolio-result small,figcaption){font-size:14px;line-height:1.6}
+body.command-shell .project-intro .visual-status{font-size:12px;line-height:1.5}
+body.command-shell .project-intro .visual-stat :is(span,small){font-size:13px;line-height:1.5}
+body.command-shell .professional-details>summary small{font-size:14px;line-height:1.6}
+body.command-shell :is(.validation-seal small,.queue-stat span,.queue-stat small,.validation-details>summary span,.principles-list b,.principles-note small,.evidence-levels article>span,.design-boundary>span,.review-prompt>span,.implementation-note>b){font-size:14px;line-height:1.6;letter-spacing:.03em}
+body.command-shell .validation-grid article>.kicker{font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell :is(.answer-strip span,.panel-head span,.pipeline span,.pipeline i,.decision-flow i,.budget-top,.budget-top span,.budget-top b,.detail-grid article>span,.features b,.boundary-quote>span){font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell :is(.evidence-levels p,.pipeline p,.decision-flow p,.budget-grid p){font-size:14px;line-height:1.7}
+body.command-shell.robot-page code.hash{font-size:13px;line-height:1.5}
+body.command-shell.smt-page :is(.scenario-buttons span,.scenario-buttons small,.history-heading span,.chip.subtle,footer>span){font-size:13px;line-height:1.5}
+body.command-shell.smt-page .station-strip button small{font-size:12px;line-height:1.5}
+body.command-shell.smt-page .station-strip button abbr{font-size:13px;line-height:1.5}
+body.command-shell :is(.tool-rail span,.tool-rail b,.country-top>b,.country-top em,.country-card dt,.country-card dd,.global-summary span,.dkasc-evidence span,.candidate-list article em,.candidate-registry summary>span){font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell :is(.tool-rail p,.country-card>p,.global-summary p,.dkasc-evidence small,.candidate-list p,.candidate-list small,.candidate-registry summary>small,.candidate-boundary){font-size:14px;line-height:1.65}
+body.command-shell .global-boundary>span{font-size:13px;line-height:1.5;letter-spacing:.03em}
+body.command-shell .cc-dashboard :is(.cc-panel-note,.cc-panel-foot,.cc-stage-detail p,.cc-chart-row p,.cc-records small,.cc-flow-intro,.cc-panel-link){font-size:14px;line-height:1.55}
+body.command-shell .cc-dashboard :is(.cc-mode,.cc-panel-head>span,.cc-stage-number,.cc-concept-label,.cc-selected-name,.cc-record-label,.cc-chart-axis,.cc-queue .cc-outcome,.cc-records time,.cc-bottom-line,.cc-bottom-line a){font-size:13px;line-height:1.5;letter-spacing:normal}
+body.command-shell .cc-dashboard :is(.cc-stage-detail a,.cc-capture-rows>div>span,.cc-capture-rows small,.cc-queue small,.cc-queue small b,.cc-records strong){font-size:14px;line-height:1.5}
+body.command-shell .cc-dashboard .cc-panel-head h2{font-size:18px;line-height:1.35}
+body.command-shell .cc-dashboard .cc-queue strong{font-size:15px;line-height:1.4}
+body.command-shell .cc-stage small{font-size:12px;line-height:1.5}
+body.command-shell .cc-dashboard .cc-stage strong{font-size:14px;white-space:normal;word-break:keep-all;overflow-wrap:break-word}
+/* Reduce decorative art rather than text to keep the four desktop panels visible. */
+@media(min-width:901px){
+ body.command-shell.cc-overview-page main{padding-top:12px}
+ body.command-shell .cc-bottom-grid{margin-top:12px}
+ body.command-shell .cc-stage{min-height:150px}
+ body.command-shell .cc-stage img{max-height:84px}
+ body.command-shell .cc-queue{gap:4px}
+ body.command-shell .cc-queue a{min-height:52px;padding-top:2px;padding-bottom:2px}
+ body.command-shell .cc-panel-head{padding-top:8px;padding-bottom:8px}
+ body.command-shell .cc-records li a{min-height:54px}
+ body.command-shell .cc-stage-detail{grid-template-columns:auto minmax(0,1fr) auto;gap:8px}
+}
+@media(max-width:900px){
+ body.command-shell .topbar nav.cc-navigation>a,body.command-shell .cc-more>summary{font-size:14px;line-height:1.4}
+ body.command-shell .topbar nav.cc-navigation .language-note{font-size:12px;line-height:1.4}
+ body.command-shell .project-intro .absolute-beginner{padding:16px}
+ body.command-shell .project-intro .hero-actions{gap:10px 12px}
+ body.command-shell .cc-capture-rows>div{grid-template-columns:minmax(0,1fr) minmax(30px,.65fr) 82px;gap:8px}
+ body.command-shell :is(main,dialog) table :is(th,td){font-size:13px}
+}

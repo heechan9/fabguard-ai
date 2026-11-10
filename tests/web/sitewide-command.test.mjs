@@ -78,7 +78,7 @@ test('browser audit and workflow retain actual Chrome, every viewport, both them
  const scanner=readFileSync(new URL('../../verification/check_sitewide_command.cjs',import.meta.url),'utf8');
  for(const check of ['unknownBackgrounds','scrollWidth','renderedAudit','ArrowRight','Escape','context.request.get','fullPage:true','pageerror','report.failures','document.fonts.ready'])assert.ok(scanner.includes(check),check);
  const workflow=readFileSync(new URL('../../.github/workflows/sitewide-command-ui.yml',import.meta.url),'utf8');
- assert.match(workflow,/width: \[1920, 1672, 1366, 1024, 900, 720, 390, 360\]/);assert.match(workflow,/theme: \[dark, silver\]/);
+ assert.match(workflow,/width: \[1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360\]/);assert.match(workflow,/theme: \[dark, silver\]/);
  assert.match(workflow,/google-chrome --version/);assert.match(workflow,/PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD/);
  assert.match(workflow,/if: always\(\)/);assert.match(workflow,/timeout 120s.*apt-get/s);
  assert.doesNotMatch(workflow,/continue-on-error:\s*true|playwright install|apt-get update/);

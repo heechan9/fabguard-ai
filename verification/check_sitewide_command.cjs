@@ -2,6 +2,7 @@
 const fs = require('node:fs');
 const {openProfessionalDetails}=require('./check_professional_disclosure.cjs');
 const {assertTopNavigation,assertIntroduction}=require('./check_top_navigation.cjs');
+const {allowedReaderRequest,readerFonts,readerAudit,assertReaderAudit}=require('./check_reader_legibility.cjs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const {execFileSync} = require('node:child_process');
@@ -133,7 +134,7 @@ function renderedAudit() {
 async function main() {
   const {chromium}=require('playwright');
   const width=Number(process.env.FABGUARD_UI_WIDTH||1366),theme=process.env.FABGUARD_UI_THEME||'dark';
-  assert.ok([1920,1672,1366,1024,900,720,390,360].includes(width));assert.ok(['dark','silver'].includes(theme));
+  assert.ok([1920,1672,1440,1366,1024,900,720,390,360].includes(width));assert.ok(['dark','silver'].includes(theme));
   const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764',origin=new URL(base).origin;
   const output=path.join(process.env.FABGUARD_UI_OUTPUT||'/tmp/sitewide-command',`${width}-${theme}`);
   fs.mkdirSync(output,{recursive:true});
@@ -154,12 +155,14 @@ async function main() {
       const page=await context.newPage();activePage=page;page.setDefaultTimeout(15000);
       page.on('pageerror',e=>errors.push(e.message));
       page.on('response',r=>{if(new URL(r.url()).origin===origin&&r.status()>=400)requests.push({url:r.url(),status:r.status()});});
-      await page.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
+      await page.route('**/*',r=>(process.env.FABGUARD_WEB_FONTS==='1'?allowedReaderRequest(r.request().url(),origin):new URL(r.request().url()).origin===origin)?r.continue():r.abort());
       const check=(condition,message)=>{if(!condition)report.failures.push({name,check:message});};
       const capture=async suffix=>{
         await page.evaluate(()=>scrollTo(0,0));
+        const fonts=process.env.FABGUARD_WEB_FONTS==='1'?await readerFonts(page):{mode:'external fonts blocked by this test mode'};
         const audit=await page.evaluate(renderedAudit);
-        report.results.push({name:name+suffix,route:page.url(),theme,language:await page.locator('html').getAttribute('lang'),...audit});
+        const typography=await page.evaluate(readerAudit);assertReaderAudit(typography);
+        report.results.push({name:name+suffix,route:page.url(),theme,language:await page.locator('html').getAttribute('lang'),fonts,typography,...audit});
         check(audit.scrollWidth<=width+1,`${suffix} no document overflow: ${audit.scrollWidth}`);
         check(audit.overflowing.length===0,`${suffix} no uncontained horizontal overflow: ${JSON.stringify(audit.overflowing.slice(0,8))}`);
         check(audit.tested>10,`${suffix} nonempty contrast coverage (${audit.tested})`);

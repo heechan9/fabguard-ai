@@ -1,10 +1,10 @@
 name: Sitewide command-room UI verification
 on:
   pull_request:
-    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_reader_legibility.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   push:
     branches: [main]
-    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_reader_legibility.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        width: [1920, 1672, 1366, 1024, 900, 720, 390, 360]
+        width: [1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360]
         theme: [dark, silver]
     runs-on: ubuntu-24.04
     timeout-minutes: 18
@@ -49,6 +49,7 @@ jobs:
         env:
           FABGUARD_UI_WIDTH: ${{ matrix.width }}
           FABGUARD_UI_THEME: ${{ matrix.theme }}
+          FABGUARD_WEB_FONTS: '1'
           FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
           FABGUARD_UI_OUTPUT: ${{ runner.temp }}/sitewide-command
         run: |
@@ -94,7 +95,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        width: [1920, 1672, 1366, 1024, 900, 720, 390, 360]
+        width: [1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360]
         theme: [dark, silver]
     runs-on: ubuntu-24.04
     timeout-minutes: 18
@@ -125,6 +126,7 @@ jobs:
           FABGUARD_BASE_URL: https://fabguard-ai.vercel.app
           FABGUARD_UI_WIDTH: ${{ matrix.width }}
           FABGUARD_UI_THEME: ${{ matrix.theme }}
+          FABGUARD_WEB_FONTS: '1'
           FABGUARD_BROWSER_PATH: /usr/bin/google-chrome
           FABGUARD_UI_OUTPUT: ${{ runner.temp }}/sitewide-production
         run: NODE_PATH="$RUNNER_TEMP/sitewide-driver/node_modules" timeout 600s node verification/check_sitewide_command.cjs
