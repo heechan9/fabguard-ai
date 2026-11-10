@@ -13,7 +13,9 @@ trigger?.addEventListener('click',async()=>{
   document.body.append(host);
   mountLearning(root,new URLSearchParams(location.search).get('lang'));
   const dialog=root.getElementById('learning-dialog');
-  root.getElementById('exit').addEventListener('click',()=>dialog.close());
+  // Explicit close restores focus in the same interaction; native close events may be queued.
+  const closeLearning=()=>{const reset=root.getElementById('reset-dialog');if(reset.open)reset.close();dialog.close();trigger.focus();};
+  root.getElementById('exit').addEventListener('click',closeLearning);
   root.getElementById('skip-learning').addEventListener('click',()=>root.getElementById('main').focus());
   dialog.addEventListener('close',()=>{const reset=root.getElementById('reset-dialog');if(reset.open)reset.close();trigger.focus();});
   root.addEventListener('click',event=>{const link=event.target.closest('a[href]');if(link?.getAttribute('href').startsWith('/'))dialog.close();});

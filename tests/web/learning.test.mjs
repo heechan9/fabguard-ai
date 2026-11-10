@@ -64,15 +64,15 @@ test('Corrupt load preserves temporary records and unavailable storage reports f
  const c=controller();c.act('skip-probe');c.act('lesson-0');c.act('reveal');c.s.setItem(STORAGE_KEY,'bad');c.click('load');assert.match(c.node('storage-status').textContent,/형식이 맞지/);assert.match(c.node('records').innerHTML,/정상·이상/);Object.defineProperty(c.ctx,'localStorage',{get(){throw Error('blocked')}});c.click('save');assert.match(c.node('storage-status').textContent,/저장하지 못/);c.click('reset');c.click('confirm-reset');assert.match(c.node('storage-status').textContent,/지우지 못/);
 });
 test('Lazy isolated entry prevents duplicate open, closes on navigation and restores requested focus',async()=>{
- const nodes=new Map();const hosts=[];let created=0,mounted=0,focused='';
- const element=id=>{if(!nodes.has(id))nodes.set(id,{id,listeners:{},disabled:false,open:false,focus(){focused=id},addEventListener(n,fn){this.listeners[n]=fn},showModal(){this.open=true},close(){this.open=false;this.listeners.close?.()}});return nodes.get(id)};
+ const nodes=new Map();const hosts=[];let created=0,mounted=0,focused='',deferClose=false;const pendingClose=[];
+ const element=id=>{if(!nodes.has(id))nodes.set(id,{id,listeners:{},disabled:false,open:false,focus(){focused=id},addEventListener(n,fn){this.listeners[n]=fn},showModal(){this.open=true},close(){this.open=false;if(deferClose)pendingClose.push(()=>this.listeners.close?.());else this.listeners.close?.()}});return nodes.get(id)};
  const root={innerHTML:'',getElementById:element,addEventListener(){}};
  const win={listeners:{},addEventListener(n,fn){this.listeners[n]=fn}};
  const ctx={document:{documentElement:{dataset:{theme:'dark'}},getElementById:element,body:{append(){}},createElement(){created++;const host={dataset:{},attachShadow(){return root},remove(){}};hosts.push(host);return host;}},window:win,location:{search:''},URLSearchParams,__template:'<dialog>',__mountLearning(){mounted++}};
  const code=read('web/learn/entry.mjs').replace("[import('./template.mjs'),import('./app.mjs')]","[Promise.resolve({template:__template}),Promise.resolve({mountLearning:__mountLearning})]");
  vm.runInNewContext(code,ctx);const start=element('open-learning');assert.equal(created,0);
  await Promise.all([start.listeners.click(),start.listeners.click()]);assert.equal(created,1);assert.equal(mounted,1);assert.equal(start.disabled,false);assert.equal(element('learning-dialog').open,true);
- element('skip-learning').listeners.click();assert.equal(focused,'main');element('exit').listeners.click();assert.equal(focused,'open-learning');
+ element('skip-learning').listeners.click();assert.equal(focused,'main');deferClose=true;element('exit').listeners.click();assert.equal(focused,'open-learning','explicit close restores focus before the queued native close event');for(const callback of pendingClose.splice(0))callback();deferClose=false;
  ctx.document.documentElement.dataset.theme='silver';await start.listeners.click();assert.equal(created,1);assert.equal(hosts[0].dataset.theme,'silver');assert.equal(element('learning-dialog').open,true);element('reset-dialog').open=true;win.listeners.hashchange();assert.equal(element('learning-dialog').open,false);assert.equal(element('reset-dialog').open,false);assert.equal(focused,'open-learning');
 });
 test('Empty restore preserves open lesson and restored snapshots cannot discard a later self-check',()=>{

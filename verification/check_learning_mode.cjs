@@ -8,8 +8,9 @@ const base=process.env.FABGUARD_LOCAL_URL||'http://127.0.0.1:8764';
 if(!['localhost','127.0.0.1'].includes(new URL(base).hostname))throw Error('Loopback only');
 const out=process.env.FABGUARD_LEARNING_OUTPUT||'/tmp/fabguard-learning-browser';
 fs.mkdirSync(out,{recursive:true});
+let browser;
 (async()=>{
- const browser=await chromium.launch({headless:true,...(process.env.FABGUARD_BROWSER_PATH?{executablePath:process.env.FABGUARD_BROWSER_PATH}:{})});
+ browser=await chromium.launch({headless:true,...(process.env.FABGUARD_BROWSER_PATH?{executablePath:process.env.FABGUARD_BROWSER_PATH}:{})});
  const report={browser:await browser.version(),checks:[],screenshots:[],limitations:['Loopback only; not production verification','Mobile viewport emulation, not physical phones','No screen-reader testing','Reflow only; not actual browser 200% zoom'],externalAfterOpen:[],errors:[]};
  for(const width of [1366,390,360])for(const language of ['ko','en'])for(const theme of ['dark','silver']){
   const tag=`${width}-${language}-${theme}`;
@@ -57,4 +58,4 @@ fs.mkdirSync(out,{recursive:true});
  }
  assert.equal(report.externalAfterOpen.length,0);assert.equal(report.errors.length,0);
  fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close();console.log(JSON.stringify({passed:report.checks.length,report:path.join(out,'receipt.json')}));
-})().catch(error=>{fs.writeFileSync(path.join(out,'blocked-or-failed.json'),JSON.stringify({error:String(error),status:'blocked_or_failed',complete:false},null,2)+'\n');console.error(error);process.exitCode=1});
+})().catch(async error=>{fs.writeFileSync(path.join(out,'blocked-or-failed.json'),JSON.stringify({error:String(error),status:'blocked_or_failed',complete:false},null,2)+'\n');console.error(error);await browser?.close();process.exitCode=1});
