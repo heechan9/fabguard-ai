@@ -38,7 +38,18 @@ async function assertProfessionalDisclosure(page){
   await page.goto(target.href);await page.locator('#app .absolute-beginner').waitFor();
   const element=page.locator('#'+hash);await element.waitFor({state:'visible'});
   if(hash!=='answer-overview')assert.equal(await panel.evaluate(e=>e.open),true,`${hash} reveals detailed evidence`);
-  await page.waitForFunction(id=>{const target=document.getElementById(id),header=document.querySelector('.topbar');return target&&target.getBoundingClientRect().top>=header.getBoundingClientRect().bottom-2&&target.getBoundingClientRect().top<innerHeight;},hash);
+  try {
+   await page.waitForFunction(id=>{const target=document.getElementById(id),header=document.querySelector('.topbar');return target&&target.getBoundingClientRect().top>=header.getBoundingClientRect().bottom-2&&target.getBoundingClientRect().top<innerHeight;},hash);
+  } catch(error) {
+   error.disclosureDiagnostic=await page.evaluate(id=>{
+    const rect=e=>e?{...e.getBoundingClientRect().toJSON()}:null;
+    const target=document.getElementById(id),header=document.querySelector('.topbar');
+    const ancestors=[];for(let e=target;e;e=e.parentElement){const style=getComputedStyle(e);ancestors.push({tag:e.tagName,id:e.id,className:e.className,open:e.open,rect:rect(e),overflow:style.overflow,scrollTop:e.scrollTop,scrollHeight:e.scrollHeight,scrollPaddingTop:style.scrollPaddingTop,scrollMarginTop:style.scrollMarginTop,position:style.position});}
+    return {url:location.href,requestedHash:id,viewport:{width:innerWidth,height:innerHeight},scroll:{x:scrollX,y:scrollY,height:document.documentElement.scrollHeight},target:rect(target),header:rect(header),activeElement:{tag:document.activeElement?.tagName,id:document.activeElement?.id},fonts:document.fonts.status,ancestors};
+   },hash);
+   error.message+='\nAnchor diagnostic: '+JSON.stringify(error.disclosureDiagnostic);
+   throw error;
+  }
   await page.locator('.cc-navigation > a[data-route=risks]').press('Enter');await page.locator('.table-shell tbody tr').first().waitFor();
   await page.goBack();await element.waitFor({state:'visible'});
   if(hash!=='answer-overview')assert.equal(await panel.evaluate(e=>e.open),true,'Back reveals the target again');

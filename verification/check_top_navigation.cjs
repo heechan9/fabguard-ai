@@ -19,7 +19,7 @@ async function assertTopNavigation(page,{scroll=true}={}){
  assert.ok(state.scrollWidth<=state.width+1&&!state.navOverflow,'no document or navigation overflow');
  for(const item of state.items){assert.ok(item.width>0&&item.height>0&&item.x>=-1&&item.right<=state.width+1,JSON.stringify(item));assert.ok(item.font>=11&&!item.clip,`readable unclipped navigation: ${JSON.stringify(item)}`);}
  const rows=new Set(state.items.map(e=>Math.round(e.y)));
- assert.ok(rows.size<=(state.width<=760?2:1),`navigation row count ${rows.size}`);
+ assert.ok(rows.size<=(state.width<=900?2:1),`navigation row count ${rows.size}`);
  if(scroll){await page.evaluate(()=>scrollTo(0,document.documentElement.scrollHeight));const after=await page.evaluate(inspect);assert.ok(after.header.y>=-1&&after.header.y<=2,'header stays at top after scroll');await page.evaluate(()=>scrollTo(0,0));}
  return state;
 }
@@ -35,7 +35,8 @@ async function main(){
  const browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const results=[];let page;
  try{
- const widths=process.env.FABGUARD_UI_WIDTH?[Number(process.env.FABGUARD_UI_WIDTH)]:[1920,1672,1366,1024,900,720,390,360];
+ const requestedWidth=Number(process.env.FABGUARD_UI_WIDTH);
+ const widths=requestedWidth?(requestedWidth===900?[900,820]:[requestedWidth]):[1920,1672,1366,1024,900,820,720,390,360];
  for(const {width,height} of widths.flatMap(width=>width===1366?[{width,height:941},{width,height:768}]:[{width,height:941}]))for(const theme of process.env.FABGUARD_UI_THEME?[process.env.FABGUARD_UI_THEME]:['dark','silver'])for(const lang of ['ko','en']){
   const context=await browser.newContext({viewport:{width,height},reducedMotion:'reduce'});page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
@@ -62,6 +63,6 @@ async function main(){
   results.push({width,height,theme,lang,geometry});fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(results,null,2));await context.close();
  }
  console.log(`PASS ${results.length} top-navigation combinations`);
- }catch(error){await page?.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});throw error;}finally{await browser.close();}
+ }catch(error){fs.writeFileSync(path.join(output,'failure.json'),JSON.stringify({error:error.stack,url:page?.url(),diagnostic:error.disclosureDiagnostic||null,completed:results},null,2));await page?.screenshot({path:path.join(output,'failure.png'),fullPage:true}).catch(()=>{});throw error;}finally{await browser.close();}
 }
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});

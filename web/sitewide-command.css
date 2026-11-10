@@ -249,7 +249,7 @@ body.command-shell .cc-dashboard .cc-panel-head h2{letter-spacing:0}
   body.command-shell .topbar nav.cc-navigation>a{padding:8px;font-size:13px}
   body.command-shell .cc-more>summary{padding:8px;font-size:13px}
 }
-@media(max-width:760px){
+@media(max-width:900px){
   body.command-shell .topbar{grid-template-columns:minmax(0,1fr) auto;padding:10px 12px 0;gap:0 8px}
   body.command-shell .brand{font-size:15px;gap:10px}
   body.command-shell .cc-demo-badge{display:none}
@@ -283,8 +283,17 @@ body.command-shell .professional-details[open]>summary{border-bottom:1px solid v
 body.command-shell .professional-body{padding:24px;min-width:0}
 body.command-shell .professional-body>section:first-child{margin-top:0}
 body.command-shell .professional-body>section:last-child{margin-bottom:0}
-body.command-shell .project-intro .intro-failure{margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--cc-warm);max-width:65ch}
+body.command-shell .project-intro .intro-failure{margin:12px 0 0;font-size:14px;line-height:1.6;color:var(--cc-warm);max-width:65ch}
 @media(max-width:760px){
  body.command-shell .professional-details>summary{padding:14px;font-size:16px}
  body.command-shell .professional-body{padding:18px 12px}
 }
+
+/* Use the actual sticky height, including wrapped translations and browser zoom. */
+html[data-default-theme]:has(body.command-shell){scroll-padding-top:var(--site-header-offset,148px)}
+@media(max-width:900px){html[data-default-theme]:has(body.command-shell){scroll-padding-top:var(--site-header-offset,210px)}}
+@media(min-width:761px) and (max-width:900px){
+ body.command-shell .brand{font-size:20px}
+ body.command-shell .topbar nav.cc-navigation>a,body.command-shell .cc-more>summary{font-size:14px}
+}
+@media(min-width:901px){body.command-shell.cc-overview-page main{padding-top:16px;padding-bottom:20px}}

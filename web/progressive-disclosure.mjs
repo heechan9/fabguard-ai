@@ -19,7 +19,17 @@ export function installProgressiveDisclosure(windowObject = globalThis.window) {
   if (!windowObject?.document || !windowObject.addEventListener) return () => {};
   if (installations.has(windowObject)) return installations.get(windowObject);
   const reveal = () => {
-    const target = openDetailsForHash(windowObject.location?.hash, windowObject.document);
+    const document = windowObject.document;
+    // App-owned routes manage their own panel state, scrolling, and focus.
+    if (document.querySelector('header[data-site-nav-owner="app"]')) return;
+    const hash = windowObject.location?.hash;
+    if (typeof hash !== 'string' || !hash.startsWith('#') || hash.length < 2) return;
+    let id;
+    try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+    const candidate = document.getElementById(id);
+    // Preserve native fragment behavior for controls, dialogs, and legacy details.
+    if (!candidate?.closest('details.professional-details')) return;
+    const target = openDetailsForHash(hash, document);
     // Native fragment navigation may have happened while the ancestor was closed.
     if (target && typeof target.scrollIntoView === 'function') target.scrollIntoView({ block: 'start', behavior: 'instant' });
     if (target && typeof target.focus === 'function') {

@@ -6,8 +6,9 @@ import { openDetailsForHash, installProgressiveDisclosure } from '../../web/prog
 function fixture() {
   const outer = { tagName: 'DETAILS', open: false, parentElement: null };
   const inner = { tagName: 'DETAILS', open: false, parentElement: outer };
-  const target = { tagName: 'H2', parentElement: inner };
-  const root = { getElementById: id => id === '측정:결과' ? target : id === 'panel' ? inner : null };
+  inner.closest = selector => selector === 'details.professional-details' ? inner : null;
+  const target = { tagName: 'H2', parentElement: inner, closest: inner.closest };
+  const root = { querySelector: () => null, getElementById: id => id === '측정:결과' ? target : id === 'panel' ? inner : null };
   return { outer, inner, target, root };
 }
 test('encoded deep links open every ancestor without CSS selectors', () => {
@@ -76,5 +77,28 @@ test('new static explanations are native closed details, with no controls or res
     assert.ok(panel, path);
     assert.match(panel[1], /<summary>전문 설명과 근거 보기/);
     assert.doesNotMatch(panel[1], /<(?:input|select|button|canvas|svg)\b|role="(?:status|alert)"/);
+  }
+});
+
+test('installer leaves legacy details, dialogs, malformed hashes and app-owned routing untouched', () => {
+  for (const scenario of ['legacy-details', 'dialog', 'malformed', 'app-route']) {
+    const { root, inner, outer, target } = fixture();
+    let focusCount = 0;
+    let scrollCount = 0;
+    target.focus = () => focusCount++;
+    target.scrollIntoView = () => scrollCount++;
+    if (scenario === 'legacy-details' || scenario === 'dialog') target.closest = () => null;
+    if (scenario === 'dialog') target.tagName = 'DIALOG';
+    if (scenario === 'app-route') root.querySelector = selector => selector === 'header[data-site-nav-owner="app"]' ? {} : null;
+    Object.assign(root, { readyState: 'complete', removeEventListener() {} });
+    const events = new Map();
+    const win = { document: root, location: { hash: scenario === 'malformed' ? '#%E0%A4%A' : '#' + encodeURIComponent('측정:결과') }, addEventListener: (name, fn) => events.set(name, fn), removeEventListener: name => events.delete(name) };
+    const cleanup = installProgressiveDisclosure(win);
+    for (const callback of events.values()) callback();
+    assert.equal(inner.open, false, scenario);
+    assert.equal(outer.open, false, scenario);
+    assert.equal(focusCount, 0, scenario);
+    assert.equal(scrollCount, 0, scenario);
+    cleanup();
   }
 });

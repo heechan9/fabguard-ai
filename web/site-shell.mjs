@@ -62,6 +62,10 @@ export function bindSiteShell(doc = document, win = window) {
   if (!nav || header.dataset.siteNavOwner === 'static' || header.dataset.siteShellBound) return;
   header.dataset.siteShellBound = 'true';
   const root = doc.documentElement;
+  const updateHeaderOffset = () => root.style.setProperty('--site-header-offset', `${Math.ceil(header.getBoundingClientRect().height) + 16}px`);
+  if (typeof win.ResizeObserver === 'function') new win.ResizeObserver(updateHeaderOffset).observe(header);
+  win.addEventListener('resize', updateHeaderOffset);
+  updateHeaderOffset();
   const appOwnsNavigation = header.dataset.siteNavOwner === 'app';
   const links = [...nav.querySelectorAll('a[href]')];
   const originalHrefs = new Map(links.map(link => [link, link.getAttribute('href')]));
