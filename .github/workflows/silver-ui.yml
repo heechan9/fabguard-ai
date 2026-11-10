@@ -1,10 +1,10 @@
 name: Silver reader surface verification
 on:
   pull_request:
-    paths: ['web/**', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
+    paths: ['web/**', 'verification/check_command_center.cjs', 'tests/web/command-center.test.mjs', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
   push:
     branches: [main]
-    paths: ['web/**', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
+    paths: ['web/**', 'verification/check_command_center.cjs', 'tests/web/command-center.test.mjs', 'verification/check_silver_ui.cjs', 'verification/check_theme_ui.cjs', 'verification/check_oht.cjs', 'tests/web/theme.test.mjs', '.github/workflows/silver-ui.yml']
 permissions:
   contents: read
 jobs:
