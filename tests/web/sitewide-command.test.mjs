@@ -3,9 +3,11 @@ import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
 import {createRequire} from 'node:module';
 import {runInNewContext} from 'node:vm';
+import * as robotCore from '../../web/robot/window-core.mjs';
+import {parseCSV} from '../../web/equipment/contract.mjs';
 import {normalizePagePath,navigationKey,navigationHref} from '../../web/site-shell.mjs';
 const require=createRequire(import.meta.url);
-const {documents,hashViews,canonicalPath,renderedAudit}=require('../../verification/check_sitewide_command.cjs');
+const {documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV}=require('../../verification/check_sitewide_command.cjs');
 const root=new URL('../../web/',import.meta.url);
 const read=name=>readFileSync(new URL(name,root),'utf8');
 function htmlFiles(directory=root,prefix=''){
@@ -97,4 +99,25 @@ test('rendered contrast audit catches translucent text, gradient risks and unsup
  assert.equal(scan({color:'rgb(130, 130, 130)',fontSize:'24px'}).issues.length,0,'large text retains the actual 3:1 threshold');
  assert.equal(scan({backgroundImage:'linear-gradient(rgb(255, 255, 255), rgb(0, 0, 0))'}).issues.length,1,'gradient risk cannot disappear from coverage');
  assert.equal(scan({backgroundImage:'url("unverified.png")'}).unknownBackgrounds.length,1,'unsupported backdrop is an explicit failure, not a skipped pass');
+});
+
+test('semantic legend fixtures produce real valid, gap, short, nonfinite, range and tail window states',()=>{
+ const expected={ok:null,gap:'timestamp_gap',short:'insufficient_samples',nonfinite:'nonfinite_value',range:'value_out_of_range'};
+ for(const [kind,reason] of Object.entries(expected)){
+  const csv=semanticWindowCSV(kind);
+  assert.equal(semanticWindowCSV(kind),csv,'fixture generation is deterministic');
+  const input=robotCore.tableToSeries(parseCSV(csv));assert.deepEqual(input.reasons,[]);
+  const result=robotCore.windowFile(input.times,input.axes,robotCore.demoConfig({nominal_period_s:'0.001'}));
+  assert.equal(result.file_status,'valid',kind);
+  assert.ok(result.partial_tail.n_samples>0,kind+' retains partial tail');
+  if(reason)assert.ok(result.windows.some(w=>w.reasons.includes(reason)),kind);
+  else assert.ok(result.windows.every(w=>w.status==='ok'));
+ }
+ assert.throws(()=>semanticWindowCSV('fake'));
+});
+test('semantic browser checks preserve explicit state meaning, warnings and keyboard-only research theme',()=>{
+ const scanner=readFileSync(new URL('../../verification/check_sitewide_command.cjs',import.meta.url),'utf8');
+ for(const marker of ['#contract-status span.bad','#file-table .pill-ok','#file-table .pill-bad','.strip .w-${kind}','#dataset-card p.plain-quality','#dataset-card p.evidence-note.evidence-warning','p.tag.synthetic','research-theme-note',"page.keyboard.press('Shift+Tab')"] )assert.ok(scanner.includes(marker),marker);
+ const html=read('research/index.html');assert.match(html,/id="research-theme"[^>]*aria-describedby="research-theme-note"/);
+ assert.match(html,/id="research-theme-note"[^>]*>[^<]*저장하지[^<]*다크/);
 });

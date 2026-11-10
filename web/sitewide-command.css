@@ -7,7 +7,7 @@ html[data-default-theme]:has(body.command-shell){
   --accent:var(--cc-accent);--focus:var(--cc-warm);--amber:var(--cc-warm);
   --action:var(--cc-active);--action-hover:var(--cc-raised);--button:var(--cc-raised);--input:var(--cc-raised);
   --hover:var(--cc-raised);--row-hover:var(--cc-raised);--radius:7px;
-  --red:#ffb4a5;--error:#ffb4a5;--normal:#9be8ae;--success-ink:#b4edbf;
+  --synthetic:#c8b7f5;--red:#ffb4a5;--error:#ffb4a5;--normal:#9be8ae;--success-ink:#b4edbf;
   --danger-bg:#351c1b;--caution-bg:#351c1b;--caution-ink:#ffd0c5;--caution-line:#b78575;
   --warning-bg:#302819;--warning-line:#ac8a4b;--success-bg:#163922;
   --note-bg:var(--cc-raised);--note-ink:var(--cc-muted);--note-line:var(--cc-line);
@@ -16,7 +16,7 @@ html[data-default-theme]:has(body.command-shell){
 html[data-theme="silver"]:has(body.command-shell),html:has(#research-theme:checked){
   --cc-bg:#aab6c5;--cc-panel:#c2cdda;--cc-raised:#b8c4d2;--cc-ink:#182c25;--cc-muted:#354b43;
   --cc-line:#496452;--cc-accent:#124d2a;--cc-warm:#583b04;--cc-active:#afc6b9;
-  --red:#7a241b;--error:#7a241b;--normal:#164b2c;--success-ink:#164b2c;
+  --synthetic:#4e347b;--red:#7a241b;--error:#7a241b;--normal:#164b2c;--success-ink:#164b2c;
   --danger-bg:#ead3ce;--caution-bg:#ead3ce;--caution-ink:#6c261c;--caution-line:#955b50;
   --warning-bg:#e7d8b6;--warning-line:#8a6929;--success-bg:#b6d3bf;color-scheme:light;
 }
@@ -30,6 +30,7 @@ body.command-shell .cc-navigation{margin:0;max-width:none;justify-content:flex-s
 body.command-shell .cc-navigation details{border-radius:0}
 body.command-shell .cc-header-controls{align-items:center;flex-wrap:nowrap}
 body.command-shell .cc-header-controls label{font-size:12px;margin:0;white-space:nowrap;cursor:pointer}
+body.command-shell .site-theme-switch:focus-visible{outline:3px solid var(--cc-warm);outline-offset:3px}
 body.command-shell .site-theme-switch{width:20px;height:20px;margin:0;accent-color:var(--cc-accent)}
 body.command-shell .cc-navigation>a[aria-current=page],body.command-shell .cc-more a[aria-current=page]{border-color:var(--cc-line);border-left-color:var(--cc-accent);color:var(--cc-ink);background:var(--cc-active)}
 body.command-shell.site-shell main{width:auto;max-width:none;margin:0 0 0 184px;padding:24px;min-width:0}
@@ -61,6 +62,9 @@ body.command-shell :is(main,dialog) :is(button,.button):hover{background:var(--c
 body.command-shell :is(main,dialog) :is(button,.button):disabled{cursor:not-allowed}
 body.command-shell :is(main,dialog) :is(.button,.primary,button.active,button[aria-pressed=true]){background:var(--cc-active);color:var(--cc-ink);border:1px solid var(--cc-accent);border-radius:4px;box-shadow:none}
 body.command-shell :is(main,dialog) :is(.button,.primary,button.active,button[aria-pressed=true]) :is(span,small,b,strong){color:var(--cc-ink)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.button,.primary,button.active,button[aria-pressed=true]){background:var(--cc-active);color:var(--cc-ink);border-color:var(--cc-accent)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.button,.primary,button.active,button[aria-pressed=true]) :is(span,small,b,strong){color:var(--cc-ink)}
+body.command-shell input:not([type=checkbox]):not([type=radio]):not([type=file]){color:var(--cc-ink);background:var(--cc-panel);border-color:var(--cc-line)}
 body.command-shell :is(main,dialog) input[type=range]{accent-color:var(--cc-accent);background:transparent}
 body.command-shell :is(main,dialog) input[type=file]::file-selector-button{font:inherit;padding:8px 12px;background:var(--cc-active);color:var(--cc-ink);border:1px solid var(--cc-line);border-radius:4px}
 body.command-shell :is(main,dialog) :is(.panel,.workspace,.card,.evidence-card,.plain-result,.table-shell,.record-grid>section,.visual,aside,.inspection-card,.measurement-card,.aoi-gates article,.notice,.boundary,.retrospective,.jump a){background:var(--cc-panel);border-color:var(--cc-line);border-radius:7px;box-shadow:none}
@@ -75,33 +79,53 @@ body.command-shell :is(main,dialog) :is(.table-scroll,.table-wrap,.context-scrol
 body.command-shell :is(main,dialog) :is(.card,.panel,.workspace,.record-grid,.controls,.viewbar,.transport,.inspection-card,.heading)>*{min-width:0}
 body.command-shell :is(main,dialog) :is(.heading,.lab-context,.context-review-details,.context-review,.context-hypotheses article,.experience-map,.evidence-entry,.absolute-beginner,.answer-strip,.portfolio-result,.validation-details){background:var(--cc-panel);border-color:var(--cc-line);box-shadow:none}
 body.command-shell :is(main,dialog) .jump a{border:1px solid var(--cc-line);border-radius:4px}
+body.command-shell .evidence-levels article.measured{background:var(--cc-panel)}
+body.command-shell .field-effect-section .validation-grid article>b{opacity:1;color:var(--cc-muted)}
 body.command-shell :is(main,dialog) details{border-color:var(--cc-line)}
 body.command-shell :is(main,dialog) .data-role{color:var(--cc-muted)!important}
+body.command-shell :is(main,dialog) :is(.evidence-tag,.notice){background:var(--cc-panel);color:var(--cc-muted);border-color:var(--cc-line)}
 body.command-shell :is(main,dialog) :is(.r-step,.robot-step,.file-card,.mode-grid article,.scope-chips li,.track-banner,.synthetic-banner,.bottom-line,.stability-box,.contract-grid fieldset,.tour-grid article,.tour-demo){background:var(--cc-panel);border-color:var(--cc-line);border-radius:7px;box-shadow:none}
 body.command-shell :is(main,dialog) :is(.r-step,.robot-step,.file-card,.mode-grid article,.scope-chips li,.track-banner,.synthetic-banner,.bottom-line,.stability-box,.contract-grid fieldset){--ink:var(--cc-ink)}
 body.command-shell :is(main,dialog) :is(.r-figure,.rms-chart,#chart) text{fill:var(--cc-muted)}
 body.command-shell :is(main,dialog) :is(.r-figure,.rms-chart,#chart) .axis,body.command-shell .c-axis{stroke:var(--cc-line)}
+body.command-shell .r-figure{overflow-x:auto}
+body.command-shell .r-figure svg{min-width:900px}
 body.command-shell .r-figure .c-random_forest{fill:#98baf3}
 html[data-theme=silver] body.command-shell .r-figure .c-random_forest{fill:#264e87}
+html[data-theme=silver] body.command-shell .r-figure .c-hist_gradient_boosting{fill:#1c6250}
+html[data-theme=silver] body.command-shell .r-figure .c-dummy{fill:#455e54}
+/* SPC limits, maintenance events and missing markers have fixed semantic
+   SVG inks. Keep their plotting surface dark in either reader palette. */
+body.command-shell :is(.spc-chart,.context-scroll) svg,body.command-shell .strip{background:#071e15}
 body.command-shell .tour-flow{border-color:var(--cc-accent);background:var(--cc-raised)}
 
 /* Warning/error/success meanings stay visible, and remain named in text. */
-body.command-shell :is(main,dialog) :is(.caution,.global-boundary,.evidence-error,#error,#context-error,#file-error){background:var(--danger-bg);color:var(--red);border-color:var(--caution-line)}
-body.command-shell :is(main,dialog) :is(.caution,.global-boundary,.evidence-error,#error,#context-error,#file-error) :is(p,span,strong,b,small){color:var(--caution-ink)}
-body.command-shell :is(main,dialog) :is(.uncertainty-note,.plain-quality,.evidence-warning,.quality,.context-hold[data-state=hold],.robot-review[data-state=hold]){background:var(--warning-bg);color:var(--amber);border-color:var(--warning-line)}
-body.command-shell :is(main,dialog) :is(.uncertainty-note,.plain-quality,.evidence-warning,.quality,.context-hold[data-state=hold],.robot-review[data-state=hold]) :is(p,span,strong,b,small){color:var(--amber)}
-body.command-shell :is(main,dialog) :is(.board-status.warn,.prototype,.tour-state [data-state=active],#load-error){color:var(--amber)}
-body.command-shell :is(main,dialog) :is(.board-status.danger,.robot-review[data-state=review]){color:var(--red)}
-body.command-shell :is(main,dialog) :is(.board-status:not(.waiting):not(.warn):not(.danger),.context-hold[data-state=clear],.robot-review[data-state=ok]){color:var(--normal)}
-body.command-shell :is(main,dialog) .scenario-buttons button.armed{background:var(--warning-bg);border-color:var(--amber)}
-body.command-shell :is(main,dialog) .scenario-buttons button.armed :is(span,b,small){color:var(--amber)}
-body.command-shell :is(main,dialog) :is(.robot-review[data-state=ok],.context-hold[data-state=clear]){background:var(--success-bg);border-color:var(--normal)}
-body.command-shell :is(main,dialog) #delay-state[data-delayed=true]{color:var(--amber);border-color:var(--amber)}
-body.command-shell :is(main,dialog) :is(.bad,.pill-bad){color:var(--red)}
-body.command-shell :is(main,dialog) :is(.warn,.tag-cond,.not-evaluated td){color:var(--amber)}
-body.command-shell :is(main,dialog) .pill-ok{color:var(--normal)}
-body.command-shell :is(main,dialog) .inspection-card[data-status=review] .inspection-result strong{color:var(--amber)}
-body.command-shell :is(main,dialog) :is(.inspection-card[data-status=unknown],.inspection-card[data-status=idle]) .inspection-result strong{color:var(--cc-muted)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.caution,.global-boundary,.evidence-error,#error,#context-error,#file-error){background:var(--danger-bg);color:var(--red);border-color:var(--caution-line)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.caution,.global-boundary,.evidence-error,#error,#context-error,#file-error) :is(p,span,strong,b,small){color:var(--caution-ink)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.uncertainty-note,.plain-quality,p.plain-quality,.evidence-warning,p.evidence-warning,.quality,.context-hold[data-state=hold],.robot-review[data-state=hold]){background:var(--warning-bg);color:var(--amber);border-color:var(--warning-line)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.uncertainty-note,.plain-quality,p.plain-quality,.evidence-warning,p.evidence-warning,.quality,.context-hold[data-state=hold],.robot-review[data-state=hold]) :is(p,span,strong,b,small){color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.board-status.warn,.prototype,.tour-state [data-state=active],#load-error){color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.board-status.danger,.robot-review[data-state=review]){color:var(--red)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.board-status:not(.waiting):not(.warn):not(.danger),.context-hold[data-state=clear],.robot-review[data-state=ok]){color:var(--normal)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) .scenario-buttons button.armed{background:var(--warning-bg);border-color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) .scenario-buttons button.armed :is(span,b,small){color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.robot-review[data-state=ok],.context-hold[data-state=clear]){background:var(--success-bg);border-color:var(--normal)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) #delay-state[data-delayed=true]{color:var(--amber);border-color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.bad,span.bad,.pill-bad,span.pill-bad){color:var(--red)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.warn,.tag-cond,.not-evaluated td){color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.pill-ok,span.pill-ok){color:var(--normal)}
+body.command-shell.robot-page .legend{background:#071e15;color:#f2efdc;padding:10px 12px;border:1px solid var(--cc-line);border-radius:4px}
+body.command-shell.robot-page .legend .ok{color:var(--ok)}
+body.command-shell.robot-page .legend .gap{color:var(--gap)}
+body.command-shell.robot-page .legend .short{color:var(--short)}
+body.command-shell.robot-page .legend .nonfinite{color:var(--nonfinite)}
+body.command-shell.robot-page .legend .range{color:#f2f2f2}
+body.command-shell.robot-page .legend .tail{color:#a1b2ac}
+body.command-shell.robot-page .w-tail{fill:#a1b2ac}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) .tag.prototype{color:var(--amber);border-color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) p.tag.synthetic{color:var(--synthetic);border-color:var(--synthetic);border-style:dashed}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) .inspection-card[data-status=review] .inspection-result strong{color:var(--amber)}
+body.command-shell:not(.cc-overview-page) :is(main,dialog) :is(.inspection-card[data-status=unknown],.inspection-card[data-status=idle]) .inspection-result strong{color:var(--cc-muted)}
 
 /* Dark graphic surfaces retain light captions in both reader themes. Shape
    colors remain the original measured/reference/synthetic diagnostic legends. */

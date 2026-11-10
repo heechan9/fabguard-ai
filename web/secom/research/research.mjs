@@ -63,8 +63,8 @@ function renderSummary(filter) {
   renderChart(rows);
 }
 function renderChart(rows) {
-  const s = $('capture-chart'), left = 270, right = 60, top = 14, bar = 20, gap = 6;
-  const height = top + rows.length * (bar + gap) + 30, width = 760, denom = D.summary[0].validation_fail_sum;
+  const s = $('capture-chart'), left = 350, right = 60, top = 14, bar = 20, gap = 6;
+  const height = top + rows.length * (bar + gap) + 30, width = 900, denom = D.summary[0].validation_fail_sum;
   s.setAttribute('viewBox', `0 0 ${width} ${height}`);
   s.setAttribute('aria-label', `후보별 포착 불량 수, 분모 ${denom}: ` + rows.map(r => `${FAMILY_LABEL[r.family]} ${r.mode} ${r.captured_fail_sum}`).join(', '));
   const scale = v => (width - left - right) * v / denom;

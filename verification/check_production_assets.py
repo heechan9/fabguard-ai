@@ -10,7 +10,7 @@ import urllib.request
 BASE = 'https://fabguard-ai.vercel.app/'
 FILES = [
     'sitewide-command.css', 'site-shell.mjs',
-    'secom/research.html', 'smt/references.html',
+    'secom/research.html', 'secom/research/research.mjs', 'smt/references.html',
     'command-center.mjs', 'command-center.css',
     'assets/command-center/wafer-in.svg', 'assets/command-center/lithography.svg',
     'assets/command-center/etch.svg', 'assets/command-center/deposition.svg',

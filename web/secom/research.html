@@ -66,7 +66,7 @@
 <label class="r-filter">모델 보기 <select id="family-filter"><option value="all">전체</option><option value="l1_logistic">L1 로지스틱</option><option value="random_forest">랜덤 포레스트</option><option value="hist_gradient_boosting">HistGradientBoosting</option><option value="dummy">Dummy</option></select></label>
 <div class="table-wrap"><table id="summary-table"><caption>세 폴드 결과 (AP 평균 ± 표본표준편차, 포착은 세 폴드 예산의 합산)</caption>
 <thead><tr><th scope="col">모델</th><th scope="col">결측 처리</th><th scope="col">AP 평균 ± SD</th><th scope="col">AP 최소–최대</th><th scope="col">포착 / 불량</th><th scope="col">폴드별 포착</th><th scope="col">합산 포착률</th></tr></thead><tbody></tbody></table></div>
-<figure class="r-figure"><svg id="capture-chart" role="img" viewBox="0 0 760 360"></svg><figcaption>후보별 포착한 불량 수 (분모는 세 폴드 검증 불량 전체, 검토 수 합계는 고정). 막대 옆 숫자가 실제 값입니다.</figcaption></figure>
+<figure class="r-figure" tabindex="0" role="group" aria-label="후보별 포착 불량 수 그래프, 작은 화면에서는 좌우로 스크롤"><svg id="capture-chart" role="img" viewBox="0 0 760 360"></svg><figcaption>후보별 포착한 불량 수 (분모는 세 폴드 검증 불량 전체, 검토 수 합계는 고정). 막대 옆 숫자가 실제 값입니다.</figcaption></figure>
 <p class="caption">AP는 scikit-learn average precision입니다. 평균 AP가 높은 후보가 같은 검토 예산의 포착에서도 앞서지는 않습니다. Dummy는 동점 정렬이 임의라서 포착 범위와 무작위 동점 기대값을 함께 봐야 합니다.</p>
 <p id="dummy-note" class="caption"></p>
 </section>

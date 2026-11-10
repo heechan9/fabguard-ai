@@ -3,7 +3,7 @@ on:
   pull_request:
     paths: ['web/**', 'verification/check_sitewide_command.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   push:
-    branches: [main, feat/sitewide-command-style-20261110]
+    branches: [main]
     paths: ['web/**', 'verification/check_sitewide_command.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   workflow_dispatch:
 permissions:

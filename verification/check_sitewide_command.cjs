@@ -31,6 +31,28 @@ const canonicalPath = value => {
   return u.pathname.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
 };
 
+// Deterministic test-only inputs processed by the real local CSV/window pipeline.
+// No manufactured DOM classes: each legend category must come from calculated state.
+function semanticWindowCSV(kind) {
+  assert.ok(['ok','gap','short','nonfinite','range'].includes(kind));
+  const rows=['Time,A_x [g],A_y [g],A_z [g]'];
+  for(let i=0;i<120;i++){
+    if(kind==='gap'&&i>=50&&i<60)continue;
+    if(kind==='short'&&i>0&&i<50&&i%5===0)continue;
+    const value=kind==='nonfinite'&&i===70?'NaN':kind==='range'&&i===70?'1000001':'1';
+    rows.push(`${(i/1000).toFixed(3)},${value},0,0`);
+  }
+  return rows.join('\n')+'\n';
+}
+// CSS custom properties are hex tokens; compare against the browser's actual RGB ink.
+function semanticStyles(selectors) {
+  const rgb=token=>/^#[0-9a-f]{6}$/i.test(token)?`rgb(${[1,3,5].map(i=>parseInt(token.slice(i,i+2),16)).join(', ')})`:token;
+  return selectors.flatMap(selector=>[...document.querySelectorAll(selector)].map(el=>{
+    const style=getComputedStyle(el);
+    return {selector,text:el.textContent.trim(),color:style.color,fill:style.fill,borderColor:style.borderColor,borderStyle:style.borderStyle,background:style.backgroundColor,visible:el.getClientRects().length>0,tokens:Object.fromEntries(['--red','--normal','--amber','--synthetic','--cc-ink','--cc-muted','--cc-accent'].map(name=>[name,rgb(style.getPropertyValue(name).trim())]))};
+  }));
+}
+
 // Runs inside the page. Transparent layers are composited, not silently skipped.
 // Gradient stops are sampled conservatively; unsupported images are reported and fail.
 // Canvas/scene overlays keep their separate semantic palette. SVG chart labels are checked.
@@ -113,7 +135,7 @@ async function main() {
   const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8764',origin=new URL(base).origin;
   const output=path.join(process.env.FABGUARD_UI_OUTPUT||'/tmp/sitewide-command',`${width}-${theme}`);
   fs.mkdirSync(output,{recursive:true});
-  const report={status:'running',base,width,theme,commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),documents:documents.map(d=>d.file),hashViews:hashViews.map(d=>d.route),results:[],failures:[],links:[],navigationTraversals:[],navigationAudits:[],scopeNotes:['Canvas/scene HUD semantic colors are not globally recolored; native SVG chart labels are audited.','Research preserves no-script CSP: both themes use its native checkbox; no cross-page saved-theme persistence or JavaScript Escape handler on this static page.','Contrast checks composite transparency and conservatively sample gradients; screenshots also require visual review.']};
+  const report={status:'running',base,width,theme,commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),documents:documents.map(d=>d.file),hashViews:hashViews.map(d=>d.route),results:[],failures:[],links:[],navigationTraversals:[],navigationAudits:[],semanticAudits:[],scopeNotes:['Canvas/scene HUD semantic colors are not globally recolored; native SVG chart labels are audited.','Research preserves no-script CSP: both themes use its native checkbox; no cross-page saved-theme persistence or JavaScript Escape handler on this static page.','Contrast checks composite transparency and conservatively sample gradients; screenshots also require visual review.']};
   const save=()=>fs.writeFileSync(path.join(output,'results.json'),JSON.stringify(report,null,2));
   let browser,activePage;
   const checkedLinks=new Set();
@@ -156,8 +178,16 @@ async function main() {
         assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','fresh browser defaults to command-room dark');
         assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-theme')),null);
         if(theme==='silver')await page.locator('#theme-toggle').press('Enter');
-        if(spec.name==='detail') {
+        if(spec.name==='detail'||spec.name==='review') {
           await page.locator('.cc-queue a[href="#detail/secom_1397"]').press('Enter');
+          await page.locator('.detail-hero').waitFor();
+          if(spec.name==='review'){
+            const review=page.locator('.review-prompt a[href^="/review/?sample="]');
+            const target=new URL(await review.getAttribute('href'),base);
+            assert.equal(target.searchParams.get('sample'),'secom_1397');
+            assert.equal(target.searchParams.get('lang'),lang==='en'?'en':null);
+            await review.press('Enter');
+          }
         }else if(spec.name!=='overview') {
           const links=await page.locator('.cc-navigation a').evaluateAll(es=>es.map(e=>({raw:e.getAttribute('href'),href:e.href,secondary:Boolean(e.closest('.cc-more'))})));
           const target=links.find(link=>canonicalPath(link.href)===canonicalPath(url.href)&&(canonicalPath(url.href)!=='/'||new URL(link.href).hash===url.hash));
@@ -167,12 +197,31 @@ async function main() {
         }
         await page.waitForURL(current=>canonicalPath(current.href)===canonicalPath(url.href)&&(canonicalPath(url.href)!=='/'||current.hash===url.hash||spec.name==='overview'));
         await page.locator(spec.ready).first().waitFor();await page.evaluate(()=>document.fonts.ready);
-        report.navigationTraversals.push({name,from:home.href,to:page.url(),method:spec.name==='overview'?'entry':spec.name==='detail'?'saved queue Enter':'shared navigation Enter'});
-        if(spec.nativeTheme){await page.locator('#research-theme').setChecked(theme==='silver');}
+        if(spec.name==='review'){
+          assert.equal(new URL(page.url()).searchParams.get('sample'),'secom_1397');
+          assert.equal(new URL(page.url()).searchParams.get('lang'),lang==='en'?'en':null);
+          assert.match(await page.locator('#source-details').innerText(),/secom_1397/);
+        }
+        report.navigationTraversals.push({name,from:home.href,to:page.url(),method:spec.name==='overview'?'entry':spec.name==='detail'?'saved queue Enter':spec.name==='review'?'saved queue to detail to record-specific review Enter':'shared navigation Enter'});
+        if(spec.nativeTheme){
+          const native=page.locator('#research-theme');await native.setChecked(theme==='silver');
+          await native.focus();await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+          assert.equal(await native.evaluate(e=>document.activeElement===e&&e.matches(':focus-visible')),true);
+          assert.notEqual(await native.evaluate(e=>getComputedStyle(e).outlineStyle),'none');
+          assert.equal(await native.getAttribute('aria-describedby'),'research-theme-note');
+          assert.match(await page.locator('#research-theme-note').innerText(),/저장하지.*다크/);
+          const before=await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor);
+          await native.press('Space');assert.equal(await native.isChecked(),theme!=='silver');
+          assert.notEqual(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),before);
+          await native.press('Space');assert.equal(await native.isChecked(),theme==='silver');
+          assert.equal(await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor),before);
+        }
         else {
           assert.equal(await page.locator('html').getAttribute('data-theme'),theme);
           if(theme==='dark')assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-theme')),null,'every scripted page defaults dark without a stored preference');
         }
+        // Preserve complete page visuals/contrast even if a later interaction assertion fails.
+        await capture('');
         assert.equal(await page.locator('body.command-shell').count(),1);
         assert.equal(await page.locator('.topbar').count(),1);
         assert.equal(await page.locator('.cc-navigation > a').count(),4);
@@ -198,8 +247,21 @@ async function main() {
         await summary.press('Space');assert.equal(await more.evaluate(e=>e.open),false);
         if(!spec.nativeTheme){
           await summary.press('Enter');await page.keyboard.press('Escape');assert.equal(await more.evaluate(e=>e.open),false);
-          await summary.press('Enter');await page.locator('main h1').first().click();assert.equal(await more.evaluate(e=>e.open),false);
-          const toggle=page.locator('#theme-toggle');await toggle.focus();assert.notEqual(await toggle.evaluate(e=>getComputedStyle(e).outlineStyle),'none');
+          await summary.press('Enter');
+          const snapshot=()=>({href:location.href,theme:document.documentElement.dataset.theme,language:document.documentElement.lang,history:history.length,controls:[...document.querySelectorAll('main input,main select,main textarea')].map(e=>({id:e.id,value:e.value,checked:e.checked}))});
+          const beforeOutside=await page.evaluate(snapshot);
+          // On narrow screens the expanded menu overlays main headings. Click actual
+          // empty topbar padding, outside More and every action, without force-clicking.
+          await page.locator('.topbar').click({position:{x:1,y:1}});
+          assert.equal(await more.evaluate(e=>e.open),false);
+          assert.deepEqual(await page.evaluate(snapshot),beforeOutside,'outside dismissal preserves navigation, theme and form state');
+          const toggle=page.locator('#theme-toggle');await toggle.focus();
+          // Programmatic focus after a pointer click retains pointer modality in Chrome.
+          // Traverse away and back with real keys before checking the keyboard indicator.
+          await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+          assert.equal(await toggle.evaluate(e=>document.activeElement===e),true,'keyboard traversal returns to the theme control');
+          assert.equal(await toggle.evaluate(e=>e.matches(':focus-visible')),true,'theme control is keyboard-focused');
+          assert.notEqual(await toggle.evaluate(e=>getComputedStyle(e).outlineStyle),'none');
           await toggle.press('Enter');assert.equal(await page.locator('html').getAttribute('data-theme'),theme==='dark'?'silver':'dark');
           await toggle.press('Space');assert.equal(await page.locator('html').getAttribute('data-theme'),theme);
           assert.equal(await toggle.getAttribute('aria-pressed'),String(theme==='dark'));
@@ -208,7 +270,6 @@ async function main() {
         if(spec.name==='risks')assert.equal(await page.locator('.table-shell tbody tr').count(),50);
         if(spec.name==='detail')assert.match(await page.locator('#app h1').innerText(),/secom_1397/);
         if(spec.fallback)assert.equal(await page.locator('#view-error').isVisible(),true,'WebGL failure is readable, not hidden');
-        await capture('');
         // Real controls open previously hidden surfaces; never fabricate CSS state classes.
         if(spec.name==='equipment'){
           await page.locator('#example').press('Enter');await page.locator('#mapping-panel:not([hidden])').waitFor();
@@ -221,6 +282,57 @@ async function main() {
           await page.locator('#review-role').fill('QA synthetic reviewer');await page.locator('#review-time').fill('2026-09-01T00:21:00Z');
           await page.locator('#review-reason').fill('Synthetic UI verification only; hold pending evidence.');
           await capture('-form');await page.locator('#context-clear').press('Enter');assert.equal(await page.locator('#context-form').isVisible(),false);
+        }else if(spec.name==='robot'){
+          await page.locator('#lock').press('Enter');await page.locator('#contract-status span.bad').waitFor();
+          const errorInk=(await page.evaluate(semanticStyles,['#contract-status span.bad']))[0];
+          check(errorInk.color===errorInk.tokens['--red']&&/고정 실패/.test(errorInk.text),'invalid contract retains named red error state');
+          report.semanticAudits.push({name,state:'invalid-contract',styles:[errorInk]});await capture('-invalid-contract');
+          await page.locator('#synthetic-error').press('Enter');
+          await page.waitForFunction(()=>document.querySelector('#input-status').textContent.includes('무효 1개'));
+          const pills=await page.evaluate(semanticStyles,['#file-table .pill-ok','#file-table .pill-bad']);
+          check(pills.filter(p=>p.selector.endsWith('.pill-ok')).length===3&&pills.filter(p=>p.selector.endsWith('.pill-bad')).length===1,'actual invalid synthetic example retains three valid and one invalid file');
+          check(pills.every(p=>p.selector.endsWith('.pill-ok')?p.color===p.tokens['--normal']&&p.text==='형식 통과':p.color===p.tokens['--red']&&p.text==='무효'),'valid/invalid named pills retain semantic colors');
+          check(new Set(pills.map(p=>p.color)).size===2,'valid and invalid pills are visually distinct');
+          report.semanticAudits.push({name,state:'invalid-synthetic',styles:pills});await capture('-invalid-synthetic');
+          await page.locator('#files').setInputFiles(['ok','gap','short','nonfinite','range'].map(kind=>({name:`QA_SYNTHETIC_${kind}.csv`,mimeType:'text/csv',buffer:Buffer.from(semanticWindowCSV(kind))})));
+          await page.waitForFunction(()=>document.querySelector('#input-status').textContent.includes('5개 파일 · 무효 0개'));
+          const legend=[];
+          for(const kind of ['ok','gap','short','nonfinite','range','tail']){
+            const key=page.locator(`#window-legend .${kind}`),marks=page.locator(`.strip .w-${kind}`);
+            assert.ok(await marks.count()>0,`real calculated ${kind} SVG state exists`);
+            const ink=await key.evaluate(e=>getComputedStyle(e).color),fills=await marks.evaluateAll(es=>[...new Set(es.map(e=>getComputedStyle(e).fill))]);
+            check(fills.length===1&&fills[0]===ink,`${kind} legend ink matches every actual SVG state fill`);
+            legend.push({kind,text:await key.innerText(),color:ink,fills,count:await marks.count()});
+          }
+          check(new Set(legend.map(x=>x.color)).size===6,'all six named window categories retain distinct colors');
+          report.semanticAudits.push({name,state:'all-calculated-window-categories',legend});await capture('-semantic-legend');
+        }else if(spec.name==='secom-research'){
+          const labels=await page.locator('#capture-chart').evaluate(svg=>{
+            const bounds=svg.viewBox.baseVal;
+            return [...svg.querySelectorAll('text')].map(el=>{const box=el.getBBox();return {text:el.textContent,x:box.x,y:box.y,right:box.x+box.width,bottom:box.y+box.height,inside:box.x>=bounds.x-1&&box.y>=bounds.y-1&&box.x+box.width<=bounds.x+bounds.width+1&&box.y+box.height<=bounds.y+bounds.height+1,renderedHeight:el.getBoundingClientRect().height};});
+          });
+          check(labels.length>2&&labels.every(label=>label.inside&&label.renderedHeight>=11),'research SVG labels stay inside viewBox and remain readable');
+          report.semanticAudits.push({name,state:'research-chart-labels',labels});
+          const figure=page.locator('.r-figure');assert.equal(await figure.getAttribute('tabindex'),'0');
+          if(await figure.evaluate(e=>e.scrollWidth>e.clientWidth+1)){
+            await figure.focus();await page.keyboard.press('ArrowRight');await page.waitForFunction(()=>document.querySelector('.r-figure').scrollLeft>0);
+            await figure.evaluate(e=>e.scrollLeft=0);
+          }
+        }else if(spec.name==='research'){
+          const tags=await page.evaluate(semanticStyles,['p.tag.synthetic','p.tag.prototype']);
+          const synthetic=tags.find(t=>t.selector==='p.tag.synthetic');assert.ok(synthetic);
+          check(synthetic.color===synthetic.tokens['--synthetic']&&synthetic.color!==synthetic.tokens['--cc-accent']&&synthetic.color!==synthetic.tokens['--amber'],'synthetic evidence badge retains distinct semantic ink');
+          check(/합성 데이터만/.test(synthetic.text)&&synthetic.borderStyle==='dashed','synthetic boundary remains explicit in text and border');
+          report.semanticAudits.push({name,state:'synthetic-evidence-boundary',styles:tags});
+        }else if(spec.name==='global'){
+          // This evidence module is shared from /smt, but its actual host is #global.
+          await page.locator('[data-evidence-source="dkasc"]').press('Enter');
+          await page.locator('#dataset-card p.plain-quality').waitFor();
+          await page.locator('#dataset-card .evidence-details > summary').first().press('Enter');
+          const warningStyles=await page.evaluate(semanticStyles,['#dataset-card p.plain-quality','#dataset-card p.evidence-note.evidence-warning']);
+          check(warningStyles.length>=2&&warningStyles.every(w=>w.visible),'real quality warning and detailed warnings are present and expanded');
+          check(warningStyles.every(w=>w.color===w.tokens['--amber']&&w.color!==w.tokens['--cc-muted']),'warning paragraphs retain amber ink, not ordinary reader text');
+          report.semanticAudits.push({name,state:'saved-quality-warnings',styles:warningStyles});await capture('-quality-warnings');
         }else if(spec.name==='ur3'){
           assert.match(await page.locator('#quality-summary').innerText(),/7,409행.*24열/);assert.equal(await page.locator('#sensor option').count(),19);
           await page.locator('#position').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#position').inputValue(),'1');
@@ -247,5 +359,5 @@ async function main() {
   }catch(error){report.status='failed';report.fatal=error.stack;save();throw error;}
   finally{await browser?.close();}
 }
-module.exports={documents,hashViews,canonicalPath,renderedAudit};
+module.exports={documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,semanticStyles};
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
