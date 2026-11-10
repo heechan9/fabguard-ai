@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const read=p=>readFileSync(new URL('../../'+p,import.meta.url),'utf8');
-function boot(saved,blocked=false){
+function boot(saved,blocked=false,defaultMode){
  const callbacks={},events={},windowEvents={},attrs={},writes=[];
- const root={dataset:{},lang:'ko',style:{},setAttribute(k,v){this[k]=v;},getAttribute(k){return this[k];}};
+ const root={'data-default-theme':defaultMode,dataset:{},lang:'ko',style:{},setAttribute(k,v){this[k]=v;},getAttribute(k){return this[k];}};
  const button={textContent:'',setAttribute(k,v){attrs[k]=String(v);},getAttribute(k){return attrs[k];},addEventListener(k,fn){events[k]=fn;}};
  const document={documentElement:root,readyState:'loading',querySelector:s=>s==='#theme-toggle'||s==='.theme-toggle'?button:null,getElementById:id=>id==='theme-toggle'?button:null,addEventListener(k,fn){callbacks[k]=fn;}};
  let observer;
@@ -42,4 +42,14 @@ test('back-forward cache restore reconciles saved theme but blocked storage reta
  app.restore('invalid');assert.equal(app.root.dataset.theme,'silver');
  app.restore('dark',false);assert.equal(app.root.dataset.theme,'silver');
  const blocked=boot(null,true);blocked.ready();blocked.click();blocked.restore('silver');assert.equal(blocked.root.dataset.theme,'dark');
+});
+
+// The requested command-room landing page opts into dark; labs keep silver.
+test('home dark default respects explicit saved choices and blocked storage',()=>{
+ for(const [saved,blocked,expected] of [[null,false,'dark'],['invalid',false,'dark'],['silver',false,'silver'],['dark',false,'dark'],['silver',true,'dark']]){
+  const app=boot(saved,blocked,'dark');app.ready();assert.equal(app.root.dataset.theme,expected);app.click();assert.equal(app.root.dataset.theme,expected==='dark'?'silver':'dark');
+ }
+ assert.match(read('web/index.html'),/data-default-theme="dark"/);
+ for(const page of ['smt/index.html','secom/index.html'])assert.doesNotMatch(read('web/'+page),/data-default-theme="dark"/);
+ const app=boot('silver',false,'dark');app.ready();app.restore('invalid');assert.equal(app.root.dataset.theme,'dark');
 });

@@ -45,11 +45,12 @@ test('headline counts match canonical evaluation CSV, including missed and norma
     assert.doesNotMatch(beginner.join('\n'), new RegExp(term));
   }
   assert.match(app, /new URLSearchParams\(location\.search\)/);
-  assert.match(app, /location\.hash \|\| "#summary"/);
+  assert.match(app, /location\.hash \|\| "#overview"/);
   assert.match(app, /hash === "answer-overview"/);
   assert.match(style, /grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
   assert.match(style, /@media\(max-width:1400px\)/);
-  assert.match(index, /반도체 분석 결과<\/a><button id="language-toggle"/);
+  assert.match(index, /반도체 분석 결과<\/a>/);
+  assert.match(index, /id="language-toggle"/);
 
   const onePageUrl = new URL('../../docs/ONE_PAGE_SUMMARY.md', import.meta.url);
   const onePage = readFileSync(onePageUrl, 'utf8');

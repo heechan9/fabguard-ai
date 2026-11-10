@@ -24,13 +24,15 @@ if (languageToggle) {
     const params = new URLSearchParams(location.search);
     if (isEnglish) params.delete("lang"); else params.set("lang", "en");
     const query = params.toString();
-    location.assign(`${location.pathname}${query ? `?${query}` : ""}${location.hash || "#summary"}`);
+    location.assign(`${location.pathname}${query ? `?${query}` : ""}${location.hash || "#overview"}`);
   });
 }
 
 if (isEnglish) {
-  const navLabels = { summary: "Project", global: "Global data", risks: "Review queue", limitations: "Validation & limits" };
+  const navLabels = { overview: "Overview", summary: "Project", global: "Global data", risks: "Inspection queue", limitations: "Validation & limits" };
   document.querySelectorAll("nav a[data-route]").forEach(link => { link.textContent = navLabels[link.dataset.route] || link.textContent; });
+  const externalLabels = { '/secom/index.html': 'Semiconductor analysis', '/smt/index.html': '3D process lab', '/equipment/index.html': 'Equipment CSV check', '/robot/ur3/index.html': 'UR3 sensor records', '/research/index.html': 'Research evidence' };
+  document.querySelectorAll('.cc-navigation a').forEach(link => { if (externalLabels[link.getAttribute('href')]) link.textContent = externalLabels[link.getAttribute('href')]; });
 }
 
 const pct = value => `${(Number(value) * 100).toFixed(1)}%`;
@@ -307,8 +309,18 @@ function finishRoute(hash) {
 
 function route() {
   if (!state.summary) return;
-  const hash = location.hash.replace(/^#/, "") || "summary";
-  if (hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  const hash = location.hash.replace(/^#/, "") || "overview";
+  document.body.classList.toggle('cc-overview-page', hash === 'overview');
+  if (hash === "overview") {
+    app.innerHTML = `<section class="state"><p>${isEnglish ? 'Loading saved records…' : '저장된 기록을 불러오는 중…'}</p></section>`;
+    import('./command-center.mjs').then(({mountCommandCenter}) => {
+      if ((location.hash.replace(/^#/, '') || 'overview') !== 'overview') return;
+      mountCommandCenter(app, state, language);
+    }).catch(() => {
+      if ((location.hash.replace(/^#/, '') || 'overview') !== 'overview') return;
+      app.innerHTML = `<section class="state"><h1>${isEnglish ? 'Overview unavailable' : '운영 개요를 표시할 수 없습니다'}</h1><p>${isEnglish ? 'No equipment status has been inferred.' : '장비 상태를 정상으로 추정하지 않습니다.'}</p><a class="button" href="#risks">${isEnglish ? 'Open the saved queue' : '기존 점검 목록 열기'}</a></section>`;
+    });
+  } else if (hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#overview">처음으로</a></section>`;
   if (isEnglish) translateEnglish();
   finishRoute(hash);
 }

@@ -19,9 +19,9 @@ async function audit(page,name,width,mode){
    if(ratio<(large?3:4.5))issues.push({text:el.textContent.trim().slice(0,80),cls:el.className,color:s.color,background:bg,ratio:Number(ratio.toFixed(2))});
   }
   const button=document.querySelector('.theme-toggle'),r=button.getBoundingClientRect(),style=getComputedStyle(button);
-  return {issues,excluded,body:getComputedStyle(document.body).backgroundColor,overflow:document.documentElement.scrollWidth,button:{left:r.left,right:r.right,width:r.width,height:r.height,color:style.color,background:style.backgroundColor}};
+  return {issues,excluded,commandShell:document.body.classList.contains('command-shell'),body:getComputedStyle(document.body).backgroundColor,overflow:document.documentElement.scrollWidth,button:{left:r.left,right:r.right,width:r.width,height:r.height,color:style.color,background:style.backgroundColor}};
  });
- assert.equal(result.body,mode==='silver'?'rgb(170, 182, 197)':'rgb(7, 11, 15)');
+ assert.equal(result.body,mode==='silver'?'rgb(170, 182, 197)':result.commandShell?'rgb(4, 23, 15)':'rgb(7, 11, 15)');
  assert.ok(result.overflow<=width+1,JSON.stringify({name,width,result}));assert.ok(result.button.left>=0&&result.button.right<=width+1&&result.button.height>=32,JSON.stringify(result.button));
  results.push({name,width,mode,...result});
  await page.screenshot({path:path.join(output,`theme-${width}-${mode}-${name}-viewport.png`)});
@@ -35,7 +35,8 @@ async function audit(page,name,width,mode){
   await page.clock.install({time:new Date('2026-10-24T00:00:00Z')});
   page.on('pageerror',e=>errors.push(e.message));await page.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());
   await page.goto(base);await page.locator('#app h1').waitFor();
-  const theme=page.locator('.theme-toggle');assert.equal(await page.locator('html').getAttribute('data-theme'),'silver');
+  const theme=page.locator('.theme-toggle');assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+  await theme.press('Enter');assert.equal(await page.locator('html').getAttribute('data-theme'),'silver');
   for(const mode of ['dark','silver','dark','silver']){await theme.press('Enter');assert.equal(await theme.getAttribute('aria-pressed'),String(mode==='dark'));assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-theme')),mode);}
   await theme.focus();assert.equal(await theme.evaluate(e=>document.activeElement===e),true);assert.notEqual(await theme.evaluate(e=>getComputedStyle(e).outlineStyle),'none');await theme.press('Space');
   assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');await page.reload();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
@@ -79,10 +80,10 @@ async function audit(page,name,width,mode){
   await page.goto(new URL('/secom/',base).href);await page.locator('.theme-toggle').click();
   await page.goBack();await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');
   await page.locator('.theme-toggle').click();await page.goForward();await page.waitForFunction(()=>document.documentElement.dataset.theme==='silver');
-  await page.goto(base);await page.evaluate(()=>localStorage.setItem('fabguard-theme','broken'));await page.reload();assert.equal(await page.locator('html').getAttribute('data-theme'),'silver');
+  await page.goto(base);await page.evaluate(()=>localStorage.setItem('fabguard-theme','broken'));await page.reload();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
   await context.close();
   const blocked=await browser.newContext({viewport:{width,height:900}});await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new DOMException('Storage disabled','SecurityError');}});});
-  const bp=await blocked.newPage();await bp.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());await bp.goto(base);await bp.locator('.theme-toggle').press('Enter');assert.equal(await bp.locator('html').getAttribute('data-theme'),'dark');await blocked.close();
+  const bp=await blocked.newPage();await bp.route('**/*',r=>new URL(r.request().url()).origin===new URL(base).origin?r.continue():r.abort());await bp.goto(base);assert.equal(await bp.locator('html').getAttribute('data-theme'),'dark');await bp.locator('.theme-toggle').press('Enter');assert.equal(await bp.locator('html').getAttribute('data-theme'),'silver');await blocked.close();
  }
  await browser.close();assert.deepEqual(errors,[]);assert.equal(results.reduce((n,r)=>n+r.issues.length,0),0,'Low contrast text; inspect theme-results.json');
 })().catch(async e=>{fs.writeFileSync(path.join(output,'theme-failure.json'),JSON.stringify({error:e.stack,results,errors},null,2));if(activePage)await activePage.screenshot({path:path.join(output,'theme-failure.png'),timeout:10000}).catch(()=>{});await browser?.close().catch(()=>{});console.error(e);process.exitCode=1;});

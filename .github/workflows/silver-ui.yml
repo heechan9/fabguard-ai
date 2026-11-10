@@ -41,6 +41,7 @@ jobs:
           python3 -m http.server 8764 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/robot-server.log" 2>&1 &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
+          NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 180s node verification/check_command_center.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_silver_ui.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_theme_ui.cjs
           NODE_PATH="$RUNNER_TEMP/robot-driver/node_modules" timeout 360s node verification/check_oht.cjs

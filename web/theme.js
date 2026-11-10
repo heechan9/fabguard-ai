@@ -2,9 +2,11 @@
    Theme changes only touch presentation, never routing, language or lab state. */
 (() => {
   const root = document.documentElement;
-  let theme = 'silver';
+  const defaultTheme = root.getAttribute('data-default-theme') === 'dark' ? 'dark' : 'silver';
+  let theme = defaultTheme;
   try {
-    if (localStorage.getItem('fabguard-theme') === 'dark') theme = 'dark';
+    const saved = localStorage.getItem('fabguard-theme');
+    if (saved === 'dark' || saved === 'silver') theme = saved;
   } catch { /* Private/blocked storage still permits an in-page choice. */ }
   root.dataset.theme = theme;
 
@@ -29,7 +31,7 @@
     // A history-restored document may predate a choice made on another page.
     window.addEventListener('pageshow', event => {
       if (!event.persisted) return;
-      try { root.dataset.theme = localStorage.getItem('fabguard-theme') === 'dark' ? 'dark' : 'silver'; }
+      try { const saved = localStorage.getItem('fabguard-theme'); root.dataset.theme = saved === 'dark' || saved === 'silver' ? saved : defaultTheme; }
       catch { /* Do not discard a usable in-page choice when storage is blocked. */ }
       render();
     });
