@@ -13,7 +13,7 @@ export const STATIONS=[
  {name:'NG buffer',label:'검사 버퍼',duration:3,description:'검사 후 대기. NG는 붉은색으로 표시하며 옆의 별도 가상 로봇이 합성 분류 동작을 보여줍니다. 실제 분기 장치와 연결되지 않습니다.'},
  {name:'Unloader',label:'배출',duration:3,description:'PCB 배출. 전체 12장 완료 시 시뮬레이션이 정지합니다.'}
 ];
-export const FAULTS={paste:'납 도포량 부족',heat:'리플로우 과열',missing:'SPI 센서 데이터 누락',condition:'가상 조건 변경 · 비교 검토',review:'가상 정비 후 · 검토 기록 없음'};
+export const FAULTS={paste:'납 도포량 부족',heat:'리플로우 과열',missing:'SPI 센서 데이터 누락',condition:'가상 조건 변경 · 비교 검토',review:'가상 정비 후 · 검토 기록 없음',temperature:'최고 온도 가정 입력'};
 export const TOTAL=STATIONS.reduce((sum,s)=>sum+s.duration,0);
 const starts=STATIONS.map((_,i)=>STATIONS.slice(0,i).reduce((sum,s)=>sum+s.duration,0));
 export function manufacturingEvents(snapshot){
@@ -41,15 +41,23 @@ export function assess(b){
 }
 export class Simulation{
  constructor(){this.reset();}
- reset(){this.time=0;this.boards=[];this.pending=null;this.running=true;this.speed=1;this.randomState=42;this.spawn();}
+ // A reset from a latched synthetic stop starts the new run paused; normal resets keep auto-run.
+ reset(){const latched=this.emergencyStopped===true;this.time=0;this.boards=[];this.pending=null;this.running=!latched;this.speed=1;this.randomState=42;this.pendingPeak=null;this.peakSequence=0;this.emergencyStopped=false;this.controlEvents=[];this.spawn();}
  random(){this.randomState=(1664525*this.randomState+1013904223)>>>0;return this.randomState/4294967296;}
- arm(fault){if(!Object.hasOwn(FAULTS,fault))throw new Error('지원하지 않는 시나리오');if(this.boards.length>=12)throw new Error('모든 PCB가 투입되었습니다. 처음부터 다시 실행하세요.');this.pending=fault;}
- spawn(){let fault=this.pending;this.pending=null;const index=this.boards.length;this.boards.push({id:`PCB-${String(index+1).padStart(3,'0')}`,born:index*4,fault,stage:-1,progress:0,volume:null,peak:null,aoi:null,done:false,rawVolume:Math.round((fault==='paste'?58:94)+this.random()*(fault==='paste'?9:12)),rawPeak:Math.round((fault==='heat'?264:239)+this.random()*8),history:[]});}
- advance(dt){if(!this.running||!Number.isFinite(dt)||dt<=0)return;this.time=Math.min(44+TOTAL,this.time+dt);while(this.boards.length<12&&this.time>=this.boards.length*4)this.spawn();
+ arm(fault){if(fault==='temperature'||!Object.hasOwn(FAULTS,fault))throw new Error('지원하지 않는 시나리오');if(this.boards.length>=12)throw new Error('모든 PCB가 투입되었습니다. 처음부터 다시 실행하세요.');this.replacePendingPeak(fault);this.pending=fault;this.pendingPeak=null;}
+ // Queued is not applied: a pending peak is either replaced (never reaches a PCB) or applied at spawn.
+ replacePendingPeak(by){if(this.pendingPeak===null)return;this.controlEvents.push({kind:'next_peak_assumption_replaced',status:'replaced',assumption_seq:this.peakSequence,simulation_seconds:this.time,next_board_id:`PCB-${String(this.boards.length+1).padStart(3,'0')}`,peak_celsius:this.pendingPeak,replaced_by:by});}
+ armPeak(value){if(typeof value!=='number'||!Number.isFinite(value)||value<235||value>280)throw new Error('가정 온도는 235–280°C 범위여야 합니다.');if(this.boards.length>=12)throw new Error('모든 PCB가 투입되었습니다. 처음부터 다시 실행하세요.');this.replacePendingPeak('temperature');this.pending='temperature';this.pendingPeak=value;this.peakSequence++;this.controlEvents.push({kind:'next_peak_assumption',status:'queued',assumption_seq:this.peakSequence,simulation_seconds:this.time,next_board_id:`PCB-${String(this.boards.length+1).padStart(3,'0')}`,peak_celsius:value});}
+ emergencyStop(){if(this.emergencyStopped)return;this.emergencyStopped=true;this.running=false;this.controlEvents.push({kind:'simulation_stop',simulation_seconds:this.time});}
+ releaseStop(){if(!this.emergencyStopped)return;this.emergencyStopped=false;this.running=false;this.controlEvents.push({kind:'simulation_stop_released',simulation_seconds:this.time});}
+ spawn(){let fault=this.pending;const peak=this.pendingPeak;this.pending=null;this.pendingPeak=null;const index=this.boards.length;this.boards.push({id:`PCB-${String(index+1).padStart(3,'0')}`,born:index*4,fault,stage:-1,progress:0,volume:null,peak:null,aoi:null,done:false,rawVolume:Math.round((fault==='paste'?58:94)+this.random()*(fault==='paste'?9:12)),rawPeak:(()=>{const generated=Math.round((fault==='heat'?264:239)+this.random()*8);return peak??generated;})(),history:[]});
+  // Large advance() steps move time first; the applied moment is this PCB's own insertion time.
+  if(peak!==null)this.controlEvents.push({kind:'next_peak_assumption_applied',status:'applied',assumption_seq:this.peakSequence,simulation_seconds:index*4,board_id:`PCB-${String(index+1).padStart(3,'0')}`,peak_celsius:peak});}
+ advance(dt){if(this.emergencyStopped||!this.running||!Number.isFinite(dt)||dt<=0)return;this.time=Math.min(44+TOTAL,this.time+dt);while(this.boards.length<12&&this.time>=this.boards.length*4)this.spawn();
   for(const b of this.boards){const age=this.time-b.born;let stage=starts.findIndex((start,i)=>age>=start&&age<start+STATIONS[i].duration);if(age>=TOTAL)stage=STATIONS.length;
    for(let i=b.stage+1;i<=stage;i++){const time=b.born+(starts[i]??TOTAL);if(i===2){b.volume=b.fault==='missing'?null:b.rawVolume;}if(i===7)b.peak=b.rawPeak;if(i===8)b.aoi=(b.rawVolume<80||b.rawPeak>250)?'NG':'OK';b.history.push({time,stage:i,text:i===11?'배출 완료':STATIONS[i].name+(i===2?` · SPI ${b.volume===null?'누락':b.volume+'%'}`:i===7?` · 최고 ${b.peak}°C`:i===8?` · 가상 ${b.aoi}`:'')});}
    b.stage=stage;b.done=stage===11;b.progress=b.done?1:Math.max(0,(age-starts[stage])/STATIONS[stage].duration);
   }if(this.boards.length===12&&this.boards.every(b=>b.done))this.running=false;
  }
- snapshot(){return {schema_version:'fabguard-smt-synthetic/v1',data_source:'synthetic',decision_engine:'demo-rules-not-fabguard-model',seed:42,simulation_seconds:this.time,thresholds:{paste_percent:[80,120],peak_celsius:[235,250]},pending_fault:this.pending,lot_policy:{kind:"synthetic-insertion-order",boards_per_lot:4,id_scope:"current-run",counts_may_overlap:true},lot_summary:lotSummary(this.boards),boards:this.boards.map((b,i)=>({...b,lot_id:lotId(i),assessment:assess(b),context_review:contextReview(b)}))};}
+ snapshot(){return {schema_version:'fabguard-smt-synthetic/v1',data_source:'synthetic',decision_engine:'demo-rules-not-fabguard-model',seed:42,simulation_seconds:this.time,thresholds:{paste_percent:[80,120],peak_celsius:[235,250]},pending_fault:this.pending,pending_peak_celsius:this.pendingPeak,emergency_stopped:this.emergencyStopped,control_events:this.controlEvents.map(event=>({...event})),intervention_scope:'synthetic-next-board-only-no-thermal-physics',lot_policy:{kind:"synthetic-insertion-order",boards_per_lot:4,id_scope:"current-run",counts_may_overlap:true},lot_summary:lotSummary(this.boards),boards:this.boards.map((b,i)=>({...b,lot_id:lotId(i),assessment:assess(b),context_review:contextReview(b)}))};}
 }
