@@ -19,7 +19,17 @@ async function readerFonts(page){
  });
  if(result.families.length){
   for(const f of result.families)assert.ok(f.count>0&&f.statuses.every(s=>s==='loaded'),`web font actually loaded: ${JSON.stringify(result)}`);
-  assert.ok(result.resources>0,'font CSS alone is not proof of a downloaded font');
+  // The browser may reuse its font cache without a new PerformanceResourceTiming
+  // entry. Verify a painted custom font as well as loaded FontFace objects.
+  const session=await page.context().newCDPSession(page);
+  try{
+   await session.send('DOM.enable');await session.send('CSS.enable');
+   const {root}=await session.send('DOM.getDocument');
+   const {nodeId}=await session.send('DOM.querySelector',{nodeId:root.nodeId,selector:'main p'});
+   const {fonts}=await session.send('CSS.getPlatformFontsForNode',{nodeId});
+   result.paintedFonts=fonts;
+   assert.ok(fonts.some(f=>f.isCustomFont&&f.glyphCount>0),'loaded font must actually paint reader text: '+JSON.stringify(result));
+  }finally{await session.detach();}
  }
  return result;
 }

@@ -319,7 +319,8 @@ body.command-shell :is(main,dialog) :is(.hint,.micro,.micro-note,.help,.evidence
 body.command-shell :is(main,dialog) :is(.kicker,.eyebrow,.tag,.status-chip,.field-label,.metrics span,.metrics small){font-size:13px;line-height:1.5;letter-spacing:.03em}
 body.command-shell :is(footer,.cc-legacy-entry){font-size:14px;line-height:1.65;letter-spacing:normal}
 body.command-shell .cc-header-controls :is(button,label){font-size:13px;line-height:1.5}
-body.command-shell .project-intro .lead{font-size:17px;line-height:1.7}
+body.command-shell .cc-more>summary{font-size:14px;line-height:1.4}
+body.command-shell:not(.cc-overview-page) main .project-intro p.lead{font-size:17px;line-height:1.7}
 body.command-shell .project-intro .absolute-beginner{padding:20px 24px}
 body.command-shell .project-intro .absolute-beginner h2{font-size:18px;line-height:1.5}
 body.command-shell .project-intro .absolute-beginner ol{font-size:16px;line-height:1.7}
@@ -345,8 +346,10 @@ body.command-shell .cc-dashboard .cc-stage strong{font-size:14px;white-space:nor
 /* Reduce decorative art rather than text to keep the four desktop panels visible. */
 @media(min-width:901px){
  body.command-shell .cc-stage{min-height:150px}
- body.command-shell .cc-stage img{max-height:112px}
- body.command-shell .cc-queue a{min-height:52px}
+ body.command-shell .cc-stage img{max-height:84px}
+ body.command-shell .cc-queue{gap:4px}
+ body.command-shell .cc-queue a{min-height:52px;padding-top:2px;padding-bottom:2px}
+ body.command-shell .cc-panel-head{padding-top:8px;padding-bottom:8px}
  body.command-shell .cc-records li a{min-height:54px}
  body.command-shell .cc-stage-detail{grid-template-columns:auto minmax(0,1fr) auto;gap:8px}
 }
