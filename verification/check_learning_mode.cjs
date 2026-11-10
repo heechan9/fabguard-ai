@@ -50,7 +50,7 @@ fs.mkdirSync(out,{recursive:true});
   assert.equal(await page.locator('#stage input[type="radio"]').count(),6);
   await page.keyboard.press('Escape');assert.equal(await dialog.isVisible(),false);
   await page.locator('#open-learning').click();await page.locator('[data-action="skip-probe"]').click();await page.locator('[data-action="lesson-0"]').click();await page.locator('[data-action="reveal"]').click();
-  await page.locator('#stage a[href="/#limitations"]').click();await page.waitForURL('**/#limitations');assert.equal(await dialog.isVisible(),false);
+  await page.locator(`#stage a[href="/?lang=${language}#limitations"]`).click();await page.waitForURL(`**/?lang=${language}#limitations`);assert.equal(await dialog.isVisible(),false);
   await page.goBack();assert.equal(await dialog.isVisible(),false);await page.goForward();assert.equal(await dialog.isVisible(),false);
   report.checks.push({tag,status:'pass',flows:'3 cases, prediction/reason, 2 bounded hints, reveal, transfer, self-check, save, reset cancel/confirm, close/reopen, language, internal navigation, back/forward, no horizontal overflow'});
   await context.close();

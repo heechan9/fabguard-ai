@@ -82,3 +82,7 @@ test('Empty restore preserves open lesson and restored snapshots cannot discard 
 test('Incorrect prediction and transfer show comparison without grading or automatic confirmation',()=>{
  const c=controller();c.act('skip-probe');c.act('lesson-0');c.choose('choice',1);c.choose('reason',1);c.act('check');assert.match(c.node('stage').innerHTML,/다시 비교/);c.choose('transfer',0);c.act('transfer');assert.match(c.node('stage').innerHTML,/선택한 설명을 아래 근거와 비교/);c.click('save');assert.equal(JSON.parse(c.s.getItem(STORAGE_KEY)).records[0].checked,false);assert.doesNotMatch(c.s.getItem(STORAGE_KEY),/score|grade|ability|answer/);
 });
+
+test('Internal evidence links retain the selected learning language',()=>{
+ const c=controller();c.act('skip-probe');c.act('lesson-0');c.act('reveal');assert.match(c.node('stage').innerHTML,/href="\/\?lang=ko#limitations"/);c.click('language');assert.match(c.node('stage').innerHTML,/href="\/\?lang=en#limitations"/);c.act('back-map');c.act('lesson-1');c.act('reveal');assert.match(c.node('stage').innerHTML,/href="\/equipment\/index.html\?lang=en"/);
+});
