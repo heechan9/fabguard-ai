@@ -1,7 +1,7 @@
 name: Equipment CSV offline screening UI
 on:
   pull_request:
-    paths: ['web/equipment/**', 'web/theme.js', 'web/style.css', 'web/command-center.css', 'web/sitewide-command.css', 'web/site-shell.mjs', 'web/navigation.css', 'verification/check_equipment_screening.cjs', '.github/workflows/equipment-screening-ui.yml']
+    paths: ['tests/web/equipment-*.test.mjs', 'web/equipment/**', 'web/theme.js', 'web/style.css', 'web/command-center.css', 'web/sitewide-command.css', 'web/site-shell.mjs', 'web/navigation.css', 'verification/check_equipment_screening.cjs', '.github/workflows/equipment-screening-ui.yml']
   workflow_dispatch:
 permissions:
   contents: read

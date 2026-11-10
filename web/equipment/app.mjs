@@ -1,14 +1,16 @@
 import {parseCSV,validateCSV,fields,decodeCSVBytes,CSV_LIMITS} from './contract.mjs';
 import {renderEquipmentScreening} from './screening-ui.mjs';
 const $=id=>document.getElementById(id);
-let data=null, generation=0, example=false, sourceBytes=null;
-function reset(){generation++;data=null;sourceBytes=null;example=false;$('file').value='';$('mapping').replaceChildren();$('preview').textContent='';$('result').replaceChildren();$('file-status').textContent='';$('mapping-panel').hidden=true;$('equipment').value='';$('role').value='';$('role').disabled=false;$('baseline-count').value='10';}
+let data=null, generation=0, fileGeneration=0, example=false, sourceBytes=null;
+function reset(){generation++;fileGeneration++;data=null;sourceBytes=null;example=false;$('file').value='';$('mapping').replaceChildren();$('preview').textContent='';$('result').replaceChildren();$('file-status').textContent='';$('mapping-panel').hidden=true;$('equipment').value='';$('role').value='';$('role').disabled=false;$('baseline-count').value='10';}
 function load(text,name,isExample=false,rawBytes=null){data=parseCSV(text);sourceBytes=rawBytes??new TextEncoder().encode(text);example=isExample;$('file-status').textContent=`${name} · ${data.rows.length}행 · ${data.headers.length}열`;$('preview').textContent=[data.headers,...data.rows.slice(0,3)].map(r=>r.join(' | ')).join('\n');$('mapping-panel').hidden=false;
   const labels={board_id:'기판 ID',pad_id:'패드 ID',value:'측정 숫자',timestamp:'측정 시각 (시간대 포함)',lot_id:'LOT ID',recipe_id:'Recipe ID'};
   for(const f of [...fields,'timestamp','lot_id','recipe_id']){const label=document.createElement('label');label.textContent=labels[f];const select=document.createElement('select');select.id=`map-${f}`;select.add(new Option('열 선택',''));data.headers.forEach((h,i)=>select.add(new Option(h,String(i))));const match=data.headers.indexOf(f);if(match>=0)select.value=String(match);label.append(select);$('mapping').append(label);}
   $('role').value=example?'synthetic':'';$('role').disabled=example;if(example)$('equipment').value='SYNTHETIC-SPI';
 }
-$('file').addEventListener('change',async()=>{const file=$('file').files[0];reset();if(!file)return;const token=generation;try{if(!/\.csv$/i.test(file.name)||file.size>CSV_LIMITS.bytes)throw Error('5MB 이하 CSV만 지원합니다.');const bytes=await file.arrayBuffer();if(token!==generation)return;load(decodeCSVBytes(bytes),file.name,false,bytes);}catch(e){if(token===generation)$('file-status').textContent=e.message;}});
+// Form blur/change events can invalidate a report while a file is being read.
+// Only a replacement/reset may cancel that file read; keep its token separate.
+$('file').addEventListener('change',async()=>{const file=$('file').files[0];reset();if(!file)return;const token=fileGeneration;try{if(!/\.csv$/i.test(file.name)||file.size>CSV_LIMITS.bytes)throw Error('5MB 이하 CSV만 지원합니다.');const bytes=await file.arrayBuffer();if(token!==fileGeneration)return;load(decodeCSVBytes(bytes),file.name,false,bytes);}catch(e){if(token===fileGeneration)$('file-status').textContent=e.message;}});
 $('example').addEventListener('click',()=>{reset();load('board_id,pad_id,value\nDEMO-001,P01,120\nDEMO-001,P02,\nDEMO-002,P01,118','합성 예제',true);});
 $('clear').addEventListener('click',reset);
 $('mapping-panel').addEventListener('change',()=>{generation++;$('result').replaceChildren();});

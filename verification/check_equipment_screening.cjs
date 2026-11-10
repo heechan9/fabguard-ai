@@ -15,7 +15,7 @@ const sourceFiles=['web/equipment/index.html','web/equipment/app.mjs','web/equip
 async function bytesOf(download){const stream=await download.createReadStream();const chunks=[];for await(const chunk of stream)chunks.push(chunk);return Buffer.concat(chunks);}
 async function prepare(page,buffer=csv){
  await page.locator('#file').setInputFiles({name:'public-synthetic.csv',mimeType:'text/csv',buffer});
- await page.locator('#mapping-panel').waitFor();
+ try{await page.locator('#mapping-panel').waitFor();}catch(error){console.error('file-load state',await page.evaluate(()=>({status:document.querySelector('#file-status').textContent,result:document.querySelector('#result').textContent,focused:document.activeElement.id})));throw error;}
  await page.locator('#equipment').fill('SYNTHETIC-SPI');
  await page.locator('#role').selectOption('synthetic');
 }
@@ -74,11 +74,19 @@ async function saved(page,expectedBytes){
     ...['board_id','pad_id','value','timestamp','lot_id','recipe_id'].map(field=>['mapping '+field,()=>page.locator('#map-'+field).selectOption('')]),
    ];
    for(const [name,change] of changes){
+    console.log('CHECK',width,theme,name);
     await prepare(page);await screen(page);await change();
     assert.equal(await page.locator('#result').innerText(),'',name+' invalidates result');
     assert.equal(await page.getByRole('button',{name:'점검 목록 JSON 저장',exact:true}).count(),0);
    }
    checks.push(`${width}/${theme}: all six mappings, equipment, role, metric and baseline invalidate old output`);
+   // Pending reads are still cancelled by replacement/clear, not by form blur.
+   await page.evaluate(()=>{const original=File.prototype.arrayBuffer;window.readStarted=false;File.prototype.arrayBuffer=function(){window.readStarted=true;const file=this;return new Promise(resolve=>{window.finishRead=async()=>{File.prototype.arrayBuffer=original;resolve(await original.call(file));};});};});
+   await page.locator('#file').setInputFiles({name:'delayed.csv',mimeType:'text/csv',buffer:csv});
+   await page.waitForFunction(()=>window.readStarted);await page.locator('#clear').click();
+   await page.evaluate(async()=>{await window.finishRead();await new Promise(resolve=>setTimeout(resolve,100));});
+   assert.equal(await page.locator('#mapping-panel').isVisible(),false);assert.equal(await page.locator('#file-status').innerText(),'');
+   checks.push(`${width}/${theme}: clearing during pending file read prevents stale input restoration`);
    // Hash must match uploaded bytes, not a re-encoded or newline-normalised CSV.
    const bomCRLF=Buffer.concat([Buffer.from([0xef,0xbb,0xbf]),Buffer.from(csv.toString('utf8').replace(/\n/g,'\r\n'))]);
    assert.notEqual(sha(bomCRLF),sha(csv));

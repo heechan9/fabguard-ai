@@ -68,7 +68,7 @@ python scripts/build_web_evidence.py --check
 
 `/research/`는 고정 커밋의 공개 보고서를 요약한 정적 근거 화면이다. #168/#170/#171/#172의 실험·감사·프로토타입과 미실행 작업을 구분한다. 새 모델 추론이나 SPC 계산을 제공하지 않으며 기존 정본 데이터는 바꾸지 않는다. 링크된 PR 상태는 확인 시각의 스냅샷이다.
 
-로봇 시연은 최대 20,000행의 CSV 조각을 처리합니다. 6.7kHz라면 약 2.99초에 불과하므로 안정 정상 기준의 충분성을 입증하지 않습니다. 사용자 CSV는 선택한 바이트를 해시하고 같은 바이트를 디코딩합니다. 해시는 출처 인증이 아니며 Python의 legacy 배열 API와도 별개입니다. 실제 로봇 SPC 실험은 미실행입니다.
+로봇 시연은 최대 20,000행의 CSV 조각을 처리합니다. 6.7kHz라면 약 2.99초에 불과하므로 안정 정상 기준의 충분성을 입증하지 않습니다. 사용자 CSV는 선택한 바이트를 해시하고 같은 바이트를 디코딩합니다. 해시는 출처 인증이 아니며 Python의 legacy 배열 API와도 별개입니다. 실제 로봇 SPC는 2026-10-23 스냅샷 당시 미실행이었지만, [공개 연구 화면의 2026-10-24 추가 기록](research/index.html#pending)에 별도 오프라인 정상 개발자료 탐색 실행이 있습니다. 이는 브라우저의 실장비 검증이나 이상 탐지 성능 입증이 아닙니다.
 
 ## 2026-10-30 학습 분포와 3D 상태 연결
 
@@ -179,7 +179,8 @@ comparison, equipment CSV and maintenance context, review notes, robot SPC,
 UR3 records, OHT, SMT and its references, and the static research snapshot.
 
 All pages now use the same six primary links and a keyboard-accessible secondary
-menu, following the introduction-first navigation update below. Neutral reader text, links, controls, panels and focus rings use one
+menu, following the introduction-first navigation update below. Neutral reader
+text, links, controls, panels and focus rings use one
 emerald/cream palette with a corresponding high-contrast silver palette.
 Warnings, errors, historical outcomes, missing-data states and diagnostic
 color legends remain distinct. No data, model, evaluation, simulation or
@@ -242,7 +243,7 @@ feature count or synthetic-image disclaimer.
 입력 검증, 고정 SPC 계산, `pending` JSON 다운로드와 원본 바이트 SHA-256을 확인합니다.
 BOM·CRLF 입력도 원본 바이트 그대로 해시하는지 검사하며, 열 매핑·장비·출처·단위·기준 행 수
 변경과 새 파일·입력 지우기가 이전 결과를 무효화하는지 검사합니다. 해시 계산 중 입력 변경으로
-오래된 다운로드가 생성되지 않는지도 확인합니다. 실장비·개인정보·비공개 자료는 사용하지 않습니다.
+오래된 다운로드가 생성되지 않는지도 확인합니다. 파일 재선택 중 폼의 지연된 변경 이벤트는 새 파일 읽기를 취소하지 않으며, 입력 지우기·다른 파일 선택은 이전 읽기를 취소합니다. 실장비·개인정보·비공개 자료는 사용하지 않습니다.
 
 정적 서버 실행 후 기존 테스트 환경의 Playwright와 Chromium으로 실행합니다. 앱 의존성은 추가하지 않습니다.
 

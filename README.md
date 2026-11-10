@@ -113,7 +113,7 @@
 
 2026-10-30 확인 당시 다음 원본 PR은 **open Draft**였습니다. 이 목록은 현재 PR 상태의 자동 조회가 아닙니다. 최신 병합 여부는 각 PR에서 확인하세요. 아래에 명시한 선별 통합은 원본 Draft 전체의 채택과 구분합니다.
 
-- [#179](https://github.com/heechan9/fabguard-ai/pull/179)·[#180](https://github.com/heechan9/fabguard-ai/pull/180)의 로봇 기록 작업, [#182](https://github.com/heechan9/fabguard-ai/pull/182)의 BOSCH/voraus 자료 자격 감사, [#183](https://github.com/heechan9/fabguard-ai/pull/183)의 학습 분포·P-A-D-A·입력 계약, [#184](https://github.com/heechan9/fabguard-ai/pull/184)의 현장 대응·알람 부담 평가 계획도 원본 PR 기준 별도 미병합입니다. #180에서 선별한 UR3 재생 부분만 #190으로 통합했으며 원본 Draft 전체를 병합한 것은 아닙니다. 제안·검사 통과를 현장 검증이나 채택으로 바꾸지 않습니다.
+- [#179](https://github.com/heechan9/fabguard-ai/pull/179)·[#180](https://github.com/heechan9/fabguard-ai/pull/180)의 로봇 기록 작업, [#182](https://github.com/heechan9/fabguard-ai/pull/182)의 BOSCH/voraus 자료 자격 감사, [#183](https://github.com/heechan9/fabguard-ai/pull/183)의 학습 분포·P-A-D-A·입력 계약, [#184](https://github.com/heechan9/fabguard-ai/pull/184)의 현장 대응·알람 부담 평가 계획도 당시 원본 PR 기준 별도 미병합으로 기록했습니다. #180에서 선별한 UR3 재생 부분만 #190으로 통합했으며 원본 Draft 전체를 병합한 것은 아닙니다. 제안·검사 통과를 현장 검증이나 채택으로 바꾸지 않습니다.
 
 아래 세 데이터 실험도 같은 확인 시점의 Draft 연구 기록입니다.
 
