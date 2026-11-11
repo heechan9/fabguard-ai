@@ -7,7 +7,7 @@ import * as robotCore from '../../web/robot/window-core.mjs';
 import {parseCSV} from '../../web/equipment/contract.mjs';
 import {normalizePagePath,navigationKey,navigationHref} from '../../web/site-shell.mjs';
 const require=createRequire(import.meta.url);
-const {documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV}=require('../../verification/check_sitewide_command.cjs');
+const {documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,navigationState}=require('../../verification/check_sitewide_command.cjs');
 const root=new URL('../../web/',import.meta.url);
 const read=name=>readFileSync(new URL(name,root),'utf8');
 function htmlFiles(directory=root,prefix=''){
@@ -121,4 +121,28 @@ test('semantic browser checks preserve explicit state meaning, warnings and keyb
  for(const marker of ['#contract-status span.bad','#contract-fields input[aria-invalid="true"]','invalid fields retain red borders','valid fields retain ordinary line borders','#file-table .pill-ok','#file-table .pill-bad','.strip .w-${kind}','#dataset-card p.plain-quality','#dataset-card p.evidence-note.evidence-warning','p.tag.synthetic','research-theme-note',"page.keyboard.press('Shift+Tab')"] )assert.ok(scanner.includes(marker),marker);
  const html=read('research/index.html');assert.match(html,/id="research-theme"[^>]*aria-describedby="research-theme-note"/);
  assert.match(html,/id="research-theme-note"[^>]*>[^<]*저장하지[^<]*다크/);
+});
+
+
+test('review audit waits for the final dynamic handoff field before capturing form state',()=>{
+ const review=documents.find(spec=>spec.name==='review');
+ assert.equal(review.ready,'#workspace:not([hidden]) #handoff-note-change_history');
+ const app=read('review/app.mjs');
+ assert.ok(app.indexOf("$('workspace').hidden = false")<app.indexOf("import('./handoff-ui.mjs')"),'workspace visibility precedes optional handoff initialization');
+ const scanner=readFileSync(new URL('../../verification/check_sitewide_command.cjs',import.meta.url),'utf8');
+ for(const marker of ["'**/review/handoff-ui.mjs'",'await held','assert.notDeepEqual(loaded,early',"for(const language of ['ko','en'])",'assertDelayedReviewReady(browser,{base,width,theme,language})'])assert.ok(scanner.includes(marker),marker);
+});
+
+test('navigation snapshots retain all original and asynchronously mounted form controls',()=>{
+ const controls=[{id:'rationale',value:'unsubmitted draft',checked:undefined}];
+ const context={location:{href:'https://example.test/review/?sample=secom_1397&lang=en'},history:{length:5},document:{documentElement:{dataset:{theme:'dark'},lang:'en'},querySelectorAll:selector=>{assert.equal(selector,'main input,main select,main textarea');return controls;}}};
+ const snapshot=()=>JSON.parse(JSON.stringify(runInNewContext(`(${navigationState.toString()})()`,context)));
+ const early=snapshot();controls.push({id:'handoff-note-change_history',value:'',checked:undefined});
+ assert.notDeepEqual(snapshot(),early,'late mounting is not hidden by filtering controls');
+ const ready=snapshot();assert.deepEqual(snapshot(),ready);
+ controls[1].value='a real state loss must still fail';assert.notDeepEqual(snapshot(),ready);
+ context.location.href+='&changed=1';assert.notEqual(snapshot().href,ready.href);
+ context.document.documentElement.dataset.theme='silver';assert.notEqual(snapshot().theme,ready.theme);
+ context.document.documentElement.lang='ko';assert.notEqual(snapshot().language,ready.language);
+ context.history.length++;assert.notEqual(snapshot().history,ready.history);
 });
