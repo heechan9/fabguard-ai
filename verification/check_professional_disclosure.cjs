@@ -1,7 +1,7 @@
 // Native disclosure checks complement the scientific/data contracts, not replace them.
 const assert=require('node:assert/strict');
 async function openProfessionalDetails(page){
- const details=page.locator('details.professional-details');
+ const details=page.locator('details.professional-details, details.public-guide');
  for(let i=0;i<await details.count();i++){
   const item=details.nth(i);
   if(!await item.evaluate(e=>e.open))await item.locator(':scope > summary').press('Enter');
@@ -19,6 +19,20 @@ async function assertProfessionalDisclosure(page){
  assert.equal(await page.locator('.project-intro .hero-actions').isVisible(),true);
  assert.equal(await page.locator('.project-intro .intro-boundary').isVisible(),true);
  assert.equal(await page.locator('.project-intro .portfolio-result').isVisible(),true);
+ const guide=page.locator('#app > details.public-guide');
+ assert.equal(await guide.count(),1,'one public easy guide outside expert evidence');
+ assert.equal(await guide.evaluate(e=>e.open),false,'easy guide starts collapsed');
+ const guideSummary=guide.locator(':scope > summary');
+ const guideText=await guide.textContent();
+ assert.equal(await guide.locator('article').count(),5,'five distinct public feature groups');
+ for(let repeat=0;repeat<2;repeat++){
+  await guideSummary.press('Enter');assert.equal(await guide.evaluate(e=>e.open),true);
+  assert.equal(await guide.locator('article').first().isVisible(),true);
+  assert.equal(await panel.evaluate(e=>e.open),false,'easy guide does not open expert evidence');
+  assert.equal(await guide.textContent(),guideText,'opening does not modify guide content');
+  await guideSummary.press('Space');assert.equal(await guide.evaluate(e=>e.open),false);
+  assert.equal(await guide.locator('article').first().isVisible(),false);
+ }
  const critical=await page.locator('.project-intro').innerText();
  assert.match(critical,/잠정|provisional/i);assert.match(critical,/홀드아웃|holdout/i);assert.match(critical,/현장|field/i);
  const evidence=await panel.textContent();

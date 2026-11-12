@@ -16,7 +16,7 @@ function mount(){
   if(!records||rows.length!==50||rows.some((row,i)=>row.dataset.id!==records[i].sample_id)){
    status.textContent=en?'Budget display withheld: saved evidence and table could not be matched. The existing list is unchanged.':'범위 표시 보류: 저장 근거와 표의 일치를 확인하지 못했습니다. 기존 목록은 그대로 유지합니다.';return;
   }
-  const render=()=>{const view=budgetView(records,budget);rows.forEach((row,i)=>row.hidden=i>=budget);select.value=String(budget);status.textContent=en?`${view.reviewed} shown · historical Fail ${view.failures} / Pass ${view.normal} · ${view.hidden} hidden from this 50-record list. Hidden does not mean safe or reviewed.`:`${view.reviewed}건 표시 · 과거 불량 ${view.failures} / 정상 ${view.normal} · 50건 중 ${view.hidden}건 숨김. 숨긴 기록을 정상·검토 완료로 처리하지 않습니다.`;};
+  const render=()=>{const view=budgetView(records,budget);rows.forEach((row,i)=>row.hidden=i>=budget);select.value=String(budget);const visibleCount=app.querySelector('#queue-visible-count');if(visibleCount)visibleCount.textContent=String(view.reviewed);status.textContent=en?`${view.reviewed} shown · historical Fail ${view.failures} / Pass ${view.normal} · ${view.hidden} hidden from this 50-record list. Hidden does not mean safe or reviewed.`:`${view.reviewed}건 표시 · 과거 불량 ${view.failures} / 정상 ${view.normal} · 50건 중 ${view.hidden}건 숨김. 숨긴 기록을 정상·검토 완료로 처리하지 않습니다.`;};
   select.disabled=false;reset.disabled=false;select.value=String(budget);select.addEventListener('change',()=>{budget=Number(select.value);render();});reset.addEventListener('click',()=>{budget=50;render();});render();
  });
 }

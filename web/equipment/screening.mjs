@@ -13,6 +13,21 @@ function validTime(value){
       (Number(offsetHour)!==14 || Number(offsetMinute)===0))) && Number.isFinite(Date.parse(value));
 }
 
+// Compare UTC whole seconds and decimal fractions separately: Date.parse truncates
+// submillisecond digits. Right-padding decimal fractions preserves arbitrary
+// supported precision without floating-point rounding or offset lexical ordering.
+function preciseTime(timestamp) {
+  const fraction = /\.(\d+)/.exec(timestamp)?.[1] ?? '';
+  return {second: Date.parse(timestamp.replace(/\.\d+/, '')), fraction};
+}
+function compareTimes(a, b) {
+  const left = preciseTime(a), right = preciseTime(b);
+  if (left.second !== right.second) return left.second < right.second ? -1 : 1;
+  const width = Math.max(left.fraction.length, right.fraction.length);
+  const x = left.fraction.padEnd(width, '0'), y = right.fraction.padEnd(width, '0');
+  return x === y ? 0 : x < y ? -1 : 1;
+}
+
 export function screenEquipmentCSV(data,mapping,context,baselineCount) {
   const validated=validateCSV(data,mapping,context);
   if (validated.rejected.length) throw Error(`격리된 행 ${validated.rejected.length}개를 수정한 뒤 분석하세요.`);
@@ -31,12 +46,12 @@ export function screenEquipmentCSV(data,mapping,context,baselineCount) {
     const recipe_id=raw[mapping.recipe_id].trim();
     if(!validTime(timestamp)) throw Error(`레코드 ${i+1}: 시간대가 포함된 유효한 ISO 시각이 필요합니다.`);
     if(!lot_id||!recipe_id) throw Error(`레코드 ${i+1}: LOT와 Recipe가 필요합니다.`);
-    return {...item,timestamp,lot_id,recipe_id,record:i+1};
+    return {...item,timestamp,lot_id,recipe_id,record:i+1,source_line:data.sourceLines?.[i] ?? i+2};
   });
   const pad=records[0].pad_id, recipe=records[0].recipe_id;
   if(records.some(r=>r.pad_id!==pad||r.recipe_id!==recipe)) throw Error('한 파일은 같은 패드 위치와 Recipe만 분석합니다.');
   for(let i=1;i<records.length;i++) {
-    if(Date.parse(records[i].timestamp)<=Date.parse(records[i-1].timestamp)) throw Error(`레코드 ${i+1}: 시각이 중복되거나 역순입니다.`);
+    if(compareTimes(records[i].timestamp,records[i-1].timestamp)<=0) throw Error(`레코드 ${i+1}: 시각이 중복되거나 역순입니다.`);
   }
   let spc;
   try {spc=individuals(records.map(r=>r.value),baselineCount);}

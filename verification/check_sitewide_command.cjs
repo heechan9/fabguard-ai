@@ -394,6 +394,31 @@ async function main() {
           check(synthetic.color===synthetic.tokens['--synthetic']&&synthetic.color!==synthetic.tokens['--cc-accent']&&synthetic.color!==synthetic.tokens['--amber'],'synthetic evidence badge retains distinct semantic ink');
           check(/합성 데이터만/.test(synthetic.text)&&synthetic.borderStyle==='dashed','synthetic boundary remains explicit in text and border');
           report.semanticAudits.push({name,state:'synthetic-evidence-boundary',styles:tags});
+          await page.locator('a[href="#bosch-etch"]').click();
+          await page.waitForURL(url=>url.hash==='#bosch-etch');
+          const etch=page.locator('#bosch-etch');
+          const etchText=await etch.innerText();
+          assert.match(etchText,/73개·8 LOT/);
+          assert.match(etchText,/34웨이퍼·4 LOT/);
+          assert.match(etchText,/89점 계측은 2025년 2월/);
+          assert.match(etchText,/9점은 공정 당일 계측됐으나 다음 LOT 전에 라벨이 실제로 조회 가능했는지는 확인되지 않았습니다/);
+          assert.equal(await etch.locator('a[href="https://doi.org/10.5281/zenodo.17122442"]').isVisible(),true);
+          const results=etch.locator('.table-scroll');
+          assert.equal(await results.getAttribute('tabindex'),'0');
+          assert.deepEqual(await results.locator('tbody td').allTextContents(),['0.2797','0.1688','0.1532','0.3396','0.1963','0.1739']);
+          await page.waitForFunction(()=>{
+            const heading=document.querySelector('#bosch-etch-title').getBoundingClientRect();
+            const header=document.querySelector('.topbar').getBoundingClientRect();
+            return heading.top>=header.bottom-2&&heading.bottom<=innerHeight;
+          });
+          if(await results.evaluate(e=>e.scrollWidth>e.clientWidth+1)){
+            await results.focus();
+            await page.keyboard.press('ArrowRight');
+            await page.waitForFunction(()=>document.querySelector('#bosch-etch .table-scroll').scrollLeft>0);
+          }
+          report.semanticAudits.push({name,state:'bosch-summary-link-and-results',route:page.url()});
+          await page.goBack();
+          await page.waitForURL(url=>url.hash==='');
         }else if(spec.name==='global'){
           // This evidence module is shared from /smt, but its actual host is #global.
           await page.locator('[data-evidence-source="dkasc"]').press('Enter');

@@ -4,6 +4,16 @@
 
 정적 HTML·CSS·JavaScript 웹 데모다. 배포 대상 폴더는 루트의 [vercel.json](../vercel.json)에 정의되어 있다.
 
+## 현재 진입·표시 계약 (2026-11-10)
+
+- `/`와 `/#summary`는 프로젝트 소개, `/#overview`는 저장 결과 운영 개요입니다.
+- 기본 상단 메뉴는 소개·운영 개요·3D 모델링·우선점검·반도체 분석·검증과 한계의 6개입니다. 나머지는 ‘다른 화면’에 있습니다.
+- 스크립트 화면은 저장된 선택이 없으면 다크이며 실버/다크 선택을 유지합니다. 무스크립트 `/research/`의 CSS 테마 전환은 해당 화면에만 적용되고 저장하지 않습니다.
+- 우선점검의 전체 저장 목록은 50건이며 선택에 따라 현재 표시 수는 20·40·50건입니다. 새 평가나 점수 변경이 아닙니다.
+- `/equipment/`는 장비 CSV의 **오프라인 통계 점검**입니다. 실장비 진위·불량·현장 성능 검증이 아닙니다.
+
+이 문서는 소스 계약을 설명합니다. 실행·배포 통과 여부는 PR의 대상 커밋 및 CI 결과와 구분합니다.
+
 ## 어디를 수정하나요?
 
 | 대상 | 진입 파일 | 관련 자료 |
@@ -13,6 +23,7 @@
 | SMT 3D 실험실 | [smt/index.html](smt/index.html), [smt/app.mjs](smt/app.mjs) | [구현 문서](../docs/SMT_WEB_INTEGRATION.md), [합성 시나리오](../docs/SMT_INSPECTION_SCENARIOS.md), [제조 검토 슬라이스](../docs/MANUFACTURING_REVIEW_SLICE.md) |
 | 반도체 분석 화면 | [secom/index.html](secom/index.html), [secom/secom.mjs](secom/secom.mjs) | [정본 결과](../results/v1/RESULTS_SUMMARY.md) |
 | SECOM 전처리 비교 기록 | [secom/research.html](secom/research.html) | #170 고정 head e7cdc47b, 개선 미입증 |
+| 장비 CSV 오프라인 점검 | [equipment/index.html](equipment/index.html), [equipment/app.mjs](equipment/app.mjs) | [screening.mjs](equipment/screening.mjs), [screening-ui.mjs](equipment/screening-ui.mjs) |
 | 로봇 확장 시연 | [robot/index.html](robot/index.html) | 별도 합성/사용자 CSV 프로토타입, Python API 호출 아님 |
 | 화면에 표시할 데이터 | [data/](data/) | [증거 스냅샷 생성기](../scripts/build_web_evidence.py), [입력 목록](../scripts/web_evidence_sources.json) |
 | 이미지·아이콘 | [assets/](assets/) | 출처와 라이선스를 함께 확인 |
@@ -57,7 +68,7 @@ python scripts/build_web_evidence.py --check
 
 `/research/`는 고정 커밋의 공개 보고서를 요약한 정적 근거 화면이다. #168/#170/#171/#172의 실험·감사·프로토타입과 미실행 작업을 구분한다. 새 모델 추론이나 SPC 계산을 제공하지 않으며 기존 정본 데이터는 바꾸지 않는다. 링크된 PR 상태는 확인 시각의 스냅샷이다.
 
-로봇 시연은 최대 20,000행의 CSV 조각을 처리합니다. 6.7kHz라면 약 2.99초에 불과하므로 안정 정상 기준의 충분성을 입증하지 않습니다. 사용자 CSV는 선택한 바이트를 해시하고 같은 바이트를 디코딩합니다. 해시는 출처 인증이 아니며 Python의 legacy 배열 API와도 별개입니다. 실제 로봇 SPC 실험은 미실행입니다.
+로봇 시연은 최대 20,000행의 CSV 조각을 처리합니다. 6.7kHz라면 약 2.99초에 불과하므로 안정 정상 기준의 충분성을 입증하지 않습니다. 사용자 CSV는 선택한 바이트를 해시하고 같은 바이트를 디코딩합니다. 해시는 출처 인증이 아니며 Python의 legacy 배열 API와도 별개입니다. 실제 로봇 SPC는 2026-10-23 스냅샷 당시 미실행이었지만, [공개 연구 화면의 2026-10-24 추가 기록](research/index.html#pending)에 별도 오프라인 정상 개발자료 탐색 실행이 있습니다. 이는 브라우저의 실장비 검증이나 이상 탐지 성능 입증이 아닙니다.
 
 ## 2026-10-30 학습 분포와 3D 상태 연결
 
@@ -74,11 +85,11 @@ SMT의 기존 분류 로봇에서는 선택 기판의 검사 근거→분류/보
 
 ## 실버 / 다크 테마
 
-소개 화면(국가별 자료·우선점검·검증과 한계 포함), SMT, SECOM의 상단 버튼으로
-테마를 전환한다. 메인 관제실은 다크그린을 기본으로, 별도 실험실은 한 단계 낮춘 실버(`#AAB6C5`, 카드 `#C2CDDA`)를 기본으로 사용하며,
-`theme.js`가 스타일 로딩 전에 `fabguard-theme` 저장값을 적용해 첫 화면의 색상 전환을 방지한다.
-저장소 접근이 차단되면 현재 페이지에서만 선택을 유지한다. 언어 URL, 경로, 3D 상태는 바꾸지 않는다.
-별도 장비·연구·로봇 확장 페이지는 기존 디자인/CSP를 유지하며, 돌아오면 저장된 테마가 적용된다.
+각 스크립트 화면의 상단 버튼으로 실버/다크를 전환합니다. 저장된 유효한 선택이 없으면
+다크가 기본이며, `theme.js`가 스타일 로딩 전에 `fabguard-theme` 저장값을 적용합니다.
+저장소 접근이 차단되면 현재 페이지에서만 선택을 유지합니다. 언어 URL, 경로, 3D 상태는 바꾸지 않습니다.
+장비·로봇 화면도 공통 디자인을 사용합니다. 연구 화면은 무스크립트 CSP를 유지하며
+네이티브 체크박스로 해당 화면의 CSS 팔레트만 전환합니다. 저장 선택을 읽거나 기록하지 않습니다.
 
 `node --test tests/web/theme.test.mjs tests/web/silver-theme.test.mjs`가 저장 실패·잘못된 값·반복 전환을 검사한다.
 기존 Silver UI CI에서 `verification/check_theme_ui.cjs`도 실행해 두 테마의 실제 대비,
@@ -125,9 +136,9 @@ AMR 자율주행, SLAM, 실제 물류 최적화, 충돌 회피나 안전 인증 
 
 ## 2026-11-10 다크그린 운영 개요
 
-루트 `/`와 `/#overview`는 다크그린 관제실 레이아웃의 읽기 전용 개요입니다.
-이 페이지에서만 저장된 테마가 없을 때 다크를 기본값으로 사용하고, 명시적으로 저장한
-실버/다크 선택은 그대로 존중합니다. 기존 소개는 `/#summary`에 유지됩니다.
+`/#overview`는 다크그린 관제실 레이아웃의 읽기 전용 개요입니다.
+현재 기본 진입 `/`는 소개 `/#summary`이며, 저장 선택이 없는 모든 스크립트 화면의
+기본 테마는 다크입니다. 명시적으로 저장한 실버/다크 선택은 존중합니다.
 
 6개 공정 그림은 새로 제작한 SVG 개념도이며 실제 장비·센서 상태가 아닙니다.
 노광·식각·증착 순서는 단순화한 설명이며 실제 생산 경로를 뜻하지 않습니다.
@@ -148,7 +159,7 @@ SECOM의 익명 변수를 장비나 센서 이름에 매핑하지 않습니다.
 
 ### 시안 대비 조정과 교차검토
 
-같은 날 공개 코드·공개 배포 캡처를 Claude와 교차검토한 뒤, 주요 탐색은 4개로 정리하고
+초기 시안에서는 공개 코드·공개 배포 캡처를 Claude와 교차검토한 뒤 주요 탐색을 4개로 정리하고
 기존 소개·국가별 자료·3D·장비·UR3·연구는 키보드로 여는 ‘다른 화면’에 보존했습니다.
 한국어 모드의 주요 패널 제목을 번역하고, 6개 장비 개념도를 크게 다시 그려 실루엣을 구분했습니다.
 데스크톱 1366×941에서 4개 패널을 볼 수 있도록 높이를 줄이고 모바일은 점검 순위부터 읽도록
@@ -167,8 +178,9 @@ risks, limitations, and sample detail). This includes SECOM and its training
 comparison, equipment CSV and maintenance context, review notes, robot SPC,
 UR3 records, OHT, SMT and its references, and the static research snapshot.
 
-All pages use the same four primary links and a keyboard-accessible secondary
-menu. Neutral reader text, links, controls, panels and focus rings use one
+All pages now use the same six primary links and a keyboard-accessible secondary
+menu, following the introduction-first navigation update below. Neutral reader
+text, links, controls, panels and focus rings use one
 emerald/cream palette with a corresponding high-contrast silver palette.
 Warnings, errors, historical outcomes, missing-data states and diagnostic
 color legends remain distinct. No data, model, evaluation, simulation or
@@ -224,3 +236,23 @@ Direct `#answer-overview` links open it automatically. The first view keeps the
 project purpose, review/3D entry points, measured counts and failure/uncertainty
 limits visible; the mobile concept illustration is shorter without removing its
 feature count or synthetic-image disclaimer.
+
+## 장비 CSV → SPC → JSON 브라우저 회귀 검사
+
+`verification/check_equipment_screening.cjs`는 저장소의 합성 CSV만 사용해 실제 파일 선택,
+입력 검증, 고정 SPC 계산, `pending` JSON 다운로드와 원본 바이트 SHA-256을 확인합니다.
+BOM·CRLF 입력도 원본 바이트 그대로 해시하는지 검사하며, 열 매핑·장비·출처·단위·기준 행 수
+변경과 새 파일·입력 지우기가 이전 결과를 무효화하는지 검사합니다. 해시 계산 중 입력 변경으로
+오래된 다운로드가 생성되지 않는지도 확인합니다. 파일 재선택 중 폼의 지연된 변경 이벤트는 새 파일 읽기를 취소하지 않으며, 입력 지우기·다른 파일 선택은 이전 읽기를 취소합니다. 실장비·개인정보·비공개 자료는 사용하지 않습니다.
+
+정적 서버 실행 후 기존 테스트 환경의 Playwright와 Chromium으로 실행합니다. 앱 의존성은 추가하지 않습니다.
+
+```bash
+FABGUARD_BASE_URL=http://127.0.0.1:8000 \
+FABGUARD_BROWSER_PATH=/usr/bin/chromium \
+FABGUARD_UI_OUTPUT=/tmp/fabguard-equipment-check \
+node verification/check_equipment_screening.cjs
+```
+
+기본 검사는 1366·390·360px와 다크/실버에서 수행합니다. 이 검사는 로컬 동작 검증이며
+생산 배포 일치·실물 모바일·화면낭독기 검증을 대신하지 않습니다.

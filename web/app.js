@@ -3,6 +3,7 @@ import { explanationScope } from "./explanation-scope.mjs";
 import { mountEvidence } from "./smt/evidence.mjs";
 import { renderHeroEvidence, renderPortfolioStory, storyEvidence } from "./portfolio-story.mjs";
 import { beginnerLines } from "./home-copy.mjs";
+import { renderPublicGuide } from "./public-guide.mjs";
 import { openDetailsForHash } from "./progressive-disclosure.mjs";
 const app = document.querySelector("#app");
 document.querySelector('.skip-link')?.addEventListener('click', event => {
@@ -248,12 +249,13 @@ function summaryView() {
     const body = professional.querySelector('.professional-body');
     [...app.children].filter(section => !section.matches('.hero')).forEach(section => body.append(section));
     app.append(professional);
+    app.querySelector('.hero')?.insertAdjacentHTML('afterend', renderPublicGuide(language));
   }
 }
 
 function risksView() {
   if (!state.risks.length) { app.innerHTML = `<section class="state"><h2>표시할 우선점검 생산 건이 없습니다.</h2></section>`; return; }
-  app.innerHTML = `<section class="page-hero"><div><p class="kicker">우선점검 목록</p><h1>먼저 확인할<br><span>생산 건 50개</span></h1><p class="lead">위험점수 순으로 정렬한 저장 목록입니다. 한 건을 선택해 근거와 한계를 확인하세요.</p><p class="lead queue-boundary">위험점수는 불량 확정값이 아닙니다. RF 전체 중요 변수는 모든 건에 같으며, 개별 위험 원인을 뜻하지 않습니다.</p></div><div class="queue-stat"><span>점검 후보</span><strong>${state.risks.length}</strong><small>위험도 순으로 정렬</small></div></section><section class="table-shell"><div class="panel-head"><span>시간순 검증구간 · 위험도 상위 목록</span><span class="live"><i></i> 데이터 준비됨</span></div><div class="scroll-hint">← 좌우로 밀어 전체 열 보기 →</div><div class="table-wrap"><table><thead><tr><th>순위</th><th>생산 건 ID</th><th>측정 시각</th><th>위험점수</th><th>실제 결과</th><th>근거 범위</th></tr></thead><tbody>${state.risks.map(row => `<tr data-id="${esc(row.sample_id)}" tabindex="0" role="link" aria-label="${esc(row.sample_id)} 상세 점검 결과 열기"><td><b>#${String(row.rank).padStart(2, "0")}</b></td><td>${esc(row.sample_id)}</td><td><span class="timestamp-full">${esc(row.timestamp)}</span><span class="timestamp-short">${esc(shortTimestamp(row.timestamp))}</span></td><td class="risk"><span>${pct(row.risk_score)}</span></td><td><i class="label-dot ${row.label === 1 ? "fail" : "pass"}"></i>${row.label === 1 ? "불량" : "정상"}</td><td>${esc(explanationScope(row.evidence_scope).label)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  app.innerHTML = `<section class="page-hero"><div><p class="kicker">우선점검 목록</p><h1>먼저 확인할<br><span>저장된 생산 기록</span></h1><p class="lead">위험점수 순으로 정렬한 저장 목록입니다. 한 건을 선택해 근거와 한계를 확인하세요.</p><p class="lead queue-boundary">위험점수는 불량 확정값이 아닙니다. RF 전체 중요 변수는 모든 건에 같으며, 개별 위험 원인을 뜻하지 않습니다.</p></div><div class="queue-stat"><span>현재 표시</span><strong id="queue-visible-count">${state.risks.length}</strong><small id="queue-total-count">저장 목록 전체 ${state.risks.length}건</small></div></section><section class="table-shell"><div class="panel-head"><span>시간순 검증구간 · 위험도 상위 목록</span><span class="live"><i></i> 데이터 준비됨</span></div><div class="scroll-hint">← 좌우로 밀어 전체 열 보기 →</div><div class="table-wrap"><table><thead><tr><th>순위</th><th>생산 건 ID</th><th>측정 시각</th><th>위험점수</th><th>실제 결과</th><th>근거 범위</th></tr></thead><tbody>${state.risks.map(row => `<tr data-id="${esc(row.sample_id)}" tabindex="0" role="link" aria-label="${esc(row.sample_id)} 상세 점검 결과 열기"><td><b>#${String(row.rank).padStart(2, "0")}</b></td><td>${esc(row.sample_id)}</td><td><span class="timestamp-full">${esc(row.timestamp)}</span><span class="timestamp-short">${esc(shortTimestamp(row.timestamp))}</span></td><td class="risk"><span>${pct(row.risk_score)}</span></td><td><i class="label-dot ${row.label === 1 ? "fail" : "pass"}"></i>${row.label === 1 ? "불량" : "정상"}</td><td>${esc(explanationScope(row.evidence_scope).label)}</td></tr>`).join("")}</tbody></table></div></section>`;
   document.querySelectorAll("tr[data-id]").forEach(row => {
     const openDetail = () => { location.hash = `detail/${encodeURIComponent(row.dataset.id)}`; };
     row.addEventListener("click", openDetail);
