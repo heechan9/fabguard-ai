@@ -3,6 +3,7 @@ import { explanationScope } from "./explanation-scope.mjs";
 import { mountEvidence } from "./smt/evidence.mjs";
 import { renderHeroEvidence, renderPortfolioStory, storyEvidence } from "./portfolio-story.mjs";
 import { beginnerLines } from "./home-copy.mjs";
+import { renderPublicGuide } from "./public-guide.mjs";
 import { openDetailsForHash } from "./progressive-disclosure.mjs";
 const app = document.querySelector("#app");
 document.querySelector('.skip-link')?.addEventListener('click', event => {
@@ -248,6 +249,7 @@ function summaryView() {
     const body = professional.querySelector('.professional-body');
     [...app.children].filter(section => !section.matches('.hero')).forEach(section => body.append(section));
     app.append(professional);
+    app.querySelector('.hero')?.insertAdjacentHTML('afterend', renderPublicGuide(language));
   }
 }
 
