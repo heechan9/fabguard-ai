@@ -12,3 +12,16 @@ test('English does not rewrite source identifiers, hashes, user notes or unknown
 test('Sensor and synthetic boundaries stay distinct',()=>{
  assert.match(englishText('UCI 공개 기록 7,409행 · 관절 전류·온도·속도와 툴 전류 19채널. 결측과 시간 공백을 유지한 탐색·재생이며 실시간 연결·예측·제어가 아닙니다. 합성 R-01·R-02 동작과 SECOM 익명 변수 분석에 연결하거나 합산하지 않습니다.'),/No live connection, prediction or control/);
 });
+
+test('Optional learning entry translates visible copy and accessible label without losing boundaries', async()=>{
+ const {readFile}=await import('node:fs/promises');
+ const html=await readFile(new URL('../../web/index.html',import.meta.url),'utf8');
+ const entry=html.match(/<aside id="learning-entry"[\s\S]*?<\/aside>/)[0];
+ const label=entry.match(/aria-label="([^"]+)"/)[1];
+ assert.equal(englishText(label),'Optional learning');
+ const strings=[...entry.matchAll(/>([^<>]+)</g)].map(match=>match[1].trim()).filter(Boolean);
+ assert.equal(strings.length,2);
+ for(const text of strings)assert.equal(/[가-힣]/.test(englishText(text)),false);
+ assert.match(englishText(strings[1]),/three synthetic cases/);
+ assert.match(englishText(strings[1]),/Not real safety decisions, operating instructions or an assessment of your ability/);
+});

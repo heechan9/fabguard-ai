@@ -169,3 +169,11 @@ patterns.push(
 );
 englishCopy.set('결과에서 검토 요청까지의 증거 흐름','Evidence flow from result to review request');
 englishCopy.set('분석 자료 선택','Select an evidence source');
+
+englishCopy.set('저장된 생산 기록','Saved production records');
+englishCopy.set('현재 표시','Currently shown');
+patterns.push([/^저장 목록 전체 (\d+)건$/,(_,n)=>`${n} records in the saved list`]);
+// Optional learning is a separate synthetic exercise, not a safety assessment.
+englishCopy.set('선택형 학습 / Optional learning', 'Optional learning');
+englishCopy.set('선택형 학습 · 근거부터 확인하기 / Optional learning →', 'Optional learning · Review the evidence first →');
+englishCopy.set('합성 사례 3개로 정상·이상, 데이터 품질, 상관과 인과를 살펴봐요. 실제 안전 판정·운영 지시·능력 평가가 아닙니다. Synthetic practice, not safety advice or ability assessment.', 'Explore normal and anomalous records, data quality, correlation and causation in three synthetic cases. Not real safety decisions, operating instructions or an assessment of your ability.');

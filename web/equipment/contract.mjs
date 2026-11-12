@@ -24,17 +24,20 @@ export function parseCSV(text) {
   if (typeof text !== 'string') throw Error('CSV 텍스트가 필요합니다.');
   if (text.length > CSV_LIMITS.bytes || new TextEncoder().encode(text).byteLength > CSV_LIMITS.bytes) throw Error('5MB 이하 CSV만 지원합니다.');
   if (/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(text)) throw Error(binaryMessage);
-  const rows = []; let row = [], cell = '', quoted = false, closed = false;
+  const rows = [], sourceLines = [];
+  let row = [], cell = '', quoted = false, closed = false, explicit = false;
+  let line = 1, rowStartLine = 1;
   const pushCell = () => {
     if (row.length >= CSV_LIMITS.columns) throw Error('최대 200열을 지원합니다.');
     row.push(cell); cell = ''; closed = false;
   };
   const pushRow = () => {
-    if (row.some(v => v !== '')) {
+    // Only physically empty lines are ignored; delimiters/quotes declare a record.
+    if (explicit || row.some(v => v !== '')) {
       if (rows.length >= CSV_LIMITS.rows + 1) throw Error('최대 20,000개 측정 행을 지원합니다.');
-      rows.push(row);
+      rows.push(row); sourceLines.push(rowStartLine);
     }
-    row = [];
+    row = []; explicit = false;
   };
   text = text.replace(/^\uFEFF/, '');
   for (let i = 0; i < text.length; i++) {
@@ -42,11 +45,18 @@ export function parseCSV(text) {
     if (quoted) {
       if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
       else if (c === '"') { quoted = false; closed = true; }
-      else cell += c;
+      else {
+        cell += c;
+        if (c === '\n' || (c === '\r' && text[i + 1] !== '\n')) line++;
+      }
     } else if (c === ',' || c === '\n' || c === '\r') {
+      if (c === ',') explicit = true;
       pushCell();
-      if (c !== ',') { pushRow(); if (c === '\r' && text[i+1] === '\n') i++; }
-    } else if (c === '"' && cell === '' && !closed) quoted = true;
+      if (c !== ',') {
+        pushRow(); if (c === '\r' && text[i+1] === '\n') i++;
+        line++; rowStartLine = line;
+      }
+    } else if (c === '"' && cell === '' && !closed) { quoted = true; explicit = true; }
     else { if (closed || c === '"') throw Error('CSV 따옴표 형식 오류'); cell += c; }
   }
   if (quoted) throw Error('닫히지 않은 CSV 따옴표');
@@ -54,7 +64,8 @@ export function parseCSV(text) {
   if (rows.length < 2) throw Error('헤더와 측정 행이 필요합니다.');
   const headers = rows.shift().map(v => v.trim());
   if (headers.some(v => !v) || new Set(headers).size !== headers.length) throw Error('비어 있거나 중복된 열 이름');
-  return {headers, rows};
+  sourceLines.shift();
+  return {headers, rows, sourceLines};
 }
 export function validateCSV(data, mapping, context) {
   if (fields.some(f => !Number.isInteger(mapping[f]) || mapping[f] < 0 || mapping[f] >= data.headers.length) || new Set(fields.map(f=>mapping[f])).size !== fields.length) throw Error('필수 항목을 서로 다른 열에 연결하세요.');
@@ -70,7 +81,7 @@ export function validateCSV(data, mapping, context) {
     const key = JSON.stringify([id,pad]);
     if (seen.has(key)) errors.push('같은 기판/패드 반복: 별도 실행 파일로 분리 필요');
     seen.add(key);
-    if (errors.length) rejected.push({record:index+1, errors});
+    if (errors.length) rejected.push({record:index+1, source_line:data.sourceLines?.[index] ?? index+2, errors});
     else accepted.push({board_id:id,pad_id:pad,value:Number(raw)});
   });
   return {accepted,rejected};

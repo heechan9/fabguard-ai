@@ -28,3 +28,15 @@ test('Unverified or malformed ranking cannot yield budget counts',()=>{
   const bad=structuredClone(rows);change(bad);assert.throws(()=>budgetView(bad,40));
  }
 });
+test('Queue heading and summary distinguish saved total from current display in both languages',async()=>{
+ const app=fs.readFileSync(new URL('../../web/app.js',import.meta.url),'utf8');
+ const controller=fs.readFileSync(new URL('../../web/review-budget.mjs',import.meta.url),'utf8');
+ const {englishText}=await import('../../web/english-copy.mjs');
+ assert.match(app,/<strong id="queue-visible-count">\$\{state.risks.length\}<\/strong>/);
+ assert.match(app,/<small id="queue-total-count">저장 목록 전체 \$\{state.risks.length\}건<\/small>/);
+ assert.match(controller,/visibleCount.textContent=String\(view.reviewed\)/);
+ assert.doesNotMatch(app,/<span>생산 건 50개<\/span>/);
+ assert.equal(englishText('저장된 생산 기록'),'Saved production records');
+ assert.equal(englishText('현재 표시'),'Currently shown');
+ assert.equal(englishText('저장 목록 전체 50건'),'50 records in the saved list');
+});
