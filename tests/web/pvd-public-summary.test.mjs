@@ -18,3 +18,7 @@ test('Only public source links and aggregate presentation are included',()=>{
  assert.match(card,/https:\/\/creativecommons.org\/licenses\/by\/4.0\//);
  assert.doesNotMatch(card,/libfile_|\/workspace\/|cohort_guard\.py|<script|<iframe|<input|<form/);
 });
+
+test('Public summary discloses non-public evidence and reproducibility limits',()=>{
+ for(const s of ['FG-PVD-ALCU-CENTER-TEMPORAL-01','공개 저장소만으로 동일 수치를 재현할 수는 없습니다','본 웹페이지의 테스트 개수가 아니며','공개 저장소만으로 해당 검사를 재실행할 수 없습니다']) assert.ok(card.includes(s),s);
+});
