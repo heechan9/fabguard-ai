@@ -148,14 +148,15 @@ export function tableToSeries(data) {
   }
   const times = [], axes = [[], [], []];
   for (const [rowIndex, row] of data.rows.entries()) {
-    if (row.length !== HEADER.length) { reasons.push(`row_shape_invalid:${rowIndex + 2}`); break; }
+    const sourceLine = data.sourceLines?.[rowIndex] ?? rowIndex + 2;
+    if (row.length !== HEADER.length) { reasons.push(`row_shape_invalid:${sourceLine}`); break; }
     const [t, ...vals] = row.map(v => v.trim());
-    if (!NUMBER.test(t)) { reasons.push(`time_nonfinite_or_nonnumeric:${rowIndex + 2}`); break; }
+    if (!NUMBER.test(t)) { reasons.push(`time_nonfinite_or_nonnumeric:${sourceLine}`); break; }
     times.push(Number(t));
     for (let a = 0; a < 3; a++) {
       if (NUMBER.test(vals[a])) axes[a].push(Number(vals[a]));
       else if (NONFINITE.test(vals[a])) axes[a].push(NaN);
-      else { reasons.push(`value_nonnumeric:${rowIndex + 2}`); break; }
+      else { reasons.push(`value_nonnumeric:${sourceLine}`); break; }
     }
     if (reasons.length) break;
   }
