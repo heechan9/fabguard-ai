@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 
 from .integrations.fledge_contract import normalize_fledge_readings
 from .manufacturing_review import (
@@ -48,13 +49,27 @@ def _fields(value, expected, label):
         raise ManufacturingReviewError(f"{label} fields do not match the contract")
 
 
+def _context_timestamp(value, field):
+    text = _nonempty(value, field)
+    if re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}"
+                    r"(?:\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])", text) is None:
+        raise ManufacturingReviewError(f"{field} must have an ISO timestamp with timezone and at most six fractional digits")
+    try:
+        return _aware_timestamp(text, field)
+    except OverflowError as error:
+        raise ManufacturingReviewError(f"{field} falls outside the supported UTC year range") from error
+
+
 def build_context_review(events_raw: bytes, history_raw: bytes, baseline_count: int, *, as_of: str) -> dict:
     """Review the whole batch at a declared knowledge cutoff, not a historical backtest."""
     source, history = _object(events_raw), _object(history_raw)
     if not isinstance(source.get("readings"), list) or len(source["readings"]) > LIMIT:
         raise ManufacturingReviewError("readings must contain at most 20000 entries")
+    for index, reading in enumerate(source["readings"]):
+        if isinstance(reading, dict):
+            _context_timestamp(reading.get("user_ts", reading.get("ts")), f"reading[{index}].timestamp")
     report, original_queue = build_review_package(events_raw, baseline_count)
-    cutoff = _aware_timestamp(as_of, "as_of")
+    cutoff = _context_timestamp(as_of, "as_of")
     measurement = report["measurement"]
     if any(len(value) > 120 for value in [*measurement.values(), *report["stream_dimensions"].values()]):
         raise ManufacturingReviewError("measurement and stream identifiers must be at most 120 characters")
@@ -70,13 +85,13 @@ def build_context_review(events_raw: bytes, history_raw: bytes, baseline_count: 
     for field in ("equipment_id", "process_step"):
         if history[field] != report["stream_dimensions"][field]:
             raise ManufacturingReviewError(f"history {field} differs from the measured stream")
-    published = _aware_timestamp(history["available_at"], "history.available_at")
+    published = _context_timestamp(history["available_at"], "history.available_at")
     if published > cutoff:
         raise ManufacturingReviewError("history was unavailable at the declared cutoff")
     coverage = history["coverage"]
     _fields(coverage, {"start", "end", "complete"}, "coverage")
-    start = _aware_timestamp(coverage["start"], "coverage.start")
-    end = _aware_timestamp(coverage["end"], "coverage.end")
+    start = _context_timestamp(coverage["start"], "coverage.start")
+    end = _context_timestamp(coverage["end"], "coverage.end")
     if start > end or end > published or type(coverage["complete"]) is not bool:
         raise ManufacturingReviewError("coverage dates or completeness declaration are invalid")
     changes = history["changes"]
@@ -93,8 +108,8 @@ def build_context_review(events_raw: bytes, history_raw: bytes, baseline_count: 
         if event["change_id"] in ids or event["kind"] not in KINDS:
             raise ManufacturingReviewError("duplicate change ID or unsupported change kind")
         ids.add(event["change_id"])
-        effective = _aware_timestamp(event["effective_at"], "change.effective_at")
-        available = _aware_timestamp(event["available_at"], "change.available_at")
+        effective = _context_timestamp(event["effective_at"], "change.effective_at")
+        available = _context_timestamp(event["available_at"], "change.available_at")
         if available > published:
             raise ManufacturingReviewError("change information postdates its history snapshot")
         if any(event[field] != history[field] for field in ("equipment_id", "process_step")):
@@ -182,6 +197,11 @@ def record_context_review(events_raw: bytes, history_raw: bytes, package_raw: by
     _fields(envelope, {"schema_version", "context_package_sha256", "decisions"}, "decision envelope")
     if envelope["schema_version"] != DECISIONS_SCHEMA or envelope["context_package_sha256"] != _sha256(package_raw):
         raise ManufacturingReviewError("decisions are not bound to this exact context package")
+    _context_timestamp(recorded_at, "recorded_at")
+    if isinstance(envelope["decisions"], list):
+        for decision in envelope["decisions"]:
+            if isinstance(decision, dict) and "decided_at" in decision:
+                _context_timestamp(decision["decided_at"], "decided_at")
     audit = record_review_decisions(_canonical_bytes(package["queue"]),
                                    _canonical_bytes({"schema_version": DECISION_SCHEMA, "decisions": envelope["decisions"]}),
                                    recorded_at=recorded_at)
