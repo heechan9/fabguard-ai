@@ -80,7 +80,14 @@ test('browser audit and workflow retain actual Chrome, every viewport, both them
  const workflow=readFileSync(new URL('../../.github/workflows/sitewide-command-ui.yml',import.meta.url),'utf8');
  assert.match(workflow,/width: \[1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360\]/);assert.match(workflow,/theme: \[dark, silver\]/);
  assert.match(workflow,/google-chrome --version/);assert.match(workflow,/PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD/);
- assert.match(workflow,/if: always\(\)/);assert.match(workflow,/timeout 120s.*apt-get/s);
+ assert.match(workflow,/if: always\(\)/);
+ // Bound dependency setup separately from the unchanged browser assertion budget.
+ assert.equal((workflow.match(/timeout 300s apt-get/g)||[]).length,2);
+ assert.equal((workflow.match(/max-parallel: 4/g)||[]).length,2);
+ assert.equal((workflow.match(/font setup\n        timeout-minutes: 6/g)||[]).length,2);
+ assert.equal((workflow.match(/test -n "\$\(fc-list :lang=ko\)"/g)||[]).length,2);
+ assert.equal((workflow.match(/FABGUARD_WEB_FONTS: '1'/g)||[]).length,2);
+ assert.equal((workflow.match(/timeout 600s node verification\/check_sitewide_command.cjs/g)||[]).length,2);
  assert.doesNotMatch(workflow,/continue-on-error:\s*true|playwright install|apt-get update/);
 });
 
