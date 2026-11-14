@@ -22,6 +22,9 @@
 
 **파일 찾기:** [전체 문서 지도](docs/README.md) · [웹 코드 안내](web/README.md) · [결과 자료 목록](results/README.md)
 
+**International review / 海外レビュー:** [5-minute route & one bounded review task](docs/TECHNICAL_HANDOFF_EN.md#november-2026-review-route) · [日本語](docs/TECHNICAL_HANDOFF_JA.md#2026年11月の確認手順) · [직무별 근거와 공백](docs/ROLE_ALIGNMENT.md#2026-11-01-공통-기반과-기업별-설명)
+
+
 <div align="center">
 
 <img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="FabGuard의 목표 운영상과 엔지니어 중심 의사결정을 표현한 독자 제작 콘셉트 이미지" width="820">
@@ -382,4 +385,3 @@ python verification/compare_priority_runs.py \
 ### 동일 조건 성능 비교와 검증 한계
 
 [비교 성적표](docs/review/PERFORMANCE_EVIDENCE_20260925.md): V1 후기 AP는 Logistic 0.094692, RF 0.093477입니다. RF가 후기 평가에서 우수하다고 결론내리지 않습니다. RF 상위 40건은 불량 24건 중 5건을 포착하고 임계값 0.5 재현율은 0입니다. Phase1은 축소 학습·별도 보정 결과로 구분합니다. 후속 SECOM 실험은 노출된 홀드아웃의 탐색적 평가이며 독립 검증이 아닙니다.
-
