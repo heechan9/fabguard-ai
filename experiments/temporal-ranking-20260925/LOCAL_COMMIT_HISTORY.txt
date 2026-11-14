@@ -1,0 +1,23 @@
+commit ed2b5217b62a36af8979f4dfece6a4394324e954
+Author:     Codex <codex@openai.com>
+AuthorDate: Thu Sep 24 10:06:39 2026 -0700
+Commit:     Codex <codex@openai.com>
+CommitDate: Thu Sep 24 10:06:39 2026 -0700
+
+    docs: freeze exploratory temporal-ranking comparison protocol
+
+commit 91b18adfa34234c6c9ca44196874119c412dc905
+Author:     Codex <codex@openai.com>
+AuthorDate: Thu Sep 24 10:10:54 2026 -0700
+Commit:     Codex <codex@openai.com>
+CommitDate: Thu Sep 24 10:10:54 2026 -0700
+
+    experiment: implement frozen temporal candidates and paired block uncertainty
+
+commit 43d3c13baf2a7a7e948d3476d02ca43f15cfede5
+Author:     Codex <codex@openai.com>
+AuthorDate: Thu Sep 24 10:16:29 2026 -0700
+Commit:     Codex <codex@openai.com>
+CommitDate: Thu Sep 24 10:16:29 2026 -0700
+
+    experiment: record negative exploratory results without replacing canonical models
