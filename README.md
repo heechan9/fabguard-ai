@@ -6,6 +6,8 @@
 
 **AI가 위험순위를 제안하고, 최종 판단과 조치는 엔지니어가 합니다.**
 
+FabGuard AI는 독립 연구 프로젝트입니다. INFICON과의 제휴 관계는 없으며, INFICON의 FabGuard® FDC와의 연동 호환성은 미검증입니다.
+
 </div>
 
 <!-- primary-navigation -->
