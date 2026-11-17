@@ -33,7 +33,37 @@ let browser;
    assert.equal(await page.locator('#hints p').count(),2);
    await page.locator('input[name="choice"]').nth(i?1:0).check();await page.locator('input[name="reason"]').nth(i?1:0).check();
    await page.locator('[data-action="check"]').click();assert.equal(await page.locator('#explanation-title').isVisible(),true);
-   await page.locator('input[name="transfer"]').nth(i===1?0:1).check();await page.locator('[data-action="transfer"]').click();await page.locator('[data-action="confirm"]').click();
+   // Exercise the new native disclosures, not only the existing learning flow.
+   const note=page.locator('.review-note'), reference=page.locator('.review-reference');
+   assert.equal(await note.evaluate(el=>el.open),false);
+   assert.equal(await reference.evaluate(el=>el.open),false);
+   await note.locator(':scope > summary').focus();await page.keyboard.press('Enter');
+   assert.equal(await note.evaluate(el=>el.open),true);
+   assert.equal(await note.locator(':scope > summary').evaluate(el=>el===el.getRootNode().activeElement),true);
+   await reference.locator(':scope > summary').focus();await page.keyboard.press('Space');
+   assert.equal(await reference.evaluate(el=>el.open),true);
+   assert.equal(await reference.locator(':scope > summary').evaluate(el=>el===el.getRootNode().activeElement),true);
+   const assertReviewOpen=async()=>{assert.equal(await note.evaluate(el=>el.open),true);assert.equal(await reference.evaluate(el=>el.open),true);};
+   await page.locator('[data-action="hint"]').click();await assertReviewOpen();
+   assert.equal(await page.locator('[data-action="hint"]').evaluate(el=>el===el.getRootNode().activeElement),true);
+   await page.locator('#language').click();await assertReviewOpen();
+   assert.equal(await page.locator('#fabguard-learning-host').getAttribute('lang'),language==='ko'?'en':'ko');
+   assert.ok((await note.innerText()).includes(language==='ko'?'This is a review after seeing the explanation above.':'위 해설을 이미 본 뒤의 복습입니다.'));
+   // Clicking language can focus it natively; do not claim focus restoration here.
+   await page.locator('#language').click();await assertReviewOpen();
+   assert.ok((await note.innerText()).includes(language==='ko'?'위 해설을 이미 본 뒤의 복습입니다.':'This is a review after seeing the explanation above.'));
+   await page.locator('input[name="choice"]').nth(i?0:1).check();await assertReviewOpen();
+   assert.equal(await page.locator('input[name="choice"]').nth(i?0:1).evaluate(el=>el===el.getRootNode().activeElement),true);
+   await page.locator('[data-action="reveal"]').click();await assertReviewOpen();
+   assert.equal(await page.locator('#explanation-title').evaluate(el=>el===el.getRootNode().activeElement),true);
+   await page.locator('input[name="transfer"]').nth(i===1?0:1).check();await page.locator('[data-action="transfer"]').click();await assertReviewOpen();
+   assert.equal(await page.locator('#transfer-explanation').evaluate(el=>el===el.getRootNode().activeElement),true);
+   // Confirm updates records only; this is a no-disturbance check, not stage-rerender evidence.
+   await page.locator('[data-action="confirm"]').click();await assertReviewOpen();
+   // Closing an outer disclosure must not reopen it on same-case rerender.
+   await note.locator(':scope > summary').focus();await page.keyboard.press('Enter');
+   await page.locator('[data-action="hint"]').click();assert.equal(await note.evaluate(el=>el.open),false);assert.equal(await reference.evaluate(el=>el.open),true);
+   await note.locator(':scope > summary').click();
    const geometry=await dialog.evaluate(el=>({scroll:el.scrollWidth,client:el.clientWidth,rect:el.getBoundingClientRect().width,viewport:innerWidth}));
    assert.ok(geometry.scroll<=geometry.client+1,JSON.stringify(geometry));assert.ok(geometry.rect<=geometry.viewport,JSON.stringify(geometry));
    if(i===0){const filename=tag+'.png';await page.screenshot({path:path.join(out,filename),fullPage:false});report.screenshots.push(filename);}
@@ -47,13 +77,19 @@ let browser;
   assert.equal(await page.locator('#reset').evaluate(el=>el===el.getRootNode().activeElement),true);
   await page.locator('#exit').click();assert.equal(await dialog.isVisible(),false);assert.equal(await page.locator('#open-learning').evaluate(el=>el===document.activeElement),true);
   await page.locator('#open-learning').click();await page.locator('#language').click();await page.locator('#language').click();
+  await page.locator('[data-action="lesson-0"]').click();await page.locator('[data-action="reveal"]').click();
+  await page.locator('.review-note > summary').click();await page.locator('.review-reference > summary').click();
+  assert.equal(await page.locator('.review-reference').evaluate(el=>el.open),true);
   await page.locator('#reset').click();await page.locator('#confirm-reset').click();assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-learning-v1')),null);
   assert.equal(await page.locator('#stage input[type="radio"]').count(),6);
+  await page.locator('[data-action="skip-probe"]').click();await page.locator('[data-action="lesson-0"]').click();await page.locator('[data-action="reveal"]').click();
+  assert.equal(await page.locator('.review-note').evaluate(el=>el.open),false);assert.equal(await page.locator('.review-reference').evaluate(el=>el.open),false);
   await page.keyboard.press('Escape');assert.equal(await dialog.isVisible(),false);
-  await page.locator('#open-learning').click();await page.locator('[data-action="skip-probe"]').click();await page.locator('[data-action="lesson-0"]').click();await page.locator('[data-action="reveal"]').click();
+  // Escape/reopen retains the current lesson, so no probe button is present.
+  await page.locator('#open-learning').click();
   await page.locator(`#stage a[href="/?lang=${language}#limitations"]`).click();await page.waitForURL(`**/?lang=${language}#limitations`);assert.equal(await dialog.isVisible(),false);
   await page.goBack();assert.equal(await dialog.isVisible(),false);await page.goForward();assert.equal(await dialog.isVisible(),false);
-  report.checks.push({tag,status:'pass',flows:'3 cases, prediction/reason, 2 bounded hints, reveal, transfer, self-check, save, reset cancel/confirm, close/reopen, language, internal navigation, back/forward, no horizontal overflow'});
+  report.checks.push({tag,status:'pass',flows:'3 cases, prediction/reason, 2 bounded hints, reveal, transfer, self-check, save, reset cancel/confirm, close/reopen, language, internal navigation, back/forward, no horizontal overflow; review disclosures: programmatic summary focus + Enter/Space activation (not Tab reachability); same-case open-state preservation after hint/language/choice/reveal/transfer; confirm record-update no-disturbance; closed-state preservation; case/reset clearing; post-explanation wording'});
   await context.close();
  }
  assert.equal(report.externalAfterOpen.length,0);assert.equal(report.errors.length,0);
