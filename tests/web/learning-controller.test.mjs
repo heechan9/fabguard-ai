@@ -18,3 +18,17 @@ test('unified modal preserves earlier controller safeguards across stale saves a
  act('back-map');act('lesson-1');act('reveal');click('load');click('save');assert.equal(JSON.parse(data.get(STORAGE_KEY)).records.length,2,'load preserves newer unsaved concept');
  data.set('other-project','preserve');click('reset');click('cancel-reset');assert.ok(data.get(STORAGE_KEY));click('reset');click('confirm-reset');assert.equal(data.has(STORAGE_KEY),false);assert.equal(data.get('other-project'),'preserve');assert.equal(focused,'reset');
 });
+test('paper review disclosure state survives same-case rerenders but resets on case change',()=>{
+ const nodes=new Map();const node=id=>{if(!nodes.has(id))nodes.set(id,{textContent:'',handlers:{},open:false,setAttribute(){},addEventListener(k,f){this.handlers[k]=f},focus(){}});return nodes.get(id)};
+ let html='';Object.defineProperty(node('stage'),'innerHTML',{get:()=>html,set:v=>{html=v;node('.review-note').open=/<details class="review-note" open>/.test(v);node('.review-reference').open=/<details class="review-reference" open>/.test(v);}});
+ const root={host:{},getElementById:node,querySelector:node};
+ const ctx={root,lessons,pick,suggestedOrder,blankRecord,saveRecords,loadRecords,clearRecords,mergeRecords};
+ const code=readFileSync(new URL('../../web/learn/app.mjs',import.meta.url),'utf8').replace(/^import .*;\n/gm,'').replace('export function mountLearning','function mountLearning');vm.runInNewContext(code+';mountLearning(root,"en");',ctx);
+ const act=action=>node('stage').handlers.click({target:{closest:()=>({dataset:{action}})}});
+ act('skip-probe');act('lesson-0');act('reveal');
+ node('.review-note').open=true;node('.review-reference').open=true;
+ for(const action of ['hint','transfer','reveal']){act(action);assert.equal(node('.review-note').open,true);assert.equal(node('.review-reference').open,true);}
+ node('language').handlers.click();assert.equal(node('.review-note').open,true);assert.equal(node('.review-reference').open,true);assert.match(html,/이미 본 뒤의 복습/);
+ node('.review-note').open=false;act('hint');assert.equal(node('.review-note').open,false);assert.equal(node('.review-reference').open,true);
+ act('back-map');act('lesson-1');act('reveal');assert.equal(node('.review-note').open,false);assert.equal(node('.review-reference').open,false);
+});
