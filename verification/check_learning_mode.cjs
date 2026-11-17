@@ -92,6 +92,23 @@ let browser;
   report.checks.push({tag,status:'pass',flows:'3 cases, prediction/reason, 2 bounded hints, reveal, transfer, self-check, save, reset cancel/confirm, close/reopen, language, internal navigation, back/forward, no horizontal overflow; review disclosures: programmatic summary focus + Enter/Space activation (not Tab reachability); same-case open-state preservation after hint/language/choice/reveal/transfer; confirm record-update no-disturbance; closed-state preservation; case/reset clearing; post-explanation wording'});
   await context.close();
  }
+ // Full production mount/DOM escaping checks, separate from source-extracted unit tests.
+ for(const language of ['ko','en'])for(const field of ['observation','limit','next']){
+  const context=await browser.newContext({viewport:{width:390,height:900}});
+  const page=await context.newPage();const tag=`escaping-${language}-${field}`;
+  page.on('pageerror',error=>report.errors.push({tag,error:String(error)}));
+  await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
+  await page.goto(base+'/?lang='+language+'#summary');
+  const payload='<em data-review-injection="probe">synthetic & "quoted" \'text\'</em>';
+  // In-memory fixture only in this isolated page context; source files are untouched.
+  await page.evaluate(async({language,field,payload})=>{const {lessons}=await import('/learn/content.mjs');lessons[0][field][language]=payload;},{language,field,payload});
+  await page.locator('#open-learning').click();await page.locator('[data-action="skip-probe"]').click();await page.locator('[data-action="lesson-0"]').click();await page.locator('[data-action="reveal"]').click();
+  await page.locator('.review-note > summary').click();await page.locator('.review-reference > summary').click();
+  assert.equal(await page.locator('.review-reference dd').nth(['observation','limit','next'].indexOf(field)).textContent(),payload);
+  assert.equal(await page.locator('[data-review-injection]').count(),0);
+  report.checks.push({tag,status:'pass',flows:'full production mount: injected synthetic field rendered as literal text, no injected element'});
+  await context.close();
+ }
  assert.equal(report.externalAfterOpen.length,0);assert.equal(report.errors.length,0);
  fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(report,null,2)+'\n');await browser.close();console.log(JSON.stringify({passed:report.checks.length,report:path.join(out,'receipt.json')}));
 })().catch(async error=>{fs.writeFileSync(path.join(out,'blocked-or-failed.json'),JSON.stringify({error:String(error),status:'blocked_or_failed',complete:false},null,2)+'\n');console.error(error);await browser?.close();process.exitCode=1});

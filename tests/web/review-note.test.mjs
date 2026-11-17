@@ -16,9 +16,12 @@ for(const lang of ['ko','en'])for(const lesson of lessons)test(`Review note pres
  assert.equal((html.match(/<details[ >]/g)||[]).length,2);assert.equal((html.match(/<summary>/g)||[]).length,2);
  assert.doesNotMatch(html,/<(?:input|textarea|canvas|img)|contenteditable|autofocus|<details[^>]+open/);
 });
-test('Review notes escape evidence markup',()=>{
- const l={...lessons[0],observation:{ko:'<img src=x onerror=x>&"',en:'x'}};
- const html=render(l,'ko');assert.ok(html.includes('&lt;img'));assert.doesNotMatch(html,/<img/);
+for(const lang of ['ko','en'])for(const field of ['observation','limit','next'])test(`Review notes escape markup in ${lang}/${field}`,()=>{
+ const payload='<em data-review-injection="probe">synthetic & "quoted" \'text\'</em>';
+ const l={...lessons[0],[field]:{...lessons[0][field],[lang]:payload}};
+ const html=render(l,lang);
+ assert.ok(html.includes('&lt;em data-review-injection=&quot;probe&quot;&gt;synthetic &amp; &quot;quoted&quot; &#39;text&#39;&lt;/em&gt;'));
+ assert.doesNotMatch(html,/<em|<\/em>/);
 });
 test('Review notes are optional, state-free, and integrated after explanation',()=>{
  assert.doesNotMatch(fn,/localStorage|fetch\(|records|\.checked|addEventListener/);
