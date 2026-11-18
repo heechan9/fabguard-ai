@@ -97,12 +97,37 @@ def main():
     for name in ('events', 'history', 'package', 'decisions', 'basis', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--recorded-at', required=True)
+    parser.add_argument('--include-diagnostics', action='store_true',
+                        help='write an offline diagnostic wrapper; does not join observations or approve actions')
+    for name in ('left', 'right', 'contract'):
+        parser.add_argument('--mapping-' + name, type=Path)
+    for name in ('as-of', 'caller-id', 'purpose'):
+        parser.add_argument('--mapping-' + name)
     args = parser.parse_args()
     try:
         paths = [args.events, args.history, args.package, args.decisions, args.basis]
         if args.output.resolve() in [path.resolve() for path in paths]:
             raise ManufacturingReviewError('output must not overwrite an input')
-        result = record_decision_basis(*(path.read_bytes() for path in paths), recorded_at=args.recorded_at)
+        mapping_values = (args.mapping_left, args.mapping_right, args.mapping_contract,
+                          args.mapping_as_of, args.mapping_caller_id, args.mapping_purpose)
+        if any(v is not None for v in mapping_values):
+            if not args.include_diagnostics or not all(v is not None for v in mapping_values):
+                raise ManufacturingReviewError('mapping requires --include-diagnostics and all six mapping arguments')
+        originals = tuple(path.read_bytes() for path in paths)
+        if args.include_diagnostics:
+            from .review_diagnostics import build_review_diagnostics
+            mapping_args = {}
+            if args.mapping_left is not None:
+                mapping_paths = [args.mapping_left, args.mapping_right, args.mapping_contract]
+                paths.extend(mapping_paths)
+                mapping_args = dict(zip(('mapping_left_raw', 'mapping_right_raw', 'mapping_contract_raw'),
+                                        (path.read_bytes() for path in mapping_paths)))
+                mapping_args.update(mapping_as_of=args.mapping_as_of,
+                                    mapping_caller_id=args.mapping_caller_id,
+                                    mapping_purpose=args.mapping_purpose)
+            result = build_review_diagnostics(*originals, recorded_at=args.recorded_at, **mapping_args)
+        else:
+            result = record_decision_basis(*originals, recorded_at=args.recorded_at)
         _write_basis_audit(args.output, paths, result)
     except (OSError, ValueError, TypeError, KeyError) as error:
         parser.exit(2, f'decision basis refused: {error}\n')
