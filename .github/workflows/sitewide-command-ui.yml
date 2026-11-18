@@ -1,10 +1,10 @@
 name: Sitewide command-room UI verification
 on:
   pull_request:
-    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_reader_legibility.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/prepare_korean_fonts.sh', 'verification/check_reader_legibility.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   push:
     branches: [main]
-    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/check_reader_legibility.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
+    paths: ['web/**', 'verification/check_sitewide_command.cjs', 'verification/prepare_korean_fonts.sh', 'verification/check_reader_legibility.cjs', 'verification/check_top_navigation.cjs', 'verification/check_professional_disclosure.cjs', 'tests/web/**', '.github/workflows/sitewide-command-ui.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,7 +16,7 @@ jobs:
         width: [1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360]
         theme: [dark, silver]
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 23
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,14 +25,11 @@ jobs:
         with:
           node-version: '22'
       - name: Check existing Chrome and bounded Korean font setup
-        timeout-minutes: 3
+        timeout-minutes: 8
         run: |
           command -v google-chrome
           google-chrome --version
-          if ! fc-list :lang=ko | grep -q .; then
-            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
-          fi
-          test -n "$(fc-list :lang=ko)"
+          bash verification/prepare_korean_fonts.sh
           fc-match :lang=ko
       - name: Isolated pinned test driver, no browser download
         timeout-minutes: 3
@@ -98,7 +95,7 @@ jobs:
         width: [1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360]
         theme: [dark, silver]
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 23
     steps:
       - uses: actions/checkout@v4
         with:
@@ -107,14 +104,11 @@ jobs:
         with:
           node-version: '22'
       - name: Existing Chrome and bounded Korean font setup
-        timeout-minutes: 3
+        timeout-minutes: 8
         run: |
           command -v google-chrome
           google-chrome --version
-          if ! fc-list :lang=ko | grep -q .; then
-            sudo timeout 120s apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20 install -y --no-install-recommends fonts-noto-cjk
-          fi
-          test -n "$(fc-list :lang=ko)"
+          bash verification/prepare_korean_fonts.sh
       - name: Isolated driver only
         timeout-minutes: 3
         env:
