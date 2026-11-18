@@ -54,3 +54,22 @@ R1의 공용 writer는 고정 output + `.tmp` 경로를 써서 그 경로가 입
 Claude 정적 검토 권고로 중복 ID 테스트는 두 판단·두 근거로 길이 상한을 통과한 뒤 실제 중복 경로를 확인하도록 추가했다. CLI 입력덮어쓰기 테스트도 유효 basis를 복원해 다른 validation 실패로 거짓 통과하지 않도록 했다. 각각 guard를 제거한 격리 사본에서 테스트가 실패하는 negative control을 수행했다. 제품 코드는 R2와 동일하다.
 
 이 기능은 사유코드와 근거 사이의 의미적 타당성을 판정하지 않는다. 예를 들어 context_changed와 빈 change_refs의 조합 자체는 금지하지 않으며 판단의 품질 검증은 사람에게 남는다. 원본 decisions 바이트 해시는 basis envelope에 결합되고, 반환 audit의 decisions_sha256은 기존 내부 정규화된 decisions의 해시이므로 원본 파일 해시와 혼동하지 않는다. 파일교체는 directory fsync까지 제공하지 않으며 crash-durable 저장 또는 악의적 동시 디렉터리 변경 방어를 보장하지 않는다.
+# 유효 제출 근거의 기타 코드 사용 비율
+
+기존 `summarize_basis_quality`가 원본을 재검증한 뒤 `other_reason_usage`를 추가로 반환한다. 기존 판정·보류·검증·출력 필드는 변경하지 않는다.
+
+`build_review_diagnostics`도 이 결과를 그대로 담으므로, `--include-diagnostics`로 실행한 CLI 보고서에는 `quality.other_reason_usage` 경로로 새 필드가 포함된다. 옵션 없는 기존 CLI의 basis-audit 출력에는 추가되지 않는다. 래퍼의 `operational_status=WITHHELD`와 기존 hold/pending 상태는 그대로이며, 이 집계가 승인이나 평가 결과로 승격되지 않는다.
+
+- numerator: 유효 제출된 basis 중 reason_code가 정확히 `other`인 건수.
+- denominator: 이 호출의 유효 제출 basis 건수. 전체 관측 수나 공장 전체 판단 수가 아니다.
+- fraction: numerator / denominator. 제출이 없으면 null이며, 제출은 있으나 기타가 없으면 0이다.
+- 미제출 관측은 기존 pending 집계에 남는다. 제출했으나 근거·코드가 누락/잘못된 경우 기존 검증이 예외를 내며 기타로 대체하지 않는다.
+- observed/inferred/unverified 등급은 이유코드와 별개다. 기타 사용이 많거나 적다는 사실만으로 판단정확성·근거진위·안전·승인·현장 효과를 평가하지 않는다.
+- 거절 시도 이력이 없으므로 거절 건수/비율은 기존 unknown/null을 유지한다. 유효 제출만 집계한 결과를 성공률로 부르면 안 된다.
+
+제조 Agentic AI 자료의 코드목록 갱신·기타 비율 점검이라는 설계 관점을 좁게 적용한 것이다. 원문 수치·도표·사용자 자료를 포함하지 않는다. 새로운 모델·온톨로지·현장 제어·승인 기능은 아니다.
+
+합성 회귀 실행:
+```sh
+PYTHONPATH=src python -m unittest discover -s tests -p 'test_decision_basis*.py' -v
+```
