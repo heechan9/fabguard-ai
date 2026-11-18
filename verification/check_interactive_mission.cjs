@@ -3,7 +3,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
 const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8775',out=process.env.FABGUARD_UI_OUTPUT||'/tmp/fabguard-interactive-browser';fs.mkdirSync(out,{recursive:true});
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});const rows=[];
 try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
- const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/THREE.WebGLProgram|Shader Error/.test(m.text()))errors.push(m.text());});
  await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
  await page.clock.install({time:new Date('2026-11-11T00:00:00Z')});await page.clock.pauseAt(new Date('2026-11-11T00:01:00Z'));
  const advance=async(ms)=>{for(let i=0;i<ms;i+=100)await page.clock.fastForward(Math.min(100,ms-i));};
@@ -106,9 +106,14 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#teaching-settings summary').press('Enter');
  const captureGuide=async name=>{
   await advance(160);await page.locator('#viewport').scrollIntoViewIfNeeded();
-  return page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
+  return page.locator('#viewport canvas').first().screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
  };
  const normalScene=await captureGuide('normal');
+ await guideMode.selectOption('cutaway');const cutaway=await captureGuide('cutaway');
+ await page.locator('#teaching-focus').selectOption('nozzle');const closeNozzle=await captureGuide('nozzle');
+ assert.equal(cutaway.equals(closeNozzle),false);
+ await page.locator('#teaching-focus').selectOption('feeder');await captureGuide('feeder');
+ await page.locator('#teaching-focus').selectOption('all');
  await guideMode.selectOption('temperature');
  const thermalScene=await captureGuide('temperature');
  assert.equal(normalScene.equals(thermalScene),false);
@@ -118,6 +123,11 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await guideMode.selectOption('stress');const stressScene=await captureGuide('stress');
  assert.equal(stressScene.equals(thermalScene),false);
  assert.match(await page.locator('#teaching-field-note').innerText(),/합성 응력/);
+ await guideMode.selectOption('compare');await captureGuide('comparison');
+ assert.equal(await page.locator('#teaching-pair').isVisible(),true);
+ assert.equal(await page.locator('#teaching-scale span').count(),6);
+ const panels=await page.locator('#teaching-pair span').evaluateAll(nodes=>nodes.map(n=>({x:n.offsetLeft,y:n.offsetTop})));
+ if(width===1366)assert.ok(panels[1].x>panels[0].x);else assert.ok(panels[1].y>panels[0].y);
  await guideMode.selectOption('assembly');const baseScene=await captureGuide('base');
  assert.equal(await page.locator('#teaching-legend').isVisible(),false);
  assert.equal(await page.locator('#teaching-back').isDisabled(),true);

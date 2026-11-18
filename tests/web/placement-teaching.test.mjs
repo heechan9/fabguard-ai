@@ -23,7 +23,7 @@ test('teaching fields use distinct categorical colors on the actual 04/05 assemb
   for (const count of [4,6]) {
     const {station, head, cover} = liveStation(count);
     const initialEmissive = head.material.emissive.getHex();
-    const guide = buildTeachingModel(station);
+    const guide = buildTeachingModel(station,count);
     for (const [mode, field] of Object.entries(FIELDS)) {
       guide.style(mode,0); guide.pose(mode,0);
       assert.equal(guide.groups.cover.visible,false);
@@ -32,9 +32,9 @@ test('teaching fields use distinct categorical colors on the actual 04/05 assemb
         for(const mesh of guide.groups[part].children) assert.equal(mesh.material.color.getHex(),field.colors[level]);
       }
     }
-    const copiedHead = guide.groups.nozzle.children.find(m=>m.geometry===head.geometry);
+    const copiedHead = guide.groups.nozzle.children.find(m=>m.geometry===head.children[0].geometry);
     assert.ok(copiedHead); assert.notEqual(copiedHead.material,head.material);
-    assert.ok(copiedHead.position.distanceTo(new THREE.Vector3(0,1.8,0))<1e-10);
+    assert.ok(copiedHead.position.distanceTo(head.children[0].position.clone().add(new THREE.Vector3(0,1.8,0)))<1e-10);
     assert.deepEqual(head.position.toArray(),[-1.15,1.54,-.2]);
     assert.equal(head.material.emissive.getHex(),initialEmissive);
     assert.equal(cover.visible,false);
@@ -43,7 +43,7 @@ test('teaching fields use distinct categorical colors on the actual 04/05 assemb
 });
 
 test('each assembly step adds the named subgroup and reverse traversal restores it',()=>{
-  const guide = buildTeachingModel(liveStation(6).station);
+  const guide = buildTeachingModel(liveStation(6).station,6);
   for (const step of [0,1,2,3,4,3,2,1,0]) {
     guide.style('assembly',step);guide.pose('assembly',step);
     STEPS.forEach(([id],i)=>{

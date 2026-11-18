@@ -37,14 +37,19 @@
 <p class="micro-note">235–280°C 중 최고 온도를 직접 가정합니다. 열전달·실물 레시피·센서·AI 모델을 실행하지 않습니다. E-stop은 이 합성 실행만 멈추며 실제 비상정지나 안전 기능이 아닙니다.</p>
 <div id="lot-mission" class="lot-mission" aria-label="생산 묶음 상태 · 클릭하면 해당 기판 선택"></div>
 <p id="placement-status" class="micro-note">실장 동작 · 기판 투입 대기</p>
-</section><section class="workspace"><div class="visual"><div class="viewbar"><span>전자기판 조립 라인 <b>가상 공정</b></span><div><button id="placement-focus" class="quiet">실장기 확대</button><button id="camera-reset" class="quiet">전체 라인</button><button id="inside-view" class="quiet" aria-pressed="false">내부 보기</button><button id="top-view" class="quiet">위에서 보기</button></div></div><details id="teaching-settings" class="teaching-settings">
+</section><section class="workspace"><div class="visual"><div class="viewbar"><span>전자기판 조립 라인 <b>가상 공정</b></span><div><button id="placement-focus" class="quiet">실장기 확대</button><button id="camera-reset" class="quiet">전체 라인</button><button id="inside-view" class="quiet" aria-pressed="false">내부 보기</button><button id="teaching-cutaway" type="button" class="quiet">기구 절개</button><button id="top-view" class="quiet">위에서 보기</button></div></div><details id="teaching-settings" class="teaching-settings">
   <summary>3D 보기 설정</summary>
   <label>표시 방식 <select id="teaching-mode">
     <option value="normal" selected>기본 시뮬레이션</option>
+    <option value="cutaway">기구 절개</option>
     <option value="temperature">온도 분포 예시</option>
     <option value="stress">응력 분포 예시</option>
+    <option value="compare">온도·응력 비교</option>
     <option value="assembly">단계별 조립·분해</option>
   </select></label>
+  <label id="teaching-focus-row" hidden>확대할 부품 <select id="teaching-focus">
+    <option value="all">실장기 전체</option><option value="nozzle">캐리지·노즐</option>
+    <option value="rail">가이드 레일</option><option value="feeder">피더 뱅크</option></select></label>
   <p id="teaching-unavailable" hidden>이 기기에서는 3D 설명 보기를 사용할 수 없습니다.</p>
   <div id="teaching-steps" hidden>
     <label>조립 단계 <select id="teaching-step"></select></label>
@@ -54,7 +59,7 @@
     <small>구조를 설명하는 모형입니다. 실제 설비의 정비·조립 순서와 다를 수 있습니다.</small>
   </div>
 </details>
-<div class="placement-detail-controls" role="group" aria-label="실장기 부품 구조 선택" style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.6rem"><span style="width:100%;font-size:.85rem">실장기 구조 보기 · 설명용 형상, 실제 장비 CAD·물리 검증 아님</span><button type="button" data-placement-part="nozzle" aria-pressed="false">노즐</button><button type="button" data-placement-part="rail" aria-pressed="false">레일</button><button type="button" data-placement-part="feeder" aria-pressed="false">부품 공급기</button><button type="button" data-placement-part="pcb" aria-pressed="false">기판</button><button type="button" id="placement-clear">강조 해제</button><span id="placement-part-note" role="status" aria-live="polite" style="width:100%;font-size:.85rem">강조 없음 · 부품을 고르면 내부를 확대합니다. 실제 측정값이 아닙니다.</span></div><div id="viewport" tabindex="0" aria-label="3D SMT 라인. 드래그로 회전, 휠이나 두 손가락으로 확대. 아래 공정 및 PCB 선택 버튼으로도 탐색할 수 있습니다."><div id="view-error" hidden>이 기기에서 3D 화면을 열지 못했어. WebGL을 지원하는 브라우저로 다시 열어줘. 아래 공정 선택과 시뮬레이션은 사용할 수 있어.</div></div><div class="teaching-reading">
+<div class="placement-detail-controls" role="group" aria-label="실장기 부품 구조 선택" style="display:flex;flex-wrap:wrap;gap:.4rem;padding:.6rem"><span style="width:100%;font-size:.85rem">실장기 구조 보기 · 설명용 형상, 실제 장비 CAD·물리 검증 아님</span><button type="button" data-placement-part="nozzle" aria-pressed="false">노즐</button><button type="button" data-placement-part="rail" aria-pressed="false">레일</button><button type="button" data-placement-part="feeder" aria-pressed="false">부품 공급기</button><button type="button" data-placement-part="pcb" aria-pressed="false">기판</button><button type="button" id="placement-clear">강조 해제</button><span id="placement-part-note" role="status" aria-live="polite" style="width:100%;font-size:.85rem">강조 없음 · 부품을 고르면 내부를 확대합니다. 실제 측정값이 아닙니다.</span></div><div id="viewport" tabindex="0" aria-label="3D SMT 라인. 드래그로 회전, 휠이나 두 손가락으로 확대. 아래 공정 및 PCB 선택 버튼으로도 탐색할 수 있습니다."><div id="teaching-pair" aria-hidden="true" hidden><span>온도 예시</span><span>응력 예시</span></div><div id="view-error" hidden>이 기기에서 3D 화면을 열지 못했어. WebGL을 지원하는 브라우저로 다시 열어줘. 아래 공정 선택과 시뮬레이션은 사용할 수 있어.</div></div><div class="teaching-reading">
   <p id="teaching-caption" role="status" hidden></p>
   <div id="teaching-legend" hidden><div id="teaching-scale"></div><p id="teaching-field-note"></p></div>
 </div>
