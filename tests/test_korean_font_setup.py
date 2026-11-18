@@ -1,5 +1,7 @@
 """Hermetic command-contract tests; not a real apt/browser integration result."""
 import os
+import hashlib
+import json
 from pathlib import Path
 import subprocess
 import tempfile
@@ -156,6 +158,21 @@ esac
         # BaseLoader safely keeps scalar spelling, including the GitHub key 'on',
         # instead of interpreting YAML 1.1 'on' as boolean True.
         workflow = yaml.load(text, Loader=StrictWorkflowLoader)
+        # Golden parsed configuration, not raw bytes: comments, key order and
+        # equivalent quoting/layout stay valid. Any effective setting change needs
+        # intentional review plus repinning, not automatic hash regeneration.
+        # This guards configuration drift, not arbitrary shell execution or approval.
+        canonical = json.dumps(workflow, sort_keys=True, separators=(',', ':')).encode()
+        self.assertEqual(hashlib.sha256(canonical).hexdigest(),
+                         '4dcdbe6fdece9d3b64ac548ba678591b94ddcebbcfaffaa76468a2c8d10f7aa9')
+        for job in workflow['jobs'].values():
+            defaults = dict(workflow.get('defaults', {}).get('run', {}))
+            defaults.update(job.get('defaults', {}).get('run', {}))
+            for step in job['steps']:
+                if 'run' in step:
+                    self.assertEqual(step.get('shell', defaults.get('shell', 'bash')), 'bash')
+                    self.assertEqual(step.get('working-directory',
+                                             defaults.get('working-directory', '.')), '.')
         self.assertEqual(workflow['on']['pull_request']['paths'],
                          ['web/**', 'scripts/build_ur3_replay.py',
                           'verification/check_ur3_replay.cjs',
