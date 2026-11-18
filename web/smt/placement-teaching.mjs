@@ -149,6 +149,8 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   const standardGuide = document.querySelector('.scene-reading-guide');
   const standardDisplay = standardGuide.style.display;
   const viewportLabel = viewport.getAttribute('aria-label');
+  const insideNote = byId('inside-note');
+  let insideWasHidden = true;
   let mode = 'normal', scene, illustration, camera, origin, stationIndex, step = 0;
   let focus = 'all', activeHighlight = -1;
   let progress = 0, from = 0, started = 0, duration = 0, dirty = true, lastFrame = '';
@@ -168,11 +170,14 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   }
   function close() {
     if (mode === 'normal') return;
+    const restoreFocus = settings.open && (steps.contains(document.activeElement) || byId('teaching-focus-row').contains(document.activeElement));
     mode = modeInput.value = 'normal';
     release();
     legend.hidden = steps.hidden = caption.hidden = true;
     standardGuide.style.display = standardDisplay;
     restoreAngles(origin);
+    insideNote.hidden = insideWasHidden;
+    if(restoreFocus) modeInput.focus();
     viewport.setAttribute('aria-label', viewportLabel);
     viewport.classList.remove('teaching-active','teaching-compare');
     byId('teaching-pair').hidden = byId('teaching-focus-row').hidden = true;
@@ -196,6 +201,8 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     if (value === 'normal') return close();
     if (!available || (!Object.hasOwn(FIELDS,value) && !['assembly','cutaway','compare'].includes(value))) return;
     if (mode === 'normal') {
+      insideWasHidden = insideNote.hidden;
+      insideNote.hidden = true;
       stationIndex = currentStation() === 4 ? 4 : 3;
       illustration = buildTeachingModel(stations[stationIndex],stationIndex===4?4:6);
       scene = new THREE.Scene();
@@ -255,6 +262,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   back.addEventListener('click', () => chooseStep(step-1));
   next.addEventListener('click', () => chooseStep(step+1));
   window.addEventListener('pagehide', close);
+  viewport.querySelector('canvas')?.addEventListener('webglcontextrestored',()=>{dirty=true;});
   function render(renderer, now) {
     const {azimuth,elevation,zoom} = angles();
     const signature = [azimuth,elevation,zoom,viewport.clientWidth,viewport.clientHeight].join('/');
