@@ -38,6 +38,8 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  }
  await page.locator('#station-strip button').nth(4).press('Enter');
  await page.locator('[data-placement-part="feeder"]').press('Enter');await advance(100);
+ assert.equal(await page.locator('[data-placement-part="feeder"]').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),1);
  assert.equal(await page.locator('#station-strip button').nth(4).getAttribute('aria-pressed'),'true');
  assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'false');
  await page.locator('#viewport').scrollIntoViewIfNeeded();
