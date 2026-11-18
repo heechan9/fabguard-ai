@@ -11,6 +11,19 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class StrictWorkflowLoader(yaml.BaseLoader):
+    """String-only loader with duplicate mapping keys rejected."""
+    def construct_mapping(self, node, deep=False):
+        result = {}
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if not isinstance(key, str) or key in result:
+                raise yaml.constructor.ConstructorError(None, None,
+                    'duplicate or non-string workflow key', key_node.start_mark)
+            result[key] = self.construct_object(value_node, deep=deep)
+        return result
+
+
 class KoreanFontSetupTests(unittest.TestCase):
     def run_setup(self, initial=False, install=True, charset='ac00-d7a3', apt_fail=False, update_fail=False, platform='Ubuntu', arch='amd64', key=True, codename='noble', install_fail=False):
         with tempfile.TemporaryDirectory() as folder:
@@ -142,11 +155,14 @@ esac
         text = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_text()
         # BaseLoader safely keeps scalar spelling, including the GitHub key 'on',
         # instead of interpreting YAML 1.1 'on' as boolean True.
-        workflow = yaml.load(text, Loader=yaml.BaseLoader)
-        self.assertIn('verification/prepare_korean_fonts.sh',
-                      workflow['on']['pull_request']['paths'])
+        workflow = yaml.load(text, Loader=StrictWorkflowLoader)
+        self.assertEqual(workflow['on']['pull_request']['paths'],
+                         ['web/**', 'scripts/build_ur3_replay.py',
+                          'verification/check_ur3_replay.cjs',
+                          'verification/prepare_korean_fonts.sh',
+                          '.github/workflows/ur3-replay-ui.yml'])
         browser = workflow['jobs']['browser']
-        self.assertEqual(browser['strategy']['matrix']['width'], ['1366', '360', '390'])
+        self.assertEqual(browser['strategy']['matrix'], {'width': ['1366', '360', '390']})
         self.assertEqual(browser['timeout-minutes'], '20')
         self.assertEqual(browser['strategy']['fail-fast'], 'false')
         self.assertNotIn('if', browser)
@@ -179,8 +195,27 @@ esac
         checkout = [step for step in steps if step.get('uses') == 'actions/checkout@v4']
         self.assertEqual(len(checkout), 1)
         self.assertEqual(checkout[0]['with']['persist-credentials'], 'false')
-        source = workflow['jobs']['source']['steps']
-        rebuild = next(step['run'] for step in source if step.get('name') ==
-                       'Rebuild from pinned UCI original without new dependencies')
-        self.assertIn('cmp web/robot/ur3/data.json', rebuild)
-        self.assertIn('cmp web/robot/ur3/data-hash.mjs', rebuild)
+        source = workflow['jobs']['source']
+        self.assertNotIn('if', source)
+        self.assertNotIn('continue-on-error', source)
+        rebuilds = [step for step in source['steps'] if step.get('name') ==
+                    'Rebuild from pinned UCI original without new dependencies']
+        self.assertEqual(len(rebuilds), 1)
+        rebuild = rebuilds[0]
+        self.assertNotIn('if', rebuild)
+        self.assertNotIn('continue-on-error', rebuild)
+        source_active = [line.strip() for line in rebuild['run'].splitlines()
+                         if line.strip() and not line.lstrip().startswith('#')]
+        for filename in ['data.json', 'data-hash.mjs']:
+            self.assertIn(f'cmp web/robot/ur3/{filename} "$RUNNER_TEMP/ur3-derived/{filename}"',
+                          source_active)
+
+    def test_workflow_loader_rejects_duplicate_keys(self):
+        with self.assertRaises(yaml.constructor.ConstructorError):
+            yaml.load('jobs:\n  browser:\n    timeout-minutes: 10\n    timeout-minutes: 20\n',
+                      Loader=StrictWorkflowLoader)
+
+    def test_workflow_loader_is_string_only_not_python_object_construction(self):
+        value = yaml.load('on: !!python/object/apply:os.system ["NOT_A_COMMAND"]',
+                          Loader=StrictWorkflowLoader)
+        self.assertEqual(value, {'on': ['NOT_A_COMMAND']})
