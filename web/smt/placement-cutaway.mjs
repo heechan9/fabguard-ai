@@ -118,20 +118,23 @@ export function addMechanismDetails(groups, feederCount) {
   }
   const aperture=new THREE.Path();aperture.absellipse(0,.048,.067,.056,0,Math.PI*2,true,0);apron.holes.push(aperture);
   const plate=new THREE.ExtrudeGeometry(apron,{depth:.068,bevelSize:.012,bevelThickness:.011,bevelSegments:3,curveSegments:12});
-  plate.name='machined-carriage-apron';add('nozzle',plate,'steel',[0,2.045,.257]);
+  plate.name='machined-carriage-apron';add('nozzle',plate,'steel',[0,2.045,.321]);
   for(const x of [-.18,.18]){
     shaft('nozzle','bright',[x,1.91,.22],.025,.35);
     shaft('nozzle','dark',[x,1.91,.22],.046,.122);
-    screw('nozzle',[x,2.012,.344],.022);
-    screw('nozzle',[x*.63,1.894,.344],.018);
+    box('nozzle','cast',[x,2.005,.267],[.080,.112,.111]);
+    screw('nozzle',[x,2.012,.404],.022);
+    screw('nozzle',[x*.63,1.894,.404],.018);
   }
   // Sectioned outer race and individual rolling elements expose the spindle bearing.
-  const cutRace=new THREE.LatheGeometry([[.128,-.035],[.168,-.035],[.182,-.022],[.182,.023],
-    [.170,.035],[.130,.035],[.128,.022],[.128,-.035]].map(([x,y])=>new THREE.Vector2(x,y)),44,.82,Math.PI*2-1.64);
+  const cutRace=new THREE.LatheGeometry([[.167,-.030],[.178,-.030],[.186,-.020],[.186,.020],
+    [.178,.030],[.167,.030],[.168,.017],[.168,-.017],[.167,-.030]].map(([x,y])=>new THREE.Vector2(x,y)),44,.82,Math.PI*2-1.64);
   cutRace.name='sectioned-bearing-race';add('nozzle',cutRace,'cast',[0,1.755,0]);
-  const rollingElement=new THREE.SphereGeometry(.025,16,10);
+  const innerRace=turned([[.126,-.022],[.131,-.022],[.132,-.015],[.132,.015],[.131,.022],[.126,.022],[.126,-.022]],40);
+  add('nozzle',innerRace,'bright',[0,1.755,0]);
+  const rollingElement=new THREE.SphereGeometry(.018,16,10);
   for(let i=0;i<15;i++){
-    const a=2*Math.PI*i/15;add('nozzle',rollingElement,'bright',[.146*Math.sin(a),1.755,.146*Math.cos(a)]);
+    const a=2*Math.PI*i/15;add('nozzle',rollingElement,'bright',[.150*Math.sin(a),1.755,.150*Math.cos(a)]);
   }
   for(const y of [1.716,1.794]){
     const lip=turned([[.119,-.009],[.158,-.009],[.163,-.004],[.163,.004],[.158,.009],[.119,.009],[.119,-.009]],40);

@@ -102,6 +102,9 @@ test('cutaway nut and spindle bearing share their shaft axes and retain open ins
     assert.equal(spindle.position.x,race.position.x);assert.equal(spindle.position.z,race.position.z);
     assert.ok(race.geometry.parameters.phiLength<Math.PI*2);
     assert.ok(apron.geometry.parameters.shapes.holes.length>=2);
+    const apronBox=new THREE.Box3().setFromObject(apron),nutBox=new THREE.Box3().setFromObject(nut);
+    assert.ok(apronBox.min.z>bounds.max.z,'The carriage apron clears the screw thread');
+    assert.ok(apronBox.intersectsBox(nutBox),'The apron meets the outside of the drive nut');
     guide.pose('assembly',2);assert.equal(guide.groups.nozzle.visible,false);
     guide.pose('assembly',3);assert.equal(guide.groups.nozzle.visible,true);
     guide.dispose();
