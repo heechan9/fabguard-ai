@@ -133,3 +133,20 @@ esac
         self.assertEqual(text.count('timeout 360s node'), 5)
         self.assertEqual(text.count('timeout 240s node'), 2)
         self.assertEqual(text.count('timeout 180s node'), 3)
+
+
+    def test_ur3_workflow_reuses_bounded_setup_without_reducing_coverage(self):
+        text = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_text()
+        self.assertIn("      - 'verification/prepare_korean_fonts.sh'", text)
+        self.assertIn('width: [1366, 360, 390]', text)
+        self.assertIn('timeout-minutes: 20', text)
+        self.assertIn('      - name: Bounded authenticated Korean font preparation\n        timeout-minutes: 8\n        run: bash verification/prepare_korean_fonts.sh', text)
+        self.assertNotIn('sudo apt-get', text)
+        self.assertNotIn('continue-on-error', text)
+        self.assertIn('fail-fast: false', text)
+        for name, seconds in [('ur3_replay', 240), ('robot_sort_cell', 360),
+                              ('context_review', 180), ('theme_ui', 360), ('transfer_robot', 360)]:
+            self.assertIn(f'timeout {seconds}s node verification/check_{name}.cjs', text)
+        self.assertIn('cmp web/robot/ur3/data.json', text)
+        self.assertIn('cmp web/robot/ur3/data-hash.mjs', text)
+        self.assertIn('persist-credentials: false', text)
