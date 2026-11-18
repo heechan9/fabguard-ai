@@ -43,7 +43,7 @@ class TemporalReview(unittest.TestCase):
             select.assert_not_called()
 
 class RunnerScopeReview(unittest.TestCase):
-    def check_runner(self, runner):
+    def check_runner(self, runner, forced_skip=None):
         from contextlib import ExitStack
         from pathlib import Path
         import tempfile
@@ -75,11 +75,20 @@ class RunnerScopeReview(unittest.TestCase):
             'drift_table': Mock(return_value=pd.DataFrame()),
             'score_temporal_fold': score,
         }
+        if forced_skip is not None:
+            replacements['temporal_fold_skip_reason'] = Mock(return_value=forced_skip)
         with ExitStack() as stack, tempfile.TemporaryDirectory() as tmp:
             for name, replacement in replacements.items():
                 stack.enter_context(patch.object(module, name, replacement))
             manifest = runner(ExperimentConfig(), output_dir=Path(tmp))
-        self.assertEqual(len(seen), 4)
+            saved = pd.read_csv(Path(tmp) / 'walk_forward_metrics.csv')
+        self.assertEqual(len(seen), 0 if forced_skip else 4)
+        self.assertEqual(manifest['walk_forward_skipped_folds'], 4 if forced_skip else 0)
+        self.assertEqual(manifest['walk_forward_evaluated_folds'], 0 if forced_skip else 4)
+        if forced_skip:
+            self.assertEqual(set(saved['status']), {'SKIPPED'})
+            self.assertEqual(set(saved['skip_reason']), {forced_skip})
+            self.assertNotIn('average_precision', saved.columns)
         self.assertEqual(manifest['walk_forward_scope'], 'original_training_period_only')
         self.assertEqual(manifest['walk_forward_selection'], 'each_fold_training_prefix_only')
         self.assertEqual(manifest['inner_selection_method'], 'repeated_stratified_cv_within_prefix')
@@ -123,3 +132,50 @@ class OutputPreservationReview(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'absent or empty'):
                     run_advanced_experiment(ExperimentConfig(), output_dir=evidence)
                 load.assert_not_called()
+
+
+class TemporalSupportReview(unittest.TestCase):
+    def test_sparse_class_support_reported(self):
+        from fabguard.advanced_experiment import temporal_fold_skip_reason
+        config=ExperimentConfig()
+        val=pd.DataFrame({'label':[0,1]})
+        for labels,expected in [([0]*10,'TRAIN_SINGLE_CLASS'),
+                                ([0]*10+[1]*4,'TRAIN_CLASS_SUPPORT_BELOW_CV_SPLITS'),
+                                ([0]*10+[1]*5,None)]:
+            self.assertEqual(temporal_fold_skip_reason(pd.DataFrame({'label':labels}),val,config),expected)
+        self.assertEqual(temporal_fold_skip_reason(pd.DataFrame({'label':[0,1]*5}),
+                         pd.DataFrame({'label':[0,0]}),config),'VALIDATION_NO_FAIL')
+    def test_invalid_cv_not_silently_skipped(self):
+        from dataclasses import replace
+        from fabguard.advanced_experiment import temporal_fold_skip_reason
+        for value in [1,True,2.5]:
+            with self.assertRaises(ValueError):
+                temporal_fold_skip_reason(pd.DataFrame({'label':[0,1]*5}),
+                    pd.DataFrame({'label':[0,1]}),replace(ExperimentConfig(),cv_splits=value))
+    def test_skipped_windows_recorded_without_metrics(self):
+        from fabguard.advanced_experiment import run_advanced_experiment
+        RunnerScopeReview().check_runner(run_advanced_experiment,
+                                        forced_skip='TRAIN_CLASS_SUPPORT_BELOW_CV_SPLITS')
+    def test_fit_errors_not_caught_as_skips(self):
+        fit=pd.DataFrame({'timestamp':pd.date_range('2020-01-01',periods=10),
+                          'feature_0':range(10),'label':[0,1]*5})
+        val=pd.DataFrame({'timestamp':[pd.Timestamp('2020-02-01')],
+                          'feature_0':[11],'label':[1]})
+        with patch('fabguard.advanced_experiment.selected_candidate',side_effect=RuntimeError('fit failure')):
+            with self.assertRaisesRegex(RuntimeError,'fit failure'):
+                score_temporal_fold(fit,val,['feature_0'],ExperimentConfig())
+
+class CliOutputReview(unittest.TestCase):
+    def test_missing_output_rejected_before_run(self):
+        import contextlib,io
+        from fabguard.advanced_experiment import main
+        with patch('sys.argv',['fabguard-advanced']),patch('fabguard.advanced_experiment.run_advanced_experiment') as run,contextlib.redirect_stderr(io.StringIO()) as err:
+            with self.assertRaises(SystemExit) as raised:main()
+            self.assertEqual(raised.exception.code,2)
+            self.assertIn('--output-dir',err.getvalue());run.assert_not_called()
+    def test_explicit_output_forwarded(self):
+        import contextlib,io
+        from pathlib import Path
+        from fabguard.advanced_experiment import main
+        with patch('sys.argv',['fabguard-advanced','--output-dir','fresh-output']),patch('fabguard.advanced_experiment.run_advanced_experiment',return_value={}) as run,contextlib.redirect_stdout(io.StringIO()):
+            main();self.assertEqual(run.call_args.kwargs['output_dir'],Path('fresh-output'))

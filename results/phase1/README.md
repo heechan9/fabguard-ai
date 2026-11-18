@@ -60,3 +60,19 @@ Inside each past prefix, candidate selection retains existing repeated stratifie
 CV; only the outer walk-forward is chronological. This is not fully nested
 chronological inner CV. The manifest explicitly lists the sections that still
 consume the exposed holdout, including feature-distribution comparison.
+
+
+### Explicit output and sparse-prefix records
+
+The CLI requires `--output-dir` explicitly. Omitting it stops in argument parsing
+before loading data or fitting; there is no default pointing to the archive.
+Existing non-empty destinations still fail rather than being silently replaced.
+
+Future walk-forward CSVs retain every window with `status=EVALUATED` or `SKIPPED`.
+Single-class prefixes, per-class support below configured inner CV splits, and
+validation windows without Fail have distinct skip reasons. Skipped rows contain
+no performance metric, and the manifest records evaluated/skipped counts. Do not
+treat them as zero scores, silently drop them to claim whole-period performance,
+or compare them to the archived CSV as if the procedures were identical.
+Only these predeclared support conditions are skipped; unexpected model-fitting
+errors still propagate. This change does not rerun models or alter archived data.

@@ -42,6 +42,21 @@ def score_temporal_fold(fit_fold: pd.DataFrame, validation: pd.DataFrame,
     return candidate, pipeline.predict_proba(validation[features])[:, 1]
 
 
+def temporal_fold_skip_reason(fit_fold: pd.DataFrame, validation: pd.DataFrame,
+                              config: ExperimentConfig) -> str | None:
+    """Report only explicit sample-support exclusions; never hide fitting errors."""
+    if type(config.cv_splits) is not int or config.cv_splits < 2:
+        raise ValueError("cv_splits must be an integer >= 2")
+    counts = fit_fold["label"].value_counts()
+    if len(counts) < 2:
+        return "TRAIN_SINGLE_CLASS"
+    if int(counts.min()) < config.cv_splits:
+        return "TRAIN_CLASS_SUPPORT_BELOW_CV_SPLITS"
+    if validation["label"].sum() == 0:
+        return "VALIDATION_NO_FAIL"
+    return None
+
+
 def prefit_calibrator(estimator: object) -> CalibratedClassifierCV:
     """Build a calibrator compatible with both old and current scikit-learn."""
     if FrozenEstimator is not None:
@@ -84,10 +99,16 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
     walk_rows = []
     for fold, (fit_index, validation_index) in enumerate(walk_forward_slices(ordered["timestamp"])):
         fit_fold, validation = ordered.iloc[fit_index], ordered.iloc[validation_index]
-        if fit_fold["label"].nunique() < 2 or validation["label"].sum() == 0:
+        skip_reason = temporal_fold_skip_reason(fit_fold, validation, config)
+        if skip_reason is not None:
+            walk_rows.append({"fold": fold, "status": "SKIPPED", "skip_reason": skip_reason,
+                              "train_samples": len(fit_fold), "samples": len(validation),
+                              "fail": int(validation["label"].sum()),
+                              "validation_start": validation["timestamp"].min().isoformat(),
+                              "validation_end": validation["timestamp"].max().isoformat()})
             continue
         fold_candidate, fold_probability = score_temporal_fold(fit_fold, validation, features, config)
-        walk_rows.append({"fold": fold, "selected_candidate": fold_candidate.name, "train_samples": len(fit_fold), "samples": len(validation),
+        walk_rows.append({"fold": fold, "status": "EVALUATED", "skip_reason": None, "selected_candidate": fold_candidate.name, "train_samples": len(fit_fold), "samples": len(validation),
                           "fail": int(validation["label"].sum()), "fail_rate": float(validation["label"].mean()),
                           "average_precision": float(average_precision_score(validation["label"], fold_probability)),
                           **calibration_metrics(validation["label"], fold_probability),
@@ -99,6 +120,9 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
                 "base_contract": "results/v1/manifest.json", "test_split_changed": False,
                 "walk_forward_scope": "original_training_period_only",
                 "walk_forward_selection": "each_fold_training_prefix_only",
+                "walk_forward_evaluated_folds": sum(row["status"] == "EVALUATED" for row in walk_rows),
+                "walk_forward_skipped_folds": sum(row["status"] == "SKIPPED" for row in walk_rows),
+                "walk_forward_aggregation": "none; skipped windows are not zero scores or whole-period performance",
                 "inner_selection_method": "repeated_stratified_cv_within_prefix",
                 "exposed_holdout_sections": ["calibration", "inspection_cost", "top_k_bootstrap", "feature_drift"],
                 "calibration_fit_scope": "last_20_percent_of_training_period_only",
@@ -112,7 +136,8 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", type=Path, default=Path("data/raw"))
-    parser.add_argument("--output-dir", type=Path, default=Path("results/phase1"))
+    parser.add_argument("--output-dir", type=Path, required=True,
+                        help="Fresh absent or empty directory; archived outputs are never overwritten")
     parser.add_argument("--bootstrap", type=int, default=2000)
     parser.add_argument("--inspection-cost", type=float, default=1.0)
     parser.add_argument("--missed-fail-cost", type=float, default=20.0)
