@@ -10,6 +10,26 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  let n=0;const snapshot=async()=>{const download=page.waitForEvent('download');await page.locator('#export').press('Enter');const d=await download,file=path.join(out,`${width}-${theme}-${n++}.json`);await d.saveAs(file);return JSON.parse(fs.readFileSync(file,'utf8'));};
  await page.goto(base+'/smt/');await advance(200);assert.equal(await page.locator('#view-error').isVisible(),false);
  if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme-toggle').press('Enter');
+ await page.locator('#viewport').scrollIntoViewIfNeeded();
+ await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-initial-machine.png`)});
+ assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
+ const guideBox=await page.locator('.scene-reading-guide').boundingBox(),initialViewBox=await page.locator('#viewport').boundingBox();assert.ok(guideBox.y>=initialViewBox.y+initialViewBox.height,'Legends stay outside the detailed machine view');
+ const guideContrasts=await page.locator('.scene-reading-guide').evaluate(guide=>{
+  const channels=c=>c.match(/[\d.]+/g).map(Number);
+  const luminance=rgb=>{const linear=rgb.slice(0,3).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});return linear[0]*.2126+linear[1]*.7152+linear[2]*.0722;};
+  const parent=channels(getComputedStyle(guide).backgroundColor);
+  return ['.gesture','#selected-station-caption','.scene-caption'].map(selector=>{
+   const style=getComputedStyle(guide.querySelector(selector)),bg=channels(style.backgroundColor),alpha=bg[3]??1;
+   const background=bg.slice(0,3).map((c,i)=>c*alpha+parent[i]*(1-alpha));
+   const a=luminance(channels(style.color)),b=luminance(background);
+   return {selector,ratio:(Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
+  });
+ });for(const {selector,ratio} of guideContrasts)assert.ok(ratio>=4.5,`${selector} guide contrast ${ratio}`);
+ await page.locator('.scene-reading-guide').screenshot({path:path.join(out,`${width}-${theme}-reading-guide.png`)});
+ await page.locator('#camera-reset').press('Enter');await advance(100);
+ await page.locator('#placement-focus').press('Enter');await advance(100);
+ assert.equal(await page.locator('#inside-view').getAttribute('aria-pressed'),'false');
+ assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
  await page.locator('#reset').press('Enter');await advance(200);assert.match(await page.locator('#run-status').innerText(),/일시정지/);
  await page.locator('#peak-assumption').press('End');for(let step=0;step<20;step++)await page.locator('#peak-assumption').press('ArrowLeft');await page.locator('#apply-peak').press('Enter');assert.equal((await snapshot()).pending_peak_celsius,260);
  await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');await advance(3600);
@@ -21,6 +41,12 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#lot-mission button').first().press('Enter');assert.equal(await page.locator('#lot-mission button').first().getAttribute('aria-pressed'),'true');
  // R3 part selection is presentation-only. Exercise exact public controls in WebGL.
  const beforeParts=await snapshot();
+ for(const station of [3,4]){
+  await page.locator('#station-strip button').nth(station).press('Enter');await advance(100);
+  await page.locator('#viewport').scrollIntoViewIfNeeded();
+  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-station${station+1}-closed.png`)});
+ }
+ await page.locator('#station-strip button').nth(3).press('Enter');await advance(100);
  for(const part of ['nozzle','rail','feeder','pcb']){
   const button=page.locator(`[data-placement-part="${part}"]`);
   await button.press('Space');await advance(100);
@@ -58,6 +84,21 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert.equal(overflow,false,'Horizontal document overflow');
  await page.locator('#reset').press('Enter');await page.locator('[data-fault="missing"]').press('Enter');await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');await advance(4000);await page.locator('#simulation-stop').press('Enter');assert.match(await page.locator('#lot-mission').innerText(),/HOLD 1/);await page.locator('#release-stop').press('Enter');assert.match(await page.locator('#lot-mission').innerText(),/HOLD 1/);
  await page.locator('#reset').press('Enter');const reset=await snapshot();assert.equal(reset.control_events.length,0);assert.equal(reset.emergency_stopped,false);assert.equal(reset.boards.length,1);assert.equal(reset.pending_peak_celsius,null);assert.equal(errors.length,0,errors.join('\n'));
+ // Inspect the real rendered head at both previously intersecting side-wall positions.
+ // Drive only public controls and validate the exported stage/progress at each sample.
+ await page.locator('#reset').press('Enter');await page.locator('#speed').selectOption('1');
+ let previousSampleTime=0;
+ for(const [stage,progress] of [[3,.185],[3,.83],[4,.185],[4,.83]]){
+  const targetTime=(stage===3?11:15)+4*progress;
+  await page.locator('#play').press('Enter');await advance(Math.round((targetTime-previousSampleTime)*1000));
+  await page.locator('#play').press('Enter');await advance(100);
+  const state=await snapshot(),board=state.boards[0];assert.equal(board.stage,stage);assert.ok(Math.abs(board.progress-progress)<.025,`Sweep capture progress ${board.progress}`);
+  previousSampleTime=state.simulation_seconds;
+  await page.locator('#station-strip button').nth(stage).press('Enter');await advance(100);
+  await page.locator('#viewport').scrollIntoViewIfNeeded();
+  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-sweep-${stage}-${progress}.png`)});
+ }
+ await page.locator('#reset').press('Enter');await advance(100);
  rows.push({width,theme,webgl:true,partControls:true,partEscape:true,partSelectionNonInterference:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
  }
  // Deliberately disabled WebGL: the same public controls and exports must still work.

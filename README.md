@@ -88,7 +88,7 @@
 
 ### 프로젝트 상태
 
-**2026-11-19 소스 확인, main [`ff56e8d`](https://github.com/heechan9/fabguard-ai/commit/ff56e8d3623e661ca8b7373c55924267c18c506a) 기준:** [#236](https://github.com/heechan9/fabguard-ai/pull/236)·[#239](https://github.com/heechan9/fabguard-ai/pull/239)의 폰트 CI 보완과 [#237](https://github.com/heechan9/fabguard-ai/pull/237)의 SMT 구조 보기가 병합됐습니다. 아래에서 main 구현, 웹 UI 연결, 오프라인 Python 기능과 운영 검증을 구분합니다. 기록·화면 기능 확장은 모델 성능이나 현장 효과 개선을 뜻하지 않습니다.
+**2026-11-19 확인한 고정 소스 스냅샷 [`ff56e8d`](https://github.com/heechan9/fabguard-ai/commit/ff56e8d3623e661ca8b7373c55924267c18c506a) 기준:** [#236](https://github.com/heechan9/fabguard-ai/pull/236)·[#239](https://github.com/heechan9/fabguard-ai/pull/239)의 폰트 CI 보완과 [#237](https://github.com/heechan9/fabguard-ai/pull/237)의 SMT 구조 보기가 병합됐습니다. 이 상태 요약은 해당 SHA의 기록이며 이후 main 변경이나 최신 배포 상태를 자동으로 나타내지 않습니다. 아래에서 이 스냅샷의 구현, 웹 UI 연결, 오프라인 Python 기능과 운영 검증을 구분합니다. 기록·화면 기능 확장은 모델 성능이나 현장 효과 개선을 뜻하지 않습니다.
 
 - **소개와 탐색:** `/`는 프로젝트 소개, `/#overview`는 저장 결과 운영 개요입니다. [#209](https://github.com/heechan9/fabguard-ai/pull/209)·[#210](https://github.com/heechan9/fabguard-ai/pull/210)에 따라 소개·운영 개요·3D·우선점검·반도체 분석·검증과 한계를 상단에서 이동하고, 전문 설명은 펼쳐 봅니다. 모든 스크립트 화면은 저장 선택이 없으면 다크이며 실버 선택을 유지합니다. 무스크립트 연구 화면의 테마는 해당 화면에만 적용됩니다.
 - **저장 순위와 사람 검토:** `/#risks`의 저장된 상위 50건에서 20·40·50건을 표시합니다. `/review/`의 검토 메모·체크리스트·인계 JSON은 브라우저에서 사용자가 저장하는 기록입니다. 입력·저장 완료가 현장 승인이나 검토의 진위를 입증하지 않습니다.
