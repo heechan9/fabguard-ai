@@ -67,6 +67,18 @@ class ReviewReceiptTests(unittest.TestCase):
                 r = dict(self.receipt); r[key] = value
                 with self.assertRaises(ValueError): self.check(r)
 
+    def test_literal_argv_whitespace_and_empty_argument(self):
+        command = ['python', '-c', 'print(1)\n', '', ' leading ', '\t']
+        self.receipt['command'] = command[:]
+        self.assertEqual(self.check()['reviews'][0]['status'], 'EXECUTION_SUCCESS_DECLARED')
+        self.assertEqual(self.receipt['command'], command)
+
+    def test_invalid_argv(self):
+        for command in [[], ['', 'arg'], ['python', None], ['python', '\x00'], ['py\x00thon'], 'python']:
+            with self.subTest(command=command):
+                self.receipt['command'] = command
+                with self.assertRaises(ValueError): self.check()
+
     def test_static_and_not_run_cannot_claim_execution(self):
         for mode in ['static', 'not_run']:
             r = dict(self.receipt, mode=mode)

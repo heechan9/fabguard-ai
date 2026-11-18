@@ -52,7 +52,9 @@ def diagnose_review_receipts(expected_commit, expected_reviewers, receipts, evid
                 _require(command is None and code is None, 'static review cannot claim execution')
                 status = 'STATIC_EVIDENCE_LINKED'
             else:
-                _require(isinstance(command, list) and 0 < len(command) <= 100 and all(_text(x) for x in command), 'invalid command declaration')
+                _require(isinstance(command, list) and 0 < len(command) <= 100
+                         and all(isinstance(x, str) and '\x00' not in x for x in command)
+                         and bool(command[0]), 'invalid command declaration')
                 _require(type(code) is int, 'invalid exit code')
                 status = 'EXECUTION_SUCCESS_DECLARED' if code == 0 else 'EXECUTION_FAILURE_DECLARED'
         declared_status = status
