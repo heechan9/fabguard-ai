@@ -1,3 +1,4 @@
+import {mountPlacementDetails,detailPCB,PARTS} from './placement-details.mjs';
 import {lotMissionSummary,placementPose,LOT_COLORS} from './interactive-model.mjs';
 import {mountContextReview} from './context-review.mjs';
 import {holdReasons} from './context-review-model.mjs';
@@ -24,8 +25,12 @@ const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const inspection=mountInspection($('inspection-lab'));
 const updateContextReview=mountContextReview($('context-review'));
 let introBusy=false,robotCell,transferRobot,floorAgvView;
+const placementDetails=new Map();
+function clearPartSelection(){const note=$('placement-part-note');if(note)note.textContent='강조 없음 · 부품을 고르면 내부를 확대합니다. 실제 측정값이 아닙니다.';for(const detail of placementDetails.values())detail.select(null);document.querySelectorAll('[data-placement-part]').forEach(b=>b.setAttribute('aria-pressed','false'));}
+document.querySelectorAll('[data-placement-part]').forEach(button=>button.addEventListener('click',()=>{const part=button.dataset.placementPart;const station=[3,4].includes(activeStation)?activeStation:3;selectStation(station);insideView=true;updateInterior();focusStation(station);placementDetails.get(station)?.select(part);button.setAttribute('aria-pressed','true');$('placement-part-note').textContent=PARTS[part]+' 선택 · 구조 설명용 강조, 실제 측정값 아님'+(part==='pcb'?' · 기판이 실장기에 들어오면 테두리 표시':'');}));
 const floorAgv=new FloorAgv();
 function selectFloorAgv(){
+ clearPartSelection();
  $('floor-agv-select').setAttribute('aria-pressed','true');
  stationButtons.forEach(button=>{button.classList.remove('active');button.setAttribute('aria-pressed','false');});
  $('station-info').textContent=AGV_NAME+' · 별도 합성 자재 트레이의 고정 경로 운반·대기·경로 막힘 시연. 실제 주행·회피·안전 검증 아님.';
@@ -48,19 +53,19 @@ function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visibl
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
-function selectStation(i,focus=true){$('equipment-reference').hidden=false;$('inside-view').disabled=false;$('floor-agv-select').setAttribute('aria-pressed','false');$('transfer-robot-select').setAttribute('aria-pressed','false');$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
+function selectStation(i,focus=true){clearPartSelection();$('equipment-reference').hidden=false;$('inside-view').disabled=false;$('floor-agv-select').setAttribute('aria-pressed','false');$('transfer-robot-select').setAttribute('aria-pressed','false');$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
 selectStation(2,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
 $('play').addEventListener('click',()=>{if(sim.emergencyStopped||sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
-$('reset').addEventListener('click',()=>{inspection.reset();sim.reset();floorAgv.reset(sim.time);if(reducedMotion.matches)sim.running=false;selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
+$('reset').addEventListener('click',()=>{clearPartSelection();inspection.reset();sim.reset();floorAgv.reset(sim.time);if(reducedMotion.matches)sim.running=false;selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
 $('peak-assumption').addEventListener('input',()=>{$('peak-assumption-value').textContent=$('peak-assumption').value+'°C';});
 $('apply-peak').addEventListener('click',()=>{if(sim.boards.length>=12){updateUI();return;}sim.armPeak(Number($('peak-assumption').value));followInjected=true;updateUI();});
 $('simulation-stop').addEventListener('click',()=>{sim.emergencyStop();updateUI();draw();});
 $('release-stop').addEventListener('click',()=>{sim.releaseStop();updateUI();});
-$('lot-mission').addEventListener('click',event=>{const button=event.target.closest('[data-lot-index]');if(!button)return;const members=sim.boards.slice(Number(button.dataset.lotIndex)*4,Number(button.dataset.lotIndex)*4+4);selected=(members.find(b=>!b.done)||members[0]).id;updateUI();draw();});
+$('lot-mission').addEventListener('click',event=>{const button=event.target.closest('[data-lot-index]');if(!button)return;clearPartSelection();const members=sim.boards.slice(Number(button.dataset.lotIndex)*4,Number(button.dataset.lotIndex)*4+4);selected=(members.find(b=>!b.done)||members[0]).id;updateUI();draw();});
 $('speed').addEventListener('change',e=>{sim.speed=Number(e.target.value);});
-$('board-select').addEventListener('change',e=>{selected=e.target.value;updateUI();});
+$('board-select').addEventListener('change',e=>{clearPartSelection();selected=e.target.value;updateUI();});
 $('export').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(sim.snapshot(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-synthetic-run.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 $('export-review').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(manufacturingEvents(sim.snapshot()),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='fabguard-smt-manufacturing-events.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 let prevOptions='',prevHistory='',prevEvidence='',prevLotMission='';
@@ -124,7 +129,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
   box(cover,w-.18,.98,.035,0,1.58,-.85,0x71a3ac,.16);
   box(cover,w-.18,.98,.035,0,1.58,.85,0x739aa7,.1);
   if(i===6){for(let k=0;k<6;k++){box(group,.46,.1,1.25,-1.7+k*.68,1.75,0,0xea9561,.62);}for(let k=0;k<8;k++)box(cover,.04,.1,.6,-1.7+k*.48,2.26,0,0x8ca3ad);}
-  if(i===3||i===4){box(group,w-.25,.09,.14,0,1.9,0,color.dark);const head=cylinder(group,.11,.48,0,1.59,0,0x3d7485);heads.push({head,group,stage:i});}
+  if(i===3||i===4){box(group,w-.25,.09,.14,0,1.9,0,color.dark);const head=cylinder(group,.11,.48,0,1.59,0,0x3d7485);heads.push({head,group,stage:i});placementDetails.set(i,mountPlacementDetails(group,head,w,i===3?6:4));}
   if(i===2||i===8){box(group,.34,.23,.34,0,1.92,0,color.dark);const scan=box(group,w-.35,.012,1.02,0,1.3,0,i===2?0x47c5c1:0x689fd3,.27);group.userData.scan=scan;}
   if(i===1){box(group,w-.3,.09,.82,0,1.63,0,0x869fab);}
   box(cover,.45,.35,.1,w*.23,2.47,.28,color.dark);box(cover,.34,.24,.015,w*.23,2.47,.341,0x75c7bb);
@@ -135,7 +140,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
  detailMachine(i,group,cover,w,box,cylinder);
  const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
 }
-function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;group.userData.chips=[];for(let k=0;k<4;k++){group.userData.chips.push(box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46));}box(group,.64,.015,.065,0,.05,.34,LOT_COLORS[Math.floor((Number(b.id.slice(-3))-1)/4)]);for(let k=0;k<5;k++)box(group,.48,.006,.013,0,.041,-.31+k*.14,0xcbb776);scene.add(group);boardMeshes.set(b.id,group);return group;}
+function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;group.userData.chips=[];for(let k=0;k<4;k++){group.userData.chips.push(box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46));}box(group,.64,.015,.065,0,.05,.34,LOT_COLORS[Math.floor((Number(b.id.slice(-3))-1)/4)]);for(let k=0;k<5;k++)box(group,.48,.006,.013,0,.041,-.31+k*.14,0xcbb776);detailPCB(group);scene.add(group);boardMeshes.set(b.id,group);return group;}
 function cameraUpdate(){updateLabelVisibility();if(!camera)return;const aspect=viewport.clientWidth/Math.max(1,viewport.clientHeight),distance=overviewDistance(aspect)*zoom;camera.position.set(targetX+Math.sin(azimuth)*Math.cos(elevation)*distance,targetY+Math.sin(elevation)*distance,targetZ+Math.cos(azimuth)*Math.cos(elevation)*distance);camera.lookAt(targetX,targetY,targetZ);camera.aspect=aspect;camera.updateProjectionMatrix();}
 function resize(){if(!renderer)return;renderer.setSize(viewport.clientWidth,viewport.clientHeight);cameraUpdate();}
 try{
@@ -158,11 +163,13 @@ try{
 
 function updateInterior(){for(const m of machines)m.userData.cover.visible=!(insideView&&m.userData.station===activeStation);$('inside-view').setAttribute('aria-pressed',String(insideView));$('inside-note').hidden=!insideView;updateLabelVisibility();}
 $('inside-view').addEventListener('click',()=>{insideView=!insideView;focusStation(activeStation);updateInterior();});
-$('camera-reset').addEventListener('click',()=>{insideView=false;updateInterior();targetX=0;targetY=.6;targetZ=0;azimuth=.55;elevation=.78;zoom=1;cameraUpdate();});$('top-view').addEventListener('click',()=>{azimuth=0;elevation=1.53;cameraUpdate();});
+$('camera-reset').addEventListener('click',()=>{clearPartSelection();insideView=false;updateInterior();targetX=0;targetY=.6;targetZ=0;azimuth=.55;elevation=.78;zoom=1;cameraUpdate();});$('top-view').addEventListener('click',()=>{azimuth=0;elevation=1.53;cameraUpdate();});
 viewport.addEventListener('wheel',event=>{event.preventDefault();zoom=clampZoom(zoom*Math.exp(event.deltaY*.001));cameraUpdate();},{passive:false});
 viewport.addEventListener('pointerdown',event=>{pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});viewport.setPointerCapture(event.pointerId);tapGuard.down(event.pointerId);if(pointers.size===2){const [a,b]=[...pointers.values()];pinchDistance=Math.hypot(a.x-b.x,a.y-b.y);}});
 viewport.addEventListener('pointermove',event=>{if(!pointers.has(event.pointerId))return;const prev=pointers.get(event.pointerId),dx=event.clientX-prev.x,dy=event.clientY-prev.y;tapGuard.move(event.pointerId,dx,dy);pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(pointers.size===2){const[a,b]=[...pointers.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(d>0&&pinchDistance>0)zoom=clampZoom(zoom*pinchDistance/d);pinchDistance=d;}else if(pointers.size===1){azimuth-=dx*.006;elevation=Math.max(-.15,Math.min(1.53,elevation+dy*.006));}cameraUpdate();});
-function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){selected=obj.userData.boardId;updateUI();}}else{if(floorAgvView&&ray.intersectObject(floorAgvView.root,true).length){selectFloorAgv();return;}if(transferRobot&&ray.intersectObject(transferRobot.root,true).length){selectTransferRobot();return;}if(robotCell&&ray.intersectObject(robotCell.root,true).length){selectRobot();return;}const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
+document.addEventListener('keydown',event=>{if(event.key==='Escape')clearPartSelection();});
+$('placement-clear').addEventListener('click',clearPartSelection);
+function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){clearPartSelection();selected=obj.userData.boardId;updateUI();}}else{if(floorAgvView&&ray.intersectObject(floorAgvView.root,true).length){selectFloorAgv();return;}if(transferRobot&&ray.intersectObject(transferRobot.root,true).length){selectTransferRobot();return;}if(robotCell&&ray.intersectObject(robotCell.root,true).length){selectRobot();return;}const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{tapGuard.end(event.pointerId,true);pointers.delete(event.pointerId);pinchDistance=0;});
 viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(-.15,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
 function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferBoard=activeTransferBoard(source.boards);for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const transfer=b===transferBoard?transferPose(b):null;if(transfer?.position){const p=transfer.position;mesh.position.set(positions[TRANSFER_STAGE]+p.x,p.y,p.z);}const pose=robotPose(b);if(pose.position){const stack=pose.phase==='내려놓기 완료'?(Number(b.id.slice(-3))-1)*.025:0;mesh.position.set(positions[9]+pose.position.x,pose.position.y+stack,pose.position.z);}
@@ -171,7 +178,8 @@ function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferB
  robotCell?.update(source.boards,selected);
  transferRobot?.update(source.boards,source.time);
  floorAgvView?.update(floorAgv.pose);
- for(const {head,stage} of heads){const board=source.boards.find(b=>b.stage===stage),pose=placementPose(board);head.position.set(board?(-widths[stage]/2-.24+(widths[stage]+.48)*board.progress)+pose.x:0,pose.y,pose.z);}if(paint)renderer.render(scene,camera);
+ for(const {head,stage} of heads){const board=source.boards.find(b=>b.stage===stage),pose=placementPose(board);head.position.set(board?(-widths[stage]/2-.24+(widths[stage]+.48)*board.progress)+pose.x:0,pose.y,pose.z);}for(const [stage,detail] of placementDetails){const board=source.boards.find(b=>b.stage===stage);detail.update(board,board?-widths[stage]/2-.24+(widths[stage]+.48)*board.progress:0);}
+ if(paint)renderer.render(scene,camera);
 }
 if(reducedMotion.matches)sim.running=false;
 reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){sim.running=false;updateUI();}});
@@ -187,7 +195,7 @@ if(document.modelContext?.registerTool){const lifecycle=new AbortController();ad
 // The introduction uses its own seeded run and camera. Restore the live view on every exit.
 let introBoardIds;
 mountIntro({scene,positions,available:()=>Boolean(renderer&&scene&&machines.length===11),
- begin(){introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;},
+ begin(){clearPartSelection();introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;},
  update(sample,station){
   const ids=new Set(sample.boards.map(b=>b.id));
   for(const [id,mesh] of boardMeshes)if(!ids.has(id))mesh.visible=false;
