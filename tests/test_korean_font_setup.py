@@ -1,5 +1,6 @@
 """Hermetic command-contract tests; not a real apt/browser integration result."""
 import os
+import re
 import hashlib
 import json
 from pathlib import Path
@@ -13,8 +14,13 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 
 
-class StrictWorkflowLoader(yaml.BaseLoader):
-    """String-only loader with duplicate mapping keys rejected."""
+class StrictWorkflowLoader(yaml.SafeLoader):
+    """Safe typed YAML with 1.2-style boolean spelling and unique mapping keys."""
+    yaml_implicit_resolvers = {
+        key: [(tag, pattern) for tag, pattern in values
+              if tag != 'tag:yaml.org,2002:bool']
+        for key, values in yaml.SafeLoader.yaml_implicit_resolvers.items()
+    }
     def construct_mapping(self, node, deep=False):
         result = {}
         for key_node, value_node in node.value:
@@ -24,6 +30,11 @@ class StrictWorkflowLoader(yaml.BaseLoader):
                     'duplicate or non-string workflow key', key_node.start_mark)
             result[key] = self.construct_object(value_node, deep=deep)
         return result
+
+
+StrictWorkflowLoader.add_implicit_resolver(
+    'tag:yaml.org,2002:bool', re.compile(r'^(?:true|false|True|False|TRUE|FALSE)$'),
+    list('tTfF'))
 
 
 class KoreanFontSetupTests(unittest.TestCase):
@@ -155,8 +166,7 @@ esac
 
     def test_ur3_workflow_reuses_bounded_setup_without_reducing_coverage(self):
         text = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_text()
-        # BaseLoader safely keeps scalar spelling, including the GitHub key 'on',
-        # instead of interpreting YAML 1.1 'on' as boolean True.
+        # Safe typed loader preserves on as a key without collapsing numeric types.
         workflow = yaml.load(text, Loader=StrictWorkflowLoader)
         # Golden parsed configuration, not raw bytes: comments, key order and
         # equivalent quoting/layout stay valid. Any effective setting change needs
@@ -164,7 +174,7 @@ esac
         # This guards configuration drift, not arbitrary shell execution or approval.
         canonical = json.dumps(workflow, sort_keys=True, separators=(',', ':')).encode()
         self.assertEqual(hashlib.sha256(canonical).hexdigest(),
-                         '4dcdbe6fdece9d3b64ac548ba678591b94ddcebbcfaffaa76468a2c8d10f7aa9')
+                         'a6b346ec4bbf1da7e1bc9d7aeff7205ae8e00472d7a80ea23369f862b1147605')
         for job in workflow['jobs'].values():
             defaults = dict(workflow.get('defaults', {}).get('run', {}))
             defaults.update(job.get('defaults', {}).get('run', {}))
@@ -179,9 +189,9 @@ esac
                           'verification/prepare_korean_fonts.sh',
                           '.github/workflows/ur3-replay-ui.yml'])
         browser = workflow['jobs']['browser']
-        self.assertEqual(browser['strategy']['matrix'], {'width': ['1366', '360', '390']})
-        self.assertEqual(browser['timeout-minutes'], '20')
-        self.assertEqual(browser['strategy']['fail-fast'], 'false')
+        self.assertEqual(browser['strategy']['matrix'], {'width': [1366, 360, 390]})
+        self.assertEqual(browser['timeout-minutes'], 20)
+        self.assertEqual(browser['strategy']['fail-fast'], False)
         self.assertNotIn('if', browser)
         self.assertNotIn('continue-on-error', browser)
         steps = browser['steps']
@@ -190,7 +200,7 @@ esac
         self.assertEqual(len(font_steps), 1)
         font = font_steps[0]
         self.assertEqual(font['run'], 'bash verification/prepare_korean_fonts.sh')
-        self.assertEqual(font['timeout-minutes'], '8')
+        self.assertEqual(font['timeout-minutes'], 8)
         self.assertNotIn('if', font)
         self.assertNotIn('continue-on-error', font)
         audits = [step for step in steps
@@ -211,7 +221,7 @@ esac
         self.assertFalse(any('sudo apt-get' in step.get('run', '') for step in steps))
         checkout = [step for step in steps if step.get('uses') == 'actions/checkout@v4']
         self.assertEqual(len(checkout), 1)
-        self.assertEqual(checkout[0]['with']['persist-credentials'], 'false')
+        self.assertEqual(checkout[0]['with']['persist-credentials'], False)
         source = workflow['jobs']['source']
         self.assertNotIn('if', source)
         self.assertNotIn('continue-on-error', source)
@@ -239,7 +249,18 @@ esac
             yaml.load('jobs:\n  browser:\n    timeout-minutes: 10\n    timeout-minutes: 20\n',
                       Loader=StrictWorkflowLoader)
 
-    def test_workflow_loader_is_string_only_not_python_object_construction(self):
-        value = yaml.load('on: !!python/object/apply:os.system ["NOT_A_COMMAND"]',
-                          Loader=StrictWorkflowLoader)
-        self.assertEqual(value, {'on': ['NOT_A_COMMAND']})
+    def test_workflow_loader_rejects_python_object_construction(self):
+        with self.assertRaises(yaml.constructor.ConstructorError):
+            yaml.load('on: !!python/object/apply:os.system ["NOT_A_COMMAND"]',
+                      Loader=StrictWorkflowLoader)
+
+    def test_workflow_loader_preserves_scalar_types_and_on_key(self):
+        normal = yaml.load('on: {push: null}\ntimeout-minutes: 8\nflag: false\n',
+                           Loader=StrictWorkflowLoader)
+        tagged = yaml.load('on: {push: null}\ntimeout-minutes: !!str 8\nflag: false\n',
+                           Loader=StrictWorkflowLoader)
+        self.assertIn('on', normal)
+        self.assertIs(type(normal['timeout-minutes']), int)
+        self.assertIs(type(tagged['timeout-minutes']), str)
+        self.assertIs(normal['flag'], False)
+        self.assertNotEqual(json.dumps(normal, sort_keys=True), json.dumps(tagged, sort_keys=True))
