@@ -21,6 +21,14 @@ class StrictWorkflowLoader(yaml.SafeLoader):
               if tag != 'tag:yaml.org,2002:bool']
         for key, values in yaml.SafeLoader.yaml_implicit_resolvers.items()
     }
+    def construct_scalar(self, node):
+        # Reject YAML 1.1-only/ambiguous integer spellings rather than silently
+        # interpreting octal or sexagesimal differently from the hosted runner.
+        if node.tag == 'tag:yaml.org,2002:int' and not re.fullmatch(r'-?(?:0|[1-9][0-9]*)', node.value):
+            raise yaml.constructor.ConstructorError(None, None,
+                'workflow integers require unambiguous decimal spelling', node.start_mark)
+        return super().construct_scalar(node)
+
     def construct_mapping(self, node, deep=False):
         result = {}
         for key_node, value_node in node.value:
@@ -264,3 +272,10 @@ esac
         self.assertIs(type(tagged['timeout-minutes']), str)
         self.assertIs(normal['flag'], False)
         self.assertNotEqual(json.dumps(normal, sort_keys=True), json.dumps(tagged, sort_keys=True))
+
+    def test_workflow_loader_rejects_ambiguous_integer_spellings(self):
+        for value in ['024', '0x14', '2_0', '0b10100', '1:20', '+20']:
+            with self.subTest(value=value), self.assertRaises(yaml.constructor.ConstructorError):
+                yaml.load(f'timeout-minutes: {value}', Loader=StrictWorkflowLoader)
+        self.assertEqual(yaml.load('timeout-minutes: 20', Loader=StrictWorkflowLoader),
+                         {'timeout-minutes': 20})
