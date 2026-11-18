@@ -34,3 +34,17 @@ test('existing visible head highlights without changing its geometry or shared s
  assert.equal(ray.intersectObject(head,true)[0].object,head,'the highlighted original nozzle body remains visible from below');
  assert.equal(d.parts.nozzle.length,3,'head, carriage and visible collar only');
 });
+
+test('new machine decorations do not expand pointer hits while the head stays pickable',()=>{
+ const {machine,head,d}=build();head.position.set(1.5,1.8,-.2);machine.updateMatrixWorld(true);
+ const ray=new THREE.Raycaster(new THREE.Vector3(1.65,5,-.45),new THREE.Vector3(0,-1,0));
+ assert.equal(ray.intersectObject(machine,true).length,0);
+ for(const mesh of [...d.parts.rail,...d.parts.feeder,...d.parts.nozzle.filter(x=>x!==head)])assert.notEqual(mesh.raycast,THREE.Mesh.prototype.raycast);
+ assert.equal(head.raycast,THREE.Mesh.prototype.raycast);
+});
+test('PCB decorative pads never intercept shallow board selection rays',()=>{
+ const group=new THREE.Group();detailPCB(group);group.updateMatrixWorld(true);
+ const ray=new THREE.Raycaster(new THREE.Vector3(-.27,.04,-2),new THREE.Vector3(0,0,1));
+ assert.equal(ray.intersectObject(group,true).length,0);
+ assert.ok(group.children.every(pad=>pad.raycast!==THREE.Mesh.prototype.raycast));
+});
