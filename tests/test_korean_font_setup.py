@@ -279,3 +279,33 @@ esac
                 yaml.load(f'timeout-minutes: {value}', Loader=StrictWorkflowLoader)
         self.assertEqual(yaml.load('timeout-minutes: 20', Loader=StrictWorkflowLoader),
                          {'timeout-minutes': 20})
+
+
+class SitewideFontWorkflowTests(unittest.TestCase):
+    def test_effective_sitewide_contract(self):
+        workflow = yaml.load((ROOT / '.github/workflows/sitewide-command-ui.yml').read_text(),
+                             Loader=StrictWorkflowLoader)
+        # Reviewed typed-YAML snapshot: permits comments/key order, not changed
+        # execution conditions, commands, coverage, budgets, permissions or types.
+        # Intentional changes require explicit review; never automatically repin.
+        digest = hashlib.sha256(json.dumps(workflow, sort_keys=True,
+            separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+        self.assertEqual(digest, '4cab21b728d936943e48014fab854a5b915e6662ebf5da6da6331cec5d607a89')
+        for event in ('push', 'pull_request'):
+            self.assertIn('verification/prepare_korean_fonts.sh', workflow['on'][event]['paths'])
+        for name in ('browser', 'production-browser'):
+            job = workflow['jobs'][name]
+            self.assertEqual(job['strategy']['matrix'], {
+                'width': [1920, 1672, 1440, 1366, 1024, 900, 720, 390, 360],
+                'theme': ['dark', 'silver']})
+            self.assertEqual(job['timeout-minutes'], 23)
+            setup = [s for s in job['steps'] if 'font setup' in s.get('name', '')]
+            self.assertEqual(len(setup), 1)
+            self.assertEqual(setup[0]['timeout-minutes'], 8)
+            self.assertNotIn('if', setup[0])
+            self.assertNotIn('continue-on-error', setup[0])
+            self.assertIn('bash verification/prepare_korean_fonts.sh', setup[0]['run'].splitlines())
+            audit = [s for s in job['steps'] if 'timeout 600s node verification/check_sitewide_command.cjs' in s.get('run', '')]
+            self.assertEqual(len(audit), 1)
+            self.assertEqual(audit[0]['timeout-minutes'], 11)
+            self.assertEqual(audit[0]['env']['FABGUARD_WEB_FONTS'], '1')
