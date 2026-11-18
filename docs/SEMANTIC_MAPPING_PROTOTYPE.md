@@ -40,7 +40,10 @@ Timestamps reuse the existing strict timezone-aware parser. Source intervals are
 half-open: `valid_from <= observed_at <= available_at <= as_of < valid_until`.
 The two observations must represent the same instant; equivalent timezone offsets
 are accepted. The contract interval contains both observations and the cutoff;
-`declared_at` must not exceed the cutoff. Observation followed by contract declaration
+`valid_from <= declared_at <= as_of < valid_until` is also required. A declaration
+before the contract validity start yields `HOLD`. This is an explicit conservative
+prototype rule, not a verified requirement of an external mapping authority.
+Observation followed by contract declaration
 is allowed: this is retrospective declared consistency, not authenticated historical
 availability or proof that the contract was fixed before observation.
 
@@ -84,10 +87,10 @@ PYTHONPATH=src python -B -m unittest discover -s tests -p test_semantic_mapping.
 PYTHONPATH=src python -O -B -m unittest discover -s tests -p test_semantic_mapping.py -v
 ```
 
-Both commands exercise the same 25 test methods, not 50 unique tests. Fixtures are
+Both commands exercise the same 28 test methods, not 56 unique tests. Fixtures are
 deterministic and use no random seed, real manufacturing records or model fitting.
 A full-checkout coexistence check against main
-`9e44fe7fea4d46c48ff0687c538972821a6bdfea` passed those 25 plus 48 existing basis,
+`9e44fe7fea4d46c48ff0687c538972821a6bdfea` passed the original 25 plus 48 existing basis,
 quality, maintenance and manufacturing tests, and 373 existing Node tests.
 Independent review reproduced the same scoped checks. These are not full Python CI,
 browser, actual AAS, operational integration or field-validation results.

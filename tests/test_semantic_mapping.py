@@ -98,6 +98,25 @@ class MappingTests(unittest.TestCase):
     def test_future_declaration(self):
         self.contract['declared_at'] = '2026-01-01T02:00:01Z'; self.hold()
 
+    def test_declaration_before_validity_start_is_hold(self):
+        self.contract['declared_at'] = '2025-12-31T23:59:59Z'
+        result = self.run_case()
+        self.assertEqual(result['status'], 'HOLD')
+        self.assertIn('contract:time_outside_contract', result['reasons'])
+        self.assertEqual(result['operational_status'], 'WITHHELD')
+
+    def test_declaration_at_validity_start_matches_but_is_withheld(self):
+        self.contract['declared_at'] = self.contract['valid_from']
+        result = self.run_case()
+        self.assertEqual(result['status'], 'DECLARATIONS_MATCH')
+        self.assertEqual(result['operational_status'], 'WITHHELD')
+
+    def test_retrospective_declaration_at_cutoff_matches_but_is_withheld(self):
+        self.contract['declared_at'] = self.args['as_of']
+        result = self.run_case()
+        self.assertEqual(result['status'], 'DECLARATIONS_MATCH')
+        self.assertEqual(result['operational_status'], 'WITHHELD')
+
     def test_contract_not_valid_at_observation(self):
         self.contract['valid_from'] = self.contract['declared_at'] = '2026-01-01T01:30:00Z'; self.hold()
 
