@@ -99,9 +99,47 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
   await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-sweep-${stage}-${progress}.png`)});
  }
  await page.locator('#reset').press('Enter');await advance(100);
+ // Check the opt-in station illustration through its public settings, using a paused run.
+ await page.locator('#station-strip button').nth(width===390 ? 4 : 3).press('Enter');await advance(120);
+ const guideState=await snapshot(),guideMode=page.locator('#teaching-mode');
+ assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-legend').isVisible(),false);
+ await page.locator('#teaching-settings summary').press('Enter');
+ const captureGuide=async name=>{
+  await advance(160);await page.locator('#viewport').scrollIntoViewIfNeeded();
+  return page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
+ };
+ const normalScene=await captureGuide('normal');
+ await guideMode.selectOption('temperature');
+ const thermalScene=await captureGuide('temperature');
+ assert.equal(normalScene.equals(thermalScene),false);
+ assert.match(await page.locator('#teaching-field-note').innerText(),/합성 온도/);
+ assert.equal(await page.locator('#teaching-scale span').count(),3);
+ assert.match(await page.locator('#teaching-caption').innerText(),width===390?/05번/:/04번/);
+ await guideMode.selectOption('stress');const stressScene=await captureGuide('stress');
+ assert.equal(stressScene.equals(thermalScene),false);
+ assert.match(await page.locator('#teaching-field-note').innerText(),/합성 응력/);
+ await guideMode.selectOption('assembly');const baseScene=await captureGuide('base');
+ assert.equal(await page.locator('#teaching-legend').isVisible(),false);
+ assert.equal(await page.locator('#teaching-back').isDisabled(),true);
+ await page.locator('#teaching-next').press('Enter');
+ assert.match(await page.locator('#teaching-description').innerText(),/카세트/);
+ await page.locator('#teaching-step').selectOption('4');const joinedScene=await captureGuide('joined');
+ assert.equal(baseScene.equals(joinedScene),false);assert.equal(await page.locator('#teaching-next').isDisabled(),true);
+ await page.locator('#teaching-back').press('Enter');await advance(100);
+ assert.equal(await page.locator('#teaching-step').inputValue(),'3');
+ await page.locator('#viewport').press('ArrowLeft');await advance(100);
+ await page.locator('#viewport').press('Escape');const restored=await captureGuide('restored');
+ assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-caption').isVisible(),false);
+ assert.ok(normalScene.equals(restored),'Original camera, geometry and selection should be restored');
+ assert.deepEqual(await snapshot(),guideState);
+ await guideMode.selectOption('stress');await advance(100);
+ await page.locator('#teaching-settings summary').press('Enter');await advance(100);
+ assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-legend').isVisible(),false);
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false);
+ assert.deepEqual(errors,[]);
  rows.push({width,theme,webgl:true,partControls:true,partEscape:true,partSelectionNonInterference:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
  }
  // Deliberately disabled WebGL: the same public controls and exports must still work.
- const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);assert.equal(await p.locator('[data-placement-part]:disabled').count(),4);assert.equal(await p.locator('[data-placement-part][aria-pressed="true"]').count(),0);assert.equal(await p.locator('#placement-clear').isDisabled(),true);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
+ const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);assert.equal(await p.locator('#teaching-mode').isDisabled(),true);assert.equal(await p.locator('[data-placement-part]:disabled').count(),4);assert.equal(await p.locator('[data-placement-part][aria-pressed="true"]').count(),0);assert.equal(await p.locator('#placement-clear').isDisabled(),true);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(rows,null,2));console.log(JSON.stringify(rows,null,2));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

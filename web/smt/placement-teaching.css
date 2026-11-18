@@ -1,0 +1,17 @@
+.smt-page .teaching-settings {
+  padding: .6rem .8rem;
+  color: var(--text);
+  background: var(--panel);
+  border-block-end: 1px solid var(--line);
+}
+.teaching-settings summary { cursor: pointer; font-weight: 650; width: fit-content; }
+.teaching-settings label, .teaching-actions, #teaching-scale { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.teaching-settings label, .teaching-actions { margin-top: .65rem; }
+.teaching-settings select, .teaching-actions button { max-width: 100%; min-height: 2.5rem; font: inherit; }
+.teaching-settings select { background: var(--panel); color: var(--text); border: 1px solid var(--line); padding: .3rem .55rem; border-radius: .35rem; }
+.teaching-settings p, .teaching-reading p { margin: .35rem 0; }
+.teaching-reading { color: var(--text); background: var(--panel); }
+.teaching-reading > :not([hidden]) { padding: .35rem .8rem; }
+#teaching-scale > span { display: inline-flex; align-items: center; gap: .3rem; }
+#teaching-scale i { width: .85rem; height: .85rem; border: 1px solid currentColor; border-radius: 50%; }
+.teaching-settings [hidden], .teaching-reading [hidden] { display: none !important; }
