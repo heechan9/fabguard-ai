@@ -43,7 +43,7 @@ class TemporalReview(unittest.TestCase):
             select.assert_not_called()
 
 class RunnerScopeReview(unittest.TestCase):
-    def check_runner(self, runner, forced_skip=None, score_error=None):
+    def check_runner(self, runner, forced_skip=None, score_error=None, mixed=False):
         from contextlib import ExitStack
         from pathlib import Path
         import tempfile
@@ -52,6 +52,8 @@ class RunnerScopeReview(unittest.TestCase):
             'sample_id': ['synthetic_%03d' % i for i in range(100)],
             'timestamp': pd.date_range('2020-01-01', periods=100),
             'feature_0': np.arange(100), 'label': [0, 1] * 50})
+        if mixed:
+            frame['label'] = [int(i in [0, 10, 20, 45, 55, 65, 75]) for i in range(100)]
         frame.attrs['hashes'] = {'synthetic': 'not-real-data'}
         train, holdout = frame.iloc[:80].copy(), frame.iloc[80:].copy()
         forbidden = set(holdout.sample_id)
@@ -82,8 +84,22 @@ class RunnerScopeReview(unittest.TestCase):
         with ExitStack() as stack, tempfile.TemporaryDirectory() as tmp:
             for name, replacement in replacements.items():
                 stack.enter_context(patch.object(module, name, replacement))
+            if score_error is not None:
+                with self.assertRaisesRegex(type(score_error), str(score_error)):
+                    runner(ExperimentConfig(), output_dir=Path(tmp))
+                self.assertEqual(list(Path(tmp).iterdir()), [])
+                raise score_error
             manifest = runner(ExperimentConfig(), output_dir=Path(tmp))
             saved = pd.read_csv(Path(tmp) / 'walk_forward_metrics.csv')
+        if mixed:
+            self.assertEqual(len(seen), 2)
+            self.assertEqual(saved['status'].tolist(), ['SKIPPED', 'SKIPPED', 'EVALUATED', 'EVALUATED'])
+            self.assertEqual(manifest['walk_forward_skipped_folds'], 2)
+            self.assertEqual(manifest['walk_forward_evaluated_folds'], 2)
+            self.assertTrue(saved.loc[saved.status == 'SKIPPED', 'average_precision'].isna().all())
+            self.assertEqual(saved.loc[saved.status == 'SKIPPED', 'skip_reason'].tolist(),
+                             ['TRAIN_CLASS_SUPPORT_BELOW_CV_SPLITS'] * 2)
+            return
         self.assertEqual(len(seen), 0 if forced_skip else 4)
         self.assertEqual(manifest['walk_forward_skipped_folds'], 4 if forced_skip else 0)
         self.assertEqual(manifest['walk_forward_evaluated_folds'], 0 if forced_skip else 4)
@@ -201,3 +217,15 @@ class TemporalFollowupCoverage(unittest.TestCase):
                              no_fail,config),expected)
         self.assertIsNone(temporal_fold_skip_reason(pd.DataFrame({'label':[0,1]*3}),
                           pd.DataFrame({'label':[0,1]}),config))
+
+
+class LatestReviewCoverage(unittest.TestCase):
+    def test_numpy_integral_cv_splits_supported(self):
+        from dataclasses import replace
+        from fabguard.advanced_experiment import temporal_fold_skip_reason
+        for value in [np.int32(5), np.int64(5)]:
+            self.assertIsNone(temporal_fold_skip_reason(pd.DataFrame({'label':[0,1]*5}),
+                pd.DataFrame({'label':[0,1]}), replace(ExperimentConfig(), cv_splits=value)))
+    def test_real_support_helper_mixed_windows(self):
+        from fabguard.advanced_experiment import run_advanced_experiment
+        RunnerScopeReview().check_runner(run_advanced_experiment, mixed=True)

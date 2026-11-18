@@ -29,7 +29,7 @@ walk-forward 성능과 확률 보정을 추가로 확인한다.
 
 ```bash
 PYTHONPATH=src python -m fabguard.advanced_experiment \
-  --data-dir data/raw --output-dir results/phase1 \
+  --data-dir data/raw --output-dir results/phase1-new-run \
   --bootstrap 2000 --inspection-cost 1 --missed-fail-cost 20
 ```
 

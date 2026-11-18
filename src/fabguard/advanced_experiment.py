@@ -6,6 +6,7 @@ import argparse
 import json
 from dataclasses import asdict, replace
 from pathlib import Path
+from numbers import Integral
 
 import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
@@ -45,7 +46,7 @@ def score_temporal_fold(fit_fold: pd.DataFrame, validation: pd.DataFrame,
 def temporal_fold_skip_reason(fit_fold: pd.DataFrame, validation: pd.DataFrame,
                               config: ExperimentConfig) -> str | None:
     """Report only explicit sample-support exclusions; never hide fitting errors."""
-    if type(config.cv_splits) is not int or config.cv_splits < 2:
+    if isinstance(config.cv_splits, bool) or not isinstance(config.cv_splits, Integral) or config.cv_splits < 2:
         raise ValueError("cv_splits must be an integer >= 2")
     counts = fit_fold["label"].value_counts()
     if len(counts) < 2:
@@ -83,17 +84,16 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
     raw_probability = base.predict_proba(test[features])[:, 1]
     probability = calibrated.predict_proba(test[features])[:, 1]
 
-    pd.DataFrame([
+    calibration_result = pd.DataFrame([
         {"variant": "uncalibrated", **calibration_metrics(test["label"], raw_probability)},
         {"variant": "sigmoid_train_tail", **calibration_metrics(test["label"], probability)},
-    ]).to_csv(output_dir / "calibration_metrics.csv", index=False)
-    inspection_cost_table(test["sample_id"], test["label"], probability, config.top_k_fractions,
-                          inspection_cost=inspection_cost, missed_fail_cost=missed_fail_cost).to_csv(
-                              output_dir / "inspection_cost_scenarios.csv", index=False)
-    bootstrap_top_k_interval(test["sample_id"].tolist(), test["label"].tolist(), probability.tolist(),
+    ])
+    inspection_result = inspection_cost_table(test["sample_id"], test["label"], probability, config.top_k_fractions,
+                          inspection_cost=inspection_cost, missed_fail_cost=missed_fail_cost)
+    bootstrap_result = bootstrap_top_k_interval(test["sample_id"].tolist(), test["label"].tolist(), probability.tolist(),
                              config.top_k_fractions, n_bootstrap=bootstrap_replicates,
-                             random_seed=config.random_seed).to_csv(output_dir / "top_k_bootstrap.csv", index=False)
-    drift_table(train, test, features).to_csv(output_dir / "feature_drift.csv", index=False)
+                             random_seed=config.random_seed)
+    drift_result = drift_table(train, test, features)
 
     ordered = train.sort_values(["timestamp", "sample_id"], kind="stable").reset_index(drop=True)
     walk_rows = []
@@ -114,6 +114,11 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
                           **calibration_metrics(validation["label"], fold_probability),
                           "validation_start": validation["timestamp"].min().isoformat(),
                           "validation_end": validation["timestamp"].max().isoformat()})
+    # Publish tables only after every calculation succeeds; fitting failures leave no result files.
+    calibration_result.to_csv(output_dir / "calibration_metrics.csv", index=False)
+    inspection_result.to_csv(output_dir / "inspection_cost_scenarios.csv", index=False)
+    bootstrap_result.to_csv(output_dir / "top_k_bootstrap.csv", index=False)
+    drift_result.to_csv(output_dir / "feature_drift.csv", index=False)
     pd.DataFrame(walk_rows).to_csv(output_dir / "walk_forward_metrics.csv", index=False)
 
     manifest = {"status": "scenario_and_provisional_validation", "selected_candidate": candidate.name,
