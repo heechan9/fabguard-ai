@@ -43,7 +43,7 @@ class TemporalReview(unittest.TestCase):
             select.assert_not_called()
 
 class RunnerScopeReview(unittest.TestCase):
-    def check_runner(self, runner, forced_skip=None):
+    def check_runner(self, runner, forced_skip=None, score_error=None):
         from contextlib import ExitStack
         from pathlib import Path
         import tempfile
@@ -60,6 +60,8 @@ class RunnerScopeReview(unittest.TestCase):
         pipeline.predict_proba.side_effect = lambda x: np.tile([.5, .5], (len(x), 1))
         seen = []
         def score(fit, validation, features, config):
+            if score_error is not None:
+                raise score_error
             self.assertFalse((set(fit.sample_id) | set(validation.sample_id)) & forbidden)
             seen.append((set(fit.sample_id), set(validation.sample_id)))
             return candidate, np.full(len(validation), .5)
@@ -179,3 +181,23 @@ class CliOutputReview(unittest.TestCase):
         from fabguard.advanced_experiment import main
         with patch('sys.argv',['fabguard-advanced','--output-dir','fresh-output']),patch('fabguard.advanced_experiment.run_advanced_experiment',return_value={}) as run,contextlib.redirect_stdout(io.StringIO()):
             main();self.assertEqual(run.call_args.kwargs['output_dir'],Path('fresh-output'))
+
+
+class TemporalFollowupCoverage(unittest.TestCase):
+    def test_runner_propagates_unexpected_score_error(self):
+        from fabguard.advanced_experiment import run_advanced_experiment
+        with self.assertRaisesRegex(RuntimeError,'synthetic unexpected fit failure'):
+            RunnerScopeReview().check_runner(run_advanced_experiment,
+                score_error=RuntimeError('synthetic unexpected fit failure'))
+    def test_support_uses_configured_splits_and_reason_precedence(self):
+        from dataclasses import replace
+        from fabguard.advanced_experiment import temporal_fold_skip_reason
+        config=replace(ExperimentConfig(),cv_splits=3)
+        no_fail=pd.DataFrame({'label':[0,0]})
+        for labels,expected in [([0]*8,'TRAIN_SINGLE_CLASS'),
+                                ([0]*8+[1]*2,'TRAIN_CLASS_SUPPORT_BELOW_CV_SPLITS'),
+                                ([0]*8+[1]*3,'VALIDATION_NO_FAIL')]:
+            self.assertEqual(temporal_fold_skip_reason(pd.DataFrame({'label':labels}),
+                             no_fail,config),expected)
+        self.assertIsNone(temporal_fold_skip_reason(pd.DataFrame({'label':[0,1]*3}),
+                          pd.DataFrame({'label':[0,1]}),config))
