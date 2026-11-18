@@ -64,7 +64,7 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
   box(root,.15,.13,.49,x,1.01,1.05,'alloy');
   box(root,.105,.045,.42,x,1.091,1.05,'graphite');
   box(root,.075,.008,.39,x,1.118,1.05,'teal');
-  for(const z of [1.135,1.215]){const flange=cyl(root,.17,.018,x,.76,z,'graphite');flange.rotation.x=Math.PI/2;}
+  for(const z of [1.135,1.215]){const flange=cyl(root,.17,.018,x,.76,z,'graphite');flange.rotation.x=Math.PI/2;flange.raycast=THREE.Mesh.prototype.raycast;}
   const core=cyl(root,.105,.075,x,.76,1.175,'alloy');core.rotation.x=Math.PI/2;
   const hub=cyl(root,.045,.10,x,.76,1.18,'teal');hub.rotation.x=Math.PI/2;
  }
