@@ -13,6 +13,7 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#viewport').scrollIntoViewIfNeeded();
  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-initial-machine.png`)});
  assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
+ const guideBox=await page.locator('.scene-reading-guide').boundingBox(),initialViewBox=await page.locator('#viewport').boundingBox();assert.ok(guideBox.y>=initialViewBox.y+initialViewBox.height,'Legends stay outside the detailed machine view');
  await page.locator('#camera-reset').press('Enter');await advance(100);
  await page.locator('#placement-focus').press('Enter');await advance(100);
  assert.equal(await page.locator('#inside-view').getAttribute('aria-pressed'),'false');
