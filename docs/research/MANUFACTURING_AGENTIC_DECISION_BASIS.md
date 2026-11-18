@@ -58,6 +58,8 @@ Claude 정적 검토 권고로 중복 ID 테스트는 두 판단·두 근거로 
 
 기존 `summarize_basis_quality`가 원본을 재검증한 뒤 `other_reason_usage`를 추가로 반환한다. 기존 판정·보류·검증·출력 필드는 변경하지 않는다.
 
+`build_review_diagnostics`도 이 결과를 그대로 담으므로, `--include-diagnostics`로 실행한 CLI 보고서에는 `quality.other_reason_usage` 경로로 새 필드가 포함된다. 옵션 없는 기존 CLI의 basis-audit 출력에는 추가되지 않는다. 래퍼의 `operational_status=WITHHELD`와 기존 hold/pending 상태는 그대로이며, 이 집계가 승인이나 평가 결과로 승격되지 않는다.
+
 - numerator: 유효 제출된 basis 중 reason_code가 정확히 `other`인 건수.
 - denominator: 이 호출의 유효 제출 basis 건수. 전체 관측 수나 공장 전체 판단 수가 아니다.
 - fraction: numerator / denominator. 제출이 없으면 null이며, 제출은 있으나 기타가 없으면 0이다.
