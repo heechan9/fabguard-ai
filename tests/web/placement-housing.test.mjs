@@ -24,3 +24,11 @@ test('feeder and bridge highlight the visible assemblies, reset and remain isola
  b.machine.traverse(o=>{if(o.isMesh&&o.userData.explanatoryPart)assert.equal(o.material.emissive.getHex(),0);});
  a.select(null);a.machine.traverse(o=>{if(o.isMesh&&o.userData.explanatoryPart)assert.equal(o.material.emissive.getHex(),0);});
 });
+
+test('visible outer feeder flange remains a station hit while surrounding air is not',()=>{
+ const {machine}=build();
+ const hits=new THREE.Raycaster(new THREE.Vector3(.6975,.89,3),new THREE.Vector3(0,0,-1)).intersectObject(machine,true);
+ assert(hits.some(h=>h.object.userData.explanatoryPart==='feeder'));
+ const air=new THREE.Raycaster(new THREE.Vector3(1.35,.89,3),new THREE.Vector3(0,0,-1)).intersectObject(machine,true);
+ assert.equal(air.length,0);
+});
