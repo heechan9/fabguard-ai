@@ -1,11 +1,48 @@
 """Hermetic command-contract tests; not a real apt/browser integration result."""
 import os
+import re
+import hashlib
+import json
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
 
+# Full-suite setup: python -m pip install ".[test]" (missing parser is not skipped).
+import yaml
+
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class StrictWorkflowLoader(yaml.SafeLoader):
+    """Safe typed YAML with 1.2-style boolean spelling and unique mapping keys."""
+    yaml_implicit_resolvers = {
+        key: [(tag, pattern) for tag, pattern in values
+              if tag != 'tag:yaml.org,2002:bool']
+        for key, values in yaml.SafeLoader.yaml_implicit_resolvers.items()
+    }
+    def construct_scalar(self, node):
+        # Reject YAML 1.1-only/ambiguous integer spellings rather than silently
+        # interpreting octal or sexagesimal differently from the hosted runner.
+        if node.tag == 'tag:yaml.org,2002:int' and not re.fullmatch(r'-?(?:0|[1-9][0-9]*)', node.value):
+            raise yaml.constructor.ConstructorError(None, None,
+                'workflow integers require unambiguous decimal spelling', node.start_mark)
+        return super().construct_scalar(node)
+
+    def construct_mapping(self, node, deep=False):
+        result = {}
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if not isinstance(key, str) or key in result:
+                raise yaml.constructor.ConstructorError(None, None,
+                    'duplicate or non-string workflow key', key_node.start_mark)
+            result[key] = self.construct_object(value_node, deep=deep)
+        return result
+
+
+StrictWorkflowLoader.add_implicit_resolver(
+    'tag:yaml.org,2002:bool', re.compile(r'^(?:true|false|True|False|TRUE|FALSE)$'),
+    list('tTfF'))
 
 
 class KoreanFontSetupTests(unittest.TestCase):
@@ -133,3 +170,112 @@ esac
         self.assertEqual(text.count('timeout 360s node'), 5)
         self.assertEqual(text.count('timeout 240s node'), 2)
         self.assertEqual(text.count('timeout 180s node'), 3)
+
+
+    def test_ur3_workflow_reuses_bounded_setup_without_reducing_coverage(self):
+        text = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_text()
+        # Safe typed loader preserves on as a key without collapsing numeric types.
+        workflow = yaml.load(text, Loader=StrictWorkflowLoader)
+        # Golden parsed configuration, not raw bytes: comments, key order and
+        # equivalent quoting/layout stay valid. Any effective setting change needs
+        # intentional review plus repinning, not automatic hash regeneration.
+        # This guards configuration drift, not arbitrary shell execution or approval.
+        canonical = json.dumps(workflow, sort_keys=True, separators=(',', ':')).encode()
+        self.assertEqual(hashlib.sha256(canonical).hexdigest(),
+                         'a6b346ec4bbf1da7e1bc9d7aeff7205ae8e00472d7a80ea23369f862b1147605')
+        for job in workflow['jobs'].values():
+            defaults = dict(workflow.get('defaults', {}).get('run', {}))
+            defaults.update(job.get('defaults', {}).get('run', {}))
+            for step in job['steps']:
+                if 'run' in step:
+                    self.assertEqual(step.get('shell', defaults.get('shell', 'bash')), 'bash')
+                    self.assertEqual(step.get('working-directory',
+                                             defaults.get('working-directory', '.')), '.')
+        self.assertEqual(workflow['on']['pull_request']['paths'],
+                         ['web/**', 'scripts/build_ur3_replay.py',
+                          'verification/check_ur3_replay.cjs',
+                          'verification/prepare_korean_fonts.sh',
+                          '.github/workflows/ur3-replay-ui.yml'])
+        browser = workflow['jobs']['browser']
+        self.assertEqual(browser['strategy']['matrix'], {'width': [1366, 360, 390]})
+        self.assertEqual(browser['timeout-minutes'], 20)
+        self.assertEqual(browser['strategy']['fail-fast'], False)
+        self.assertNotIn('if', browser)
+        self.assertNotIn('continue-on-error', browser)
+        steps = browser['steps']
+        font_steps = [step for step in steps
+                      if step.get('name') == 'Bounded authenticated Korean font preparation']
+        self.assertEqual(len(font_steps), 1)
+        font = font_steps[0]
+        self.assertEqual(font['run'], 'bash verification/prepare_korean_fonts.sh')
+        self.assertEqual(font['timeout-minutes'], 8)
+        self.assertNotIn('if', font)
+        self.assertNotIn('continue-on-error', font)
+        audits = [step for step in steps
+                  if step.get('name') == 'Loopback-only UR3 and existing feature regression']
+        self.assertEqual(len(audits), 1)
+        audit = audits[0]
+        self.assertLess(steps.index(font), steps.index(audit))
+        self.assertNotIn('if', audit)
+        self.assertNotIn('continue-on-error', audit)
+        active = [line.strip() for line in audit['run'].splitlines()
+                  if line.strip() and not line.lstrip().startswith('#')]
+        for name, folder, seconds in [('ur3_replay', 'ur3', 240), ('robot_sort_cell', 'robot', 360),
+                                     ('context_review', 'context', 180), ('theme_ui', 'theme', 360),
+                                     ('transfer_robot', 'transfer', 360)]:
+            expected = (f'FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/{folder}" '
+                        f'timeout {seconds}s node verification/check_{name}.cjs')
+            self.assertIn(expected, active)
+        self.assertFalse(any('sudo apt-get' in step.get('run', '') for step in steps))
+        checkout = [step for step in steps if step.get('uses') == 'actions/checkout@v4']
+        self.assertEqual(len(checkout), 1)
+        self.assertEqual(checkout[0]['with']['persist-credentials'], False)
+        source = workflow['jobs']['source']
+        self.assertNotIn('if', source)
+        self.assertNotIn('continue-on-error', source)
+        rebuilds = [step for step in source['steps'] if step.get('name') ==
+                    'Rebuild from pinned UCI original without new dependencies']
+        self.assertEqual(len(rebuilds), 1)
+        rebuild = rebuilds[0]
+        self.assertNotIn('if', rebuild)
+        self.assertNotIn('continue-on-error', rebuild)
+        inherited_shell = workflow.get('defaults', {}).get('run', {}).get('shell', 'bash')
+        job_shell = source.get('defaults', {}).get('run', {}).get('shell', inherited_shell)
+        self.assertEqual(rebuild.get('shell', job_shell), 'bash')
+        self.assertEqual(source['runs-on'], 'ubuntu-24.04')
+        source_active = [line.strip() for line in rebuild['run'].splitlines()
+                         if line.strip() and not line.lstrip().startswith('#')]
+        self.assertEqual(source_active, [
+            'python -c "import urllib.request; urllib.request.urlretrieve(\'https://archive.ics.uci.edu/static/public/963/ur3+cobotops.zip\', \'/tmp/ur3-source.zip\')"',
+            'python scripts/build_ur3_replay.py --archive /tmp/ur3-source.zip --output "$RUNNER_TEMP/ur3-derived/data.json" > "$RUNNER_TEMP/ur3-audit.json"',
+            'cmp web/robot/ur3/data.json "$RUNNER_TEMP/ur3-derived/data.json"',
+            'cmp web/robot/ur3/data-hash.mjs "$RUNNER_TEMP/ur3-derived/data-hash.mjs"',
+        ])
+
+    def test_workflow_loader_rejects_duplicate_keys(self):
+        with self.assertRaises(yaml.constructor.ConstructorError):
+            yaml.load('jobs:\n  browser:\n    timeout-minutes: 10\n    timeout-minutes: 20\n',
+                      Loader=StrictWorkflowLoader)
+
+    def test_workflow_loader_rejects_python_object_construction(self):
+        with self.assertRaises(yaml.constructor.ConstructorError):
+            yaml.load('on: !!python/object/apply:os.system ["NOT_A_COMMAND"]',
+                      Loader=StrictWorkflowLoader)
+
+    def test_workflow_loader_preserves_scalar_types_and_on_key(self):
+        normal = yaml.load('on: {push: null}\ntimeout-minutes: 8\nflag: false\n',
+                           Loader=StrictWorkflowLoader)
+        tagged = yaml.load('on: {push: null}\ntimeout-minutes: !!str 8\nflag: false\n',
+                           Loader=StrictWorkflowLoader)
+        self.assertIn('on', normal)
+        self.assertIs(type(normal['timeout-minutes']), int)
+        self.assertIs(type(tagged['timeout-minutes']), str)
+        self.assertIs(normal['flag'], False)
+        self.assertNotEqual(json.dumps(normal, sort_keys=True), json.dumps(tagged, sort_keys=True))
+
+    def test_workflow_loader_rejects_ambiguous_integer_spellings(self):
+        for value in ['024', '0x14', '2_0', '0b10100', '1:20', '+20']:
+            with self.subTest(value=value), self.assertRaises(yaml.constructor.ConstructorError):
+                yaml.load(f'timeout-minutes: {value}', Loader=StrictWorkflowLoader)
+        self.assertEqual(yaml.load('timeout-minutes: 20', Loader=StrictWorkflowLoader),
+                         {'timeout-minutes': 20})
