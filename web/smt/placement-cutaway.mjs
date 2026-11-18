@@ -264,8 +264,26 @@ export function lightPlacementStudio(scene) {
   const rim=new THREE.DirectionalLight(0xbfdcff,1.45);rim.position.set(4,3,-2);
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(18,18),new THREE.ShadowMaterial({opacity:.27,depthWrite:false}));
   ground.rotation.x=-Math.PI/2;ground.position.y=-.018;ground.receiveShadow=true;
+  // The floor is transparent wherever no part casts a shadow. Fit the receiver to
+  // the projection of the whole model (including covers) using this directional light.
+  function fitGround(model) {
+    const bounds = new THREE.Box3().setFromObject(model);
+    const ray = key.target.position.clone().sub(key.position);
+    const floorY = ground.position.y;
+    const near = (floorY - bounds.min.y) / ray.y;
+    const far = (floorY - bounds.max.y) / ray.y;
+    const margin = .12;
+    const left = bounds.min.x + Math.min(ray.x*near,ray.x*far) - margin;
+    const right = bounds.max.x + Math.max(ray.x*near,ray.x*far) + margin;
+    const back = bounds.min.z + Math.min(ray.z*near,ray.z*far) - margin;
+    const front = bounds.max.z + Math.max(ray.z*near,ray.z*far) + margin;
+    ground.position.set((left+right)/2, floorY, (back+front)/2);
+    ground.scale.set((right-left)/18,(front-back)/18,1);
+  }
   scene.add(fill,key,key.target,rim,ground);
   return {
+    fitGround,
+    resetGround(){ground.scale.set(1,1,1);ground.position.set(0,-.018,0);},
     refresh(){key.shadow.needsUpdate=true;},
     dispose(){ground.material.dispose();ground.geometry.dispose();key.shadow.dispose();scene.environment.dispose();}
   };

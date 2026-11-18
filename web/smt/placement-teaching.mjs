@@ -27,6 +27,7 @@ export function buildTeachingModel(station, feederCount) {
   groups.workpiece = new THREE.Group();
   model.add(...Object.values(groups));
   const frontGuideParts=[];
+  const housingBoxes = new Set();
   const housing = station.getObjectByName('placement-engineering-body');
   const details = station.getObjectByName('schematic-placement-details');
   const head = station.children.find(child => child.userData.explanatoryPart === 'nozzle');
@@ -55,6 +56,7 @@ export function buildTeachingModel(station, feederCount) {
         styles.push({part, material, color:material.color.clone(), emissive:material.emissive?.clone(),
           intensity:material.emissiveIntensity, metalness:material.metalness});
       }
+      if (source === housing && original.geometry.type === 'BoxGeometry') housingBoxes.add(original.geometry);
       const copy = original.isInstancedMesh ? original.clone(false) : new THREE.Mesh(original.geometry, materials.get(key));
       copy.material = materials.get(key);
       const matrix = new THREE.Matrix4().multiplyMatrices(toStation, original.matrixWorld);
@@ -69,6 +71,32 @@ export function buildTeachingModel(station, feederCount) {
   copyGroup(cover, 'cover');
   copyGroup(details, 'base');
   copyGroup(head, 'nozzle', true);
+
+  // Only consolidate the identically sized, opaque housing boxes in these two groups.
+  // The separately hidden transverse guide stays independently selectable in the cutaway.
+  for (const group of [groups.rail, groups.feeder]) {
+    const batches = new Map();
+    for (const copy of group.children) {
+      const geometry = copy.geometry;
+      if (geometry.type !== 'BoxGeometry' || copy.isInstancedMesh || frontGuideParts.includes(copy) ||
+          copy.material.transparent || !housingBoxes.has(geometry)) continue;
+      const {width, height, depth} = geometry.parameters;
+      const key = [copy.material.uuid, width, height, depth].join('/');
+      if (!batches.has(key)) batches.set(key, []);
+      batches.get(key).push(copy);
+    }
+    for (const copies of batches.values()) {
+      if (copies.length < 2) continue;
+      const first = copies[0];
+      const instances = new THREE.InstancedMesh(first.geometry, first.material, copies.length);
+      copies.forEach((copy, index) => {
+        copy.updateMatrix();
+        instances.setMatrixAt(index, copy.matrix);
+        group.remove(copy);
+      });
+      group.add(instances);
+    }
+  }
 
   const mechanism = addMechanismDetails(groups, feederCount);
   for (const {part,material} of mechanism.materials) {
@@ -235,6 +263,10 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       camera = new THREE.PerspectiveCamera(38,1,.1,50);
       origin = angles();
     }
+    if (value === 'compare') {
+      illustration.pose(value, 0, focus);
+      studio.fitGround(illustration.model);
+    } else if (mode === 'compare') studio.resetGround();
     mode = value;
     const field = FIELDS[mode];
     steps.hidden = mode !== 'assembly';

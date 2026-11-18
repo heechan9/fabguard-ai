@@ -1,0 +1,42 @@
+name: Paired placement comparison experiment
+on:
+  push:
+    branches: [experiment/smt-compare-ab-20261119]
+permissions:
+  contents: read
+jobs:
+  paired-orbit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [360, 1024]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned driver
+        run: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --prefix "$RUNNER_TEMP/driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Compare alternating builds on this runner
+        env:
+          WIDTH: ${{ matrix.width }}
+        run: |
+          python3 -m http.server 8775 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/smt-http.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8775/smt/ > /dev/null; then break; fi
+            sleep .2
+          done
+          NODE_PATH="$RUNNER_TEMP/driver/node_modules" node verification/bench_placement_compare.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smt-paired-${{ matrix.width }}
+          path: benchmark-${{ matrix.width }}/
+          retention-days: 14
