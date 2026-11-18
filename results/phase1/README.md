@@ -5,7 +5,7 @@ This directory records the advanced-validation outputs reproduced on 2026-09-04 
 ```bash
 python -m fabguard.advanced_experiment \
   --data-dir data/raw \
-  --output-dir results/phase1 \
+  --output-dir results/phase1-new-run \
   --bootstrap 2000 \
   --inspection-cost 1 \
   --missed-fail-cost 20
@@ -33,3 +33,46 @@ deployment superiority. Aggregating by repeat avoids treating all 25 overlapping
 fold estimates as independent observations.
 
 These outputs do not establish yield improvement, causal impact, or production readiness.
+
+## Subsequent evaluator correction (archived outputs unchanged)
+
+The archived walk-forward run selected its candidate from the entire original
+training period before evaluating earlier windows; later windows also fitted on
+part of the original holdout. It is retrospective exploratory evidence, not nested
+or independent validation. Do not interpret these archived scores as results of
+the corrected evaluator.
+
+Future walk-forward runs select a candidate separately using each fold's past
+training prefix, restrict windows to the original training period, and record
+fold-specific candidates. Shared timestamp-group boundaries prevent adjacent
+validation windows from overlapping. Degenerate timestamp groups fail explicitly.
+No archived result, data split or model was regenerated for this correction.
+The existing full advanced-experiment command still evaluates its calibration and
+cost sections on the previously exposed holdout; it is not a train-only runner.
+
+The command above now uses a fresh output directory. The runner refuses any
+non-empty output directory before loading data or fitting models, so the archived
+snapshot cannot be overwritten by an ordinary rerun. This is an accidental-write
+guard, not a hostile concurrent-filesystem sandbox. Historical invocation used
+`results/phase1`; retain those archived files rather than rerunning into that path.
+
+Inside each past prefix, candidate selection retains existing repeated stratified
+CV; only the outer walk-forward is chronological. This is not fully nested
+chronological inner CV. The manifest explicitly lists the sections that still
+consume the exposed holdout, including feature-distribution comparison.
+
+
+### Explicit output and sparse-prefix records
+
+The CLI requires `--output-dir` explicitly. Omitting it stops in argument parsing
+before loading data or fitting; there is no default pointing to the archive.
+Existing non-empty destinations still fail rather than being silently replaced.
+
+Future walk-forward CSVs retain every window with `status=EVALUATED` or `SKIPPED`.
+Single-class prefixes, per-class support below configured inner CV splits, and
+validation windows without Fail have distinct skip reasons. Skipped rows contain
+no performance metric, and the manifest records evaluated/skipped counts. Do not
+treat them as zero scores, silently drop them to claim whole-period performance,
+or compare them to the archived CSV as if the procedures were identical.
+Only these predeclared support conditions are skipped; unexpected model-fitting
+errors still propagate. This change does not rerun models or alter archived data.
