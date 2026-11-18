@@ -11,9 +11,11 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
   display:new THREE.MeshStandardMaterial({color:0x113841,roughness:.3,emissive:0x175762,emissiveIntensity:.45}),
   white:new THREE.MeshStandardMaterial({color:0xb8f2ea,roughness:.45,emissive:0x5fbfb0,emissiveIntensity:.45})};
  let category=null;const highlights=new Map();
+ // THREE traverses invisible ancestors during raycasting: do not select hidden covers.
+ function visibleRaycast(raycaster,hits){for(let o=this;o;o=o.parent)if(!o.visible)return;THREE.Mesh.prototype.raycast.call(this,raycaster,hits);}
  const root=new THREE.Group();root.name='placement-engineering-body';machine.add(root);
  function add(parent,geometry,xyz,mat,{pick=false,shadow=false}={}){let material=mats[mat];if(category){const key=category+':'+mat;if(!highlights.has(key))highlights.set(key,material.clone());material=highlights.get(key);}
- const m=new THREE.Mesh(geometry,material);m.userData.explanatoryPart=category;m.position.set(...xyz);m.castShadow=shadow;m.receiveShadow=true;if(!pick)m.raycast=()=>{};parent.add(m);return m;}
+ const m=new THREE.Mesh(geometry,material);m.userData.explanatoryPart=category;m.position.set(...xyz);m.castShadow=shadow;m.receiveShadow=true;m.userData.housingPickable=pick;m.raycast=pick?visibleRaycast:()=>{};parent.add(m);return m;}
  const box=(p,w,h,d,x,y,z,mat,options)=>add(p,new THREE.BoxGeometry(w,h,d),[x,y,z],mat,options);
  const cyl=(p,r,h,x,y,z,mat)=>add(p,new THREE.CylinderGeometry(r,r,h,24),[x,y,z],mat);
  // Small bevels catch light at real silhouette edges, instead of relying on flat colours.
@@ -51,7 +53,7 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
  // Fixed bridge and paired longitudinal guide shafts. None touch the PCB path.
  for(const x of [-width*.39,width*.39]){
   box(root,.14,1.06,.17,x,1.39,-.70,'alloy');
-  const shaft=cyl(root,.034,1.20,x,1.88,0,'alloy');shaft.rotation.x=Math.PI/2;
+  const shaft=cyl(root,.034,1.24,x,1.88,-.02,'alloy');shaft.rotation.x=Math.PI/2;
   box(root,.10,.30,.25,x,2.00,0,'graphite');
  }
  box(root,width-.25,.18,.23,0,2.18,0,'alloy');
@@ -65,7 +67,7 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
   box(root,.15,.13,.49,x,1.01,1.05,'alloy');
   box(root,.105,.045,.42,x,1.091,1.05,'graphite');
   box(root,.075,.008,.39,x,1.118,1.05,'teal');
-  for(const z of [1.135,1.215]){const flange=cyl(root,.17,.018,x,.76,z,'graphite');flange.rotation.x=Math.PI/2;flange.raycast=THREE.Mesh.prototype.raycast;}
+  for(const z of [1.135,1.215]){const flange=cyl(root,feederCount===6?.135:.17,.018,x,.76,z,'graphite');flange.rotation.x=Math.PI/2;flange.userData.housingPickable=true;flange.raycast=visibleRaycast;}
   const core=cyl(root,.105,.075,x,.76,1.175,'alloy');core.rotation.x=Math.PI/2;
   const hub=cyl(root,.045,.10,x,.76,1.18,'teal');hub.rotation.x=Math.PI/2;
  }

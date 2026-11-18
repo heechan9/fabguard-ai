@@ -18,7 +18,7 @@ test('removable cover retains all moving-path architecture and does not hide fee
 });
 test('glass does not write depth; decorative meshes have no ray hits',()=>{
  const {machine,materials}=build();assert.equal(materials.glass.depthWrite,false);assert.equal(materials.glass.transparent,true);
- let decorations=0;machine.traverse(o=>{if(!o.isMesh||o.raycast===THREE.Mesh.prototype.raycast)return;const hits=[];o.raycast(new THREE.Raycaster(),hits);assert.deepEqual(hits,[]);decorations++;});assert(decorations>40);
+ let decorations=0;machine.traverse(o=>{if(!o.isMesh||o.userData.housingPickable)return;const hits=[];o.raycast(new THREE.Raycaster(),hits);assert.deepEqual(hits,[]);decorations++;});assert(decorations>40);
 });
 test('feeder and bridge highlight the visible assemblies, reset and remain isolated',()=>{
  const a=build(),b=build();a.select('feeder');let lit=0;
@@ -46,4 +46,20 @@ test('new housing clears sampled head and carriage poses across the full progres
    for(const {object,bounds} of fixed)assert(!bounds.intersectsBox(moving),`stage ${stage}, progress ${progress}: ${object.geometry.type} at ${object.position.toArray()} intersects head/carriage`);
   }
  }
+});
+
+test('cover panels are pickable only with a visible ancestor chain',()=>{
+ const {machine,cover}=build();const ray=new THREE.Raycaster(new THREE.Vector3(0,2.35,3),new THREE.Vector3(0,0,-1));
+ assert(ray.intersectObject(cover,true).length>0);
+ cover.visible=false;assert.equal(ray.intersectObject(cover,true).length,0);
+ cover.visible=true;machine.visible=false;assert.equal(ray.intersectObject(cover,true).length,0);
+ machine.visible=true;assert(ray.intersectObject(cover,true).length>0);
+});
+test('guide shafts contact rear supports on both machines',()=>{
+ for(const n of [4,6]){const {root}=build(n);const shafts=root.children.filter(o=>o.geometry?.type==='CylinderGeometry'&&o.position.y===1.88);
+ assert.equal(shafts.length,2);for(const shaft of shafts){const support=root.children.find(o=>o.geometry?.type==='BoxGeometry'&&o.position.x===shaft.position.x&&o.position.z===-.70);assert(support);assert(new THREE.Box3().setFromObject(shaft).intersectsBox(new THREE.Box3().setFromObject(support)));}}
+});
+test('adjacent same-depth reel flanges remain separate in both feeder banks',()=>{
+ for(const n of [4,6]){const {root}=build(n);const flanges=root.children.filter(o=>o.geometry?.type==='CylinderGeometry'&&o.position.z===1.215);assert.equal(flanges.length,n);
+ for(let i=1;i<flanges.length;i++){const a=flanges[i-1],b=flanges[i];assert(b.position.x-a.position.x>a.geometry.parameters.radiusTop+b.geometry.parameters.radiusTop);}}
 });
