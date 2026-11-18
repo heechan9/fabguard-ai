@@ -94,6 +94,8 @@ class RunnerScopeReview(unittest.TestCase):
             import json
             saved_manifest = json.loads((Path(tmp) / 'manifest.json').read_text())
             self.assertIs(type(saved_manifest['config']['cv_splits']), int)
+            self.assertEqual(saved_manifest['config']['cv_splits'],
+                             int((config or ExperimentConfig()).cv_splits))
         if mixed:
             self.assertEqual(len(seen), 2)
             self.assertEqual(saved['status'].tolist(), ['SKIPPED', 'SKIPPED', 'EVALUATED', 'EVALUATED'])
@@ -237,4 +239,4 @@ class LatestReviewCoverage(unittest.TestCase):
         from dataclasses import replace
         from fabguard.advanced_experiment import run_advanced_experiment
         RunnerScopeReview().check_runner(run_advanced_experiment,
-            config=replace(ExperimentConfig(),cv_splits=np.int64(5)))
+            config=replace(ExperimentConfig(),cv_splits=np.int64(4)))
