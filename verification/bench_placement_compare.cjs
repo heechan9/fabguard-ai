@@ -27,7 +27,22 @@ async function run(browser,variant,round,images=false){
       const url=new URL(route.request().url()), name=url.pathname.split('/').pop();
       if(url.origin!=='http://127.0.0.1:8775')return route.abort();
       if(!url.pathname.startsWith('/smt/')||!files[name])return route.continue();
-      let source=files[name][variant]??files[name].base;
+      let source=files[name].base;
+      if(variant==='candidate' && name==='placement-teaching.mjs'){
+        source=source.replace('renderer.setScissorTest(true);',
+          'renderer.setOpaqueSort((a,b)=>a.groupOrder-b.groupOrder || a.renderOrder-b.renderOrder || a.z-b.z || a.id-b.id);renderer.setScissorTest(true);');
+        source=source.replace('finally{renderer.setScissorTest(false);','finally{renderer.setOpaqueSort(null);renderer.setScissorTest(false);');
+        assert(source.includes('renderer.setOpaqueSort(null)'));
+      }
+      if(variant==='priorMechanism' && name==='placement-cutaway.mjs'){
+        const marker='// A small procedurally lit studio environment';
+        assert(source.includes(marker) && files[name].prior.includes(marker));
+        source=files[name].prior.split(marker)[0]+marker+source.split(marker)[1];
+      }
+      if(variant==='noGrain' && name==='placement-cutaway.mjs'){
+        const needle="roughnessMap:['steel','bright','brass'].includes(finish)?grain:null";
+        assert(source.includes(needle));source=source.replace(needle,"roughnessMap:null");
+      }
       if(variant==='noShadow' && name==='app.mjs'){
         assert(source.includes('renderer.shadowMap.enabled=true'));
         source=source.replace('renderer.shadowMap.enabled=true','renderer.shadowMap.enabled=false');
@@ -86,7 +101,8 @@ const captures=new Map();
  const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const results={width,chrome:browser.version(),baseSHA,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),runs:[]};
  try{
-  const order=['base','candidate','candidate','base','prior','noShadow','noShadow','prior','base','candidate','candidate','base'];
+  await run(browser,'base',-1);
+  const order=['base','candidate','candidate','base','noGrain','priorMechanism','priorMechanism','noGrain','base','candidate','candidate','base'];
   for(const [round,v] of order.entries()){
     const record=await run(browser,v,round,round<2);
     results.runs.push(record);
