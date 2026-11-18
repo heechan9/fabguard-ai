@@ -111,7 +111,12 @@ const viewport=$('viewport'),boardMeshes=new Map(),machines=[],heads=[];
 let renderer,scene,camera,selectionRing;const widths=STATIONS.map((_,i)=>i===6?4.4:i===0||i===10?1.7:i===5||i===7||i===9?1.45:2.25),positions=[];
 let offset=0;for(let i=0;i<widths.length;i++){positions.push(offset+widths[i]/2);offset+=widths[i]+.65;}for(let i=0;i<positions.length;i++)positions[i]-=offset/2;
 let targetX=0,targetY=.6,targetZ=0;
-function focusStation(i){targetZ=0;targetX=positions[i];targetY=1.4;azimuth=.35;elevation=.55;zoom=stationZoom(widths[i],viewport.clientWidth/Math.max(1,viewport.clientHeight))*(insideView?.65:1);cameraUpdate();}
+function focusStation(i){
+ // Keep the placement feeder bank in frame; other station framing is unchanged.
+ const placementInterior=insideView&&[3,4].includes(i);
+ targetZ=placementInterior?.2:0;targetX=positions[i];targetY=placementInterior?1.1:1.4;azimuth=.35;elevation=.55;
+ zoom=stationZoom(widths[i],viewport.clientWidth/Math.max(1,viewport.clientHeight))*(placementInterior?1.05:insideView?.65:1);cameraUpdate();
+}
 let azimuth=.55,elevation=.78,zoom=1,pinchDistance=0;const pointers=new Map(),tapGuard=new TapGuard();
 const color={shell:0xe4ecef,dark:0x344e5c,rail:0x5a7481,mint:0x43b998,amber:0xe8aa4e,red:0xd75948};
 function box(parent,w,h,d,x,y,z,c,opacity=1){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color:c,roughness:opacity<1?.18:.52,metalness:opacity<1?.05:.28,transparent:opacity<1,opacity,depthWrite:opacity===1}));mesh.position.set(x,y,z);mesh.castShadow=opacity===1;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
