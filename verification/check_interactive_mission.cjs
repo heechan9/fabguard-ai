@@ -14,11 +14,17 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-initial-machine.png`)});
  assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
  const guideBox=await page.locator('.scene-reading-guide').boundingBox(),initialViewBox=await page.locator('#viewport').boundingBox();assert.ok(guideBox.y>=initialViewBox.y+initialViewBox.height,'Legends stay outside the detailed machine view');
- const guideContrast=await page.locator('.scene-reading-guide').evaluate(guide=>{
-  const luminance=c=>{const rgb=c.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;};
-  const a=luminance(getComputedStyle(guide.querySelector('.gesture')).color),b=luminance(getComputedStyle(guide).backgroundColor);
-  return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
- });assert.ok(guideContrast>=4.5,`Gesture guide contrast ${guideContrast}`);
+ const guideContrasts=await page.locator('.scene-reading-guide').evaluate(guide=>{
+  const channels=c=>c.match(/[\d.]+/g).map(Number);
+  const luminance=rgb=>{const linear=rgb.slice(0,3).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});return linear[0]*.2126+linear[1]*.7152+linear[2]*.0722;};
+  const parent=channels(getComputedStyle(guide).backgroundColor);
+  return ['.gesture','#selected-station-caption','.scene-caption'].map(selector=>{
+   const style=getComputedStyle(guide.querySelector(selector)),bg=channels(style.backgroundColor),alpha=bg[3]??1;
+   const background=bg.slice(0,3).map((c,i)=>c*alpha+parent[i]*(1-alpha));
+   const a=luminance(channels(style.color)),b=luminance(background);
+   return {selector,ratio:(Math.max(a,b)+.05)/(Math.min(a,b)+.05)};
+  });
+ });for(const {selector,ratio} of guideContrasts)assert.ok(ratio>=4.5,`${selector} guide contrast ${ratio}`);
  await page.locator('.scene-reading-guide').screenshot({path:path.join(out,`${width}-${theme}-reading-guide.png`)});
  await page.locator('#camera-reset').press('Enter');await advance(100);
  await page.locator('#placement-focus').press('Enter');await advance(100);
