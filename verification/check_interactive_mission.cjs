@@ -14,6 +14,12 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-initial-machine.png`)});
  assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
  const guideBox=await page.locator('.scene-reading-guide').boundingBox(),initialViewBox=await page.locator('#viewport').boundingBox();assert.ok(guideBox.y>=initialViewBox.y+initialViewBox.height,'Legends stay outside the detailed machine view');
+ const guideContrast=await page.locator('.scene-reading-guide').evaluate(guide=>{
+  const luminance=c=>{const rgb=c.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4;});return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;};
+  const a=luminance(getComputedStyle(guide.querySelector('.gesture')).color),b=luminance(getComputedStyle(guide).backgroundColor);
+  return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+ });assert.ok(guideContrast>=4.5,`Gesture guide contrast ${guideContrast}`);
+ await page.locator('.scene-reading-guide').screenshot({path:path.join(out,`${width}-${theme}-reading-guide.png`)});
  await page.locator('#camera-reset').press('Enter');await advance(100);
  await page.locator('#placement-focus').press('Enter');await advance(100);
  assert.equal(await page.locator('#inside-view').getAttribute('aria-pressed'),'false');
