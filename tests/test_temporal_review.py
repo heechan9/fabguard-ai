@@ -41,3 +41,61 @@ class TemporalReview(unittest.TestCase):
         with patch('fabguard.advanced_experiment.selected_candidate') as select:
             with self.assertRaises(ValueError): score_temporal_fold(f,f,[],ExperimentConfig())
             select.assert_not_called()
+
+class RunnerScopeReview(unittest.TestCase):
+    def check_runner(self, runner):
+        from contextlib import ExitStack
+        from pathlib import Path
+        import tempfile
+        import fabguard.advanced_experiment as module
+        frame = pd.DataFrame({
+            'sample_id': ['synthetic_%03d' % i for i in range(100)],
+            'timestamp': pd.date_range('2020-01-01', periods=100),
+            'feature_0': np.arange(100), 'label': [0, 1] * 50})
+        frame.attrs['hashes'] = {'synthetic': 'not-real-data'}
+        train, holdout = frame.iloc[:80].copy(), frame.iloc[80:].copy()
+        forbidden = set(holdout.sample_id)
+        candidate = Candidate('synthetic_dummy', 'dummy', {})
+        pipeline = Mock()
+        pipeline.predict_proba.side_effect = lambda x: np.tile([.5, .5], (len(x), 1))
+        seen = []
+        def score(fit, validation, features, config):
+            self.assertFalse((set(fit.sample_id) | set(validation.sample_id)) & forbidden)
+            seen.append((set(fit.sample_id), set(validation.sample_id)))
+            return candidate, np.full(len(validation), .5)
+        replacements = {
+            'load_secom': Mock(return_value=frame),
+            'time_holdout': Mock(return_value=(train, holdout)),
+            'selected_candidate': Mock(return_value=candidate),
+            'build_pipeline': Mock(return_value=pipeline),
+            'prefit_calibrator': Mock(return_value=pipeline),
+            'calibration_metrics': Mock(return_value={}),
+            'inspection_cost_table': Mock(return_value=pd.DataFrame()),
+            'bootstrap_top_k_interval': Mock(return_value=pd.DataFrame()),
+            'drift_table': Mock(return_value=pd.DataFrame()),
+            'score_temporal_fold': score,
+        }
+        with ExitStack() as stack, tempfile.TemporaryDirectory() as tmp:
+            for name, replacement in replacements.items():
+                stack.enter_context(patch.object(module, name, replacement))
+            manifest = runner(ExperimentConfig(), output_dir=Path(tmp))
+        self.assertEqual(len(seen), 4)
+        self.assertEqual(manifest['walk_forward_scope'], 'original_training_period_only')
+        self.assertEqual(manifest['walk_forward_selection'], 'each_fold_training_prefix_only')
+
+    def test_runner_excludes_holdout_from_walk_forward(self):
+        from fabguard.advanced_experiment import run_advanced_experiment
+        self.check_runner(run_advanced_experiment)
+
+    def test_guard_detects_whole_frame_regression(self):
+        import inspect
+        import fabguard.advanced_experiment as module
+        source = inspect.getsource(module.run_advanced_experiment)
+        self.assertIn('ordered = train.sort_values', source)
+        # Compile one deliberate regression only in memory; production source stays unchanged.
+        namespace = dict(module.__dict__)
+        exec(compile(source.replace('ordered = train.sort_values',
+                                    'ordered = frame.sort_values'), '<synthetic-regression>', 'exec'),
+             module.__dict__, namespace)
+        with self.assertRaises(AssertionError):
+            self.check_runner(namespace['run_advanced_experiment'])
