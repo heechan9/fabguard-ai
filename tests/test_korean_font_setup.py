@@ -1,11 +1,12 @@
 """Hermetic command-contract tests; not a real apt/browser integration result."""
 import os
-import hashlib
-import re
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+
+# Full-suite setup: python -m pip install ".[test]" (missing parser is not skipped).
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -138,30 +139,48 @@ esac
 
 
     def test_ur3_workflow_reuses_bounded_setup_without_reducing_coverage(self):
-        workflow = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_bytes()
-        # Reviewed whole-file snapshot: any change, including YAML aliases, quoted
-        # keys or comment-hidden settings, requires explicit re-review and repinning.
-        # This intentionally rejects harmless formatting too; it is not a YAML parser.
-        self.assertEqual(hashlib.sha256(workflow).hexdigest(),
-                         '0b2d4071a16720325a5e213e403bb6b6a752820fc618dbdd43b4691b324acfe9')
-        text = workflow.decode('utf-8')
-        # Deliberately constrain this workflow's existing indentation/layout;
-        # this is not a general YAML parser and requires no new dependency.
-        paths = re.search(r"(?m)^on:\n  pull_request:\n    paths:\n((?:      - [^\n]+\n)+)", text)
-        self.assertIsNotNone(paths)
-        self.assertIn("      - 'verification/prepare_korean_fonts.sh'", paths[1].splitlines())
-        self.assertIn('width: [1366, 360, 390]', text)
-        self.assertIn('timeout-minutes: 20', text)
-        self.assertRegex(text, r'(?m)^      - name: Bounded authenticated Korean font preparation\n        timeout-minutes: 8\n        run: bash verification/prepare_korean_fonts.sh\n(?=      - name:)')
-        self.assertNotIn('sudo apt-get', text)
-        self.assertNotIn('continue-on-error', text)
-        self.assertIn('fail-fast: false', text)
-        browser = text.split('      - name: Loopback-only UR3 and existing feature regression\n', 1)[1].split('      - uses:', 1)[0]
-        self.assertNotRegex(browser, r'(?m)^        if:')
-        run = browser.split('        run: |\n', 1)[1]
-        for name, seconds in [('ur3_replay', 240), ('robot_sort_cell', 360),
-                              ('context_review', 180), ('theme_ui', 360), ('transfer_robot', 360)]:
-            self.assertRegex(run, rf'(?m)^          FABGUARD_UI_OUTPUT=\"[^\"]+\" timeout {seconds}s node verification/check_{name}\.cjs$')
-        self.assertIn('cmp web/robot/ur3/data.json', text)
-        self.assertIn('cmp web/robot/ur3/data-hash.mjs', text)
-        self.assertIn('persist-credentials: false', text)
+        text = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_text()
+        # BaseLoader safely keeps scalar spelling, including the GitHub key 'on',
+        # instead of interpreting YAML 1.1 'on' as boolean True.
+        workflow = yaml.load(text, Loader=yaml.BaseLoader)
+        self.assertIn('verification/prepare_korean_fonts.sh',
+                      workflow['on']['pull_request']['paths'])
+        browser = workflow['jobs']['browser']
+        self.assertEqual(browser['strategy']['matrix']['width'], ['1366', '360', '390'])
+        self.assertEqual(browser['timeout-minutes'], '20')
+        self.assertEqual(browser['strategy']['fail-fast'], 'false')
+        self.assertNotIn('if', browser)
+        self.assertNotIn('continue-on-error', browser)
+        steps = browser['steps']
+        font_steps = [step for step in steps
+                      if step.get('name') == 'Bounded authenticated Korean font preparation']
+        self.assertEqual(len(font_steps), 1)
+        font = font_steps[0]
+        self.assertEqual(font['run'], 'bash verification/prepare_korean_fonts.sh')
+        self.assertEqual(font['timeout-minutes'], '8')
+        self.assertNotIn('if', font)
+        self.assertNotIn('continue-on-error', font)
+        audits = [step for step in steps
+                  if step.get('name') == 'Loopback-only UR3 and existing feature regression']
+        self.assertEqual(len(audits), 1)
+        audit = audits[0]
+        self.assertLess(steps.index(font), steps.index(audit))
+        self.assertNotIn('if', audit)
+        self.assertNotIn('continue-on-error', audit)
+        active = [line.strip() for line in audit['run'].splitlines()
+                  if line.strip() and not line.lstrip().startswith('#')]
+        for name, folder, seconds in [('ur3_replay', 'ur3', 240), ('robot_sort_cell', 'robot', 360),
+                                     ('context_review', 'context', 180), ('theme_ui', 'theme', 360),
+                                     ('transfer_robot', 'transfer', 360)]:
+            expected = (f'FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/{folder}" '
+                        f'timeout {seconds}s node verification/check_{name}.cjs')
+            self.assertIn(expected, active)
+        self.assertFalse(any('sudo apt-get' in step.get('run', '') for step in steps))
+        checkout = [step for step in steps if step.get('uses') == 'actions/checkout@v4']
+        self.assertEqual(len(checkout), 1)
+        self.assertEqual(checkout[0]['with']['persist-credentials'], 'false')
+        source = workflow['jobs']['source']['steps']
+        rebuild = next(step['run'] for step in source if step.get('name') ==
+                       'Rebuild from pinned UCI original without new dependencies')
+        self.assertIn('cmp web/robot/ur3/data.json', rebuild)
+        self.assertIn('cmp web/robot/ur3/data-hash.mjs', rebuild)
