@@ -1,4 +1,4 @@
-import {addMechanismDetails, studioEnvironment} from './placement-cutaway.mjs';
+import {addMechanismDetails, lightPlacementStudio} from './placement-cutaway.mjs';
 import * as THREE from './vendor/three.module.js';
 
 export const STEPS = [
@@ -103,6 +103,9 @@ export function buildTeachingModel(station, feederCount) {
     };
     item.material.customProgramCacheKey = () => 'placement-illustration-field-v1';
   }
+  model.traverse(object=>{
+    if(object.isMesh){object.castShadow=!object.material.transparent;object.receiveShadow=true;}
+  });
   function style(mode, step) {
     const field = FIELDS[mode];
     for (const item of styles) {
@@ -156,7 +159,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   const standardDisplay = standardGuide.style.display;
   const viewportLabel = viewport.getAttribute('aria-label');
   const insideNote = byId('inside-note');
-  let insideWasHidden = true;
+  let insideWasHidden = true, studio, lastShadowPose;
   let mode = 'normal', scene, illustration, camera, origin, stationIndex, step = 0;
   let focus = 'all', activeHighlight = -1;
   let progress = 0, from = 0, started = 0, duration = 0;
@@ -170,7 +173,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
 
   function release() {
     illustration?.dispose();
-    scene?.environment?.dispose();
+    studio?.dispose();studio=null;lastShadowPose=null;
     scene?.clear();
     illustration = scene = camera = null;
   }
@@ -211,13 +214,9 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       stationIndex = currentStation() === 4 ? 4 : 3;
       illustration = buildTeachingModel(stations[stationIndex],stationIndex===4?4:6);
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x24323d);
-      scene.environment = studioEnvironment();
+      studio=lightPlacementStudio(scene);
+      scene.add(illustration.model);
       focus = focusControl.value = "all";
-      const ambient = new THREE.HemisphereLight(0xe4f2ff, 0x83959b, 1.8);
-      const key = new THREE.DirectionalLight(0xfff3db, 2.8); key.position.set(3,6,4);
-      const rim = new THREE.DirectionalLight(0xa5ddff, 2.2); rim.position.set(-4,3,-3);
-      scene.add(illustration.model, ambient, key, rim);
       camera = new THREE.PerspectiveCamera(38,1,.1,50);
       origin = angles();
     }
@@ -274,6 +273,8 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     // The default WebGL framebuffer can be discarded after composition or a resize.
     // Present the active illustration on each visible animation frame, as the live scene does.
     illustration.pose(mode, progress, focus);
+    const shadowPose=mode==='assembly' ? progress : focus==='nozzle' ? 'spindle-cut' : 'open';
+    if(shadowPose!==lastShadowPose){studio.refresh();lastShadowPose=shadowPose;}
     if(mode==='assembly' && progress!==step){
       const highlight=Math.ceil(progress);
       if(highlight!==activeHighlight){illustration.style(mode,highlight);activeHighlight=highlight;}

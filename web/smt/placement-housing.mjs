@@ -45,10 +45,32 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
   panel(cover,.12,.48,.055,sign*(width/2-.08),1.51,.825,'teal');
  }
  const visor=panel(cover,width,.30,1.67,0,2.35,-.02,'paint');visor.rotation.x=-.07;
- box(cover,width-.16,.09,.075,0,2.06,.85,'graphite');
- box(cover,width-.38,.024,.02,0,2.055,.892,'teal');
- box(cover,width-.37,.73,.022,0,1.65,.807,'glass');
- box(cover,width-.38,.04,.055,0,1.28,.827,'graphite');
+ // A pressed window surround, bonded glass and a bail handle share one opening.
+ const outline=(path,w,h,cut)=>{
+  const x=w/2,y=h/2;
+  path.moveTo(-x+cut,-y);path.lineTo(x-cut,-y);path.lineTo(x,-y+cut);
+  path.lineTo(x,y-cut);path.lineTo(x-cut,y);path.lineTo(-x+cut,y);
+  path.lineTo(-x,y-cut);path.lineTo(-x,-y+cut);path.closePath();return path;
+ };
+ function surround(w,h,border,z,finish){
+  const shape=outline(new THREE.Shape(),w,h,.115);
+  shape.holes.push(outline(new THREE.Path(),w-2*border,h-2*border,.077));
+  const frame=new THREE.ExtrudeGeometry(shape,{depth:.025,bevelThickness:.007,bevelSize:.007,bevelSegments:2,steps:1});
+  return add(cover,frame,[0,1.72,z],finish,{pick:true,shadow:true});
+ }
+ surround(width-.095,.96,.080,.840,'paint').name='pressed-window-door';
+ surround(width-.24,.81,.035,.851,'rubber');
+ box(cover,width-.32,.75,.018,0,1.72,.842,'glass');
+ for(const sign of [-1,1]){
+  const hinge=cyl(cover,.041,.26,sign*(width*.31),2.17,.887,'alloy');
+  hinge.rotation.z=Math.PI/2;
+  box(cover,.16,.095,.05,sign*(width*.31),2.135,.868,'graphite');
+ }
+ const bailShape=new THREE.CurvePath();
+ const bailPoints=[[-.17,1.296,.875],[-.17,1.296,.95],[-.141,1.32,.975],[.141,1.32,.975],[.17,1.296,.95],[.17,1.296,.875]];
+ const bail=bailPoints.map(point=>new THREE.Vector3(...point));
+ for(let i=1;i<bail.length;i++)bailShape.add(new THREE.LineCurve3(bail[i-1],bail[i]));
+ add(cover,new THREE.TubeGeometry(bailShape,24,.024,10,false),[0,0,0],'graphite');
  category='rail';
  // Fixed bridge and paired longitudinal guide shafts. None touch the PCB path.
  for(const x of [-width*.39,width*.39]){
