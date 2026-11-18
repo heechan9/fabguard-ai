@@ -279,6 +279,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   back.addEventListener('click', () => chooseStep(step-1));
   next.addEventListener('click', () => chooseStep(step+1));
   window.addEventListener('pagehide', close);
+  viewport.querySelector('canvas')?.addEventListener('webglcontextrestored',()=>{studio?.refresh();});
   function render(renderer, now) {
     const {azimuth,elevation,zoom} = angles();
     if (mode === 'assembly' && progress !== step) {

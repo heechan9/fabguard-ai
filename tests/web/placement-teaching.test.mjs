@@ -82,3 +82,28 @@ test('each assembly step adds the named subgroup and reverse traversal restores 
   assert.ok(guide.groups.cover.position.y>0);
   guide.dispose();
 });
+
+test('cutaway nut and spindle bearing share their shaft axes and retain open inspection sections',()=>{
+  for(const n of [4,6]){
+    const {station}=liveStation(n);
+    const guide=buildTeachingModel(station,n);
+    const find=(group,name)=>guide.groups[group].children.find(mesh=>mesh.geometry.name===name);
+    const nut=find('nozzle','cross-slide-nut'),screw=find('rail','lead-screw-thread');
+    const spindle=find('nozzle','stepped-spindle'),race=find('nozzle','sectioned-bearing-race');
+    const apron=find('nozzle','machined-carriage-apron');
+    for(const mesh of [nut,screw,spindle,race,apron])assert.ok(mesh);
+    guide.model.updateMatrixWorld(true);
+    const bounds=new THREE.Box3().setFromObject(screw);
+    const center=bounds.getCenter(new THREE.Vector3());
+    const axis=new THREE.Vector3(0,1,0).applyQuaternion(nut.quaternion);
+    assert.ok(Math.abs(axis.x)>.999);
+    assert.ok(Math.abs(nut.position.y-center.y)<.002 && Math.abs(nut.position.z-center.z)<.002);
+    assert.ok(Math.min(...nut.geometry.parameters.points.map(pt=>pt.x)) > (bounds.max.y-bounds.min.y)/2);
+    assert.equal(spindle.position.x,race.position.x);assert.equal(spindle.position.z,race.position.z);
+    assert.ok(race.geometry.parameters.phiLength<Math.PI*2);
+    assert.ok(apron.geometry.parameters.shapes.holes.length>=2);
+    guide.pose('assembly',2);assert.equal(guide.groups.nozzle.visible,false);
+    guide.pose('assembly',3);assert.equal(guide.groups.nozzle.visible,true);
+    guide.dispose();
+  }
+});
