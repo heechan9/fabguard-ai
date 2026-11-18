@@ -49,7 +49,7 @@ module.exports = async function compareTeaching(browser, base, out) {
         const {buildPlacementHousing}=await import('/smt/placement-housing.mjs');
         const {mountPlacementDetails}=await import('/smt/placement-details.mjs');
         const {buildTeachingModel}=await import('/smt/placement-teaching.mjs');
-        const {studioEnvironment}=await import('/smt/placement-cutaway.mjs');
+        const {lightPlacementStudio}=await import('/smt/placement-cutaway.mjs');
         const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
         const h=width===360?340:512;
         renderer.setSize(width,h);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
@@ -60,10 +60,8 @@ module.exports = async function compareTeaching(browser, base, out) {
         cover.visible=false;
         const guide=buildTeachingModel(station,6);
         guide.style('cutaway',0);guide.pose('cutaway',0);
-        const scene=new T.Scene();scene.background=new T.Color(0x24323d);scene.environment=studioEnvironment();
-        scene.add(new T.HemisphereLight(0xe4f2ff,0x83959b,1.8));
-        const key=new T.DirectionalLight(0xfff3db,2.8);key.position.set(3,6,4);scene.add(key);
-        const rim=new T.DirectionalLight(0xa5ddff,2.2);rim.position.set(-4,3,-3);scene.add(rim);
+        const scene=new T.Scene(),studio=lightPlacementStudio(scene);
+        renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
         const views={station:[0,1.22,.10,1.88],nozzle:[0,1.79,0,.56],feeder:[0,.90,1.07,1.06]};
         const images=[];
         for(const [view,[x,y,z,radius]] of Object.entries(views)){
@@ -72,17 +70,19 @@ module.exports = async function compareTeaching(browser, base, out) {
           const half=T.MathUtils.degToRad(19),d=radius/Math.sin(Math.min(half,Math.atan(Math.tan(half)*width/h)));
           camera.position.set(x+d*Math.sin(.4)*Math.cos(.35),y+d*Math.sin(.35),z+d*Math.cos(.4)*Math.cos(.35));camera.lookAt(x,y,z);
           for(const [version,object] of [['base-station',station],['detailed-cutaway',guide.model]]){
-            scene.add(object);renderer.render(scene,camera);
+            scene.add(object);studio.refresh();renderer.render(scene,camera);
             const result={version,view,png:renderer.domElement.toDataURL('image/png').split(',')[1],
               calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};
             if(version==='detailed-cutaway'){
-              const feature={station:'lead-screw-thread',nozzle:'stepped-spindle',feeder:'open-reel-rim'}[view];
+              const features={station:['lead-screw-thread','cross-slide-nut'],nozzle:['stepped-spindle','machined-carriage-apron','sectioned-bearing-race'],feeder:['open-reel-rim']}[view];
+              result.features={};
+              for(const feature of features){
               const meshes=[];
               object.traverse(o=>{if(o.geometry?.name===feature)meshes.push(o);});
               if(!meshes.length)throw Error('Missing cutaway feature: '+feature);
               const gl=renderer.getContext();
               const pixels=()=>{const data=new Uint8Array(width*h*4);gl.readPixels(0,0,width,h,gl.RGBA,gl.UNSIGNED_BYTE,data);return data;};
-              const withPart=pixels();for(const mesh of meshes)mesh.visible=false;
+              renderer.render(scene,camera);const withPart=pixels();for(const mesh of meshes)mesh.visible=false;
               renderer.render(scene,camera);
               const withoutPart=pixels();for(const mesh of meshes)mesh.visible=true;
               let changed=0;
@@ -90,13 +90,14 @@ module.exports = async function compareTeaching(browser, base, out) {
                 if(Math.abs(withPart[i]-withoutPart[i])+Math.abs(withPart[i+1]-withoutPart[i+1])+Math.abs(withPart[i+2]-withoutPart[i+2])>18)changed++;
               }
               if(changed<8)throw Error(feature+' cannot be distinguished in '+view+' view: '+changed+' pixels');
-              result.feature=feature;result.featurePixels=changed;
+              result.features[feature]=changed;
+              }
             }
             images.push(result);
             scene.remove(object);
           }
         }
-        guide.dispose();scene.environment.dispose();renderer.dispose();
+        guide.dispose();studio.dispose();renderer.dispose();
         return images;
       },{width});
       for(const item of images) writeFileSync(join(out,`matched-${width}-${item.view}-${item.version}.png`),Buffer.from(item.png,'base64'));

@@ -1,4 +1,4 @@
-import {addMechanismDetails, studioEnvironment} from './placement-cutaway.mjs';
+import {addMechanismDetails, lightPlacementStudio} from './placement-cutaway.mjs';
 import * as THREE from './vendor/three.module.js';
 
 export const STEPS = [
@@ -77,8 +77,18 @@ export function buildTeachingModel(station, feederCount) {
   }
   for (const item of styles) {
     if (!Object.hasOwn(FIELDS.temperature.levels,item.part)) continue;
+    // Color only the illustrative working regions, so the adjoining structure
+    // remains a material/shape reference in both comparative views.
+    const regions={
+      nozzle:[[0,1.79,.11],[.31,.48,.30]],
+      rail:[[0,2.21,.22],[1.12,.16,.22]],
+      feeder:[[0,.94,1.21],[1.15,.36,.27]]
+    };
+    const [center,extent]=regions[item.part];
     const uniforms = {
-      guideLevel:{value:-1}, guideLow:{value:new THREE.Color()}, guideMid:{value:new THREE.Color()}, guideHigh:{value:new THREE.Color()}
+      guideLevel:{value:-1}, guideNeutral:{value:item.color},
+      guideCenter:{value:new THREE.Vector3(...center)}, guideExtent:{value:new THREE.Vector3(...extent)},
+      guideLow:{value:new THREE.Color()}, guideMid:{value:new THREE.Color()}, guideHigh:{value:new THREE.Color()}
     };
     item.uniforms=uniforms;
     item.material.onBeforeCompile = shader => {
@@ -91,18 +101,28 @@ export function buildTeachingModel(station, feederCount) {
         #endif
         guidePosition = (modelMatrix * guidePoint).xyz;
       `);
-      shader.fragmentShader = 'varying vec3 guidePosition; uniform float guideLevel; uniform vec3 guideLow, guideMid, guideHigh;\n'+
+      shader.fragmentShader = 'varying vec3 guidePosition; uniform float guideLevel; uniform vec3 guideNeutral, guideCenter, guideExtent, guideLow, guideMid, guideHigh;\n'+
         shader.fragmentShader.replace('#include <color_fragment>', `
           #include <color_fragment>
+          float guideWeight=0.0;
           if (guideLevel >= 0.0) {
-            float blend = clamp(guideLevel*.35+.15 + .13*sin(guidePosition.x*4.0+guidePosition.z*2.0)
-              + .10*cos(guidePosition.y*8.0-guidePosition.z*3.0),0.0,1.0);
-            diffuseColor.rgb = mix(mix(guideLow,guideMid,smoothstep(0.0,.5,blend)),guideHigh,smoothstep(.5,1.0,blend));
+            vec3 offset=(guidePosition-guideCenter)/guideExtent;
+            float radius=length(offset);
+            guideWeight=1.0-smoothstep(.62,1.16,radius);
+            float band=clamp(.13+.39*guideLevel+.14*(1.0-clamp(radius,0.0,1.0)),0.0,1.0);
+            vec3 tint=mix(mix(guideLow,guideMid,smoothstep(0.0,.5,band)),guideHigh,smoothstep(.5,1.0,band));
+            diffuseColor.rgb=mix(guideNeutral,tint,guideWeight);
           }
+        `).replace('#include <metalnessmap_fragment>', `
+          #include <metalnessmap_fragment>
+          metalnessFactor=mix(metalnessFactor,.18,guideWeight);
         `);
     };
-    item.material.customProgramCacheKey = () => 'placement-illustration-field-v1';
+    item.material.customProgramCacheKey = () => 'placement-local-illustration-v2';
   }
+  model.traverse(object=>{
+    if(object.isMesh){object.castShadow=!object.material.transparent;object.receiveShadow=true;}
+  });
   function style(mode, step) {
     const field = FIELDS[mode];
     for (const item of styles) {
@@ -118,9 +138,7 @@ export function buildTeachingModel(station, feederCount) {
         item.uniforms.guideMid.value.setHex(field.colors[1]);
         item.uniforms.guideHigh.value.setHex(field.colors[2]);
         material.color.setHex(color);
-        material.emissive?.setHex(color);
-        material.emissiveIntensity = 0.09;
-        material.metalness = 0.18;
+
       } else if (mode === 'assembly' && part === STEPS[step][0] && material.emissive) {
         material.emissive.setHex(0x398697);
         material.emissiveIntensity = 0.32;
@@ -156,7 +174,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   const standardDisplay = standardGuide.style.display;
   const viewportLabel = viewport.getAttribute('aria-label');
   const insideNote = byId('inside-note');
-  let insideWasHidden = true;
+  let insideWasHidden = true, studio, lastShadowPose;
   let mode = 'normal', scene, illustration, camera, origin, stationIndex, step = 0;
   let focus = 'all', activeHighlight = -1;
   let progress = 0, from = 0, started = 0, duration = 0;
@@ -170,7 +188,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
 
   function release() {
     illustration?.dispose();
-    scene?.environment?.dispose();
+    studio?.dispose();studio=null;lastShadowPose=null;
     scene?.clear();
     illustration = scene = camera = null;
   }
@@ -211,13 +229,9 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       stationIndex = currentStation() === 4 ? 4 : 3;
       illustration = buildTeachingModel(stations[stationIndex],stationIndex===4?4:6);
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x24323d);
-      scene.environment = studioEnvironment();
+      studio=lightPlacementStudio(scene);
+      scene.add(illustration.model);
       focus = focusControl.value = "all";
-      const ambient = new THREE.HemisphereLight(0xe4f2ff, 0x83959b, 1.8);
-      const key = new THREE.DirectionalLight(0xfff3db, 2.8); key.position.set(3,6,4);
-      const rim = new THREE.DirectionalLight(0xa5ddff, 2.2); rim.position.set(-4,3,-3);
-      scene.add(illustration.model, ambient, key, rim);
       camera = new THREE.PerspectiveCamera(38,1,.1,50);
       origin = angles();
     }
@@ -249,7 +263,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       });
       row.append(...labels);return row;});
       byId('teaching-scale').replaceChildren(...scales);
-      byId('teaching-field-note').textContent = '부품별로 지정한 설명용 합성 '+(compare?'온도·응력':field.label)+' 분포입니다. 색 변화는 예시이며 센서 측정값이나 해석 단위가 없습니다.';
+      byId('teaching-field-note').textContent = '부품별로 지정한 설명용 합성 '+(compare?'온도·응력':field.label)+' 분포입니다. 색이 입혀진 영역만 예시 분포를 나타냅니다. 실제 센서·물리 해석값은 없습니다.';
       illustration.style(compare?'temperature':mode,0);
     } else if(mode==='cutaway'){
       caption.textContent=stationName+' · 기구 절개 모형 · 예시 기판';
@@ -265,6 +279,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   back.addEventListener('click', () => chooseStep(step-1));
   next.addEventListener('click', () => chooseStep(step+1));
   window.addEventListener('pagehide', close);
+  viewport.querySelector('canvas')?.addEventListener('webglcontextrestored',()=>{studio?.refresh();});
   function render(renderer, now) {
     const {azimuth,elevation,zoom} = angles();
     if (mode === 'assembly' && progress !== step) {
@@ -274,6 +289,8 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     // The default WebGL framebuffer can be discarded after composition or a resize.
     // Present the active illustration on each visible animation frame, as the live scene does.
     illustration.pose(mode, progress, focus);
+    const shadowPose=mode==='assembly' ? progress : focus==='nozzle' ? 'spindle-cut' : 'open';
+    if(shadowPose!==lastShadowPose){studio.refresh();lastShadowPose=shadowPose;}
     if(mode==='assembly' && progress!==step){
       const highlight=Math.ceil(progress);
       if(highlight!==activeHighlight){illustration.style(mode,highlight);activeHighlight=highlight;}

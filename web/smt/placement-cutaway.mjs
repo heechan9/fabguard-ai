@@ -1,8 +1,8 @@
 import * as THREE from './vendor/three.module.js';
 
 const METALS = {
-  steel: [0xd4dfe5,.87,.24], bright: [0xe6edf0,.91,.15], cast: [0x626f79,.65,.37],
-  anodized: [0x18697a,.66,.30], dark: [0x29333b,.56,.38], brass: [0xc29859,.76,.27],
+  steel: [0xa9bbc5,.86,.27], bright: [0xe9edf0,.93,.16], cast: [0x566577,.63,.46],
+  anodized: [0x23586a,.72,.29], dark: [0x29333b,.56,.38], brass: [0xc29859,.76,.27],
   polymer: [0x263037,.08,.58], tape: [0xb9935c,.37,.45], gasket: [0x161d21,.03,.8], soldermask:[0x277653,.18,.43]
 };
 
@@ -48,12 +48,17 @@ export function addMechanismDetails(groups, feederCount) {
 
   // Bearing blocks, stepped output coupler and helical lead screw on the bridge face.
   shaft('rail','bright',[0,2.22,.235],.048,1.71,rz);
-  const helix=[];
-  for(let i=0;i<=300;i++) {
-    const t=i/300,angle=t*2*Math.PI*20;
-    helix.push([-0.75+1.50*t,2.22+.054*Math.cos(angle),.235+.054*Math.sin(angle)]);
+  // A trapezoidal thread rises directly from the steel core. The flanks share a root.
+  const threadVertices=[], threadIndices=[], turns=22, sections=turns*24;
+  const profile=[[-.024,.047],[-.007,.061],[.007,.061],[.024,.047]];
+  for(let i=0;i<=sections;i++){
+    const t=i/sections,angle=turns*2*Math.PI*t;
+    for(const [dx,r] of profile)threadVertices.push(-.74+1.48*t+dx,2.22+r*Math.cos(angle),.235+r*Math.sin(angle));
+    if(i)for(let j=0;j<3;j++){const k=(i-1)*4+j;threadIndices.push(k,k+4,k+1,k+1,k+4,k+5);}
   }
-  const screwThread=tube(helix,.011,300);screwThread.name='lead-screw-thread';
+  const screwThread=new THREE.BufferGeometry();
+  screwThread.setAttribute('position',new THREE.Float32BufferAttribute(threadVertices,3));
+  screwThread.setIndex(threadIndices);screwThread.computeVertexNormals();screwThread.name='lead-screw-thread';
   add('rail',screwThread,'steel',origin);
   for(const x of [-.83,.83]){
     box('rail','anodized',[x,2.22,.23],[.14,.22,.25]);
@@ -77,7 +82,7 @@ export function addMechanismDetails(groups, feederCount) {
   const collet=turned([[.018,-.105],[.034,-.095],[.046,-.050],[.062,-.044],[.062,-.004],[.068,0],[.068,.025]],36);
   add('nozzle',collet,'brass',[0,1.50,0]);
   shaft('nozzle','bright',[0,1.375,0],.014,.05);
-  for(let i=0;i<6;i++) shaft('nozzle','cast',[0,1.72+i*.028,0],.14,.012);
+  for(const y of [1.815,1.843]) shaft('nozzle','cast',[0,y,0],.137,.012);
   for(const x of [-.125,.125]){
     box('nozzle','anodized',[x,1.96,.10],[.08,.23,.20]);
     for(const y of [1.89,2.03]) screw('nozzle',[x,y,.206],.022);
@@ -97,6 +102,52 @@ export function addMechanismDetails(groups, feederCount) {
   for(let i=0;i<12;i++){
     const a=i*Math.PI/6;
     box('nozzle','dark',[.065*Math.sin(a),1.495,.065*Math.cos(a)],[.009,.048,.008],[0,a,0]);
+  }
+  // The bored drive nut rides the horizontal screw. A milled apron connects it to
+  // the vertical slide; their overlap makes the load path legible in the cutaway.
+  const nut=turned([[.067,-.18],[.096,-.18],[.103,-.166],[.103,.093],[.126,.10],
+    [.126,.148],[.117,.155],[.067,.155],[.067,-.18]],48);
+  nut.name='cross-slide-nut';
+  add('nozzle',nut,'brass',[0,2.22,.235],rz);
+  const apron=new THREE.Shape();
+  const perimeter=[[-.24,.12],[-.18,.178],[.155,.178],[.232,.115],[.232,-.09],
+    [.132,-.205],[-.13,-.205],[-.24,-.09]];
+  perimeter.forEach(([x,y],i)=>i?apron.lineTo(x,y):apron.moveTo(x,y));apron.closePath();
+  for(const x of [-.145,.145]){
+    const hole=new THREE.Path();hole.absellipse(x,.04,.044,.062,0,Math.PI*2,true,0);apron.holes.push(hole);
+  }
+  const aperture=new THREE.Path();aperture.absellipse(0,.048,.067,.056,0,Math.PI*2,true,0);apron.holes.push(aperture);
+  const plate=new THREE.ExtrudeGeometry(apron,{depth:.068,bevelSize:.012,bevelThickness:.011,bevelSegments:3,curveSegments:12});
+  plate.name='machined-carriage-apron';add('nozzle',plate,'steel',[0,2.045,.321]);
+  for(const x of [-.18,.18]){
+    shaft('nozzle','bright',[x,1.91,.22],.025,.35);
+    shaft('nozzle','dark',[x,1.91,.22],.046,.122);
+    box('nozzle','cast',[x,2.005,.267],[.080,.112,.111]);
+    screw('nozzle',[x,2.012,.404],.022);
+    screw('nozzle',[x*.63,1.894,.404],.018);
+  }
+  // Sectioned outer race and individual rolling elements expose the spindle bearing.
+  const cutRace=new THREE.LatheGeometry([[.167,-.030],[.178,-.030],[.186,-.020],[.186,.020],
+    [.178,.030],[.167,.030],[.168,.017],[.168,-.017],[.167,-.030]].map(([x,y])=>new THREE.Vector2(x,y)),44,.82,Math.PI*2-1.64);
+  cutRace.name='sectioned-bearing-race';add('nozzle',cutRace,'cast',[0,1.755,0]);
+  const innerRace=turned([[.126,-.022],[.131,-.022],[.132,-.015],[.132,.015],[.131,.022],[.126,.022],[.126,-.022]],40);
+  add('nozzle',innerRace,'bright',[0,1.755,0]);
+  const rollingElement=new THREE.SphereGeometry(.018,16,10);
+  for(let i=0;i<15;i++){
+    const a=2*Math.PI*i/15;add('nozzle',rollingElement,'bright',[.150*Math.sin(a),1.755,.150*Math.cos(a)]);
+  }
+  for(const y of [1.716,1.794]){
+    const lip=turned([[.119,-.009],[.158,-.009],[.163,-.004],[.163,.004],[.158,.009],[.119,.009],[.119,-.009]],40);
+    add('nozzle',lip,'steel',[0,y,0]);
+  }
+  // E-chain side links and the continuous backbone connect the fixed bridge to the carriage.
+  const chainBack=tube([[-.83,2.29,-.24],[-.58,2.38,-.24],[-.31,2.38,-.24],[-.19,2.33,-.24],[-.13,2.22,-.24]],.034);
+  add('rail',chainBack,'gasket',origin);
+  const link=turned([[.018,-.011],[.045,-.011],[.047,-.006],[.047,.006],[.044,.011],[.018,.011],[.018,-.011]],16);
+  for(let i=0;i<11;i++){
+    const t=i/10,x=-.815+.635*t,y=2.297+.073*Math.sin(Math.PI*t)-.01*t;
+    add('rail',link,'dark',[x,y,-.205],rx);
+    shaft('rail','steel',[x,y,-.202],.014,.033,rx);
   }
   // This example board is a separate cutaway workpiece, never an assembly step or a live PCB.
   box('workpiece','soldermask',[.05,1.112,0],[.67,.046,.75]);
@@ -139,13 +190,32 @@ export function addMechanismDetails(groups, feederCount) {
     }
     const ribbon=new THREE.BufferGeometry();ribbon.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
     ribbon.setIndex(indices);ribbon.computeVertexNormals();add('feeder',ribbon,'tape',origin);
+    // Pocketed carrier tape on the exposed feed span, with a distinct indexing lane.
+    for(let j=0;j<8;j++){
+      const t=.65+j*.042,q=curve.getPoint(t),v=curve.getTangent(t);
+      const angle=Math.atan2(-v.y,-v.z);
+      box('feeder','polymer',[q.x-.006,q.y+.005,q.z],[.026,.008,.021],[angle,0,0]);
+      box('feeder','gasket',[q.x+.019,q.y+.006,q.z],[.008,.008,.009],[angle,0,0]);
+    }
   }
+
+  // Fine lathe marks vary microsurface roughness around the turned components.
+  const grainSize=64, grainPixels=new Uint8Array(grainSize*grainSize*4);
+  for(let row=0;row<grainSize;row++)for(let col=0;col<grainSize;col++){
+    const intensity=Math.round(203+25*Math.sin(row*2.1)+13*Math.sin(row*.8+col*.3));
+    const i=(row*grainSize+col)*4;
+    grainPixels.set([intensity,intensity,intensity,255],i);
+  }
+  const grain=new THREE.DataTexture(grainPixels,grainSize,grainSize,THREE.RGBAFormat);
+  grain.wrapS=grain.wrapT=THREE.RepeatWrapping;grain.repeat.set(2,4);
+  grain.minFilter=THREE.LinearMipmapLinearFilter;grain.magFilter=THREE.LinearFilter;
+  grain.generateMipmaps=true;grain.needsUpdate=true;
 
   for(const {part,geometry,finish,poses} of batches.values()){
     const key=part+':'+finish;
     if(!materials.has(key)){
       const [color,metalness,roughness]=METALS[finish];
-      materials.set(key,new THREE.MeshStandardMaterial({color,metalness,roughness,side:finish==='tape'?THREE.DoubleSide:THREE.FrontSide}));
+      materials.set(key,new THREE.MeshStandardMaterial({color,metalness,roughness,roughnessMap:['steel','bright','brass'].includes(finish)?grain:null,side:finish==='tape'?THREE.DoubleSide:THREE.FrontSide}));
     }
     const material=materials.get(key);
     const mesh=poses.length===1 ? new THREE.Mesh(geometry,material) : new THREE.InstancedMesh(geometry,material,poses.length);
@@ -155,21 +225,48 @@ export function addMechanismDetails(groups, feederCount) {
     groups[part].add(mesh);
   }
   return {materials:[...materials.entries()].map(([key,material])=>({part:key.split(':')[0],material})),
-    dispose(){for(const geometry of geometries)geometry.dispose();}};
+    dispose(){grain.dispose();for(const geometry of geometries)geometry.dispose();}};
 }
 
 // A small procedurally lit studio environment supplies reflections without a network asset.
 export function studioEnvironment(){
-  const width=128,height=64,bytes=new Uint8Array(width*height*4);
+  const width=192,height=96,values=new Uint16Array(width*height*4);
+  const half=THREE.DataUtils.toHalfFloat;
   for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-    const u=x/width,v=y/height;
+    const u=(x+.5)/width,v=(y+.5)/height;
     const panel=(cx,cy,sx,sy)=>Math.exp(-Math.pow((u-cx)/sx,6)-Math.pow((v-cy)/sy,6));
-    const key=panel(.66,.67,.065,.14),strip=panel(.28,.60,.025,.25),rim=panel(.89,.58,.06,.09);
-    const light=.09+.15*v+key*.75+strip*.59+rim*.32;
-    const i=(y*width+x)*4;
-    bytes.set([Math.min(255,Math.round(light*255)),Math.min(255,Math.round((light+.025*strip)*255)),Math.min(255,Math.round((light+.06*strip)*255)),255],i);
+    const key=panel(.66,.70,.085,.12),strip=panel(.29,.60,.023,.28),rim=panel(.90,.54,.070,.12);
+    const sky=.035+.16*v, i=(y*width+x)*4;
+    values[i]=half(sky+4.3*key+2.6*strip+.8*rim);
+    values[i+1]=half(sky+3.9*key+2.85*strip+.96*rim);
+    values[i+2]=half(sky+3.45*key+3.25*strip+1.20*rim);
+    values[i+3]=half(1);
   }
-  const map=new THREE.DataTexture(bytes,width,height,THREE.RGBAFormat);
+  const map=new THREE.DataTexture(values,width,height,THREE.RGBAFormat,THREE.HalfFloatType);
   map.mapping=THREE.EquirectangularReflectionMapping;
-  map.colorSpace=THREE.SRGBColorSpace;map.needsUpdate=true;return map;
+  map.colorSpace=THREE.LinearSRGBColorSpace;map.needsUpdate=true;return map;
+}
+
+// Both the actual teaching canvas and its matched renders use this light rig.
+export function lightPlacementStudio(scene) {
+  scene.background=new THREE.Color(0x303e49);
+  scene.environment=studioEnvironment();
+  const fill=new THREE.HemisphereLight(0xf0f6ff,0x68747c,1.22);
+  const key=new THREE.DirectionalLight(0xffe9ce,2.75);
+  key.position.set(-3.6,5.4,4.5);
+  key.target.position.set(0,1.14,0);
+  key.castShadow=true;
+  Object.assign(key.shadow.camera,{left:-2.6,right:2.6,top:2.8,bottom:-2.8,near:.1,far:15});
+  key.shadow.camera.updateProjectionMatrix();
+  key.shadow.mapSize.set(512,512);
+  key.shadow.normalBias=.009;key.shadow.bias=-.00035;
+  key.shadow.autoUpdate=false;key.shadow.needsUpdate=true;
+  const rim=new THREE.DirectionalLight(0xbfdcff,1.45);rim.position.set(4,3,-2);
+  const ground=new THREE.Mesh(new THREE.PlaneGeometry(18,18),new THREE.ShadowMaterial({opacity:.27,depthWrite:false}));
+  ground.rotation.x=-Math.PI/2;ground.position.y=-.018;ground.receiveShadow=true;
+  scene.add(fill,key,key.target,rim,ground);
+  return {
+    refresh(){key.shadow.needsUpdate=true;},
+    dispose(){ground.material.dispose();ground.geometry.dispose();key.shadow.dispose();scene.environment.dispose();}
+  };
 }
