@@ -79,8 +79,13 @@ class InspectionSelectionTests(unittest.TestCase):
                         chosen=set(sorted(range(3),key=lambda i:-scores[i])[:k])
                         expected={label:int(i in chosen) for i,label in enumerate(('fail','normal','unknown'))}
                         self.assertEqual(result[name]['selected_counts'],expected)
-                        self.assertEqual(result[name]['normal_selection_fraction']['value'],int(1 in chosen))
-                        self.assertEqual(result[name]['fail_unselected_fraction']['value'],int(0 not in chosen))
+                        complement=set(range(3))-chosen
+                        expected_unselected={label:int(i in complement) for i,label in enumerate(('fail','normal','unknown'))}
+                        self.assertEqual(result[name]['unselected_counts'],expected_unselected)
+                        self.assertEqual(result[name]['normal_selection_fraction'],
+                                         {'numerator':int(1 in chosen),'denominator':1,'value':int(1 in chosen)})
+                        self.assertEqual(result[name]['fail_unselected_fraction'],
+                                         {'numerator':int(0 in complement),'denominator':1,'value':int(0 in complement)})
 
     def test_missing_candidate_has_no_numeric_summary(self):
         r=summarize(raw(fixture()))
