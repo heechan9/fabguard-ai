@@ -5,7 +5,7 @@ This directory records the advanced-validation outputs reproduced on 2026-09-04 
 ```bash
 python -m fabguard.advanced_experiment \
   --data-dir data/raw \
-  --output-dir results/phase1 \
+  --output-dir results/phase1-new-run \
   --bootstrap 2000 \
   --inspection-cost 1 \
   --missed-fail-cost 20
@@ -49,3 +49,14 @@ validation windows from overlapping. Degenerate timestamp groups fail explicitly
 No archived result, data split or model was regenerated for this correction.
 The existing full advanced-experiment command still evaluates its calibration and
 cost sections on the previously exposed holdout; it is not a train-only runner.
+
+The command above now uses a fresh output directory. The runner refuses any
+non-empty output directory before loading data or fitting models, so the archived
+snapshot cannot be overwritten by an ordinary rerun. This is an accidental-write
+guard, not a hostile concurrent-filesystem sandbox. Historical invocation used
+`results/phase1`; retain those archived files rather than rerunning into that path.
+
+Inside each past prefix, candidate selection retains existing repeated stratified
+CV; only the outer walk-forward is chronological. This is not fully nested
+chronological inner CV. The manifest explicitly lists the sections that still
+consume the exposed holdout, including feature-distribution comparison.

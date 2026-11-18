@@ -51,6 +51,8 @@ def prefit_calibrator(estimator: object) -> CalibratedClassifierCV:
 
 def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, bootstrap_replicates: int = 2000,
                             inspection_cost: float = 1.0, missed_fail_cost: float = 20.0) -> dict[str, object]:
+    if output_dir.exists() and (not output_dir.is_dir() or any(output_dir.iterdir())):
+        raise ValueError("Output directory must be absent or empty; archived results are never overwritten")
     output_dir.mkdir(parents=True, exist_ok=True)
     frame = load_secom(config.data_dir)
     train, test = time_holdout(frame, config.train_size)
@@ -97,6 +99,8 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
                 "base_contract": "results/v1/manifest.json", "test_split_changed": False,
                 "walk_forward_scope": "original_training_period_only",
                 "walk_forward_selection": "each_fold_training_prefix_only",
+                "inner_selection_method": "repeated_stratified_cv_within_prefix",
+                "exposed_holdout_sections": ["calibration", "inspection_cost", "top_k_bootstrap", "feature_drift"],
                 "calibration_fit_scope": "last_20_percent_of_training_period_only",
                 "bootstrap_replicates": bootstrap_replicates, "cost_units_are_scenarios_not_currency": True,
                 "inspection_cost_units": inspection_cost, "missed_fail_cost_units": missed_fail_cost,

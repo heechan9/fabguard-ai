@@ -82,6 +82,9 @@ class RunnerScopeReview(unittest.TestCase):
         self.assertEqual(len(seen), 4)
         self.assertEqual(manifest['walk_forward_scope'], 'original_training_period_only')
         self.assertEqual(manifest['walk_forward_selection'], 'each_fold_training_prefix_only')
+        self.assertEqual(manifest['inner_selection_method'], 'repeated_stratified_cv_within_prefix')
+        self.assertEqual(manifest['exposed_holdout_sections'],
+                         ['calibration', 'inspection_cost', 'top_k_bootstrap', 'feature_drift'])
 
     def test_runner_excludes_holdout_from_walk_forward(self):
         from fabguard.advanced_experiment import run_advanced_experiment
@@ -99,3 +102,24 @@ class RunnerScopeReview(unittest.TestCase):
              module.__dict__, namespace)
         with self.assertRaises(AssertionError):
             self.check_runner(namespace['run_advanced_experiment'])
+
+
+class OutputPreservationReview(unittest.TestCase):
+    def test_existing_outputs_rejected_before_data_load(self):
+        import tempfile
+        from pathlib import Path
+        from fabguard.advanced_experiment import run_advanced_experiment
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / 'archive'
+            target.mkdir()
+            evidence = target / 'saved.csv'
+            evidence.write_bytes(b'synthetic original\n')
+            with patch('fabguard.advanced_experiment.load_secom') as load:
+                with self.assertRaisesRegex(ValueError, 'absent or empty'):
+                    run_advanced_experiment(ExperimentConfig(), output_dir=target)
+                load.assert_not_called()
+                self.assertEqual(evidence.read_bytes(), b'synthetic original\n')
+                with self.assertRaisesRegex(ValueError, 'absent or empty'):
+                    run_advanced_experiment(ExperimentConfig(), output_dir=evidence)
+                load.assert_not_called()
