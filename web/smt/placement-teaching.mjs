@@ -159,12 +159,12 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   let insideWasHidden = true;
   let mode = 'normal', scene, illustration, camera, origin, stationIndex, step = 0;
   let focus = 'all', activeHighlight = -1;
-  let progress = 0, from = 0, started = 0, duration = 0, dirty = true, lastFrame = '';
+  let progress = 0, from = 0, started = 0, duration = 0;
   modeInput.disabled = !available;
   const shortcut=byId('teaching-cutaway'), focusControl=byId('teaching-focus');
   shortcut.disabled=!available;
   shortcut.addEventListener('click',()=>{settings.open=true;modeInput.value='cutaway';open('cutaway');});
-  focusControl.addEventListener('change',()=>{focus=focusControl.value;dirty=true;});
+  focusControl.addEventListener('change',()=>{focus=focusControl.value;});
   byId('teaching-unavailable').hidden = available;
   for (const [index, [,label]] of STEPS.entries()) stepInput.add(new Option((index+1)+' · '+label, String(index)));
 
@@ -201,7 +201,6 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     byId('teaching-description').textContent = (animate && step < previousProgress && Number.isInteger(previousProgress) ? STEPS[previousProgress][1]+' 분리 · ' : '')+STEPS[step][2];
     activeHighlight=step;
     illustration.style('assembly',step);
-    dirty = true;
   }
   function open(value) {
     if (value === 'normal') return close();
@@ -221,7 +220,6 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       scene.add(illustration.model, ambient, key, rim);
       camera = new THREE.PerspectiveCamera(38,1,.1,50);
       origin = angles();
-      lastFrame = '';
     }
     mode = value;
     const field = FIELDS[mode];
@@ -260,7 +258,6 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       caption.textContent = stationName+' · 단계별 조립 모형';
       chooseStep(0,false);
     }
-    dirty = true;
   }
   modeInput.addEventListener('change', () => open(modeInput.value));
   settings.addEventListener('toggle', () => { if (!settings.open) close(); });
@@ -268,16 +265,14 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
   back.addEventListener('click', () => chooseStep(step-1));
   next.addEventListener('click', () => chooseStep(step+1));
   window.addEventListener('pagehide', close);
-  viewport.querySelector('canvas')?.addEventListener('webglcontextrestored',()=>{dirty=true;});
   function render(renderer, now) {
     const {azimuth,elevation,zoom} = angles();
-    const signature = [azimuth,elevation,zoom,viewport.clientWidth,viewport.clientHeight].join('/');
     if (mode === 'assembly' && progress !== step) {
       const t = reducedMotion.matches || !duration ? 1 : Math.min(1,Math.max(0,(now-started)/duration));
       progress = from+(step-from)*(t*t*(3-2*t));
-      dirty = true;
-    }
-    if (!dirty && signature === lastFrame) return;
+      }
+    // The default WebGL framebuffer can be discarded after composition or a resize.
+    // Present the active illustration on each visible animation frame, as the live scene does.
     illustration.pose(mode, progress, focus);
     if(mode==='assembly' && progress!==step){
       const highlight=Math.ceil(progress);
@@ -313,8 +308,6 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
         if(stacked)renderPanel(0,0,W,half);else renderPanel(half,0,W-half,H);
       }finally{renderer.setScissorTest(false);renderer.setViewport(0,0,W,H);}
     }else renderPanel(0,0,W,H);
-    lastFrame = signature;
-    dirty = false;
   }
-  return {get active(){return mode !== 'normal';}, close, render, invalidate(){dirty=true;}};
+  return {get active(){return mode !== 'normal';}, close, render};
 }

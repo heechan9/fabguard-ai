@@ -107,7 +107,27 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#teaching-settings summary').press('Enter');
  const captureGuide=async name=>{
   await advance(160);await page.locator('#viewport').scrollIntoViewIfNeeded();
-  return page.locator('#viewport canvas').first().screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
+  await advance(120);
+  const image=await page.locator('#viewport canvas').first().screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
+  const visible=await page.evaluate(async ({data,panels})=>{
+    const bytes=Uint8Array.from(atob(data),c=>c.charCodeAt(0));
+    const bitmap=await createImageBitmap(new Blob([bytes],{type:'image/png'}));
+    const canvas=new OffscreenCanvas(bitmap.width,bitmap.height),ctx=canvas.getContext('2d');
+    ctx.drawImage(bitmap,0,0);bitmap.close();
+    return panels.map(([x,y,w,h])=>{
+      const region=ctx.getImageData(Math.floor(x*canvas.width),Math.floor(y*canvas.height),
+        Math.floor(w*canvas.width),Math.floor(h*canvas.height));
+      const counts=new Uint32Array(4096),rgb=region.data;let max=0,count=0;
+      for(let i=0;i<rgb.length;i+=16){
+        const bucket=(rgb[i]>>4)*256+(rgb[i+1]>>4)*16+(rgb[i+2]>>4);
+        max=Math.max(max,++counts[bucket]);count++;
+      }
+      return 1-max/count;
+    });
+  },{data:image.toString('base64'),panels:name!=='comparison'?[[.16,.16,.68,.68]]:
+    width===1366?[[.08,.18,.34,.64],[.58,.18,.34,.64]]:[[.16,.08,.68,.34],[.16,.58,.68,.34]]});
+  for(const fraction of visible)assert.ok(fraction>.025,`Blank geometry in ${width} ${theme} ${name} (${fraction})`);
+  return image;
  };
  // The compositor retains the presented image after WebGL clears its default framebuffer.
  // Compare the same interior pixels. Native focus and fractional CSS borders lie outside this area.
@@ -136,7 +156,9 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await guideMode.selectOption('stress');const stressScene=await captureGuide('stress');
  assert.equal(stressScene.equals(thermalScene),false);
  assert.match(await page.locator('#teaching-field-note').innerText(),/합성 응력/);
- await guideMode.selectOption('compare');await captureGuide('comparison');
+ await guideMode.selectOption('compare');await advance(200);
+ await page.locator('#export').scrollIntoViewIfNeeded();await advance(120);
+ await captureGuide('comparison');
  assert.equal(await page.locator('#teaching-pair').isVisible(),true);
  assert.equal(await page.locator('#teaching-scale span').count(),6);
  const panels=await page.locator('#teaching-pair span').evaluateAll(nodes=>nodes.map(n=>({x:n.offsetLeft,y:n.offsetTop})));
