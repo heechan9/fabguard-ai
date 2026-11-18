@@ -100,3 +100,62 @@ class BasisQualityTests(unittest.TestCase):
         self.assertIsNone(r['submission_attempt_history']['rejected_attempts'])
         self.assertIsNone(r['submission_attempt_history']['total_attempts'])
         self.assertEqual(r['counts']['pending_observations'], 2)
+
+    def test_other_usage_valid_submission_denominator_not_all_observations(self):
+        self.f.basis['entries'][0]['reason_code'] = 'other'
+        before = copy.deepcopy(self.f.basis)
+        r = self.report()
+        self.assertEqual(r['other_reason_usage']['numerator'], 1)
+        self.assertEqual(r['other_reason_usage']['denominator'], 1)
+        self.assertEqual(r['other_reason_usage']['fraction'], 1.0)
+        self.assertEqual(r['counts']['pending_observations'], 2)
+        self.assertEqual(r['diagnostics'][0]['status'], 'not_assessed')
+        self.assertEqual(before, self.f.basis)
+        self.assertEqual(self.f.run_record()['audit']['counts']['pending'], 2)
+
+    def test_non_other_zero_is_distinct_from_no_submissions(self):
+        r = self.report()['other_reason_usage']
+        self.assertEqual((r['numerator'], r['denominator'], r['fraction']), (0, 1, 0.0))
+        f = self.f
+        d = json.loads(f.decisions); d['decisions'] = []
+        f.decisions = f.enc(d)
+        f.basis.update(decisions_sha256=_sha256(f.decisions), entries=[])
+        r = self.report()
+        self.assertEqual(r['other_reason_usage']['numerator'], 0)
+        self.assertEqual(r['other_reason_usage']['denominator'], 0)
+        self.assertIsNone(r['other_reason_usage']['fraction'])
+        self.assertEqual(r['counts']['pending_observations'], 3)
+
+    def test_missing_or_invalid_reason_never_becomes_other(self):
+        original = copy.deepcopy(self.f.basis)
+        for value in (None, '', 'OTHER', 'missing', False):
+            self.f.basis = copy.deepcopy(original)
+            self.f.basis['entries'][0]['reason_code'] = value
+            with self.subTest(value=value), self.assertRaises(ManufacturingReviewError):
+                self.report()
+        self.f.basis = copy.deepcopy(original)
+        del self.f.basis['entries'][0]['reason_code']
+        with self.assertRaises(ManufacturingReviewError):
+            self.report()
+
+    def test_mixed_reasons_exact_fraction_and_evidence_independence(self):
+        f = self.f
+        original_decision = json.loads(f.decisions)['decisions'][0]
+        d = json.loads(f.decisions); d['decisions'] = []
+        entries = []
+        for index, row in enumerate(json.loads(f.package)['observations']):
+            decision = dict(original_decision, review_id=row['review_id'])
+            d['decisions'].append(decision)
+            entry = dict(f.basis['entries'][0], review_id=row['review_id'],
+                         observation_sha256=_sha256(f.enc(row)), change_refs=[],
+                         reason_code='other' if index == 0 else 'reference_only',
+                         evidence_status=('observed', 'inferred', 'unverified')[index])
+            entries.append(entry)
+        f.decisions = f.enc(d)
+        f.basis.update(decisions_sha256=_sha256(f.decisions), entries=entries)
+        r = self.report()
+        self.assertEqual(r['other_reason_usage']['numerator'], 1)
+        self.assertEqual(r['other_reason_usage']['denominator'], 3)
+        self.assertEqual(r['other_reason_usage']['fraction'], 1/3)
+        self.assertEqual(r['counts']['pending_observations'], 0)
+        self.assertIsNone(r['submission_attempt_history']['rejected_attempts'])

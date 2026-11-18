@@ -49,6 +49,13 @@ def summarize_basis_quality(events_raw: bytes, history_raw: bytes, package_raw: 
             'rejection_fraction': None,
             'reason': 'No submission-attempt ledger is provided; rejected inputs raise before reporting. '
                       'Do not interpret absent rejected records as zero failures or total coverage.'},
+        'other_reason_usage': {
+            'numerator': sum(e['reason_code'] == 'other' for e in entries),
+            'denominator': decided,
+            'fraction': (sum(e['reason_code'] == 'other' for e in entries) / decided
+                         if decided else None),
+            'population': 'Validated submitted basis entries only; pending observations and rejected attempts are excluded.',
+            'interpretation': 'Reason-code usage only, not correctness, approval or factory-wide coverage.'},
         'evidence_declarations': {s: sum(e['evidence_status'] == s for e in entries)
                                   for s in sorted(EVIDENCE_STATUSES)},
         'diagnostic_counts': {s: sum(r['status'] == s for r in rows)
