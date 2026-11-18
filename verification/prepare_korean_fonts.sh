@@ -33,10 +33,43 @@ if verify_fonts; then
   exit 0
 fi
 
-# Use only the runner's configured authenticated distro package repositories.
-# No custom mirror, unsigned download, restored executable cache or trust override.
+# This workflow is pinned to Ubuntu 24.04 amd64. Unknown platforms fail closed.
+[[ "$(lsb_release -is)" == Ubuntu && "$(lsb_release -cs)" == noble ]]
+[[ "$(dpkg --print-architecture)" == amd64 ]]
+keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg
+[[ -r "$keyring" ]]
+
+# Use the existing Ubuntu trust root, but not the hosted runner's regional mirror.
+# All APT source/index/archive overrides are confined to this disposable directory.
+apt_root="$(mktemp -d)"
+trap 'sudo rm -rf -- "$apt_root"' EXIT
+chmod 755 "$apt_root"
+mkdir -p "$apt_root/sourceparts" "$apt_root/lists/partial" "$apt_root/archives/partial"
+cat > "$apt_root/ubuntu.sources" <<SOURCE
+Types: deb
+URIs: https://archive.ubuntu.com/ubuntu
+Suites: noble noble-updates
+Components: main
+Architectures: amd64
+Signed-By: $keyring
+
+Types: deb
+URIs: https://security.ubuntu.com/ubuntu
+Suites: noble-security
+Components: main
+Architectures: amd64
+Signed-By: $keyring
+SOURCE
 apt_options=(-o Acquire::Retries=1 -o Acquire::http::Timeout=20
-             -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20)
+             -o Acquire::https::Timeout=20 -o DPkg::Lock::Timeout=20
+             -o APT::Update::Error-Mode=any
+             -o "Dir::Etc::sourcelist=$apt_root/ubuntu.sources"
+             -o "Dir::Etc::sourceparts=$apt_root/sourceparts"
+             -o "Dir::State::lists=$apt_root/lists"
+             -o "Dir::Cache::archives=$apt_root/archives")
+# Preserve APT signature, hash, expiry and TLS verification. Download first, then
+# install once without network; a download failure never reaches dpkg installation.
 sudo timeout --kill-after=10s 90s apt-get "${apt_options[@]}" update -qq
-sudo timeout --kill-after=10s 300s apt-get "${apt_options[@]}" install -y --no-install-recommends fonts-noto-cjk
+sudo timeout --kill-after=10s 240s apt-get "${apt_options[@]}" install --download-only --no-remove -y --no-install-recommends fonts-noto-cjk
+sudo timeout --kill-after=10s 60s apt-get "${apt_options[@]}" install --no-download --no-remove -y --no-install-recommends fonts-noto-cjk
 verify_fonts
