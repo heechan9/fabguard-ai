@@ -26,8 +26,9 @@ const inspection=mountInspection($('inspection-lab'));
 const updateContextReview=mountContextReview($('context-review'));
 let introBusy=false,robotCell,transferRobot,floorAgvView;
 const placementDetails=new Map();
-function clearPartSelection(){const note=$('placement-part-note');if(note)note.textContent='강조 없음 · 부품을 고르면 내부를 확대합니다. 실제 측정값이 아닙니다.';for(const detail of placementDetails.values())detail.select(null);document.querySelectorAll('[data-placement-part]').forEach(b=>b.setAttribute('aria-pressed','false'));}
-document.querySelectorAll('[data-placement-part]').forEach(button=>button.addEventListener('click',()=>{const part=button.dataset.placementPart;const station=[3,4].includes(activeStation)?activeStation:3;selectStation(station);insideView=true;updateInterior();focusStation(station);placementDetails.get(station)?.select(part);button.setAttribute('aria-pressed','true');$('placement-part-note').textContent=PARTS[part]+' 선택 · 구조 설명용 강조, 실제 측정값 아님'+(part==='pcb'?' · 기판이 실장기에 들어오면 테두리 표시':'');}));
+let placementSceneAvailable=false;
+function clearPartSelection(){const note=$('placement-part-note');if(note)note.textContent=placementSceneAvailable?'강조 없음 · 부품을 고르면 내부를 확대합니다. 실제 측정값이 아닙니다.':'3D 화면을 사용할 수 없어 부품 강조가 비활성화됐습니다. 공정 선택과 시뮬레이션은 사용할 수 있습니다.';for(const detail of placementDetails.values())detail.select(null);document.querySelectorAll('[data-placement-part]').forEach(b=>b.setAttribute('aria-pressed','false'));}
+document.querySelectorAll('[data-placement-part]').forEach(button=>button.addEventListener('click',()=>{if(!placementSceneAvailable){clearPartSelection();return;}const part=button.dataset.placementPart;const station=[3,4].includes(activeStation)?activeStation:3;selectStation(station);insideView=true;updateInterior();focusStation(station);placementDetails.get(station)?.select(part);button.setAttribute('aria-pressed','true');$('placement-part-note').textContent=PARTS[part]+' 선택 · 구조 설명용 강조, 실제 측정값 아님'+(part==='pcb'?' · 기판이 실장기에 들어오면 테두리 표시':'');}));
 const floorAgv=new FloorAgv();
 function selectFloorAgv(){
  clearPartSelection();
@@ -164,7 +165,9 @@ try{
  for(let i=0;i<10;i++){const x=(positions[i]+widths[i]/2+positions[i+1]-widths[i+1]/2)/2;box(scene,.65,.08,1.2,x,.94,0,color.dark);}
  selectionRing=new THREE.Mesh(new THREE.RingGeometry(.52,.58,32),new THREE.MeshBasicMaterial({color:0x39d6c4,side:THREE.DoubleSide,transparent:true,opacity:.85}));selectionRing.rotation.x=-Math.PI/2;scene.add(selectionRing);
  new ResizeObserver(resize).observe(viewport);resize();
+ placementSceneAvailable=placementDetails.has(3)&&placementDetails.has(4);
 }catch(error){$('view-error').hidden=false;console.error('3D initialization failed',error);}
+document.querySelectorAll('[data-placement-part]').forEach(button=>{button.disabled=!placementSceneAvailable;});$('placement-clear').disabled=!placementSceneAvailable;clearPartSelection();
 
 function updateInterior(){for(const m of machines)m.userData.cover.visible=!(insideView&&m.userData.station===activeStation);$('inside-view').setAttribute('aria-pressed',String(insideView));$('inside-note').hidden=!insideView;updateLabelVisibility();}
 $('inside-view').addEventListener('click',()=>{insideView=!insideView;focusStation(activeStation);updateInterior();});
