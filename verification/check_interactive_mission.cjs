@@ -36,6 +36,13 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
   await button.press('Escape');
   assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),0);
  }
+ await page.locator('#station-strip button').nth(4).press('Enter');
+ await page.locator('[data-placement-part="feeder"]').press('Enter');await advance(100);
+ assert.equal(await page.locator('#station-strip button').nth(4).getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'false');
+ await page.locator('#viewport').scrollIntoViewIfNeeded();
+ await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-station5-feeder.png`)});
+ await page.locator('[data-placement-part="feeder"]').press('Escape');
  const afterParts=await snapshot();assert.deepEqual(afterParts.boards,beforeParts.boards);assert.equal(afterParts.simulation_seconds,beforeParts.simulation_seconds);
  await page.locator('[data-placement-part="rail"]').press('Enter');await page.locator('#placement-clear').press('Enter');
  assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),0);
@@ -52,6 +59,6 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  rows.push({width,theme,webgl:true,partControls:true,partEscape:true,partSelectionNonInterference:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
  }
  // Deliberately disabled WebGL: the same public controls and exports must still work.
- const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
+ const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);assert.equal(await p.locator('[data-placement-part]:disabled').count(),4);assert.equal(await p.locator('[data-placement-part][aria-pressed="true"]').count(),0);assert.equal(await p.locator('#placement-clear').isDisabled(),true);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(rows,null,2));console.log(JSON.stringify(rows,null,2));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});
