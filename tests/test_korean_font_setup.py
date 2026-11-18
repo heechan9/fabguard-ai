@@ -204,11 +204,18 @@ esac
         rebuild = rebuilds[0]
         self.assertNotIn('if', rebuild)
         self.assertNotIn('continue-on-error', rebuild)
+        inherited_shell = workflow.get('defaults', {}).get('run', {}).get('shell', 'bash')
+        job_shell = source.get('defaults', {}).get('run', {}).get('shell', inherited_shell)
+        self.assertEqual(rebuild.get('shell', job_shell), 'bash')
+        self.assertEqual(source['runs-on'], 'ubuntu-24.04')
         source_active = [line.strip() for line in rebuild['run'].splitlines()
                          if line.strip() and not line.lstrip().startswith('#')]
-        for filename in ['data.json', 'data-hash.mjs']:
-            self.assertIn(f'cmp web/robot/ur3/{filename} "$RUNNER_TEMP/ur3-derived/{filename}"',
-                          source_active)
+        self.assertEqual(source_active, [
+            'python -c "import urllib.request; urllib.request.urlretrieve(\'https://archive.ics.uci.edu/static/public/963/ur3+cobotops.zip\', \'/tmp/ur3-source.zip\')"',
+            'python scripts/build_ur3_replay.py --archive /tmp/ur3-source.zip --output "$RUNNER_TEMP/ur3-derived/data.json" > "$RUNNER_TEMP/ur3-audit.json"',
+            'cmp web/robot/ur3/data.json "$RUNNER_TEMP/ur3-derived/data.json"',
+            'cmp web/robot/ur3/data-hash.mjs "$RUNNER_TEMP/ur3-derived/data-hash.mjs"',
+        ])
 
     def test_workflow_loader_rejects_duplicate_keys(self):
         with self.assertRaises(yaml.constructor.ConstructorError):
