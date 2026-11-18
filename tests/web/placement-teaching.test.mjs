@@ -43,8 +43,21 @@ test('teaching fields use distinct categorical colors on the actual 04/05 assemb
     guide.model.traverse(m=>assert.notEqual(m.geometry,bolts.geometry));
     const rims=guide.groups.feeder.children.find(m=>m.geometry.name==='open-reel-rim');
     assert.equal(rims.count,2*count);
-    const {radius,tube}=rims.geometry.parameters;
-    assert.ok((radius+tube)*2 < 2.25*.62/(count-1));
+    const byPlane=new Map(),matrix=new THREE.Matrix4();
+    for(let i=0;i<rims.count;i++){
+      rims.getMatrixAt(i,matrix);
+      const bounds=new THREE.Box3().setFromBufferAttribute(rims.geometry.attributes.position).applyMatrix4(matrix);
+      const z=new THREE.Vector3().setFromMatrixPosition(matrix).z;
+      if(!byPlane.has(z))byPlane.set(z,[]);
+      byPlane.get(z).push(bounds);
+    }
+    assert.equal(byPlane.size,2);
+    for(const plane of byPlane.values()){
+      plane.sort((a,b)=>a.min.x-b.min.x);
+      assert.equal(plane.length,count);
+      for(let i=1;i<plane.length;i++)
+        assert.ok(plane[i].min.x>plane[i-1].max.x,'Adjacent rendered reel flanges must have a visible gap');
+    }
     assert.ok(copiedHead.position.distanceTo(head.children[0].position.clone().add(new THREE.Vector3(0,1.8,0)))<1e-10);
     assert.deepEqual(head.position.toArray(),[-1.15,1.54,-.2]);
     assert.equal(head.material.emissive.getHex(),initialEmissive);
