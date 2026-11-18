@@ -1,5 +1,6 @@
 """Hermetic command-contract tests; not a real apt/browser integration result."""
 import os
+import hashlib
 import re
 from pathlib import Path
 import subprocess
@@ -137,7 +138,13 @@ esac
 
 
     def test_ur3_workflow_reuses_bounded_setup_without_reducing_coverage(self):
-        text = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_text()
+        workflow = (ROOT / '.github/workflows/ur3-replay-ui.yml').read_bytes()
+        # Reviewed whole-file snapshot: any change, including YAML aliases, quoted
+        # keys or comment-hidden settings, requires explicit re-review and repinning.
+        # This intentionally rejects harmless formatting too; it is not a YAML parser.
+        self.assertEqual(hashlib.sha256(workflow).hexdigest(),
+                         '0b2d4071a16720325a5e213e403bb6b6a752820fc618dbdd43b4691b324acfe9')
+        text = workflow.decode('utf-8')
         # Deliberately constrain this workflow's existing indentation/layout;
         # this is not a general YAML parser and requires no new dependency.
         paths = re.search(r"(?m)^on:\n  pull_request:\n    paths:\n((?:      - [^\n]+\n)+)", text)
