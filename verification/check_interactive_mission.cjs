@@ -28,6 +28,9 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
   assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),1);
   assert.equal(await page.locator('#inside-view').getAttribute('aria-pressed'),'true');
   assert.match(await page.locator('#placement-part-note').innerText(),/실제 측정값 아님/);
+  assert.equal(await page.locator('#inside-note').isVisible(),true);
+  const noteBox=await page.locator('#inside-note').boundingBox(),viewBox=await page.locator('#viewport').boundingBox();
+  assert.ok(noteBox.y>=viewBox.y+viewBox.height,'Interior note stays outside the 3D viewport');
   await page.locator('#viewport').scrollIntoViewIfNeeded();
   await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-part-${part}.png`)});
   await button.press('Escape');
