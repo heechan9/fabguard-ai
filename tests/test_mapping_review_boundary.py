@@ -90,6 +90,8 @@ class MappingReviewCLIBoundaries(unittest.TestCase):
             audit = report['basis_audit']['audit']
             submitted = len(json.loads(raws['decisions'])['decisions'])
             self.assertEqual(audit['counts'],{'total':3,'decided':submitted,'pending':3-submitted})
+            self.assertEqual(len(audit['entries']), 3)
+            self.assertEqual(sum(row['state'] == 'pending' for row in audit['entries']), 3-submitted)
             for row in audit['entries']:
                 if row['state']=='pending': self.assertIsNone(row['decision'])
                 else:
@@ -147,6 +149,11 @@ class MappingReviewCLIBoundaries(unittest.TestCase):
         self.assertEqual(r['mapping']['status'],'DECLARATIONS_MATCH')
         self.assertEqual(r['quality']['submitted_decision_coverage'],{'numerator':0,'denominator':3,'fraction':0.0})
         self.assertEqual(r['quality']['counts']['validated_basis_entries'],0)
+        self.assertIs(type(r['quality']['counts']['validated_basis_entries']), int)
+        coverage = r['quality']['submitted_decision_coverage']
+        self.assertIs(type(coverage['numerator']), int)
+        self.assertIs(type(coverage['denominator']), int)
+        self.assertIs(type(coverage['fraction']), float)
 
     def test_cli_unverified_evidence_does_not_become_observed_or_approved(self):
         self.b.basis['entries'][0]['evidence_status']='unverified'
