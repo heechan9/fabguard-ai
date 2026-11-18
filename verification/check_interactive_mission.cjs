@@ -19,13 +19,34 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#play').press('Enter');await advance(6000);await page.locator('#play').press('Enter');await advance(200);
  const observed=await snapshot();assert.equal(observed.boards[1].peak,260);assert.equal(observed.boards[1].aoi,'NG');assert.match(await page.locator('#lot-mission').innerText(),/가상 NG 1/);
  await page.locator('#lot-mission button').first().press('Enter');assert.equal(await page.locator('#lot-mission button').first().getAttribute('aria-pressed'),'true');
+ // R3 part selection is presentation-only. Exercise exact public controls in WebGL.
+ const beforeParts=await snapshot();
+ for(const part of ['nozzle','rail','feeder','pcb']){
+  const button=page.locator(`[data-placement-part="${part}"]`);
+  await button.press('Space');await advance(100);
+  assert.equal(await button.getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),1);
+  assert.equal(await page.locator('#inside-view').getAttribute('aria-pressed'),'true');
+  assert.match(await page.locator('#placement-part-note').innerText(),/실제 측정값 아님/);
+  await page.locator('#viewport').scrollIntoViewIfNeeded();
+  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-part-${part}.png`)});
+  await button.press('Escape');
+  assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),0);
+ }
+ const afterParts=await snapshot();assert.deepEqual(afterParts.boards,beforeParts.boards);assert.equal(afterParts.simulation_seconds,beforeParts.simulation_seconds);
+ await page.locator('[data-placement-part="rail"]').press('Enter');await page.locator('#placement-clear').press('Enter');
+ assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),0);
+ await page.locator('[data-placement-part="nozzle"]').press('Enter');await page.locator('#board-select').selectOption({index:0});
+ assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),0);
+ await page.locator('[data-placement-part="feeder"]').press('Enter');await page.locator('#camera-reset').press('Enter');
+ assert.equal(await page.locator('[data-placement-part][aria-pressed="true"]').count(),0);
  await page.locator('.mission-controls').scrollIntoViewIfNeeded();await page.locator('.mission-controls').screenshot({path:path.join(out,`${width}-${theme}-controls.png`)});
  await page.locator('#viewport').scrollIntoViewIfNeeded();await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-scene.png`)});
  const stripes=await page.locator('#lot-mission button').evaluateAll(nodes=>nodes.map(node=>({width:getComputedStyle(node).borderTopWidth,color:getComputedStyle(node).borderTopColor})));assert.ok(stripes.every(s=>s.width==='5px'),'LOT identity strips stay visible');assert.equal(new Set(stripes.map(s=>s.color)).size,stripes.length,'LOT identities use distinct colors');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert.equal(overflow,false,'Horizontal document overflow');
  await page.locator('#reset').press('Enter');await page.locator('[data-fault="missing"]').press('Enter');await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');await advance(4000);await page.locator('#simulation-stop').press('Enter');assert.match(await page.locator('#lot-mission').innerText(),/HOLD 1/);await page.locator('#release-stop').press('Enter');assert.match(await page.locator('#lot-mission').innerText(),/HOLD 1/);
  await page.locator('#reset').press('Enter');const reset=await snapshot();assert.equal(reset.control_events.length,0);assert.equal(reset.emergency_stopped,false);assert.equal(reset.boards.length,1);assert.equal(reset.pending_peak_celsius,null);assert.equal(errors.length,0,errors.join('\n'));
- rows.push({width,theme,webgl:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
+ rows.push({width,theme,webgl:true,partControls:true,partEscape:true,partSelectionNonInterference:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
  }
  // Deliberately disabled WebGL: the same public controls and exports must still work.
  const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
