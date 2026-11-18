@@ -10,6 +10,13 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  let n=0;const snapshot=async()=>{const download=page.waitForEvent('download');await page.locator('#export').press('Enter');const d=await download,file=path.join(out,`${width}-${theme}-${n++}.json`);await d.saveAs(file);return JSON.parse(fs.readFileSync(file,'utf8'));};
  await page.goto(base+'/smt/');await advance(200);assert.equal(await page.locator('#view-error').isVisible(),false);
  if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme-toggle').press('Enter');
+ await page.locator('#viewport').scrollIntoViewIfNeeded();
+ await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-initial-machine.png`)});
+ assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
+ await page.locator('#camera-reset').press('Enter');await advance(100);
+ await page.locator('#placement-focus').press('Enter');await advance(100);
+ assert.equal(await page.locator('#inside-view').getAttribute('aria-pressed'),'false');
+ assert.equal(await page.locator('#station-strip button').nth(3).getAttribute('aria-pressed'),'true');
  await page.locator('#reset').press('Enter');await advance(200);assert.match(await page.locator('#run-status').innerText(),/일시정지/);
  await page.locator('#peak-assumption').press('End');for(let step=0;step<20;step++)await page.locator('#peak-assumption').press('ArrowLeft');await page.locator('#apply-peak').press('Enter');assert.equal((await snapshot()).pending_peak_celsius,260);
  await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');await advance(3600);
