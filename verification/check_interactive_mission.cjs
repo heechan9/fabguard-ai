@@ -21,6 +21,12 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#lot-mission button').first().press('Enter');assert.equal(await page.locator('#lot-mission button').first().getAttribute('aria-pressed'),'true');
  // R3 part selection is presentation-only. Exercise exact public controls in WebGL.
  const beforeParts=await snapshot();
+ for(const station of [3,4]){
+  await page.locator('#station-strip button').nth(station).press('Enter');await advance(100);
+  await page.locator('#viewport').scrollIntoViewIfNeeded();
+  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-station${station+1}-closed.png`)});
+ }
+ await page.locator('#station-strip button').nth(3).press('Enter');await advance(100);
  for(const part of ['nozzle','rail','feeder','pcb']){
   const button=page.locator(`[data-placement-part="${part}"]`);
   await button.press('Space');await advance(100);
