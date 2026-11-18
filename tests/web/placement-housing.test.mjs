@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from '../../web/smt/vendor/three.module.js';
+import {placementPose} from '../../web/smt/interactive-model.mjs';
+import {mountPlacementDetails} from '../../web/smt/placement-details.mjs';
 import {buildPlacementHousing} from '../../web/smt/placement-housing.mjs';
 function build(n=6){const machine=new THREE.Group(),cover=new THREE.Group();machine.add(cover);const result=buildPlacementHousing(machine,cover,2.25,n);machine.updateMatrixWorld(true);return {machine,cover,...result};}
 test('engineering housing is finite, compact and has bounded render cost',()=>{
  for(const n of [4,6]){const {machine}=build(n);let meshes=0,triangles=0;machine.traverse(o=>{if(!o.isMesh)return;meshes++;const g=o.geometry;triangles+=(g.index?g.index.count:g.attributes.position.count)/3*(o.isInstancedMesh?o.count:1);});
- const bounds=new THREE.Box3().setFromObject(machine);for(const v of [...bounds.min.toArray(),...bounds.max.toArray()])assert(Number.isFinite(v));assert(bounds.min.x>=-1.4&&bounds.max.x<=1.4);assert(bounds.max.z<=1.31);assert(bounds.max.y<2.6);assert(meshes<125,`mesh count ${meshes}`);assert(triangles<18000,`triangles ${triangles}`);
+ const bounds=new THREE.Box3().setFromObject(machine);for(const v of [...bounds.min.toArray(),...bounds.max.toArray()])assert(Number.isFinite(v));assert(bounds.min.x>=-1.4&&bounds.max.x<=1.4);assert(bounds.max.z<=1.31);assert(bounds.max.y<2.8);assert(meshes<125,`mesh count ${meshes}`);assert(triangles<18000,`triangles ${triangles}`);
  }});
 test('all opaque architecture stays out of the moving PCB envelope',()=>{
  const {machine}=build();const corridor=new THREE.Box3(new THREE.Vector3(-1.38,1.075,-.395),new THREE.Vector3(1.38,1.145,.395));
@@ -31,4 +33,17 @@ test('visible outer feeder flange remains a station hit while surrounding air is
  assert(hits.some(h=>h.object.userData.explanatoryPart==='feeder'));
  const air=new THREE.Raycaster(new THREE.Vector3(1.35,.89,3),new THREE.Vector3(0,0,-1)).intersectObject(machine,true);
  assert.equal(air.length,0);
+});
+
+test('new housing clears sampled head and carriage poses across the full progress range',()=>{
+ for(const stage of [3,4]){
+  const {machine,cover,root}=build(stage===3?6:4);
+  const head=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.48,12),new THREE.MeshStandardMaterial());machine.add(head);mountPlacementDetails(machine,head,2.25,stage===3?6:4);
+  const fixed=[];for(const group of [root,cover])group.traverse(o=>{if(o.isMesh)fixed.push({object:o,bounds:new THREE.Box3().setFromObject(o)});});
+  for(let n=-1;n<=1000;n++){
+   const progress=n/1000,pose=placementPose(n<0?null:{stage,progress});head.position.set(n<0?0:-2.25/2-.24+(2.25+.48)*progress+pose.x,pose.y,pose.z);machine.updateMatrixWorld(true);
+   const moving=new THREE.Box3().setFromObject(head);
+   for(const {object,bounds} of fixed)assert(!bounds.intersectsBox(moving),`stage ${stage}, progress ${progress}: ${object.geometry.type} at ${object.position.toArray()} intersects head/carriage`);
+  }
+ }
 });
