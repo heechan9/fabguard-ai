@@ -37,11 +37,12 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
  // Distinct cabinet silhouette: rear spine, slim pillars, sloping upper visor.
  panel(cover,width,.80,.15,0,1.69,-.79,'paint');
  for(const sign of [-1,1]){
-  panel(cover,.16,.96,1.55,sign*(width/2-.08),1.70,0,'paint');
+  // Split side walls into corner posts: keep the existing moving head path open.
+  for(const z of [-.70,.70])panel(cover,.16,.96,.14,sign*(width/2-.08),1.70,z,'paint');
   box(cover,.035,.94,.024,sign*(width/2-.19),1.61,.81,'graphite');
   panel(cover,.12,.48,.055,sign*(width/2-.08),1.51,.825,'teal');
  }
- const visor=panel(cover,width,.30,1.67,0,2.18,-.02,'paint');visor.rotation.x=-.07;
+ const visor=panel(cover,width,.30,1.67,0,2.35,-.02,'paint');visor.rotation.x=-.07;
  box(cover,width-.16,.09,.075,0,2.06,.85,'graphite');
  box(cover,width-.38,.024,.02,0,2.055,.892,'teal');
  box(cover,width-.37,.73,.022,0,1.65,.807,'glass');
@@ -49,13 +50,13 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
  category='rail';
  // Fixed bridge and paired longitudinal guide shafts. None touch the PCB path.
  for(const x of [-width*.39,width*.39]){
-  box(root,.14,.78,.17,x,1.50,-.51,'alloy');
+  box(root,.14,.78,.17,x,1.50,-.70,'alloy');
   const shaft=cyl(root,.034,1.20,x,1.88,0,'alloy');shaft.rotation.x=Math.PI/2;
   box(root,.10,.10,.25,x,1.90,0,'graphite');
  }
- box(root,width-.25,.18,.23,0,1.99,0,'alloy');
- box(root,width-.28,.035,.024,0,1.94,.127,'rubber');
- for(let j=0;j<9;j++)box(root,.024,.09,.024,-width*.35+j*width*.7/8,2.01,.131,'graphite');
+ box(root,width-.25,.18,.23,0,2.18,0,'alloy');
+ box(root,width-.28,.035,.024,0,2.13,.127,'rubber');
+ for(let j=0;j<9;j++)box(root,.024,.09,.024,-width*.35+j*width*.7/8,2.20,.131,'graphite');
  panel(root,.25,.28,.30,-width*.36,1.97,-.2,'teal');
  category='feeder';
  // Feeder cassettes and double-flange reels; large enough to read as an assembly.
@@ -72,7 +73,7 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
  for(const x of [-width*.38,width*.38])box(root,.055,.35,.055,x,.65,1.13,'graphite');
  category=null;
  // Integrated operator panel, not a fake live measurement display.
- const consoleGroup=new THREE.Group();consoleGroup.position.set(width*.27,2.35,.40);consoleGroup.rotation.x=-.15;cover.add(consoleGroup);
+ const consoleGroup=new THREE.Group();consoleGroup.position.set(width*.27,2.63,.40);consoleGroup.rotation.x=-.15;cover.add(consoleGroup);
  panel(consoleGroup,.42,.29,.075,0,0,0,'graphite');box(consoleGroup,.32,.19,.012,0,.012,.045,'display');
  for(let j=0;j<3;j++)box(consoleGroup,.21-j*.035,.012,.005,-.025,.057-j*.042,.053,'white');
  // One instanced draw for recessed fasteners, not individual shadow-casting screws.
