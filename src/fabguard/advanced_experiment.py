@@ -133,7 +133,7 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
                 "calibration_fit_scope": "last_20_percent_of_training_period_only",
                 "bootstrap_replicates": bootstrap_replicates, "cost_units_are_scenarios_not_currency": True,
                 "inspection_cost_units": inspection_cost, "missed_fail_cost_units": missed_fail_cost,
-                "config": asdict(config), "raw_hashes": frame.attrs["hashes"]}
+                "config": {**asdict(config), "cv_splits": int(config.cv_splits)}, "raw_hashes": frame.attrs["hashes"]}
     (output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
     return manifest
 

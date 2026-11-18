@@ -35,3 +35,5 @@ PYTHONPATH=src python -m fabguard.advanced_experiment \
 
 구조 확인에는 `--fast --bootstrap 100`을 사용한다. 실제 수치를 README에 올리기 전에는 전체 테스트,
 공식 파일 해시, 동일 명령 재현, 시간구간별 Fail 수, 비용 단위 표기를 다시 확인한다.
+
+재현 실행마다 실험 설정은 유지하되 `--output-dir`는 새 경로 또는 빈 디렉터리로 바꾼다. 첫 실행의 `results/phase1-new-run`은 비교용으로 보존한다.

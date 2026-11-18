@@ -43,7 +43,7 @@ class TemporalReview(unittest.TestCase):
             select.assert_not_called()
 
 class RunnerScopeReview(unittest.TestCase):
-    def check_runner(self, runner, forced_skip=None, score_error=None, mixed=False):
+    def check_runner(self, runner, forced_skip=None, score_error=None, mixed=False, config=None):
         from contextlib import ExitStack
         from pathlib import Path
         import tempfile
@@ -86,11 +86,14 @@ class RunnerScopeReview(unittest.TestCase):
                 stack.enter_context(patch.object(module, name, replacement))
             if score_error is not None:
                 with self.assertRaisesRegex(type(score_error), str(score_error)):
-                    runner(ExperimentConfig(), output_dir=Path(tmp))
+                    runner(config or ExperimentConfig(), output_dir=Path(tmp))
                 self.assertEqual(list(Path(tmp).iterdir()), [])
                 raise score_error
-            manifest = runner(ExperimentConfig(), output_dir=Path(tmp))
+            manifest = runner(config or ExperimentConfig(), output_dir=Path(tmp))
             saved = pd.read_csv(Path(tmp) / 'walk_forward_metrics.csv')
+            import json
+            saved_manifest = json.loads((Path(tmp) / 'manifest.json').read_text())
+            self.assertIs(type(saved_manifest['config']['cv_splits']), int)
         if mixed:
             self.assertEqual(len(seen), 2)
             self.assertEqual(saved['status'].tolist(), ['SKIPPED', 'SKIPPED', 'EVALUATED', 'EVALUATED'])
@@ -229,3 +232,9 @@ class LatestReviewCoverage(unittest.TestCase):
     def test_real_support_helper_mixed_windows(self):
         from fabguard.advanced_experiment import run_advanced_experiment
         RunnerScopeReview().check_runner(run_advanced_experiment, mixed=True)
+
+    def test_numpy_split_count_manifest_is_json_number(self):
+        from dataclasses import replace
+        from fabguard.advanced_experiment import run_advanced_experiment
+        RunnerScopeReview().check_runner(run_advanced_experiment,
+            config=replace(ExperimentConfig(),cv_splits=np.int64(5)))
