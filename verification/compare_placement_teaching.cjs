@@ -62,9 +62,10 @@ module.exports = async function compareTeaching(browser, base, out) {
         scene.add(new T.HemisphereLight(0xe4f2ff,0x83959b,1.8));
         const key=new T.DirectionalLight(0xfff3db,2.8);key.position.set(3,6,4);scene.add(key);
         const rim=new T.DirectionalLight(0xa5ddff,2.2);rim.position.set(-4,3,-3);scene.add(rim);
-        const views={station:[0,1.22,.10,1.88],nozzle:[0,1.78,0,.66],feeder:[0,.90,1.07,1.06]};
+        const views={station:[0,1.22,.10,1.88],nozzle:[0,1.79,0,.56],feeder:[0,.90,1.07,1.06]};
         const images=[];
         for(const [view,[x,y,z,radius]] of Object.entries(views)){
+          guide.pose('cutaway',0,view);
           const camera=new T.PerspectiveCamera(38,width/h,.1,50);
           const half=T.MathUtils.degToRad(19),d=radius/Math.sin(Math.min(half,Math.atan(Math.tan(half)*width/h)));
           camera.position.set(x+d*Math.sin(.4)*Math.cos(.35),y+d*Math.sin(.35),z+d*Math.cos(.4)*Math.cos(.35));camera.lookAt(x,y,z);

@@ -24,7 +24,9 @@ export const FIELDS = {
 export function buildTeachingModel(station, feederCount) {
   const model = new THREE.Group();
   const groups = Object.fromEntries(STEPS.map(([id]) => [id, new THREE.Group()]));
+  groups.workpiece = new THREE.Group();
   model.add(...Object.values(groups));
+  const frontGuideParts=[];
   const housing = station.getObjectByName('placement-engineering-body');
   const details = station.getObjectByName('schematic-placement-details');
   const head = station.children.find(child => child.userData.explanatoryPart === 'nozzle');
@@ -59,6 +61,8 @@ export function buildTeachingModel(station, feederCount) {
       if (centerHead) matrix.premultiply(neutralHead);
       matrix.decompose(copy.position,copy.quaternion,copy.scale);
       groups[part].add(copy);
+      // The near-side transverse rail otherwise occludes the spindle at the nozzle detail scale.
+      if (source===details && part==='rail' && original.position.z>0) frontGuideParts.push(copy);
     });
   }
   copyGroup(housing, 'base');
@@ -124,7 +128,9 @@ export function buildTeachingModel(station, feederCount) {
     }
   }
 
-  function pose(mode, progress) {
+  function pose(mode, progress, focus = 'all') {
+    groups.workpiece.visible=mode!=='assembly';
+    for(const mesh of frontGuideParts) mesh.visible=!(focus==='nozzle' && mode!=='assembly');
     STEPS.forEach(([id, , , offset], index) => {
       const group = groups[id];
       const joined = index === 0 ? 1 : THREE.MathUtils.clamp(progress-index+1,0,1);
@@ -248,7 +254,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       byId('teaching-field-note').textContent = '부품별로 지정한 설명용 합성 '+(compare?'온도·응력':field.label)+' 분포입니다. 색 변화는 예시이며 센서 측정값이나 해석 단위가 없습니다.';
       illustration.style(compare?'temperature':mode,0);
     } else if(mode==='cutaway'){
-      caption.textContent=stationName+' · 기구 절개 모형 · 드래그로 회전';
+      caption.textContent=stationName+' · 기구 절개 모형 · 예시 기판';
       illustration.style(mode,0);
     } else {
       caption.textContent = stationName+' · 단계별 조립 모형';
@@ -272,7 +278,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
       dirty = true;
     }
     if (!dirty && signature === lastFrame) return;
-    illustration.pose(mode, progress);
+    illustration.pose(mode, progress, focus);
     if(mode==='assembly' && progress!==step){
       const highlight=Math.ceil(progress);
       if(highlight!==activeHighlight){illustration.style(mode,highlight);activeHighlight=highlight;}
@@ -281,7 +287,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     const pitch = THREE.MathUtils.clamp(.35+elevation-origin.elevation,-.2,1.52);
     const targets={
       all:[0,mode==='assembly'?1.45:1.22,.10,mode==='assembly'?2.03:1.88],
-      nozzle:[0,1.78,0,.66], rail:[0,2.05,.09,1.24], feeder:[0,.9,1.07,1.06]
+      nozzle:[0,1.79,0,.56], rail:[0,2.05,.09,1.24], feeder:[0,.9,1.07,1.06]
     };
     const [x,height,z,radius]=targets[mode==='assembly'?'all':focus];
     const W=viewport.clientWidth,H=viewport.clientHeight;

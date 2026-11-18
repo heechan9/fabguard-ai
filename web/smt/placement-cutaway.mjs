@@ -3,7 +3,7 @@ import * as THREE from './vendor/three.module.js';
 const METALS = {
   steel: [0xd4dfe5,.87,.24], bright: [0xe6edf0,.91,.15], cast: [0x626f79,.65,.37],
   anodized: [0x18697a,.66,.30], dark: [0x29333b,.56,.38], brass: [0xc29859,.76,.27],
-  polymer: [0x263037,.08,.58], tape: [0xb9935c,.37,.45], gasket: [0x161d21,.03,.8]
+  polymer: [0x263037,.08,.58], tape: [0xb9935c,.37,.45], gasket: [0x161d21,.03,.8], soldermask:[0x277653,.18,.43]
 };
 
 // Turned and assembled surfaces for the educational cutaway. Dimensions are model units.
@@ -84,6 +84,26 @@ export function addMechanismDetails(groups, feederCount) {
     add('nozzle',hose,x>0?'anodized':'polymer',origin);
   }
 
+  // A front bearing face, crown and curved feed hoses stay readable through the cutaway.
+  for(const x of [-.122,.122]){
+    box('nozzle','cast',[x,1.94,.25],[.085,.19,.075]);
+    screw('nozzle',[x,1.90,.296],.026);screw('nozzle',[x,2.00,.296],.026);
+  }
+  shaft('nozzle','steel',[0,1.86,.097],.104,.068,rx);
+  shaft('nozzle','dark',[0,1.86,.134],.077,.016,rx);
+  shaft('nozzle','brass',[0,1.86,.148],.047,.018,rx);
+  for(let i=0;i<12;i++){
+    const a=i*Math.PI/6;
+    box('nozzle','dark',[.065*Math.sin(a),1.495,.065*Math.cos(a)],[.009,.048,.008],[0,a,0]);
+  }
+  // This example board is a separate cutaway workpiece, never an assembly step or a live PCB.
+  box('workpiece','soldermask',[.05,1.112,0],[.67,.046,.75]);
+  for(const x of [-.10,.16])for(const z of [-.12,.14]){
+    box('workpiece','polymer',[x,1.16,z],[.13,.045,.13]);
+    for(let j=0;j<4;j++)for(const side of [-1,1])
+      box('workpiece','steel',[x-.046+j*.03,1.139,z+side*.085],[.012,.012,.034]);
+  }
+  for(let i=0;i<6;i++)box('workpiece','brass',[-.19+i*.077,1.14,.32],[.038,.009,.058]);
   // Open reel flanges and spokes reveal the core, tape edge and feed wheel.
   const radius=feederCount===6?.132:.164;
   const rim=new THREE.TorusGeometry(radius,.014,7,36);
