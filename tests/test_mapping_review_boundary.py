@@ -90,6 +90,11 @@ class MappingReviewCLIBoundaries(unittest.TestCase):
             audit = report['basis_audit']['audit']
             submitted = len(json.loads(raws['decisions'])['decisions'])
             self.assertEqual(audit['counts'],{'total':3,'decided':submitted,'pending':3-submitted})
+            observation_ids = [row['review_id'] for row in json.loads(raws['package'])['observations']]
+            submitted_ids = {row['review_id'] for row in json.loads(raws['decisions'])['decisions']}
+            self.assertCountEqual([row['review_id'] for row in audit['entries']], observation_ids)
+            self.assertCountEqual([row['review_id'] for row in audit['entries'] if row['state'] == 'pending'],
+                                  [rid for rid in observation_ids if rid not in submitted_ids])
             self.assertEqual(len(audit['entries']), 3)
             self.assertEqual(sum(row['state'] == 'pending' for row in audit['entries']), 3-submitted)
             for row in audit['entries']:
