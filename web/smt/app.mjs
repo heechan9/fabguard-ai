@@ -49,14 +49,14 @@ function selectTransferRobot(){selectStation(TRANSFER_STAGE);$('transfer-robot-s
 $('transfer-robot-select').addEventListener('click',selectTransferRobot);
 function selectRobot(){selectStation(9);$('robot-select').setAttribute('aria-pressed','true');$('station-info').textContent=ROBOT_NAME+' · '+ROBOT_SCOPE+'. 기판 집기 → 이송 → 정상/불량 위치에 내려놓기. 측정 누락·조건 변경·정비 후 검토 대기는 검토 보류 위치로 이동합니다.';targetX=positions[9];targetY=1.25;zoom=.28;azimuth=.55;elevation=.8;cameraUpdate();}
 $('robot-select').addEventListener('click',selectRobot);
-let selected='PCB-001',activeStation=2,followInjected=false,insideView=false;
+let selected='PCB-001',activeStation=3,followInjected=false,insideView=false;
 const compactView=matchMedia('(max-width: 900px)'),machineLabels=[];
 function updateLabelVisibility(){for(const sprite of machineLabels)sprite.visible=!compactView.matches&&!insideView&&zoom>=.45;}
 compactView.addEventListener('change',updateLabelVisibility);
 const timeText=t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`;
 const stationButtons=STATIONS.map((s,i)=>{const button=document.createElement('button');button.innerHTML=`<small>${String(i+1).padStart(2,'0')}</small>${STATION_TERMS[i].plain}<small>${i===6?'<abbr title="열로 납을 녹여 부품을 연결하는 납땜 공정">리플로우</abbr>':s.name}</small>`;button.addEventListener('click',()=>selectStation(i));$('station-strip').append(button);return button;});
 function selectStation(i,focus=true){clearPartSelection();$('equipment-reference').hidden=false;$('inside-view').disabled=false;$('floor-agv-select').setAttribute('aria-pressed','false');$('transfer-robot-select').setAttribute('aria-pressed','false');$('robot-select').setAttribute('aria-pressed','false');activeStation=i;stationButtons.forEach((b,j)=>{b.classList.toggle('active',i===j);b.setAttribute('aria-pressed',String(i===j));});$('station-info').textContent=`${STATION_TERMS[i].plain} (${STATIONS[i].name}) · ${STATION_TERMS[i].explanation}`;$('selected-station-caption').textContent=`선택한 공정 · ${String(i+1).padStart(2,'0')} ${STATION_TERMS[i].plain}`;showEquipment($('equipment-reference'),i);if(focus){insideView=shouldAutoRevealInterior(i);focusStation(i);updateInterior();}}
-selectStation(2,false);
+selectStation(3,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
 $('play').addEventListener('click',()=>{if(sim.emergencyStopped||sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
@@ -170,9 +170,11 @@ try{
  floorAgvView=mountFloorAgv(scene,{box,cylinder,label});
  for(let i=0;i<10;i++){const x=(positions[i]+widths[i]/2+positions[i+1]-widths[i+1]/2)/2;box(scene,.65,.08,1.2,x,.94,0,color.dark);}
  selectionRing=new THREE.Mesh(new THREE.RingGeometry(.52,.58,32),new THREE.MeshBasicMaterial({color:0x39d6c4,side:THREE.DoubleSide,transparent:true,opacity:.85}));selectionRing.rotation.x=-Math.PI/2;scene.add(selectionRing);
- new ResizeObserver(resize).observe(viewport);resize();
+ new ResizeObserver(resize).observe(viewport);resize();focusStation(3);
  placementSceneAvailable=placementDetails.has(3)&&placementDetails.has(4);
 }catch(error){$('view-error').hidden=false;console.error('3D initialization failed',error);}
+$('placement-focus').disabled=!placementSceneAvailable;
+$('placement-focus').addEventListener('click',()=>{if(placementSceneAvailable)selectStation([3,4].includes(activeStation)?activeStation:3);});
 document.querySelectorAll('[data-placement-part]').forEach(button=>{button.disabled=!placementSceneAvailable;});$('placement-clear').disabled=!placementSceneAvailable;clearPartSelection();
 
 function updateInterior(){for(const m of machines)m.userData.cover.visible=!(insideView&&m.userData.station===activeStation);$('inside-view').setAttribute('aria-pressed',String(insideView));$('inside-note').hidden=!insideView;updateLabelVisibility();}
