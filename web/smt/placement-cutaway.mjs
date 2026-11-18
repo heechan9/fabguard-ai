@@ -53,7 +53,8 @@ export function addMechanismDetails(groups, feederCount) {
     const t=i/300,angle=t*2*Math.PI*20;
     helix.push([-0.75+1.50*t,2.22+.054*Math.cos(angle),.235+.054*Math.sin(angle)]);
   }
-  add('rail',tube(helix,.011,300),'steel',origin);
+  const screwThread=tube(helix,.011,300);screwThread.name='lead-screw-thread';
+  add('rail',screwThread,'steel',origin);
   for(const x of [-.83,.83]){
     box('rail','anodized',[x,2.22,.23],[.14,.22,.25]);
     shaft('rail','dark',[x,2.22,.37],.072,.04,rx);
@@ -71,6 +72,7 @@ export function addMechanismDetails(groups, feederCount) {
   // Stepped spindle, collar, collet and nozzle taper. Vacuum hoses terminate at fittings.
   const spindle=turned([[.03,-.31],[.04,-.29],[.061,-.275],[.061,-.235],[.080,-.225],
     [.080,-.15],[.12,-.14],[.126,-.12],[.126,.055],[.143,.066],[.143,.135],[.12,.151],[.08,.152]]);
+  spindle.name='stepped-spindle';
   add('nozzle',spindle,'bright',[0,1.80,0]);
   const collet=turned([[.018,-.105],[.034,-.095],[.046,-.050],[.062,-.044],[.062,-.004],[.068,0],[.068,.025]],36);
   add('nozzle',collet,'brass',[0,1.50,0]);
@@ -105,8 +107,9 @@ export function addMechanismDetails(groups, feederCount) {
   }
   for(let i=0;i<6;i++)box('workpiece','brass',[-.19+i*.077,1.14,.32],[.038,.009,.058]);
   // Open reel flanges and spokes reveal the core, tape edge and feed wheel.
-  const radius=feederCount===6?.132:.164;
+  const radius=feederCount===6?.119:.164;
   const rim=new THREE.TorusGeometry(radius,.014,7,36);
+  rim.name='open-reel-rim';
   const winding=new THREE.TorusGeometry(radius*.73,.010,6,32);
   for(let i=0;i<feederCount;i++){
     const x=-2.25*.31+i*2.25*.62/(feederCount-1);

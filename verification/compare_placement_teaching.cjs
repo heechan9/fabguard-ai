@@ -17,7 +17,9 @@ module.exports = async function compareTeaching(browser, base, out) {
       await page.goto(base+'/smt/');
       const perf=[];
       for(const mode of ['normal','cutaway','compare']){
-        if(mode==='cutaway') await page.locator('#teaching-cutaway').click();
+        await page.locator('#reset').click();
+        await page.locator('#station-strip button').nth(3).click();
+        if(mode!=='normal') await page.locator('#teaching-cutaway').click();
         if(mode==='compare') await page.locator('#teaching-mode').selectOption(mode);
         await page.locator('#viewport').scrollIntoViewIfNeeded();
         const sample=await page.evaluate(async()=>{
@@ -69,10 +71,28 @@ module.exports = async function compareTeaching(browser, base, out) {
           const camera=new T.PerspectiveCamera(38,width/h,.1,50);
           const half=T.MathUtils.degToRad(19),d=radius/Math.sin(Math.min(half,Math.atan(Math.tan(half)*width/h)));
           camera.position.set(x+d*Math.sin(.4)*Math.cos(.35),y+d*Math.sin(.35),z+d*Math.cos(.4)*Math.cos(.35));camera.lookAt(x,y,z);
-          for(const [version,object] of [['before',station],['after',guide.model]]){
+          for(const [version,object] of [['base-station',station],['detailed-cutaway',guide.model]]){
             scene.add(object);renderer.render(scene,camera);
-            images.push({version,view,png:renderer.domElement.toDataURL('image/png').split(',')[1],
-              calls:renderer.info.render.calls,triangles:renderer.info.render.triangles});
+            const result={version,view,png:renderer.domElement.toDataURL('image/png').split(',')[1],
+              calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};
+            if(version==='detailed-cutaway'){
+              const feature={station:'lead-screw-thread',nozzle:'stepped-spindle',feeder:'open-reel-rim'}[view];
+              const meshes=[];
+              object.traverse(o=>{if(o.geometry?.name===feature)meshes.push(o);});
+              if(!meshes.length)throw Error('Missing cutaway feature: '+feature);
+              const gl=renderer.getContext();
+              const pixels=()=>{const data=new Uint8Array(width*h*4);gl.readPixels(0,0,width,h,gl.RGBA,gl.UNSIGNED_BYTE,data);return data;};
+              const withPart=pixels();for(const mesh of meshes)mesh.visible=false;
+              renderer.render(scene,camera);
+              const withoutPart=pixels();for(const mesh of meshes)mesh.visible=true;
+              let changed=0;
+              for(let i=0;i<withPart.length;i+=4){
+                if(Math.abs(withPart[i]-withoutPart[i])+Math.abs(withPart[i+1]-withoutPart[i+1])+Math.abs(withPart[i+2]-withoutPart[i+2])>18)changed++;
+              }
+              if(changed<8)throw Error(feature+' cannot be distinguished in '+view+' view: '+changed+' pixels');
+              result.feature=feature;result.featurePixels=changed;
+            }
+            images.push(result);
             scene.remove(object);
           }
         }
@@ -85,7 +105,7 @@ module.exports = async function compareTeaching(browser, base, out) {
       }
       assert.deepEqual(errors,[]);
       results.push({width,liveOrbit:perf,stillRenderWallMs:Math.round(performance.now()-began),
-        matched:images.map(({version,view,calls,triangles})=>({version,view,calls,triangles}))});
+        matched:images.map(({png,...metrics})=>metrics)});
     }finally{await page.close();}
   }
   writeFileSync(join(out,'teaching-comparison.json'),JSON.stringify(results,null,2));

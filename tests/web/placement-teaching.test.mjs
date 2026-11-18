@@ -23,6 +23,8 @@ test('teaching fields use distinct categorical colors on the actual 04/05 assemb
   for (const count of [4,6]) {
     const {station, head, cover} = liveStation(count);
     const initialEmissive = head.material.emissive.getHex();
+    const sourceMaterial = head.children[0].material;
+    const initialChildColor = sourceMaterial.color.getHex(),initialChildEmission=sourceMaterial.emissive.getHex();
     const guide = buildTeachingModel(station,count);
     for (const [mode, field] of Object.entries(FIELDS)) {
       guide.style(mode,0); guide.pose(mode,0);
@@ -33,7 +35,16 @@ test('teaching fields use distinct categorical colors on the actual 04/05 assemb
       }
     }
     const copiedHead = guide.groups.nozzle.children.find(m=>m.geometry===head.children[0].geometry);
-    assert.ok(copiedHead); assert.notEqual(copiedHead.material,head.material);
+    assert.ok(copiedHead); assert.notEqual(copiedHead.material,sourceMaterial);
+    assert.equal(sourceMaterial.color.getHex(),initialChildColor);
+    assert.equal(sourceMaterial.emissive.getHex(),initialChildEmission);
+    const bolts=station.getObjectByName('service-door-fasteners');
+    assert.ok(bolts?.isInstancedMesh);
+    guide.model.traverse(m=>assert.notEqual(m.geometry,bolts.geometry));
+    const rims=guide.groups.feeder.children.find(m=>m.geometry.name==='open-reel-rim');
+    assert.equal(rims.count,2*count);
+    const {radius,tube}=rims.geometry.parameters;
+    assert.ok((radius+tube)*2 < 2.25*.62/(count-1));
     assert.ok(copiedHead.position.distanceTo(head.children[0].position.clone().add(new THREE.Vector3(0,1.8,0)))<1e-10);
     assert.deepEqual(head.position.toArray(),[-1.15,1.54,-.2]);
     assert.equal(head.material.emissive.getHex(),initialEmissive);

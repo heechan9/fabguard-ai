@@ -39,7 +39,7 @@ export function buildTeachingModel(station, feederCount) {
 
   function copyGroup(source, defaultPart, centerHead = false) {
     source.traverse(original => {
-      if (!original.isMesh || original === head) return;
+      if (!original.isMesh || original === head || original.name === 'service-door-fasteners') return;
       // The open bay and spoked reels replace the solid teaching proxies.
       if (source === housing && !original.userData.explanatoryPart &&
           original.position.y > .22 && original.position.y < .71) return;
@@ -189,7 +189,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     byId('teaching-pair').hidden = byId('teaching-focus-row').hidden = true;
   }
   function chooseStep(value, animate = true) {
-    const previousStep = step;
+    const previousProgress = progress;
     step = Math.max(0, Math.min(STEPS.length-1, value));
     stepInput.value = String(step);
     back.disabled = step === 0;
@@ -198,7 +198,7 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     started = performance.now();
     duration = animate && !reducedMotion.matches ? Math.min(1000, Math.abs(step-from)*420) : 0;
     if (!duration) progress = step;
-    byId('teaching-description').textContent = (animate && step < previousStep ? STEPS[previousStep][1]+' 분리 · ' : '')+STEPS[step][2];
+    byId('teaching-description').textContent = (animate && step < previousProgress && Number.isInteger(previousProgress) ? STEPS[previousProgress][1]+' 분리 · ' : '')+STEPS[step][2];
     activeHighlight=step;
     illustration.style('assembly',step);
     dirty = true;
@@ -316,5 +316,5 @@ export function mountTeachingView({stations, currentStation, angles, restoreAngl
     lastFrame = signature;
     dirty = false;
   }
-  return {get active(){return mode !== 'normal';}, close, render};
+  return {get active(){return mode !== 'normal';}, close, render, invalidate(){dirty=true;}};
 }
