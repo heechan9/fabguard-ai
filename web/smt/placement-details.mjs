@@ -13,6 +13,8 @@ export function mountPlacementDetails(machine,head,width,feederCount=6){
  function add(parent,geometry,xyz,material,part){
   const key=part+material;if(!shared.has(key))shared.set(key,materials[material].clone());
   const mesh=new THREE.Mesh(geometry,shared.get(key));mesh.position.set(...xyz);mesh.castShadow=false;mesh.receiveShadow=true;
+  // Decorations do not expand the original station pointer-picking area.
+  mesh.raycast=()=>{};
   mesh.userData.explanatoryPart=part;parent.add(mesh);parts[part].push(mesh);return mesh;
  }
  const box=(parent,w,h,d,xyz,mat,part)=>add(parent,new THREE.BoxGeometry(w,h,d),xyz,mat,part);
@@ -54,5 +56,5 @@ export function detailPCB(group){
  // Decorative pads live on the PCB surface and never carry status or measured values.
  const material=new THREE.MeshStandardMaterial({color:0xc5aa65,metalness:.65,roughness:.4});
  const geometry=new THREE.BoxGeometry(.035,.006,.045);
- for(let i=0;i<8;i++){const pad=new THREE.Mesh(geometry,material);pad.position.set(-.27+i*.077,.04,-.34);group.add(pad);}
+ for(let i=0;i<8;i++){const pad=new THREE.Mesh(geometry,material);pad.position.set(-.27+i*.077,.04,-.34);pad.raycast=()=>{};group.add(pad);}
 }
