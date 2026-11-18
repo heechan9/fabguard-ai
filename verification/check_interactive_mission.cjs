@@ -109,19 +109,19 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
   await advance(160);await page.locator('#viewport').scrollIntoViewIfNeeded();
   return page.locator('#viewport canvas').first().screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
  };
- await captureGuide('normal');
- const readRendered=async()=>{await page.locator('#viewport canvas').first().evaluate(canvas=>{
-   // Capture the WebGL attachment inside the app's render frame, excluding native focus and fractional CSS edges.
-   window.teachingPixelCheck=new Promise(resolve=>requestAnimationFrame(()=>{
-     const gl=canvas.getContext('webgl2'),w=gl.drawingBufferWidth,h=gl.drawingBufferHeight,bytes=new Uint8Array(w*h*4);
-     gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,bytes);
-     let hash=2166136261,nonzero=0;for(let i=0;i<bytes.length;i+=4){nonzero+=bytes[i]+bytes[i+1]+bytes[i+2]>0;for(let j=0;j<3;j++)hash=Math.imul(hash^bytes[i+j],16777619);}
-     resolve({w,h,hash:hash>>>0,nonzero});
-   }));
- });
- await advance(100);return page.evaluate(()=>window.teachingPixelCheck);};
- const normalPixels=await readRendered();assert.ok(normalPixels.nonzero>normalPixels.w*normalPixels.h*.5);
- const normalScene=await captureGuide('baseline');
+ // The compositor retains the presented image after WebGL clears its default framebuffer.
+ // Compare the same interior pixels. Native focus and fractional CSS borders lie outside this area.
+ const interiorPixels=buffer=>page.evaluate(async data=>{
+   const binary=Uint8Array.from(atob(data),c=>c.charCodeAt(0));
+   const img=await createImageBitmap(new Blob([binary],{type:'image/png'}));
+   const w=img.width-4,h=img.height-4,canvas=new OffscreenCanvas(w,h),ctx=canvas.getContext('2d');
+   ctx.drawImage(img,2,2,w,h,0,0,w,h);img.close();
+   const raw=ctx.getImageData(0,0,w,h).data;
+   let hash=2166136261,nonzero=0;for(let i=0;i<raw.length;i+=4){nonzero+=raw[i]+raw[i+1]+raw[i+2]>0;for(let j=0;j<3;j++)hash=Math.imul(hash^raw[i+j],16777619);}
+   return {w,h,hash:hash>>>0,nonzero};
+ },buffer.toString('base64'));
+ const normalScene=await captureGuide('normal'),normalPixels=await interiorPixels(normalScene);
+ assert.ok(normalPixels.nonzero>normalPixels.w*normalPixels.h*.5);
  await guideMode.selectOption('cutaway');const cutaway=await captureGuide('cutaway');
  await page.locator('#teaching-focus').selectOption('nozzle');const closeNozzle=await captureGuide('nozzle');
  assert.equal(cutaway.equals(closeNozzle),false);
@@ -151,9 +151,9 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  await page.locator('#teaching-back').press('Enter');await advance(100);
  assert.equal(await page.locator('#teaching-step').inputValue(),'3');
  await page.locator('#viewport').press('ArrowLeft');await advance(100);
- await page.locator('#teaching-step').press('Escape');assert.equal(await page.locator('#teaching-mode').evaluate(el=>el===document.activeElement),true);assert.equal(await page.locator('[data-placement-part="rail"]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#inside-note').isVisible(),true);await captureGuide('restored');
+ await page.locator('#teaching-step').press('Escape');assert.equal(await page.locator('#teaching-mode').evaluate(el=>el===document.activeElement),true);assert.equal(await page.locator('[data-placement-part="rail"]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#inside-note').isVisible(),true);const restored=await captureGuide('restored');
  assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-caption').isVisible(),false);
- assert.deepEqual(await readRendered(),normalPixels,'Original WebGL pixels, camera and selection should be restored');
+ assert.deepEqual(await interiorPixels(restored),normalPixels,'Original presented canvas pixels, camera and selection should be restored');
  assert.deepEqual(await snapshot(),guideState);
  await guideMode.selectOption('stress');await advance(100);
  await page.locator('#teaching-settings summary').press('Enter');await advance(100);
