@@ -84,6 +84,21 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);assert.equal(overflow,false,'Horizontal document overflow');
  await page.locator('#reset').press('Enter');await page.locator('[data-fault="missing"]').press('Enter');await page.locator('#speed').selectOption('4');await page.locator('#play').press('Enter');await advance(4000);await page.locator('#simulation-stop').press('Enter');assert.match(await page.locator('#lot-mission').innerText(),/HOLD 1/);await page.locator('#release-stop').press('Enter');assert.match(await page.locator('#lot-mission').innerText(),/HOLD 1/);
  await page.locator('#reset').press('Enter');const reset=await snapshot();assert.equal(reset.control_events.length,0);assert.equal(reset.emergency_stopped,false);assert.equal(reset.boards.length,1);assert.equal(reset.pending_peak_celsius,null);assert.equal(errors.length,0,errors.join('\n'));
+ // Inspect the real rendered head at both previously intersecting side-wall positions.
+ // Drive only public controls and validate the exported stage/progress at each sample.
+ await page.locator('#reset').press('Enter');await page.locator('#speed').selectOption('1');
+ let previousSampleTime=0;
+ for(const [stage,progress] of [[3,.185],[3,.83],[4,.185],[4,.83]]){
+  const targetTime=(stage===3?11:15)+4*progress;
+  await page.locator('#play').press('Enter');await advance(Math.round((targetTime-previousSampleTime)*1000));
+  await page.locator('#play').press('Enter');await advance(100);
+  const state=await snapshot(),board=state.boards[0];assert.equal(board.stage,stage);assert.ok(Math.abs(board.progress-progress)<.025,`Sweep capture progress ${board.progress}`);
+  previousSampleTime=state.simulation_seconds;
+  await page.locator('#station-strip button').nth(stage).press('Enter');await advance(100);
+  await page.locator('#viewport').scrollIntoViewIfNeeded();
+  await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-sweep-${stage}-${progress}.png`)});
+ }
+ await page.locator('#reset').press('Enter');await advance(100);
  rows.push({width,theme,webgl:true,partControls:true,partEscape:true,partSelectionNonInterference:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
  }
  // Deliberately disabled WebGL: the same public controls and exports must still work.
