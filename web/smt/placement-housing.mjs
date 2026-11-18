@@ -50,9 +50,9 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
  category='rail';
  // Fixed bridge and paired longitudinal guide shafts. None touch the PCB path.
  for(const x of [-width*.39,width*.39]){
-  box(root,.14,.78,.17,x,1.50,-.70,'alloy');
+  box(root,.14,1.06,.17,x,1.39,-.70,'alloy');
   const shaft=cyl(root,.034,1.20,x,1.88,0,'alloy');shaft.rotation.x=Math.PI/2;
-  box(root,.10,.10,.25,x,1.90,0,'graphite');
+  box(root,.10,.30,.25,x,2.00,0,'graphite');
  }
  box(root,width-.25,.18,.23,0,2.18,0,'alloy');
  box(root,width-.28,.035,.024,0,2.13,.127,'rubber');
