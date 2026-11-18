@@ -3,7 +3,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
 const base=process.env.FABGUARD_BASE_URL||'http://127.0.0.1:8775',out=process.env.FABGUARD_UI_OUTPUT||'/tmp/fabguard-interactive-browser';fs.mkdirSync(out,{recursive:true});
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});const rows=[];
 try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
- const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/THREE.WebGLProgram|Shader Error/.test(m.text()))errors.push(m.text());});
  await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
  await page.clock.install({time:new Date('2026-11-11T00:00:00Z')});await page.clock.pauseAt(new Date('2026-11-11T00:01:00Z'));
  const advance=async(ms)=>{for(let i=0;i<ms;i+=100)await page.clock.fastForward(Math.min(100,ms-i));};
@@ -99,9 +99,93 @@ try{for(const width of [1366,390,360])for(const theme of ['dark','silver']){
   await page.locator('#viewport').screenshot({path:path.join(out,`${width}-${theme}-sweep-${stage}-${progress}.png`)});
  }
  await page.locator('#reset').press('Enter');await advance(100);
+ // Check the opt-in station illustration through its public settings, using a paused run.
+ await page.locator('#station-strip button').nth(width===390 ? 4 : 3).press('Enter');await advance(120);
+ await page.locator('[data-placement-part="rail"]').press('Enter');await advance(100);
+ const guideState=await snapshot(),guideMode=page.locator('#teaching-mode');
+ assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-legend').isVisible(),false);
+ await page.locator('#teaching-settings summary').press('Enter');
+ const captureGuide=async name=>{
+  await advance(160);await page.locator('#viewport').scrollIntoViewIfNeeded();
+  await advance(120);
+  const image=await page.locator('#viewport canvas').first().screenshot({path:path.join(out,`${width}-${theme}-teaching-${name}.png`)});
+  const visible=await page.evaluate(async ({data,panels})=>{
+    const bytes=Uint8Array.from(atob(data),c=>c.charCodeAt(0));
+    const bitmap=await createImageBitmap(new Blob([bytes],{type:'image/png'}));
+    const canvas=new OffscreenCanvas(bitmap.width,bitmap.height),ctx=canvas.getContext('2d');
+    ctx.drawImage(bitmap,0,0);bitmap.close();
+    return panels.map(([x,y,w,h])=>{
+      const region=ctx.getImageData(Math.floor(x*canvas.width),Math.floor(y*canvas.height),
+        Math.floor(w*canvas.width),Math.floor(h*canvas.height));
+      const counts=new Uint32Array(4096),rgb=region.data;let max=0,count=0;
+      for(let i=0;i<rgb.length;i+=16){
+        const bucket=(rgb[i]>>4)*256+(rgb[i+1]>>4)*16+(rgb[i+2]>>4);
+        max=Math.max(max,++counts[bucket]);count++;
+      }
+      return 1-max/count;
+    });
+  },{data:image.toString('base64'),panels:name!=='comparison'?[[.16,.16,.68,.68]]:
+    width===1366?[[.08,.18,.34,.64],[.58,.18,.34,.64]]:[[.16,.08,.68,.34],[.16,.58,.68,.34]]});
+  for(const fraction of visible)assert.ok(fraction>.025,`Blank geometry in ${width} ${theme} ${name} (${fraction})`);
+  return image;
+ };
+ // The compositor retains the presented image after WebGL clears its default framebuffer.
+ // Compare the same interior pixels. Native focus and fractional CSS borders lie outside this area.
+ const interiorPixels=buffer=>page.evaluate(async data=>{
+   const binary=Uint8Array.from(atob(data),c=>c.charCodeAt(0));
+   const img=await createImageBitmap(new Blob([binary],{type:'image/png'}));
+   const w=img.width-4,h=img.height-4,canvas=new OffscreenCanvas(w,h),ctx=canvas.getContext('2d');
+   ctx.drawImage(img,2,2,w,h,0,0,w,h);img.close();
+   const raw=ctx.getImageData(0,0,w,h).data;
+   let hash=2166136261,nonzero=0;for(let i=0;i<raw.length;i+=4){nonzero+=raw[i]+raw[i+1]+raw[i+2]>0;for(let j=0;j<3;j++)hash=Math.imul(hash^raw[i+j],16777619);}
+   return {w,h,hash:hash>>>0,nonzero};
+ },buffer.toString('base64'));
+ const normalScene=await captureGuide('normal'),normalPixels=await interiorPixels(normalScene);
+ assert.ok(normalPixels.nonzero>normalPixels.w*normalPixels.h*.5);
+ await guideMode.selectOption('cutaway');const cutaway=await captureGuide('cutaway');
+ await page.locator('#teaching-focus').selectOption('nozzle');const closeNozzle=await captureGuide('nozzle');
+ assert.equal(cutaway.equals(closeNozzle),false);
+ await page.locator('#teaching-focus').selectOption('feeder');await captureGuide('feeder');
+ await page.locator('#teaching-focus').selectOption('all');
+ await guideMode.selectOption('temperature');
+ const thermalScene=await captureGuide('temperature');
+ assert.equal(normalScene.equals(thermalScene),false);
+ assert.match(await page.locator('#teaching-field-note').innerText(),/합성 온도/);
+ assert.equal(await page.locator('#teaching-scale span').count(),3);
+ assert.match(await page.locator('#teaching-caption').innerText(),width===390?/05번/:/04번/);
+ await guideMode.selectOption('stress');const stressScene=await captureGuide('stress');
+ assert.equal(stressScene.equals(thermalScene),false);
+ assert.match(await page.locator('#teaching-field-note').innerText(),/합성 응력/);
+ await guideMode.selectOption('compare');await advance(200);
+ await page.locator('#export').scrollIntoViewIfNeeded();await advance(120);
+ await captureGuide('comparison');
+ assert.equal(await page.locator('#teaching-pair').isVisible(),true);
+ assert.equal(await page.locator('#teaching-scale span').count(),6);
+ const panels=await page.locator('#teaching-pair span').evaluateAll(nodes=>nodes.map(n=>({x:n.offsetLeft,y:n.offsetTop})));
+ if(width===1366)assert.ok(panels[1].x>panels[0].x);else assert.ok(panels[1].y>panels[0].y);
+ await guideMode.selectOption('assembly');const baseScene=await captureGuide('base');assert.equal(await page.locator('#inside-note').isVisible(),false);
+ assert.equal(await page.locator('#teaching-legend').isVisible(),false);
+ assert.equal(await page.locator('#teaching-back').isDisabled(),true);
+ await page.locator('#teaching-next').press('Enter');
+ assert.match(await page.locator('#teaching-description').innerText(),/카세트/);
+ await page.locator('#teaching-step').selectOption('4');const joinedScene=await captureGuide('joined');
+ assert.equal(baseScene.equals(joinedScene),false);assert.equal(await page.locator('#teaching-next').isDisabled(),true);
+ await page.locator('#teaching-back').press('Enter');await advance(100);
+ assert.equal(await page.locator('#teaching-step').inputValue(),'3');
+ await page.locator('#viewport').press('ArrowLeft');await advance(100);
+ await page.locator('#teaching-step').press('Escape');assert.equal(await page.locator('#teaching-mode').evaluate(el=>el===document.activeElement),true);assert.equal(await page.locator('[data-placement-part="rail"]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#inside-note').isVisible(),true);const restored=await captureGuide('restored');
+ assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-caption').isVisible(),false);
+ assert.deepEqual(await interiorPixels(restored),normalPixels,'Original presented canvas pixels, camera and selection should be restored');
+ assert.deepEqual(await snapshot(),guideState);
+ await guideMode.selectOption('stress');await advance(100);
+ await page.locator('#teaching-settings summary').press('Enter');await advance(100);
+ assert.equal(await guideMode.inputValue(),'normal');assert.equal(await page.locator('#teaching-legend').isVisible(),false);
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth),false);
+ assert.deepEqual(errors,[]);
  rows.push({width,theme,webgl:true,partControls:true,partEscape:true,partSelectionNonInterference:true,temperatureNextBoard:true,stopLatch:true,holdPreserved:true,reset:true,horizontalOverflow:false});await ctx.close();
  }
  // Deliberately disabled WebGL: the same public controls and exports must still work.
- const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);assert.equal(await p.locator('[data-placement-part]:disabled').count(),4);assert.equal(await p.locator('[data-placement-part][aria-pressed="true"]').count(),0);assert.equal(await p.locator('#placement-clear').isDisabled(),true);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
+ const b=await chromium.launch({headless:true,executablePath:process.env.FABGUARD_BROWSER_PATH||'/usr/bin/chromium',args:['--disable-webgl']});try{const p=await b.newPage({reducedMotion:'no-preference'});await p.goto(base+'/smt/');assert.equal(await p.locator('#view-error').isVisible(),true);assert.equal(await p.locator('#teaching-mode').isDisabled(),true);assert.equal(await p.locator('[data-placement-part]:disabled').count(),4);assert.equal(await p.locator('[data-placement-part][aria-pressed="true"]').count(),0);assert.equal(await p.locator('#placement-clear').isDisabled(),true);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);await p.locator('#apply-peak').click();assert.match(await p.locator('#mission-status').innerText(),/260/);await p.locator('#simulation-stop').click();assert.equal(await p.locator('#play').isDisabled(),true);await p.locator('#release-stop').click();assert.equal(await p.locator('#play').isDisabled(),false);await p.locator('#simulation-stop').click();await p.locator('#reset').click();assert.match(await p.locator('#run-status').innerText(),/일시정지/);assert.equal(await p.locator('#play').isDisabled(),false);assert.match(await p.locator('#placement-part-note').innerText(),/비활성화/);rows.push({webgl:false,controls:true,latchedResetPaused:true});}finally{await b.close();}
+ await require('./compare_placement_teaching.cjs')(browser,base,out);
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(rows,null,2));console.log(JSON.stringify(rows,null,2));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

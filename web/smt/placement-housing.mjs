@@ -80,7 +80,7 @@ export function buildPlacementHousing(machine,cover,width,feederCount){
  for(let j=0;j<3;j++)box(consoleGroup,.21-j*.035,.012,.005,-.025,.057-j*.042,.053,'white');
  // One instanced draw for recessed fasteners, not individual shadow-casting screws.
  const points=[];for(const x of [-width*.43,width*.43])for(const y of [.25,.65])points.push([x,y,.89]);
- const bolts=new THREE.InstancedMesh(new THREE.CylinderGeometry(.018,.018,.012,6),mats.alloy,points.length);bolts.raycast=()=>{};
+ const bolts=new THREE.InstancedMesh(new THREE.CylinderGeometry(.018,.018,.012,6),mats.alloy,points.length);bolts.name='service-door-fasteners';bolts.raycast=()=>{};
  const transform=new THREE.Object3D();points.forEach((p,i)=>{transform.position.set(...p);transform.rotation.x=Math.PI/2;transform.updateMatrix();bolts.setMatrixAt(i,transform.matrix);});root.add(bolts);
  function select(part){for(const [key,material] of highlights){material.emissive.setHex(key.startsWith(part+':')?0x247a87:0);material.emissiveIntensity=.48;}}
  return {root,materials:mats,select};
