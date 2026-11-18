@@ -1,5 +1,10 @@
 name: Released robot and context browser verification
 on:
+  pull_request:
+    paths:
+      - .github/workflows/release-browser.yml
+      - verification/prepare_korean_fonts.sh
+      - tests/test_korean_font_setup.py
   push:
     branches: [main]
 permissions:
@@ -23,6 +28,8 @@ jobs:
     needs: production-assets
     strategy:
       fail-fast: false
+      # Limit simultaneous authenticated distro font downloads, not coverage.
+      max-parallel: 4
       matrix:
         kind: [robot, context, silver, theme, transfer, floor-agv, ur3, oht, offline-report]
         width: [1366, 390, 360]
@@ -43,8 +50,9 @@ jobs:
           command -v google-chrome
           google-chrome --version
           python -m pip install .
-          sudo apt-get update -qq
-          sudo apt-get install -y fonts-noto-cjk
+      - name: Bounded authenticated Korean font preparation
+        timeout-minutes: 7
+        run: bash verification/prepare_korean_fonts.sh
       - name: Isolated browser driver without browser download
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
