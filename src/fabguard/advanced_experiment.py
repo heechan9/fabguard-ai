@@ -31,6 +31,17 @@ def selected_candidate(train: pd.DataFrame, config: ExperimentConfig):
     return next(candidate for candidate in selected.values() if candidate.name == name)
 
 
+def score_temporal_fold(fit_fold: pd.DataFrame, validation: pd.DataFrame,
+                        features: list[str], config: ExperimentConfig):
+    """Select and fit using only the chronological prefix, never validation labels."""
+    if fit_fold.empty or validation.empty or fit_fold["timestamp"].max() >= validation["timestamp"].min():
+        raise ValueError("Strictly ordered non-empty temporal blocks required")
+    candidate = selected_candidate(fit_fold, config)
+    pipeline = build_pipeline(candidate, config)
+    pipeline.fit(fit_fold[features], fit_fold["label"])
+    return candidate, pipeline.predict_proba(validation[features])[:, 1]
+
+
 def prefit_calibrator(estimator: object) -> CalibratedClassifierCV:
     """Build a calibrator compatible with both old and current scikit-learn."""
     if FrozenEstimator is not None:
@@ -67,16 +78,14 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
                              random_seed=config.random_seed).to_csv(output_dir / "top_k_bootstrap.csv", index=False)
     drift_table(train, test, features).to_csv(output_dir / "feature_drift.csv", index=False)
 
-    ordered = frame.sort_values(["timestamp", "sample_id"], kind="stable").reset_index(drop=True)
+    ordered = train.sort_values(["timestamp", "sample_id"], kind="stable").reset_index(drop=True)
     walk_rows = []
     for fold, (fit_index, validation_index) in enumerate(walk_forward_slices(ordered["timestamp"])):
         fit_fold, validation = ordered.iloc[fit_index], ordered.iloc[validation_index]
         if fit_fold["label"].nunique() < 2 or validation["label"].sum() == 0:
             continue
-        pipeline = build_pipeline(candidate, config)
-        pipeline.fit(fit_fold[features], fit_fold["label"])
-        fold_probability = pipeline.predict_proba(validation[features])[:, 1]
-        walk_rows.append({"fold": fold, "train_samples": len(fit_fold), "samples": len(validation),
+        fold_candidate, fold_probability = score_temporal_fold(fit_fold, validation, features, config)
+        walk_rows.append({"fold": fold, "selected_candidate": fold_candidate.name, "train_samples": len(fit_fold), "samples": len(validation),
                           "fail": int(validation["label"].sum()), "fail_rate": float(validation["label"].mean()),
                           "average_precision": float(average_precision_score(validation["label"], fold_probability)),
                           **calibration_metrics(validation["label"], fold_probability),
@@ -86,6 +95,8 @@ def run_advanced_experiment(config: ExperimentConfig, *, output_dir: Path, boots
 
     manifest = {"status": "scenario_and_provisional_validation", "selected_candidate": candidate.name,
                 "base_contract": "results/v1/manifest.json", "test_split_changed": False,
+                "walk_forward_scope": "original_training_period_only",
+                "walk_forward_selection": "each_fold_training_prefix_only",
                 "calibration_fit_scope": "last_20_percent_of_training_period_only",
                 "bootstrap_replicates": bootstrap_replicates, "cost_units_are_scenarios_not_currency": True,
                 "inspection_cost_units": inspection_cost, "missed_fail_cost_units": missed_fail_cost,

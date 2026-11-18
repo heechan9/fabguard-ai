@@ -33,3 +33,19 @@ deployment superiority. Aggregating by repeat avoids treating all 25 overlapping
 fold estimates as independent observations.
 
 These outputs do not establish yield improvement, causal impact, or production readiness.
+
+## Subsequent evaluator correction (archived outputs unchanged)
+
+The archived walk-forward run selected its candidate from the entire original
+training period before evaluating earlier windows; later windows also fitted on
+part of the original holdout. It is retrospective exploratory evidence, not nested
+or independent validation. Do not interpret these archived scores as results of
+the corrected evaluator.
+
+Future walk-forward runs select a candidate separately using each fold's past
+training prefix, restrict windows to the original training period, and record
+fold-specific candidates. Shared timestamp-group boundaries prevent adjacent
+validation windows from overlapping. Degenerate timestamp groups fail explicitly.
+No archived result, data split or model was regenerated for this correction.
+The existing full advanced-experiment command still evaluates its calibration and
+cost sections on the previously exposed holdout; it is not a train-only runner.
