@@ -9,8 +9,10 @@ hardware. Every result has `operational_status: WITHHELD`.
 
 The function accepts exact UTF-8 JSON bytes for `left_raw`, `right_raw` and
 `contract_raw`, plus explicit `as_of`, `caller_id` and `purpose` keyword arguments.
-It reads no files or services and writes nothing. It adds no dependency or existing
-caller integration. The tests provide synthetic examples, not a real authority.
+It reads no files or services and writes nothing. It adds no dependency. An existing
+opt-in offline caller invokes this API as described below; that caller's local-file
+I/O does not change the pure diagnostic API or grant operational authority.
+The tests provide synthetic examples, not a real authority.
 
 ## Input contract
 
@@ -70,7 +72,20 @@ and retain HOLD reasons.
 Existing JSON/time/hash helpers are reused. No changes are made to decision basis,
 record quality, maintenance review, their schemas, `change_refs`, pending rows or
 existing holds. This API cannot replace original-evidence validation and MATCH must
-not override a HOLD. There is no UI, CLI, controller or production caller wiring.
+not override a HOLD. There is no browser UI, equipment controller, AAS connection
+or production orchestration for this diagnostic.
+
+The [opt-in offline caller](offline_review_diagnostics.md), added in
+[#229](https://github.com/heechan9/fabguard-ai/pull/229), is available through
+`python -m fabguard.decision_basis --include-diagnostics`. Mapping additionally
+requires all six explicit mapping arguments documented there. The caller revalidates
+review/basis inputs and co-reports the unchanged basis audit, record-quality hints
+and mapping diagnostic; it does not join mapping sources to review observations.
+The wrapper retains `observation_linkage_status: NOT_ESTABLISHED` and
+`operational_status: WITHHELD`, including for matching declarations.
+Omitted mapping remains `null`/`NOT_PROVIDED`, partial requests fail, and HOLD,
+pending and unknown states are not promoted to approval. CLI regression coverage
+was added in [#234](https://github.com/heechan9/fabguard-ai/pull/234).
 
 An earlier separate design/eligibility candidate was unavailable for byte-level
 comparison; compatibility with it is not claimed. Actual authority, caller roles,
