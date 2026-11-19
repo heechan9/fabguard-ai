@@ -1,0 +1,78 @@
+name: Profile completed PCB recovery rendering
+on:
+  push:
+    branches: [draft-smt-recovery-perf-20261119]
+    paths: ['.github/workflows/smt-recovery-perf.yml', 'verification/compare_recovery_perf.cjs', 'verification/compare_recovery_pixels.py', 'verification/compare_line_draft.cjs', 'web/smt/**', 'tests/web/**']
+permissions:
+  contents: read
+jobs:
+  recovery:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [performance, regression]
+        width: [360, 1366]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 11443099ea8f3747f6cb8586fec00bef8a1794f7
+          path: old-line
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: c8e5db2eae140fa3fd95971fdde04495922e6e76
+          path: reviewed
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare the same local software renderer
+        run: |
+          bash verification/prepare_korean_fonts.sh
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install --prefix "$RUNNER_TEMP/driver" --ignore-scripts --no-audit --no-fund playwright@1.62.1
+      - name: Install pixel comparison dependency
+        if: matrix.kind == 'regression'
+        run: |
+          python3 -m venv "$RUNNER_TEMP/pixels"
+          "$RUNNER_TEMP/pixels/bin/pip" --disable-pip-version-check install Pillow==11.3.0
+      - name: Compare isolated revisions over loopback
+        env:
+          WIDTH: ${{ matrix.width }}
+          QA_OUT: recovery-${{ matrix.kind }}-${{ matrix.width }}
+          MODE: ${{ matrix.kind }}
+        run: |
+          mkdir -p "$QA_OUT"
+          git -C old-line rev-parse HEAD > "$QA_OUT/1144309.txt"
+          git -C reviewed rev-parse HEAD > "$QA_OUT/c8e5db2.txt"
+          git rev-parse HEAD > "$QA_OUT/candidate.txt"
+          python3 -m http.server 8774 --bind 127.0.0.1 --directory old-line/web > "$RUNNER_TEMP/old.log" 2>&1 &
+          P0=$!
+          python3 -m http.server 8775 --bind 127.0.0.1 --directory reviewed/web > "$RUNNER_TEMP/reviewed.log" 2>&1 &
+          P1=$!
+          python3 -m http.server 8776 --bind 127.0.0.1 --directory web > "$RUNNER_TEMP/candidate.log" 2>&1 &
+          P2=$!
+          trap 'kill "$P0" "$P1" "$P2"' EXIT
+          for p in 8774 8775 8776; do
+            curl --retry 10 --retry-connrefused --retry-delay 1 -fsS "http://127.0.0.1:$p/smt/" -o /dev/null
+          done
+          export NODE_PATH="$RUNNER_TEMP/driver/node_modules"
+          if [ "$MODE" = performance ]; then
+            if cmp -s web/smt/app.mjs reviewed/web/smt/app.mjs; then export PROFILE_ONLY=1; fi
+            node verification/compare_recovery_perf.cjs
+          else
+            node --test tests/web/*.test.mjs > "$QA_OUT/node-tests.log" || { tail -80 "$QA_OUT/node-tests.log"; exit 1; }
+            tail -9 "$QA_OUT/node-tests.log"
+            RECOVERY_REGRESSION=1 node verification/compare_line_draft.cjs
+            "$RUNNER_TEMP/pixels/bin/python" verification/compare_recovery_pixels.py "$QA_OUT"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: recovery-${{ matrix.kind }}-${{ matrix.width }}
+          path: recovery-${{ matrix.kind }}-${{ matrix.width }}/
+          retention-days: 30

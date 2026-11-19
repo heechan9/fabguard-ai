@@ -8,7 +8,11 @@ const {createHash} = require('node:crypto');
 const width = Number(process.env.WIDTH || 360);
 assert([360,1366].includes(width),'WIDTH must be 360 or 1366');
 const out = path.resolve(process.env.QA_OUT || 'line-qa-'+width);
-const servers = {base:'http://127.0.0.1:8774',candidate:'http://127.0.0.1:8775'};
+const recoveryRegression=process.env.RECOVERY_REGRESSION==='1';
+const servers=recoveryRegression
+  ? {base:'http://127.0.0.1:8775',candidate:'http://127.0.0.1:8776'}
+  : {base:'http://127.0.0.1:8774',candidate:'http://127.0.0.1:8775'};
+const hasRecovery=version=>recoveryRegression || version==='candidate';
 const save = (name,value) => fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n');
 const digest = data => createHash('sha256').update(data).digest('hex');
 const stamp = b => b.map(({id,stage,progress,done})=>({id,stage,progress,done}));
@@ -247,7 +251,7 @@ async function boardTrace(page,version) {
     if(sample.time>=4&&sample.time<8&&!rows.some(r=>r.armedHold)){await call(page,'arm','missing');row.armedHold=true;}
     const probe=await call(page,'probeBoards');rows.push({key:sample.key,...row,probe});
     for(const board of probe.snapshot.boards){
-      const m=probe.boards[board.id],expected=version==='candidate'||!board.done||board.id==='PCB-001';
+      const m=probe.boards[board.id],expected=hasRecovery(version)||!board.done||board.id==='PCB-001';
       assert.equal(m.visible,expected,version+' '+sample.key+' '+board.id+' visibility');
       assert.equal(m.count,Number(expected));assert(m.position.every(Number.isFinite));
     }
@@ -299,6 +303,20 @@ async function visual(browser,version) {
     if(version==='base')await call(page,'write',canonical.line);
     await imageOf(page,version,'line',true);
     await boardTrace(page,version);
+    if(recoveryRegression){
+      // Check real pointer picking on the two hold trays and the top two normal boards.
+      await call(page,'terminalView');
+      const probe=await call(page,'probeBoards'),canvas=page.locator('#viewport canvas').first();
+      const bounds=await canvas.boundingBox();assert(bounds);
+      const picked=[];
+      for(const id of ['PCB-002','PCB-003','PCB-011','PCB-012']){
+        const [x,y]=probe.boards[id].ndc;
+        await canvas.click({position:{x:(x+1)*bounds.width/2,y:(1-y)*bounds.height/2}});
+        assert.equal(await page.locator('#board-select').inputValue(),id,'pointer pick '+id);
+        picked.push(id);
+      }
+      save(version+'-recovery-picks.json',picked);
+    }
     await call(page,'seek',22.25);
     for(const i of [0,1,5,7,8,9,10]) {
       await page.locator('#station-strip button').nth(i).click();
@@ -398,6 +416,13 @@ async function timed(browser,version,ordinal){
       for(const key of ['key','stage','number','name','selected','uiLocation','uiClock','progress','done','visible','motion','history','time'])
         assert.deepEqual(a[key],b[key],'PCB-001 '+a.key+' '+key);
       assert.deepEqual(a.probe.snapshot,b.probe.snapshot,'all board and event records at '+a.key);
+      if(recoveryRegression){
+        assert.deepEqual(a.recoveryPath,b.recoveryPath);
+        for(const id of Object.keys(a.probe.boards)){
+          const before=a.probe.boards[id],after=b.probe.boards[id];
+          for(const field of ['position','visible','count','ndc'])assert.deepEqual(before[field],after[field],id+' '+field+' '+a.key);
+        }
+      }
       for(const board of a.probe.snapshot.boards){
         const p=a.probe.boards[board.id].position,q=b.probe.boards[board.id].position;
         if(board.stage<9||(board.stage===9&&board.progress<.9)){
@@ -418,7 +443,7 @@ async function timed(browser,version,ordinal){
       assert(xzDistance(first,trays.ok)<1e-5);
       const samples=['ok-pickup','ok-quarter','stage-11','ok-three-quarter','discharged'];
       const distances=samples.map(k=>xzDistance(trays.ok,point(k,'PCB-001')));
-      if(version==='candidate'){
+      if(hasRecovery(version)){
         assert(distances.slice(1).every((v,i)=>v>distances[i]+.01),'forward handoff positions');
         assert(Math.abs(last[0]-(terminal.station11[0]-.38))<1e-5&&Math.abs(last[2]-terminal.station11[2])<1e-5,'normal board in first recovery slot');
         const path=rows.flatMap(r=>r.recoveryPath);
@@ -438,11 +463,11 @@ async function timed(browser,version,ordinal){
       assert.equal(boards[2].aoi,'OK');assert.equal(boards[2].fault,'missing');assert.equal(boards[2].volume,null);
       const normal=boards.filter(b=>b.aoi==='OK'&&!b.fault).map(b=>terminal.boards[b.id]);
       assert.equal(normal.length,10);
-      if(version==='candidate')for(const [i,m] of normal.entries()){
+      if(hasRecovery(version))for(const [i,m] of normal.entries()){
         const expected=[terminal.station11[0]+(i%2?.38:-.38),1.11+Math.floor(i/2)*.15,terminal.station11[2]];
         assert(m.visible&&m.count===1&&m.position.every((v,j)=>Math.abs(v-expected[j])<1e-5),'completed board in recovery slot '+i);
       }
-      if(version==='candidate')for(const [i,m] of normal.entries())for(const n of normal.slice(i+1)){
+      if(hasRecovery(version))for(const [i,m] of normal.entries())for(const n of normal.slice(i+1)){
         assert(Math.abs(m.position[0]-n.position[0])>=.67||Math.abs(m.position[2]-n.position[2])>=.79||Math.abs(m.position[1]-n.position[1])>=.07,'overlapping board substrates');
       }
       observations[version]={trays,completedMeshVisibility:Object.fromEntries(Object.entries(terminal.boards).map(([id,m])=>[id,m.visible])),station11:terminal.station11,normalHandoff:samples.map((k,i)=>({key:k,xyz:point(k,'PCB-001'),distanceFromTray:distances[i]})),ng:point('ng-discharged','PCB-002'),hold:point('hold-discharged','PCB-003'),normalStack:normal.map(n=>n.position)};
@@ -452,6 +477,7 @@ async function timed(browser,version,ordinal){
     assert.notDeepEqual(shots.base['flow-22p25'].boards,shots.base['flow-23p5'].boards);
     save('captures.json',{width,initial,canonical,shots,teaching,modules,
       note:'Camera is the live factory camera. The assembly, temperature and stress screenshots use their own teaching camera.'});
+    if(recoveryRegression)return;
     // Two ABBA blocks, a single active page, and four independent runs per version and scenario.
     const order=['base','candidate','candidate','base','base','candidate','candidate','base'];
     for(const [i,version] of order.entries())await timed(browser,version,i);
