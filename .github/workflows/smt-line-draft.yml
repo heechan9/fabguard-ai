@@ -2,6 +2,7 @@ name: SMT line draft comparison
 on:
   push:
     branches: [draft-smt-line-20261119]
+    paths: ['.github/workflows/smt-line-draft.yml', 'web/smt/**', 'verification/compare_line_draft.cjs','tests/web/**']
 permissions:
   contents: read
 jobs:
