@@ -8,16 +8,37 @@ export function robotRoute(board){
  if(board?.aoi==='OK')return holdReasons(board).length?'review':'ok';
  return null;
 }
-export function robotPose(board){
+export function robotPose(board,trayIndex=0){
  const route=robotRoute(board);
  if(!route||!Number.isInteger(board.stage)||board.stage<9)return {phase:'최종 검사 대기',route:null,position:null,carrying:false};
- if(board.stage>9){const d=DESTINATIONS[route];return {phase:'내려놓기 완료',route,position:{x:d.x,y:1.1,z:d.z},carrying:false};}
+ // The OK tray is transient. Retained boards occupy separate layers on NG/HOLD trays.
+ const depositY=1.10+(route==='ok'?0:trayIndex*.15);
+ const carryingY=Math.max(1.76,depositY+.24);
+ if(board.stage>9){const d=DESTINATIONS[route];return {phase:'내려놓기 완료',route,position:{x:d.x,y:depositY,z:d.z},carrying:false};}
  const p=Number.isFinite(board.progress)?Math.max(0,Math.min(1,board.progress)):0;
  const d=DESTINATIONS[route];let position,phase;
- if(p<.25){phase='집기';position={x:0,y:1.11+Math.max(0,(p-.1)/.15)*.65,z:0};}
- else if(p<.75){phase='이송';const t=(p-.25)/.5;position={x:d.x*t,y:1.76,z:d.z*t};}
- else {phase=p<.9?'내려놓기':'내려놓기 완료';const t=Math.min(1,(p-.75)/.15);position={x:d.x,y:1.76-.66*t,z:d.z};}
+ if(p<.25){phase='집기';position={x:0,y:1.11+Math.max(0,(p-.1)/.15)*(carryingY-1.11),z:0};}
+ else if(p<.75){phase='이송';const t=(p-.25)/.5;position={x:d.x*t,y:carryingY,z:d.z*t};}
+ else {phase=p<.9?'내려놓기':'내려놓기 완료';const t=Math.min(1,(p-.75)/.15);position={x:d.x,y:carryingY+(depositY-carryingY)*t,z:d.z};}
  return {phase,route,position,carrying:p>=.1&&p<.9};
+}
+
+// Display-only recovery positions relative to station 10. Slots fill in arrival order.
+export const RECOVERY_LANE_Z=1.91;
+export function normalRecoveryPose(progress,slot,unloaderOffset){
+ const x=unloaderOffset+(slot%2===0?-.38:.38);
+ const y=1.11+Math.floor(slot/2)*.15;
+ const tray=DESTINATIONS.ok;
+ const ease=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+ if(progress<.25){
+  const t=ease(progress/.25);
+  return {x:tray.x,y:1.10+.01*t,z:tray.z+(RECOVERY_LANE_Z-tray.z)*t};
+ }
+ if(progress<.65){
+  const t=ease((progress-.25)/.40);
+  return {x:tray.x+(x-tray.x)*t,y:1.11+(y-1.11)*t,z:RECOVERY_LANE_Z};
+ }
+ return {x,y,z:RECOVERY_LANE_Z*(1-ease((progress-.65)/.35))};
 }
 
 // Read only disclosed synthetic measurements; never infer a route from raw/future values.

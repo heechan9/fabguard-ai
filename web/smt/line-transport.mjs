@@ -68,23 +68,45 @@ export function buildTransfers(scene, positions, widths, box) {
   batchFixedSolids(beds);
 }
 
-// The loader shows a tall slotted supply magazine. The exit has a lower retrieval shelf.
-export function buildMagazine(i,group,cover,w,box) {
-  const inbound = i===0, tall = inbound ? 2.55 : 1.94;
-  for (const x of [-w*.36,w*.36]) {
-    box(cover,.095,tall-.86,.095,x,(tall+.86)/2,-.99,0x456470);
-    box(cover,.095,tall-.86,.095,x,(tall+.86)/2,-.50,0x9fadb2);
-    box(cover,.12,.10,.62,x,tall,-.745,0xabc3c6);
+// The supply cassette rises above the line. Its guides retain the open throat along X.
+export function buildSupplyCassette(group,cover,w,box) {
+  const tower=w*.80, front=-.475, rear=-1.04;
+  for(const x of [-tower/2,tower/2]){
+    box(cover,.12,1.95,.10,x,1.88,rear,0x31515d);
+    box(cover,.075,1.95,.085,x,1.88,front,0xb5c3c5);
+    box(cover,.12,.13,.66,x,2.83,-.755,0xa8bcbe);
   }
-  box(cover,w*.79,.12,.62,0,tall+.06,-.745,inbound?0x246671:0x536876);
-  for (let k=0;k<(inbound?8:4);k++) {
-    const y=1.20+k*.15;
-    box(group,w*.66,.034,.49,0,y,-.76,0x568a79);
-    box(group,w*.70,.035,.035,0,y-.026,-.493,0xb4bfc0);
+  box(cover,tower+.18,.13,.69,0,2.93,-.755,0x1d6974);
+  box(cover,.38,.14,.09,0,3.04,-.78,0x334a52);
+  box(group,.14,1.90,.10,-tower*.30,1.87,rear,0x485e68);
+  for(let k=0;k<9;k++){
+    const y=1.30+k*.165;
+    box(group,tower-.10,.040,.49,0,y,-.765,0x43836c);
+    box(group,tower-.035,.034,.048,0,y-.022,-.490,0xb8c5c3);
   }
-  if (!inbound) {
-    box(group,w*.8,.085,.52,0,.965,.86,0x708996);
-    box(group,w*.8,.11,.04,0,1.014,1.12,0xa4b6be);
+  box(group,tower+.02,.12,.61,0,1.19,-.76,0x526771);
+}
+
+// Robots approach both recovery positions from +Z. All roller crowns and rim caps
+// remain below the base board's underside; there is no crossbar over the opening.
+export function buildRecoveryBed(group,w,box,cylinder) {
+  const apron=w+.05;
+  box(group,apron,.085,2.04,0,.945,.43,0x3a5862);
+  for(const x of [-apron*.47,apron*.47]){
+    box(group,.085,.105,2.05,x,1.00,.43,0x78959c);
+    box(group,.098,.025,1.97,x,1.058,.43,0xb9c9c9);
+    box(group,.089,.031,.32,x,1.055,1.28,0xd8ac58);
+    const brace=box(group,.080,.080,.92,x*.88,.75,1.008,0x68838c);
+    brace.rotation.x=-.39;
+  }
+  // Two independent receiving lanes, centered at x = ±0.38 in model coordinates.
+  // The low gap between them makes both landing positions readable from above.
+  for(const cx of [-.38,.38]){
+    box(group,.70,.038,1.89,cx,1.006,.41,0x263e47);
+    for(let n=0;n<9;n++){
+      const roller=cylinder(group,.034,.68,cx,1.038,-.43+n*.215,0xb2c0c1);
+      roller.rotation.z=Math.PI/2;
+    }
   }
 }
 
@@ -104,22 +126,4 @@ export function buildOpenWorkstation(i,group,cover,w,box) {
     box(cover,w*.95,.24,.09,0,1.26,-.68,0x436775);
     for(const x of [-.47,0,.47]) box(cover,.065,.47,.11,x,1.44,-.67,0x8b9ea7);
   }
-}
-
-
-// A shallow hinged press hood above the existing stencil frame; the PCB passes under it.
-export function buildPrinterHood(cover,w,box) {
-  const profile=new THREE.Shape();
-  profile.moveTo(.83,1.71);profile.lineTo(.83,2.22);profile.lineTo(.45,2.36);
-  profile.lineTo(-.20,2.36);profile.lineTo(-.83,1.94);profile.lineTo(-.83,1.82);
-  profile.lineTo(-.72,1.82);profile.lineTo(-.09,2.22);profile.lineTo(.62,2.22);
-  profile.lineTo(.71,2.17);profile.lineTo(.71,1.71);profile.closePath();
-  const shape=new THREE.ExtrudeGeometry(profile,{depth:w-.09,bevelEnabled:false});
-  shape.rotateY(Math.PI/2);shape.translate(-(w-.09)/2,0,0);
-  const hood=new THREE.Mesh(shape,new THREE.MeshStandardMaterial({color:0xa6babd,roughness:.46,metalness:.25}));
-  hood.castShadow=hood.receiveShadow=true;cover.add(hood);
-  for(const x of [-w*.43,w*.43]) {
-    box(cover,.12,.75,.15,x,1.44,-.76,0x4e6470);
-  }
-  box(cover,w*.52,.07,.08,0,1.85,.866,0x294854);
 }

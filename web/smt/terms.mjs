@@ -10,6 +10,6 @@ export const STATION_TERMS=[
  ['기판 식히기','Cooling Conveyor','가열한 기판을 식히는 단계예요. 냉각 속도나 열전달은 계산하지 않아요.'],
  ['마지막 외관 확인','AOI · Automated Optical Inspection','실제 장비는 영상으로 외관을 검사해요. 이 화면은 영상 분석 없이 가상 규칙으로 결과를 만들어요.'],
  ['검사 뒤 대기','NG Buffer','검사를 마친 기판이 잠시 기다리는 자리예요. 옆의 가상 로봇이 합성 규칙에 따라 이송·분류해요. 실제 분기 장치를 제어하지 않아요.'],
- ['기판 꺼내기','Unloader','조립 라인을 지난 기판을 꺼내요. 이번 실행은 12장까지 진행해요.']
+ ['기판 꺼내기','Unloader','정상 기판은 회수 슬롯에 들어가고, 불량·검토 보류 기판은 각 분류 트레이에 남아요. 배출 완료 기록은 가상 공정 시간표의 끝을 뜻해요.']
 ].map(([plain,formal,explanation])=>({plain,formal,explanation}));
 export function plainCopy(text){return text.replaceAll('가상 AOI','가상 최종 검사(AOI)').replaceAll('SPI','납 검사(SPI)').replaceAll('리플로우','납땜 가열(리플로우)').replaceAll('NG','불량 표시(NG)').replaceAll('OK','통과 표시(OK)');}

@@ -5,7 +5,7 @@ import {mountPlacementDetails,detailPCB,PARTS} from './placement-details.mjs';
 import {lotMissionSummary,placementPose,LOT_COLORS} from './interactive-model.mjs';
 import {mountContextReview} from './context-review.mjs';
 import {holdReasons} from './context-review-model.mjs';
-import {robotPose,robotReview,DESTINATIONS,ROBOT_NAME,ROBOT_SCOPE} from './robot-cell-model.mjs';
+import {robotPose,robotRoute,normalRecoveryPose,robotReview,DESTINATIONS,ROBOT_NAME,ROBOT_SCOPE} from './robot-cell-model.mjs';
 import {mountRobotCell} from './robot-cell-view.mjs';
 import {FloorAgv,AGV_NAME} from './floor-agv-model.mjs';
 import {mountFloorAgv} from './floor-agv-view.mjs';
@@ -103,6 +103,10 @@ function updateUI(){
  $('transfer-robot-phase').textContent='선택한 기판 · '+b.id+' · '+transferPose(b).phase;
  const moving=sim.boards.find(board=>board.stage===9);$('robot-active').textContent=moving?'지금 이송하는 기판 · '+moving.id:'지금 이송하는 기판 · 없음';
  const pose=robotPose(b);$('robot-phase').textContent='선택한 기판 · '+ROBOT_NAME+' · '+b.id+' · '+pose.phase+(pose.route?' → '+DESTINATIONS[pose.route].label:'');
+ if(b.stage>=10 && pose.route){
+  const location=pose.route==='ok'?(b.done?'11 정상 회수 슬롯':'10 정상 트레이 → 11 회수 슬롯 인계'):DESTINATIONS[pose.route].label+' 보관';
+  $('robot-phase').textContent+=' · 3D 기판 위치: '+location;
+ }
  const historyKey=b.id+':'+b.history.length;if(prevHistory!==historyKey){$('history').replaceChildren(...b.history.slice().reverse().map(h=>{const li=document.createElement('li'),t=document.createElement('time'),s=document.createElement('span');t.textContent=timeText(h.time);s.textContent=h.stage<STATION_TERMS.length?`${STATION_TERMS[h.stage].plain} (${STATIONS[h.stage].name})${plainCopy(h.text.slice(STATIONS[h.stage].name.length))}`:h.text;li.append(t,s);return li;}));prevHistory=historyKey;}
  const done=sim.boards.length===12&&sim.boards.every(b=>b.done);$('play').textContent=done?'실험 완료':sim.running?'일시정지':'계속 실행';$('play').disabled=done||sim.emergencyStopped;$('export-review').disabled=!done;$('run-status').textContent=sim.emergencyStopped?'합성 E-stop · 정지 잠금':done?'기판 12개 완료':sim.running?'시뮬레이션 실행 중':'일시정지';$('run-dot').style.background=sim.running?'#1d9b7a':'#94a5ac';$('clock').textContent=timeText(sim.time);
  $('completed').textContent=sim.boards.filter(b=>b.done).length;$('ng-count').textContent=sim.boards.filter(b=>b.aoi==='NG').length;$('review-count').textContent=sim.boards.filter(b=>holdReasons(b).length>0).length;
@@ -152,19 +156,10 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
   const head=cylinder(group,.11,.48,0,1.59,0,0x3d7485);heads.push({head,group,stage:i});const details=mountPlacementDetails(group,head,w,i===3?6:4);const select=details.select;details.select=part=>{select(part);housing.select(part);};placementDetails.set(i,details);
  }else{
  box(group,w,.65,1.7,0,.45,0,color.shell);box(group,w+.14,.13,1.9,0,.86,0,color.dark);
- for(const z of[-.61,.61])box(group,w+.5,.12,.1,0,1.03,z,color.rail);
+ if(i!==10)for(const z of[-.61,.61])box(group,w+.5,.12,.1,0,1.03,z,color.rail);
  for(const lx of[-w*.36,w*.36])for(const z of[-.59,.59])cylinder(group,.055,.27,lx,.08,z,color.dark);
  box(group,w*.72,.39,.035,0,.46, .87,0xc3d0d8);box(group,.07,.18,.055,w*.28,.49,.9,0x6d8490);
- if(!open&&!processHousing&&i!==1){
-  box(cover,w,.13,1.9,0,2.17,0,color.shell);
-  for(const xx of[-w/2+.06,w/2-.06])for(const z of[-.83,.83])box(cover,.1,1.25,.1,xx,1.55,z,color.shell);
-  box(cover,w-.18,.98,.035,0,1.58,-.85,0x71a3ac,.16);
-  box(cover,w-.18,.98,.035,0,1.58,.85,0x739aa7,.1);
-  if(i===8){box(group,.34,.23,.34,0,1.92,0,color.dark);group.userData.scan=box(group,w-.35,.012,1.02,0,1.3,0,0x689fd3,.27);}
-  box(cover,.45,.35,.1,w*.23,2.47,.28,color.dark);box(cover,.34,.24,.015,w*.23,2.47,.341,0x75c7bb);
  }
- }
- if(i===1)box(group,w-.3,.09,.82,0,1.63,0,0x869fab);
  if(open)buildOpenWorkstation(i,group,cover,w,box);
  if(i===7){for(let k=0;k<3;k++)cylinder(group,.18,.09,-.4+k*.4,.96,0,0x769ba7);}
  cylinder(group,.035,.5,w*.38,open?1.65:2.55,-.58,color.dark);const lamp=cylinder(group,.07,.15,w*.38,open?1.98:2.87,-.58,color.mint);group.userData.lamp=lamp;
@@ -173,7 +168,7 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
   batchFixedSolids(group);batchFixedSolids(cover);
   if(processHousing)detailMachine(i,group,cover,w,box,cylinder);
  }
- const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
+ const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,i===0?3.48:open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
 }
 function makeBoard(b){const group=new THREE.Group();group.userData.boardId=b.id;const pcb=box(group,.67,.07,.79,0,0,0,0x287c63);group.userData.pcb=pcb;group.userData.chips=[];for(let k=0;k<4;k++){group.userData.chips.push(box(group,.13,.065,.16,-.19+(k%2)*.34,.065,-.2+Math.floor(k/2)*.34,0x273d46));}box(group,.64,.015,.065,0,.05,.34,LOT_COLORS[Math.floor((Number(b.id.slice(-3))-1)/4)]);detailPCB(group);scene.add(group);boardMeshes.set(b.id,group);return group;}
 function cameraUpdate(){updateLabelVisibility();if(!camera)return;const aspect=viewport.clientWidth/Math.max(1,viewport.clientHeight),distance=overviewDistance(aspect)*zoom;camera.position.set(targetX+Math.sin(azimuth)*Math.cos(elevation)*distance,targetY+Math.sin(elevation)*distance,targetZ+Math.cos(azimuth)*Math.cos(elevation)*distance);camera.lookAt(targetX,targetY,targetZ);camera.aspect=aspect;camera.updateProjectionMatrix();}
@@ -189,7 +184,7 @@ try{
  const floorMarkings=new THREE.Group();scene.add(floorMarkings);
  dressFloor(floorMarkings,positions,widths,box);batchFixedSolids(floorMarkings);
  for(let i=0;i<11;i++)makeMachine(i);
- robotCell=mountRobotCell(scene,positions[9],{box,cylinder,label});
+ robotCell=mountRobotCell(scene,positions[9],{box,cylinder,label},positions[10]-positions[9]);
  transferRobot=mountTransferRobot(scene,positions[TRANSFER_STAGE],{box,cylinder,label});
  floorAgvView=mountFloorAgv(scene,{box,cylinder,label});
  buildTransfers(scene,positions,widths,box);
@@ -217,9 +212,22 @@ $('placement-clear').addEventListener('click',clearPartSelection);
 function pointerEnd(event){const clicked=tapGuard.end(event.pointerId);pointers.delete(event.pointerId);pinchDistance=0;if(clicked&&renderer&&!teachingView.active){const rect=viewport.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),camera);const hits=ray.intersectObjects([...boardMeshes.values()],true);if(hits.length){let obj=hits[0].object;while(obj&&!obj.userData.boardId)obj=obj.parent;if(obj){clearPartSelection();selected=obj.userData.boardId;updateUI();}}else{if(floorAgvView&&ray.intersectObject(floorAgvView.root,true).length){selectFloorAgv();return;}if(transferRobot&&ray.intersectObject(transferRobot.root,true).length){selectTransferRobot();return;}if(robotCell&&ray.intersectObject(robotCell.root,true).length){selectRobot();return;}const m=ray.intersectObjects(machines,true);if(m.length){let obj=m[0].object;while(obj&&obj.userData.station===undefined)obj=obj.parent;if(obj)selectStation(obj.userData.station);}}}}
 viewport.addEventListener('pointerup',pointerEnd);viewport.addEventListener('pointercancel',event=>{tapGuard.end(event.pointerId,true);pointers.delete(event.pointerId);pinchDistance=0;});
 viewport.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(event.key))return;event.preventDefault();overviewFraming=false;if(event.key==='ArrowLeft')azimuth-=.1;if(event.key==='ArrowRight')azimuth+=.1;if(event.key==='ArrowUp')elevation=Math.min(1.53,elevation+.1);if(event.key==='ArrowDown')elevation=Math.max(-.15,elevation-.1);if(event.key==='+')zoom=clampZoom(zoom/1.2);if(event.key==='-')zoom=clampZoom(zoom*1.2);cameraUpdate();});
-function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferBoard=activeTransferBoard(source.boards);for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const transfer=b===transferBoard?transferPose(b):null;if(transfer?.position){const p=transfer.position;mesh.position.set(positions[TRANSFER_STAGE]+p.x,p.y,p.z);}const pose=robotPose(b);if(pose.position){const stack=pose.phase==='내려놓기 완료'?(Number(b.id.slice(-3))-1)*.025:0;mesh.position.set(positions[9]+pose.position.x,pose.position.y+stack,pose.position.z);}
- mesh.visible=!b.done||b.id===selected;const placed=placementPose(b).placed;mesh.userData.chips.forEach((chip,index)=>{chip.visible=index<placed;});const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,1.2,mesh.position.z);}}
+function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferBoard=activeTransferBoard(source.boards);
+ const nextSlot={ok:0,ng:0,review:0};let shuttlePosition=null;
+ for(const b of source.boards){const mesh=boardMeshes.get(b.id)||makeBoard(b),stage=Math.max(0,Math.min(10,b.stage));const from=positions[stage]-widths[stage]/2-.24,to=positions[stage]+widths[stage]/2+.24;mesh.position.set(b.done?positions[10]+1.3:from+(to-from)*b.progress,1.11,b.done?((Number(b.id.slice(-3))-1)%6)*.15:0);const transfer=b===transferBoard?transferPose(b):null;if(transfer?.position){const p=transfer.position;mesh.position.set(positions[TRANSFER_STAGE]+p.x,p.y,p.z);}const route=b.stage>=9?robotRoute(b):null;
+ const slot=route?nextSlot[route]++:0;
+ const pose=robotPose(b,slot);
+ if(pose.position){
+  let p=pose.position;
+  if(route==='ok'&&b.stage>=10){
+   p=normalRecoveryPose(b.done?1:b.progress,slot,positions[10]-positions[9]);
+   if(!b.done)shuttlePosition=p;
+  }
+  mesh.position.set(positions[9]+p.x,p.y,p.z);
+ }
+ mesh.visible=!b.done||Boolean(route)||b.id===selected;const placed=placementPose(b).placed;mesh.userData.chips.forEach((chip,index)=>{chip.visible=index<placed;});const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,mesh.position.y+.09,mesh.position.z);}}
  for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=source.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(source.time*4));}
+ robotCell?.showShuttle(shuttlePosition);
  robotCell?.update(source.boards,selected);
  transferRobot?.update(source.boards,source.time);
  floorAgvView?.update(floorAgv.pose);
