@@ -1,3 +1,4 @@
+import {CompletedBoardBatch} from './completed-board-batch.mjs';
 import {batchFixedSolids,buildTransfers,buildOpenWorkstation} from './line-transport.mjs';
 import {mountTeachingView} from './placement-teaching.mjs';
 import {buildPlacementHousing} from './placement-housing.mjs';
@@ -62,7 +63,7 @@ selectStation(3,false);
 function arm(fault){sim.arm(fault);followInjected=true;updateUI();}
 document.querySelectorAll('[data-fault]').forEach(b=>b.addEventListener('click',()=>arm(b.dataset.fault)));
 $('play').addEventListener('click',()=>{if(sim.emergencyStopped||sim.boards.every(b=>b.done))return;sim.running=!sim.running;updateUI();});
-$('reset').addEventListener('click',()=>{clearPartSelection();inspection.reset();sim.reset();floorAgv.reset(sim.time);if(reducedMotion.matches)sim.running=false;selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
+$('reset').addEventListener('click',()=>{clearPartSelection();inspection.reset();clearCompletedBoards();sim.reset();floorAgv.reset(sim.time);if(reducedMotion.matches)sim.running=false;selected='PCB-001';followInjected=false;for(const g of boardMeshes.values()){scene?.remove(g);g.traverse(o=>{o.geometry?.dispose();if(o.material&&!Array.isArray(o.material))o.material.dispose();});}boardMeshes.clear();$('speed').value='1';sim.advance(.001);updateUI();});
 $('peak-assumption').addEventListener('input',()=>{$('peak-assumption-value').textContent=$('peak-assumption').value+'°C';});
 $('apply-peak').addEventListener('click',()=>{if(sim.boards.length>=12){updateUI();return;}sim.armPeak(Number($('peak-assumption').value));followInjected=true;updateUI();});
 $('simulation-stop').addEventListener('click',()=>{sim.emergencyStop();updateUI();draw();});
@@ -116,6 +117,11 @@ function updateUI(){
 
 // Concept geometry, not manufacturer CAD. No geometry or parameters imply physical validation.
 const viewport=$('viewport'),boardMeshes=new Map(),machines=[],heads=[];
+let completedBoards;
+function clearCompletedBoards(){
+ completedBoards?.dispose();
+ completedBoards=null;
+}
 let renderer,scene,camera,selectionRing;const widths=STATIONS.map((_,i)=>i===6?4.4:i===0||i===10?1.7:i===5||i===7||i===9?1.45:2.25),positions=[];
 let offset=0;for(let i=0;i<widths.length;i++){positions.push(offset+widths[i]/2);offset+=widths[i]+.65;}for(let i=0;i<positions.length;i++)positions[i]-=offset/2;
 let targetX=0,targetY=.6,targetZ=0, overviewFraming=true;
@@ -225,7 +231,12 @@ function draw(source=sim,paint=true){if(!renderer||!scene)return;const transferB
   }
   mesh.position.set(positions[9]+p.x,p.y,p.z);
  }
- mesh.visible=!b.done||Boolean(route)||b.id===selected;const placed=placementPose(b).placed;mesh.userData.chips.forEach((chip,index)=>{chip.visible=index<placed;});const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);if(b.id===selected){selectionRing.position.set(mesh.position.x,mesh.position.y+.09,mesh.position.z);}}
+ mesh.visible=!b.done||Boolean(route)||b.id===selected;const placed=placementPose(b).placed;mesh.userData.chips.forEach((chip,index)=>{chip.visible=index<placed;});const a=assess(b);mesh.userData.pcb.material.color.setHex(a.level==='danger'?color.red:a.level==='warn'?color.amber:0x287c63);
+ if(source===sim && b.done && route){
+  completedBoards??=new CompletedBoardBatch(scene,mesh);
+  completedBoards.add(mesh);
+ }
+ if(b.id===selected){selectionRing.position.set(mesh.position.x,mesh.position.y+.09,mesh.position.z);}}
  for(let i=0;i<machines.length;i++){const group=machines[i],hasFault=source.boards.some(b=>b.stage===i&&assess(b).level!=='normal');group.userData.lamp.material.color.setHex(hasFault?color.amber:color.mint);if(group.userData.scan)group.userData.scan.position.y=1.2+.2*(1+Math.sin(source.time*4));}
  robotCell?.showShuttle(shuttlePosition);
  robotCell?.update(source.boards,selected);
@@ -251,7 +262,7 @@ if(document.modelContext?.registerTool){const lifecycle=new AbortController();ad
 // The introduction uses its own seeded run and camera. Restore the live view on every exit.
 let introBoardIds;
 mountIntro({scene,positions,available:()=>Boolean(renderer&&scene&&machines.length===11),
- begin(){clearPartSelection();introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;},
+ begin(){clearPartSelection();clearCompletedBoards();introBoardIds=new Set(boardMeshes.keys());introBusy=true;selectionRing.visible=false;},
  update(sample,station){
   const ids=new Set(sample.boards.map(b=>b.id));
   for(const [id,mesh] of boardMeshes)if(!ids.has(id))mesh.visible=false;
