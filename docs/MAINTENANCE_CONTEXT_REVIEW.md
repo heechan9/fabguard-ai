@@ -102,3 +102,20 @@ PC 전체/검토, 390 전체, 360 검토 캡처를 직접 확인했다. 원본 G
 - 실행 명령·원본 ZIP/파일 SHA-256: [검사 JSON](review/MAINTENANCE_CONTEXT_UI_20261025.json)
 
 세 기능의 합성 동작·화면 연결은 완료했지만, 실제 정비 로그에 대한 유효성·물리적 원인·운영 성능·권한 승인은 검증하지 않았다. Draft 검토 상태이며 main 병합·배포는 하지 않는다.
+
+### Optional process and same-sample review note
+
+In the selected observation's evidence panel, open **공정 이상·동일 시료 검토 메모**.
+Record what was observed and where it was recorded, separately from the existing hypotheses.
+Record measurement conditions and LOT history, and keep quality and throughput observations
+separate. The optional entry adds a `process_review_note` to the local evidence JSON only.
+It does not alter the source package, SPC result, decision draft, or release rules.
+
+For a second inspection record, compare the declared LOT, physical unit ID, measurement
+name, unit and conditions. Matching field text is recorded as `DECLARED_FIELDS_MATCH_ONLY`,
+not proof of physical identity or a measured difference. A known mismatch is flagged
+even if other details are missing. Missing details remain incomplete. The process note
+does not execute or ingest the [inspection-selection summary](INSPECTION_SELECTION_SUMMARY.md);
+it stores a user-declared reference so the existing report can be reviewed separately.
+This demo does not validate a battery inspection model, yield gain, or cause.
+No lecture originals or live production data are included.
