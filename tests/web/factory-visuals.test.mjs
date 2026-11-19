@@ -28,16 +28,39 @@ test('all added station and floor geometry has finite transformed vertices and v
  });assert.ok(count>0);}finally{dispose(scene);}
 });
 
-test('added reflow cover stays clear of the bare PCB swept volume in three dimensions',()=>{
- const {group,cover}=machine(6);
- assert.equal(shouldAutoRevealInterior(6),true,'focused reflow should open its explanatory cutaway');
- assert.equal(shouldAutoRevealInterior(5),false,'open work table should not force interior mode');
- // Current app: PCB .67 x .07 x .79, center y=1.11 and z=0.
- // Sweep through the entire station, including entry and exit.
- const path=new THREE.Box3(new THREE.Vector3(-3,1.075,-.395),new THREE.Vector3(3,1.145,.395));
- try{cover.traverse(o=>{if(o.isMesh)assert.equal(new THREE.Box3().setFromObject(o).intersectsBox(path),false,'cover intersects PCB transport corridor');});
-  const sidePanels=cover.children.filter(o=>o.geometry.parameters.height===.85);
-  assert.equal(sidePanels.length,2);
-  for(const panel of sidePanels){const b=new THREE.Box3().setFromObject(panel);const gap=panel.position.z>0?b.min.z-path.max.z:path.min.z-b.max.z;assert.ok(gap>.38);}
- }finally{dispose(group);}
+test('inspection and heating assemblies clear the populated PCB from entrance to exit',()=>{
+ assert.equal(shouldAutoRevealInterior(6),true);
+ assert.equal(shouldAutoRevealInterior(5),false);
+ const corridor=new THREE.Box3(new THREE.Vector3(-3,1.075,-.395),new THREE.Vector3(3,1.208,.395));
+ for(const stage of [2,6]){
+  const {group,cover}=machine(stage);
+  let triangles=0;
+  const ray=new THREE.Raycaster(), m=new THREE.Matrix4(), t=new THREE.Triangle();
+  const instance=new THREE.Matrix4();
+  try{
+   group.traverse(mesh=>{
+    if(!mesh.isMesh)return;
+    const g=mesh.geometry,positions=g.getAttribute('position');
+    for(let n=0;n<(mesh.isInstancedMesh?mesh.count:1);n++){
+     m.copy(mesh.matrixWorld);
+     if(mesh.isInstancedMesh){mesh.getMatrixAt(n,instance);m.multiply(instance);}
+     for(let i=0;i<(g.index?.count??positions.count);i+=3){
+      [t.a,t.b,t.c].forEach((v,j)=>v.fromBufferAttribute(positions,g.index?g.index.getX(i+j):i+j).applyMatrix4(m));
+      assert.ok(!corridor.intersectsTriangle(t),'part in board corridor');
+      triangles++;
+     }
+    }
+   });
+   assert.ok(triangles>0);
+   if(stage===6){
+    // At transport height the folded sidewalls remain outboard of the board edges.
+    // On both sides at mid-height, the inner wall lies more than .38 from the board.
+    for (const sign of [-1,1]){
+     ray.set(new THREE.Vector3(0,1.34,0),new THREE.Vector3(0,0,sign));
+     const hit=ray.intersectObjects(cover.children,true)[0];
+     assert.ok(hit && Math.abs(hit.point.z)-.395>.38);
+    }
+   }else assert.ok(group.userData.scan);
+  }finally{dispose(group);}
+ }
 });

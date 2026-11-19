@@ -53,8 +53,30 @@ export function mountPlacementDetails(machine,head,width,feederCount=6){
  return {root,parts,carriage,pcbOutline,select,update,get selected(){return selected;}};
 }
 export function detailPCB(group){
- // Decorative pads live on the PCB surface and never carry status or measured values.
- const material=new THREE.MeshStandardMaterial({color:0xc5aa65,metalness:.65,roughness:.4});
- const geometry=new THREE.BoxGeometry(.035,.006,.045);
- for(let i=0;i<8;i++){const pad=new THREE.Mesh(geometry,material);pad.position.set(-.27+i*.077,.04,-.34);pad.raycast=()=>{};group.add(pad);}
+ // One surface draw travels with the same board ID through every station. The gold
+ // edge fingers and white orientation mark do not encode measurements or board status.
+ const coords=[], colors=[];
+ const copper=new THREE.Color(0xba9951),silk=new THREE.Color(0xe5eee2);
+ function triangle(a,b,c,color){
+  for(const [x,z] of [a,b,c]){coords.push(x,.041,z);colors.push(color.r,color.g,color.b);}
+ }
+ function strip(x,z,w,d,color=copper){
+  const x0=x-w/2,x1=x+w/2,z0=z-d/2,z1=z+d/2;
+  triangle([x0,z0],[x0,z1],[x1,z1],color);
+  triangle([x0,z0],[x1,z1],[x1,z0],color);
+ }
+ for(let i=0;i<8;i++)strip(-.27+i*.077,-.34,.035,.045);
+ for(let i=0;i<7;i++)strip(.296,-.22+i*.063,.057,.037);
+ for(let i=0;i<4;i++){
+  const z=-.235+i*.127;
+  strip(-.055,z,.38,.011);strip(.129,z+.020,.011,.046);
+ }
+ triangle([-.299,.235],[-.299,.296],[-.223,.265],silk);
+ const geometry=new THREE.BufferGeometry();
+ geometry.setAttribute('position',new THREE.Float32BufferAttribute(coords,3));
+ geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+ geometry.computeVertexNormals();
+ const markings=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,metalness:.4,roughness:.48}));
+ markings.raycast=()=>{};
+ group.add(markings);
 }
