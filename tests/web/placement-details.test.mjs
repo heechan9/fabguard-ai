@@ -6,7 +6,27 @@ test('bounded finite geometry with no generated physical status',()=>{const {mac
 test('highlight categories restore and never alter base colour',()=>{const {d}=build();const mesh=d.parts.rail[0],base=mesh.material.color.getHex();d.select('rail');assert.notEqual(mesh.material.emissive.getHex(),0);d.select('nozzle');assert.equal(mesh.material.emissive.getHex(),0);assert.equal(mesh.material.color.getHex(),base);d.select('bogus');assert.equal(d.selected,null);});
 test('PCB border only follows a present board and selected category',()=>{const {d}=build();d.select('pcb');d.update(null,0);assert.equal(d.pcbOutline.visible,false);d.update({},.3);assert.equal(d.pcbOutline.visible,true);assert.equal(d.pcbOutline.position.x,.3);d.select('rail');d.update({},.2);assert.equal(d.pcbOutline.visible,false);});
 test('moving head retains parent transform and repeated update creates no geometry',()=>{const {machine,head,d}=build();const count=()=>{let n=0;machine.traverse(()=>n++);return n;};const n=count();for(let i=0;i<100;i++){head.position.set(i/100,1.5,0);d.update({},i/100);}assert.equal(count(),n);assert.equal(d.carriage.parent,head);});
-test('PCB pads are bounded decorative children',()=>{const g=new THREE.Group();detailPCB(g);assert.equal(g.children.length,8);assert.ok(g.children.every(x=>x.position.y===.04));});
+test('the shared board markings retain eight bounded solder pads on the board surface',()=>{
+ const group=new THREE.Group();
+ detailPCB(group);group.updateMatrixWorld(true);
+ assert.equal(group.children.length,1,'all markings use one draw');
+ const mesh=group.children[0], positions=mesh.geometry.attributes.position;
+ for(let i=0;i<positions.count;i++){
+  assert.ok(Math.abs(positions.getX(i))<=.335 && Math.abs(positions.getZ(i))<=.395);
+  assert.ok(Math.abs(positions.getY(i)-.041)<1e-6);
+ }
+ function touches(x,z){
+  const ray=new THREE.Raycaster(new THREE.Vector3(x,1,z),new THREE.Vector3(0,-1,0)), hits=[];
+  // Inspect the triangles directly. The live decorative mesh intentionally ignores picks.
+  THREE.Mesh.prototype.raycast.call(mesh,ray,hits);
+  return hits.length>0;
+ }
+ for(let i=0;i<8;i++){
+  const x=-.27+i*.077;
+  assert.equal(touches(x,-.34),true);
+  if(i<7)assert.equal(touches(x+.0385,-.34),false);
+ }
+});
 test('station highlights never leak into another station',()=>{const a=build(),b=build();a.d.select('rail');assert.equal(b.d.parts.rail[0].material.emissive.getHex(),0);a.d.select(null);assert.equal(a.d.parts.rail[0].material.emissive.getHex(),0);});
 test('fixed rails and feeders leave the PCB transport volume clear',()=>{const {machine,d}=build();machine.updateMatrixWorld(true);const path=new THREE.Box3(new THREE.Vector3(-2,1.075,-.395),new THREE.Vector3(2,1.145,.395));for(const mesh of [...d.parts.rail,...d.parts.feeder])assert.equal(new THREE.Box3().setFromObject(mesh).intersectsBox(path),false);});
 test('decorative PCB outline is never ray-pickable, hidden or visible',()=>{
