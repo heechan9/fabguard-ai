@@ -6,7 +6,8 @@
   "git": {
     "deploymentEnabled": {
       "draft-smt-line-20261119": false,
-      "draft-smt-handoff-20261119": false
+      "draft-smt-handoff-20261119": false,
+      "draft-smt-recovery-perf-20261119": false
     }
   }
 }
