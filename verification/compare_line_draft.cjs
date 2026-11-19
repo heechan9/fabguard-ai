@@ -56,10 +56,17 @@ function runtime() {
       activeStation,insideView,teachingMode:document.getElementById('teaching-mode').value,
       camera:cameraRead(),horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1};
   }
-  async function bench() {
+  async function bench(scenario) {
     const next=()=>new Promise(resolve=>requestAnimationFrame(resolve));
     // Align the first simulation advancement with an actual RAF boundary.
-    await next();seek(.001);measured=true;sim.running=true;
+    await next();seek(.001);
+    if(scenario==='late-recovery'){
+      // Stage the same mixed lot with the last board approaching the sorter.
+      sim.running=true;sim.arm('paste');advance(4);sim.arm('missing');advance(75);
+      floorAgv.update(sim.time);updateUI();draw();
+    }
+    const startCompleted=sim.boards.filter(b=>b.done).length;
+    measured=true;sim.running=true;
     try {
       for(let i=0;i<14;i++) await next();
       const start=sim.time, startBoards=sim.boards.length, intervals=[],calls=[],triangles=[];
@@ -70,7 +77,7 @@ function runtime() {
         intervals.push(now-previous);previous=now;
         calls.push(renderer.info.render.calls);triangles.push(renderer.info.render.triangles);
       }
-      return {start,measuredStart,end:sim.time,startBoards,endBoards:sim.boards.length,
+      return {start,measuredStart,end:sim.time,startCompleted,startBoards,endBoards:sim.boards.length,
         intervals,calls,triangles,camera:cameraRead()};
     } finally {measured=false;sim.running=false;}
   }
@@ -360,10 +367,13 @@ async function timed(browser,version,ordinal){
     const state=await call(page,'read');matchView(state.camera,initial[version],'fresh initial');
     await page.locator('#viewport canvas').first().scrollIntoViewIfNeeded();
     const scenarios=ordinal%2?['matched-line','actual-initial']:['actual-initial','matched-line'];
+    scenarios.splice(ordinal%2?0:scenarios.length,0,'late-recovery');
     for(const scenario of scenarios){
-      const view=scenario==='matched-line'?canonical.line:initial[version];
+      const view=scenario==='late-recovery'?canonical['terminal-lot-complete']:scenario==='matched-line'?canonical.line:initial[version];
       matchView(await call(page,'write',view),view,scenario);
-      const sample=await call(page,'bench');matchView(sample.camera,view,scenario);
+      const sample=await call(page,'bench',scenario);
+      if(scenario==='late-recovery')assert(sample.startBoards===12 && sample.startCompleted>=9);
+      matchView(sample.camera,view,scenario);
       assert(Math.abs((sample.end-sample.measuredStart)-32/60)<1e-8,'Simulation must advance once per measured frame');
       const result={ordinal,version,scenario,renderer:state.gpu,dpr:1,...sample,
         frameMs:stats(sample.intervals),drawCalls:stats(sample.calls),trianglesPerFrame:stats(sample.triangles)};
@@ -451,7 +461,7 @@ async function timed(browser,version,ordinal){
       pooledFrameMs:stats(v.flatMap(r=>r.intervals)),runMeansMs:v.map(r=>r.frameMs.mean),
       drawCalls:stats(v.flatMap(r=>r.calls)),triangles:stats(v.flatMap(r=>r.triangles))}]));
     const report={width,chrome:browser.version(),renderer:runs[0].renderer,deviceScaleFactor:1,order,modules,
-      method:'One Chromium instance, one live page at a time; native real-time RAF, static camera, 14 warm-up frames, 32 measured intervals, moving simulation at 1/60 synthetic second per rendered frame. Each actual-initial uses its native initial lens/pose; matched-line shares candidate optics and pose. Counts are Three renderer.info.render counters, not hardware GPU times.',summary};
+      method:'One Chromium instance, one live page at a time; native real-time RAF, static camera, 14 warm-up frames, 32 measured intervals, moving simulation at 1/60 synthetic second per rendered frame. Each actual-initial uses its native initial lens/pose; matched-line shares candidate optics and pose. Late-recovery uses the common sorter camera at 79 synthetic seconds with 12 boards and at least 9 already complete. Counts are Three renderer.info.render counters, not hardware GPU times.',summary};
     save('summary.json',report);console.log(JSON.stringify(report,null,2));
   }finally{await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});
