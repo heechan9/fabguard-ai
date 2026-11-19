@@ -13,6 +13,7 @@ const save = (name,value) => fs.writeFileSync(path.join(out,name),JSON.stringify
 const digest = data => createHash('sha256').update(data).digest('hex');
 const stamp = b => b.map(({id,stage,progress,done})=>({id,stage,progress,done}));
 const shots = {}, canonical = {}, initial = {}, modules = {}, runs = [], teaching = {};
+const traces = {};
 const frames = page => page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
 const call = (page,method,arg) => page.evaluate(({method,arg})=>{
   const detail={method,arg};window.dispatchEvent(new CustomEvent('line-qa-runtime',{detail}));
@@ -73,7 +74,60 @@ function runtime() {
         intervals,calls,triangles,camera:cameraRead()};
     } finally {measured=false;sim.running=false;}
   }
-  const methods={read:info,write:cameraWrite,seek,bench};
+
+  let tracked, trackedMesh;
+  const objectIds=new WeakMap();
+  function beginTrace() {
+    if(tracked) throw Error('A continuous board trace may be initialized only once');
+    // One public reset supplies both the original simulation object and a fresh scene mesh.
+    document.getElementById('reset').click();
+    sim.running=true;advance(.001);floorAgv.update(sim.time);updateUI();draw();
+    tracked=sim.boards[0];trackedMesh=boardMeshes.get(tracked.id);
+    if(tracked.id!=='PCB-001'||trackedMesh.userData.boardId!==tracked.id)throw Error('Unexpected tracked PCB');
+    objectIds.set(tracked,crypto.randomUUID());
+    return STATIONS.map(({name,duration})=>({name,duration}));
+  }
+  function traceTo(t) {
+    if(!tracked || t<sim.time)throw Error('Trace must advance in chronological order');
+    const boardNow=()=>sim.boards.find(b=>b.id===tracked.id);
+    function verifyIdentity() {
+      if(boardNow()!==tracked||boardMeshes.get(tracked.id)!==trackedMesh||selected!==tracked.id)
+        throw Error('The tracked board object, selected ID, or mesh changed');
+    }
+    let steps=0;
+    while(sim.time<t){
+      const dt=Math.min(.1,t-sim.time);advance(dt);floorAgv.update(sim.time);
+      // Use the original draw path for all intervening poses; present the requested checkpoints.
+      draw(sim,false);verifyIdentity();steps++;
+    }
+    updateUI();draw();verifyIdentity();
+    const n=tracked.stage,station=STATIONS[n],p=trackedMesh.getWorldPosition(new THREE.Vector3());
+    const ndc=p.clone().project(camera);
+    let visible=true;
+    for(let o=trackedMesh;o;o=o.parent)visible=visible&&o.visible;
+    const transfer=n===TRANSFER_STAGE&&activeTransferBoard(sim.boards)===tracked?transferPose(tracked):null;
+    const robot=robotPose(tracked);
+    const destination=robot.route?DESTINATIONS[robot.route]:null;
+    const unloader=machines[10].getWorldPosition(new THREE.Vector3());
+    const buffer=machines[9].getWorldPosition(new THREE.Vector3());
+    const endpoint=destination?{x:buffer.x+destination.x,z:buffer.z+destination.z}:null;
+    const local=machines[10].worldToLocal(p.clone()),withinUnloaderFootprint=
+      Math.abs(local.x)<=widths[10]/2 && Math.abs(local.z)<=.95;
+    return {time:sim.time,steps,stage:n,number:station?n+1:null,
+      name:station?.name??'배출 완료',uiLocation:document.getElementById('board-location').textContent,
+      uiClock:document.getElementById('clock').textContent,selected,uiSelected:document.getElementById('board-select').value,
+      boardId:tracked.id,objectReferenceToken:objectIds.get(boardNow()),meshUuid:trackedMesh.uuid,
+      meshBoardId:trackedMesh.userData.boardId,visible,progress:tracked.progress,done:tracked.done,
+      position:p.toArray(),unloaderCenterXZ:[unloader.x,unloader.z],unloaderBodyWidth:widths[10],
+      withinUnloaderFootprint,robotDestinationXZ:endpoint?[endpoint.x,endpoint.z]:null,
+      atRobotDestinationXZ:endpoint?Math.abs(p.x-endpoint.x)<1e-7 && Math.abs(p.z-endpoint.z)<1e-7:false,
+      screenNdc:ndc.toArray(),camera:cameraRead(),mode:document.getElementById('teaching-mode').value,
+      viewportInside:insideView,visibleMeshCountForId:scene.children.filter(c=>c.userData.boardId===tracked.id&&c.visible).length,
+      history:tracked.history.map(({stage,time})=>({stage,time})),
+      motion:robot.position?{source:'robotPose',phase:robot.phase,route:robot.route,carrying:robot.carrying}:
+        transfer?.position?{source:'transferPose',phase:transfer.phase,carrying:transfer.carrying}:{source:'conveyor'}};
+  }
+  const methods={read:info,write:cameraWrite,seek,bench,beginTrace,traceTo};
   window.addEventListener('line-qa-runtime',e=>{
     const {method,arg}=e.detail;
     if (Object.hasOwn(methods,method)) e.detail.result=methods[method](arg);
@@ -133,6 +187,51 @@ async function matchBeforeCapture(page,version,name) {
   return imageOf(page,version,name,true);
 }
 
+
+async function boardTrace(page,version) {
+  // Set the camera before beginning. No station or board selection is performed during the trace.
+  matchView(await call(page,'write',canonical.line),canonical.line,'trace overview');
+  const stations=await call(page,'beginTrace');assert.equal(stations.length,11);
+  let end=0;
+  const samples=[{key:'initial',time:.001,stage:0,photo:true}];
+  for(const [stage,station] of stations.entries()){
+    samples.push({key:'stage-'+String(stage+1).padStart(2,'0'),stage,time:end+station.duration/2,
+      photo:[2,6,8,10].includes(stage)});
+    end+=station.duration;
+  }
+  samples.push({key:'discharged',stage:stations.length,time:end+.25,photo:true});
+  const rows=[];
+  for(const sample of samples){
+    const row=await call(page,'traceTo',sample.time);rows.push({key:sample.key,...row});
+    assert.equal(row.stage,sample.stage);assert.equal(row.mode,'normal');assert.equal(row.viewportInside,false);
+    for(const id of [row.boardId,row.meshBoardId,row.selected,row.uiSelected])assert.equal(id,'PCB-001');
+    assert.equal(row.meshUuid,rows[0].meshUuid);assert.equal(row.objectReferenceToken,rows[0].objectReferenceToken);
+    assert(row.visible && row.visibleMeshCountForId===1 && row.position.every(Number.isFinite));
+    assert(Math.abs(row.time-sample.time)<1e-8);
+    assert.equal(row.done,sample.stage===stations.length);
+    if(sample.stage<stations.length){assert.equal(row.name,stations[sample.stage].name);assert.equal(row.number,sample.stage+1);}
+    matchView(row.camera,canonical.line,'trace '+sample.key);
+    if(sample.photo)await imageOf(page,version,'pcb-001-'+sample.key,true);
+  }
+  const final=rows.at(-1);
+  assert.equal(final.uiLocation,'배출 완료');
+  assert.deepEqual(final.history.map(h=>h.stage),[...stations.keys(),stations.length]);
+  const transfer=rows.find(r=>r.number===8),robot=rows.find(r=>r.number===10);
+  assert.equal(transfer.motion.source,'transferPose');assert.equal(robot.motion.source,'robotPose');
+  assert(transfer.motion.carrying && robot.motion.carrying);
+  const endpointObservations=[rows.find(r=>r.number===11),final].map(r=>({
+    sample:r.key,simulationSeconds:r.time,uiLocation:r.uiLocation,meshVisible:r.visible,
+    meshWorldXYZ:r.position,unloaderCenterXZ:r.unloaderCenterXZ,unloaderBodyWidth:r.unloaderBodyWidth,
+    withinUnloaderFootprint:r.withinUnloaderFootprint,robotDestinationXZ:r.robotDestinationXZ,
+    atRobotDestinationXZ:r.atRobotDestinationXZ,units:'model scene units'
+  }));
+  const trace={version,board:'PCB-001',width,endpointObservations,totalStations:stations.length,totalDuration:end,stations,rows,
+    note:'Explanatory simulation timeline and scene-unit coordinates. A test-only WeakMap token identifies the original plain board object; meshUuid is Three.js identity. Visibility means the mesh and its ancestors are visible. Covers may occlude it. Read the final robot pose alongside the UI stage.'};
+  traces[version]=trace;save(version+'-pcb-001-trace.json',trace);
+  console.log(version+' PCB-001 stage 11 and discharge (model units): '+JSON.stringify(endpointObservations));
+  console.log(version+' PCB-001: '+stations.length+' ordered stages, '+final.time.toFixed(3)+' synthetic seconds, '+final.uiLocation+'; final mesh position '+final.position.join(', '));
+}
+
 async function visual(browser,version) {
   const {page,context,errors}=await open(browser,version);
   try {
@@ -144,7 +243,15 @@ async function visual(browser,version) {
     await page.locator('#camera-reset').click();await frames(page);
     if(version==='base')await call(page,'write',canonical.line);
     await imageOf(page,version,'line',true);
+    await boardTrace(page,version);
     await call(page,'seek',22.25);
+    for(const i of [0,1,5,7,8,9,10]) {
+      await page.locator('#station-strip button').nth(i).click();
+      const button=page.locator('#inside-view');
+      if(await button.getAttribute('aria-pressed')==='true')await button.click();
+      const shot=await matchBeforeCapture(page,version,'station-'+String(i+1).padStart(2,'0')+'-closed');
+      assert.equal(shot.mode,'normal');assert.equal(shot.inside,false);assert.equal(shot.activeStation,i);assert.equal(shot.simulationSeconds,22.25);
+    }
     for(const [i,label] of [[2,'spi'],[6,'reflow']]) {
       await page.locator('#station-strip button').nth(i).click();
       for(const inside of [false,true]) {
@@ -224,10 +331,20 @@ async function timed(browser,version,ordinal){
     args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-background-networking','--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE localhost, EXCLUDE 127.0.0.1']});
   try{
     await visual(browser,'candidate');await visual(browser,'base');
-    for(const name of ['line','spi-closed','spi-open','reflow-closed','reflow-open','flow-22p25','flow-23p5']){
+    for(const name of Object.keys(canonical)){
       const a=shots.base[name],b=shots.candidate[name];matchView(a.camera,b.camera,name);
       assert.deepEqual(stamp(a.boards),stamp(b.boards));assert.equal(a.simulationSeconds,b.simulationSeconds);
     }
+    for(const [i,a] of traces.base.rows.entries()){
+      const b=traces.candidate.rows[i];
+      for(const key of ['key','stage','number','name','selected','uiLocation','uiClock','progress','done','visible','motion','history','time'])
+        assert.deepEqual(a[key],b[key],'PCB-001 '+a.key+' '+key);
+      assert(a.position.every((v,j)=>Math.abs(v-b.position[j])<1e-7),'PCB-001 '+a.key+' changed world position');
+    }
+    save('pcb-001-trace-comparison.json',{width,sameStageStateAndWorldPosition:true,
+      samples:traces.base.rows.length,verifiedStages:traces.base.totalStations,
+      endpointObservations:{base:traces.base.endpointObservations,candidate:traces.candidate.endpointObservations},
+      files:['base-pcb-001-trace.json','candidate-pcb-001-trace.json']});
     assert.notDeepEqual(shots.base['flow-22p25'].boards,shots.base['flow-23p5'].boards);
     save('captures.json',{width,initial,canonical,shots,teaching,modules,
       note:'Camera is the live factory camera. The assembly, temperature and stress screenshots use their own teaching camera.'});

@@ -2,22 +2,29 @@
 import * as THREE from './vendor/three.module.js';
 
 // The station builder makes a separate opaque standard material and box per panel.
-// Combine its fixed boxes by finish, keeping the station/cover as the pick and visibility boundary.
-export function batchFixedBoxes(group) {
+// Combine its fixed boxes and cylindrical feet or rollers by finish, keeping the station/cover as the pick and visibility boundary.
+export function batchFixedSolids(group) {
   const batches = new Map();
   for (const mesh of group.children) {
     const mat = mesh.material;
-    if (!mesh.isMesh || mesh.isInstancedMesh || mesh.geometry.type !== 'BoxGeometry' ||
+    if (!mesh.isMesh || mesh.isInstancedMesh || mesh===group.userData.lamp ||
         !mat?.isMeshStandardMaterial || mat.transparent || mat.map || mat.emissive.getHex() !== 0) continue;
-    const key = [mat.roughness,mat.metalness,mesh.castShadow,mesh.receiveShadow].join('/');
+    const geometry=mesh.geometry, p=geometry.parameters;
+    const box=geometry.type==='BoxGeometry';
+    const cylinder=geometry.type==='CylinderGeometry' && p.radiusTop===p.radiusBottom &&
+      !p.openEnded && p.heightSegments===1 && p.thetaStart===0 && p.thetaLength===2*Math.PI;
+    if(!box && !cylinder) continue;
+    const key = [geometry.type,cylinder?p.radialSegments:0,mat.roughness,mat.metalness,mesh.castShadow,mesh.receiveShadow].join('/');
     if (!batches.has(key)) batches.set(key, []);
     batches.get(key).push(mesh);
   }
-  for (const boxes of batches.values()) {
-    if (boxes.length < 2) continue;
-    const first = boxes[0], finish = first.material.clone();
+  for (const solids of batches.values()) {
+    if (solids.length < 2) continue;
+    const first = solids[0], finish = first.material.clone();
     finish.color.setHex(0xffffff);
-    const instances = new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1), finish, boxes.length);
+    const isBox=first.geometry.type==='BoxGeometry';
+    const shape=isBox?new THREE.BoxGeometry(1,1,1):new THREE.CylinderGeometry(1,1,1,first.geometry.parameters.radialSegments);
+    const instances = new THREE.InstancedMesh(shape, finish, solids.length);
     const pick = instances.raycast;
     instances.raycast = function(ray,hits) {
       for(let owner=this;owner;owner=owner.parent) if(!owner.visible) return;
@@ -26,9 +33,9 @@ export function batchFixedBoxes(group) {
     instances.castShadow = first.castShadow;
     instances.receiveShadow = first.receiveShadow;
     const matrix = new THREE.Matrix4(), dimensions = new THREE.Vector3();
-    boxes.forEach((mesh,index) => {
-      const {width,height,depth} = mesh.geometry.parameters;
-      dimensions.set(width,height,depth).multiply(mesh.scale);
+    solids.forEach((mesh,index) => {
+      const p=mesh.geometry.parameters;
+      dimensions.set(isBox?p.width:p.radiusTop,p.height,isBox?p.depth:p.radiusBottom).multiply(mesh.scale);
       matrix.compose(mesh.position,mesh.quaternion,dimensions);
       instances.setMatrixAt(index,matrix);
       instances.setColorAt(index,mesh.material.color);
@@ -58,7 +65,7 @@ export function buildTransfers(scene, positions, widths, box) {
       arrow.rotation.y=side*.43;
     }
   }
-  batchFixedBoxes(beds);
+  batchFixedSolids(beds);
 }
 
 // The loader shows a tall slotted supply magazine. The exit has a lower retrieval shelf.
@@ -97,4 +104,22 @@ export function buildOpenWorkstation(i,group,cover,w,box) {
     box(cover,w*.95,.24,.09,0,1.26,-.68,0x436775);
     for(const x of [-.47,0,.47]) box(cover,.065,.47,.11,x,1.44,-.67,0x8b9ea7);
   }
+}
+
+
+// A shallow hinged press hood above the existing stencil frame; the PCB passes under it.
+export function buildPrinterHood(cover,w,box) {
+  const profile=new THREE.Shape();
+  profile.moveTo(.83,1.71);profile.lineTo(.83,2.22);profile.lineTo(.45,2.36);
+  profile.lineTo(-.20,2.36);profile.lineTo(-.83,1.94);profile.lineTo(-.83,1.82);
+  profile.lineTo(-.72,1.82);profile.lineTo(-.09,2.22);profile.lineTo(.62,2.22);
+  profile.lineTo(.71,2.17);profile.lineTo(.71,1.71);profile.closePath();
+  const shape=new THREE.ExtrudeGeometry(profile,{depth:w-.09,bevelEnabled:false});
+  shape.rotateY(Math.PI/2);shape.translate(-(w-.09)/2,0,0);
+  const hood=new THREE.Mesh(shape,new THREE.MeshStandardMaterial({color:0xa6babd,roughness:.46,metalness:.25}));
+  hood.castShadow=hood.receiveShadow=true;cover.add(hood);
+  for(const x of [-w*.43,w*.43]) {
+    box(cover,.12,.75,.15,x,1.44,-.76,0x4e6470);
+  }
+  box(cover,w*.52,.07,.08,0,1.85,.866,0x294854);
 }

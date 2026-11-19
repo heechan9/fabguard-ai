@@ -1,4 +1,4 @@
-import {batchFixedBoxes,buildTransfers,buildOpenWorkstation} from './line-transport.mjs';
+import {batchFixedSolids,buildTransfers,buildOpenWorkstation} from './line-transport.mjs';
 import {mountTeachingView} from './placement-teaching.mjs';
 import {buildPlacementHousing} from './placement-housing.mjs';
 import {mountPlacementDetails,detailPCB,PARTS} from './placement-details.mjs';
@@ -155,22 +155,22 @@ function makeMachine(i){const group=new THREE.Group(),x=positions[i],w=widths[i]
  for(const z of[-.61,.61])box(group,w+.5,.12,.1,0,1.03,z,color.rail);
  for(const lx of[-w*.36,w*.36])for(const z of[-.59,.59])cylinder(group,.055,.27,lx,.08,z,color.dark);
  box(group,w*.72,.39,.035,0,.46, .87,0xc3d0d8);box(group,.07,.18,.055,w*.28,.49,.9,0x6d8490);
- if(!open&&!processHousing){
+ if(!open&&!processHousing&&i!==1){
   box(cover,w,.13,1.9,0,2.17,0,color.shell);
   for(const xx of[-w/2+.06,w/2-.06])for(const z of[-.83,.83])box(cover,.1,1.25,.1,xx,1.55,z,color.shell);
   box(cover,w-.18,.98,.035,0,1.58,-.85,0x71a3ac,.16);
   box(cover,w-.18,.98,.035,0,1.58,.85,0x739aa7,.1);
   if(i===8){box(group,.34,.23,.34,0,1.92,0,color.dark);group.userData.scan=box(group,w-.35,.012,1.02,0,1.3,0,0x689fd3,.27);}
-  if(i===1){box(group,w-.3,.09,.82,0,1.63,0,0x869fab);}
   box(cover,.45,.35,.1,w*.23,2.47,.28,color.dark);box(cover,.34,.24,.015,w*.23,2.47,.341,0x75c7bb);
  }
  }
+ if(i===1)box(group,w-.3,.09,.82,0,1.63,0,0x869fab);
  if(open)buildOpenWorkstation(i,group,cover,w,box);
  if(i===7){for(let k=0;k<3;k++)cylinder(group,.18,.09,-.4+k*.4,.96,0,0x769ba7);}
  cylinder(group,.035,.5,w*.38,open?1.65:2.55,-.58,color.dark);const lamp=cylinder(group,.07,.15,w*.38,open?1.98:2.87,-.58,color.mint);group.userData.lamp=lamp;
  if(!placement){
   if(!processHousing)detailMachine(i,group,cover,w,box,cylinder);
-  batchFixedBoxes(group);batchFixedBoxes(cover);
+  batchFixedSolids(group);batchFixedSolids(cover);
   if(processHousing)detailMachine(i,group,cover,w,box,cylinder);
  }
  const sprite=label(group,String(i+1).padStart(2,'0')+'  '+STATIONS[i].name,0,open?2.55:3.45,0);sprite.visible=!compactView.matches;machineLabels.push(sprite);machines.push(group);
@@ -187,7 +187,7 @@ try{
  box(scene,offset+1,.08,4.2,-.3,-.09,0,0x17272e);
  for(const z of[-2.35,2.35]){box(scene,offset+2,.008,.025,-.3,-.13,z,0x397d75);}
  const floorMarkings=new THREE.Group();scene.add(floorMarkings);
- dressFloor(floorMarkings,positions,widths,box);batchFixedBoxes(floorMarkings);
+ dressFloor(floorMarkings,positions,widths,box);batchFixedSolids(floorMarkings);
  for(let i=0;i<11;i++)makeMachine(i);
  robotCell=mountRobotCell(scene,positions[9],{box,cylinder,label});
  transferRobot=mountTransferRobot(scene,positions[TRANSFER_STAGE],{box,cylinder,label});

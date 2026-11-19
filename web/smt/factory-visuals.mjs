@@ -1,5 +1,5 @@
 import {buildProcessHousing} from './process-housings.mjs';
-import {buildMagazine} from './line-transport.mjs';
+import {buildMagazine,buildPrinterHood} from './line-transport.mjs';
 // Original schematic geometry for explaining station roles; not vendor CAD.
 export const shouldAutoRevealInterior=stationIndex=>stationIndex===6;
 
@@ -10,13 +10,14 @@ export function detailMachine(i,group,cover,w,box,cylinder){
  // Low cabinet seams and ventilation, shared across the line.
  for(const x of [-w*.25,w*.25])box(group,.018,.42,.02,x,.43,.895,dark);
  for(let k=0;k<4;k++)box(group,.3,.018,.025,-w*.27,.29+k*.06,-.88,steel);
- if([1,3,4,8].includes(i)){
+ if([3,4,8].includes(i)){
   // Solid side shoulders frame a front viewing window.
   for(const x of [-w/2+.16,w/2-.16])box(cover,.25,1.13,1.72,x,1.56,0,panel);
   box(cover,w,.16,1.86,0,2.27,0,i===8?teal:dark);
   box(cover,.12,.25,.04,w*.31,1.52,.89,steel);
  }
  if(i===1){ // Broad stencil frame and crossbar distinguish the printer.
+  buildPrinterHood(cover,w,box);
   for(const z of [-.48,.48])box(group,w-.48,.06,.05,0,1.6,z,teal);
   box(group,.16,.17,1.05,0,1.77,0,dark);
  }
