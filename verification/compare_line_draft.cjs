@@ -7,7 +7,7 @@ const {createHash} = require('node:crypto');
 
 const width = Number(process.env.WIDTH || 360);
 assert([360,1366].includes(width),'WIDTH must be 360 or 1366');
-const out = path.resolve('line-qa-'+width);
+const out = path.resolve(process.env.QA_OUT || 'line-qa-'+width);
 const servers = {base:'http://127.0.0.1:8774',candidate:'http://127.0.0.1:8775'};
 const save = (name,value) => fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n');
 const digest = data => createHash('sha256').update(data).digest('hex');
@@ -94,11 +94,12 @@ function runtime() {
       if(boardNow()!==tracked||boardMeshes.get(tracked.id)!==trackedMesh||selected!==tracked.id)
         throw Error('The tracked board object, selected ID, or mesh changed');
     }
-    let steps=0;
+    const recoveryPath=[];let steps=0;
     while(sim.time<t){
       const dt=Math.min(.1,t-sim.time);advance(dt);floorAgv.update(sim.time);
       // Use the original draw path for all intervening poses; present the requested checkpoints.
       draw(sim,false);verifyIdentity();steps++;
+      if(tracked.stage===10)recoveryPath.push({t:sim.time,xyz:trackedMesh.getWorldPosition(new THREE.Vector3()).toArray()});
     }
     updateUI();draw();verifyIdentity();
     const n=tracked.stage,station=STATIONS[n],p=trackedMesh.getWorldPosition(new THREE.Vector3());
@@ -113,7 +114,7 @@ function runtime() {
     const endpoint=destination?{x:buffer.x+destination.x,z:buffer.z+destination.z}:null;
     const local=machines[10].worldToLocal(p.clone()),withinUnloaderFootprint=
       Math.abs(local.x)<=widths[10]/2 && Math.abs(local.z)<=.95;
-    return {time:sim.time,steps,stage:n,number:station?n+1:null,
+    return {time:sim.time,steps,recoveryPath,stage:n,number:station?n+1:null,
       name:station?.name??'배출 완료',uiLocation:document.getElementById('board-location').textContent,
       uiClock:document.getElementById('clock').textContent,selected,uiSelected:document.getElementById('board-select').value,
       boardId:tracked.id,objectReferenceToken:objectIds.get(boardNow()),meshUuid:trackedMesh.uuid,
@@ -127,7 +128,32 @@ function runtime() {
       motion:robot.position?{source:'robotPose',phase:robot.phase,route:robot.route,carrying:robot.carrying}:
         transfer?.position?{source:'transferPose',phase:transfer.phase,carrying:transfer.carrying}:{source:'conveyor'}};
   }
-  const methods={read:info,write:cameraWrite,seek,bench,beginTrace,traceTo};
+  const retained=new Map();
+  function probeBoards() {
+    const boards={};
+    for(const b of sim.boards) {
+      const m=boardMeshes.get(b.id);
+      if(!retained.has(b.id)) retained.set(b.id,[b,m]);
+      const [original,mesh]=retained.get(b.id);
+      if(b!==original||mesh!==m)throw Error('Board identity changed '+b.id);
+      const p=m.getWorldPosition(new THREE.Vector3()), ndc=p.clone().project(camera);
+      let visible=true;for(let o=m;o;o=o.parent) visible=visible&&o.visible;
+      boards[b.id]={uuid:m.uuid,position:p.toArray(),ndc:ndc.toArray(),visible,
+        count:scene.children.filter(c=>c.userData.boardId===b.id&&c.visible).length};
+    }
+    const trays={};
+    for(const [key,hex] of Object.entries({ok:0x43b998,ng:0xd75948,review:0xe8aa4e})){
+      const tray=robotCell.root.children.find(o=>o.isMesh&&o.material.color.getHex()===hex&&Math.abs(o.position.y-.94)<1e-6);
+      if(!tray)throw Error('Physical tray not found: '+key);
+      trays[key]=tray.getWorldPosition(new THREE.Vector3()).toArray();
+    }
+    return {boards,trays,station11:machines[10].getWorldPosition(new THREE.Vector3()).toArray(),snapshot:sim.snapshot()};
+  }
+  function terminalView(){
+    const c=cameraRead();c.target=[(positions[9]+positions[10])/2,1.15,0];c.azimuth=.2;c.elevation=.98;
+    c.zoom=stationZoom(6.5,c.aspect);return cameraWrite(c);
+  }
+  const methods={read:info,write:cameraWrite,seek,bench,beginTrace,traceTo,probeBoards,terminalView,arm:f=>sim.arm(f)};
   window.addEventListener('line-qa-runtime',e=>{
     const {method,arg}=e.detail;
     if (Object.hasOwn(methods,method)) e.detail.result=methods[method](arg);
@@ -193,6 +219,7 @@ async function boardTrace(page,version) {
   matchView(await call(page,'write',canonical.line),canonical.line,'trace overview');
   const stations=await call(page,'beginTrace');assert.equal(stations.length,11);
   let end=0;
+  await call(page,'arm','paste');
   const samples=[{key:'initial',time:.001,stage:0,photo:true}];
   for(const [stage,station] of stations.entries()){
     samples.push({key:'stage-'+String(stage+1).padStart(2,'0'),stage,time:end+station.duration/2,
@@ -200,9 +227,30 @@ async function boardTrace(page,version) {
     end+=station.duration;
   }
   samples.push({key:'discharged',stage:stations.length,time:end+.25,photo:true});
+  const start11=end-stations[10].duration;
+  for(const [key,time] of [['ok-pickup',start11],['ok-quarter',start11+.75],['ok-three-quarter',start11+2.25],
+      ['ng-sort',start11+4],['ng-mid',start11+5.5],['ng-discharged',end+4.25],
+      ['hold-discharged',end+8.25],['multiple-ok',end+20.25],['lot-complete',end+44]]) {
+    samples.push({key,time,stage:time>=end?11:10,terminal:true});
+  }
+  samples.sort((a,b)=>a.time-b.time);
   const rows=[];
   for(const sample of samples){
-    const row=await call(page,'traceTo',sample.time);rows.push({key:sample.key,...row});
+    const row=await call(page,'traceTo',sample.time);
+    if(sample.time>=4&&sample.time<8&&!rows.some(r=>r.armedHold)){await call(page,'arm','missing');row.armedHold=true;}
+    const probe=await call(page,'probeBoards');rows.push({key:sample.key,...row,probe});
+    for(const board of probe.snapshot.boards){
+      const m=probe.boards[board.id],expected=version==='candidate'||!board.done||board.id==='PCB-001';
+      assert.equal(m.visible,expected,version+' '+sample.key+' '+board.id+' visibility');
+      assert.equal(m.count,Number(expected));assert(m.position.every(Number.isFinite));
+    }
+    if(sample.terminal || sample.key==='stage-11'){
+      await call(page,'terminalView');
+      const target=sample.key.startsWith('ng-')?'PCB-002':sample.key.startsWith('hold-')?'PCB-003':'PCB-001';
+      const board=(await call(page,'probeBoards')).boards[target];assert(board.ndc.every(v=>Math.abs(v)<=1),'outside terminal camera '+target);
+      await matchBeforeCapture(page,version,'terminal-'+sample.key);
+      await call(page,'write',canonical.line);
+    }
     assert.equal(row.stage,sample.stage);assert.equal(row.mode,'normal');assert.equal(row.viewportInside,false);
     for(const id of [row.boardId,row.meshBoardId,row.selected,row.uiSelected])assert.equal(id,'PCB-001');
     assert.equal(row.meshUuid,rows[0].meshUuid);assert.equal(row.objectReferenceToken,rows[0].objectReferenceToken);
@@ -252,7 +300,7 @@ async function visual(browser,version) {
       const shot=await matchBeforeCapture(page,version,'station-'+String(i+1).padStart(2,'0')+'-closed');
       assert.equal(shot.mode,'normal');assert.equal(shot.inside,false);assert.equal(shot.activeStation,i);assert.equal(shot.simulationSeconds,22.25);
     }
-    for(const [i,label] of [[2,'spi'],[6,'reflow']]) {
+    for(const [i,label] of [[1,'printer'],[2,'spi'],[6,'reflow'],[8,'aoi']]) {
       await page.locator('#station-strip button').nth(i).click();
       for(const inside of [false,true]) {
         const button=page.locator('#inside-view');
@@ -327,7 +375,7 @@ async function timed(browser,version,ordinal){
 
 (async()=>{
   fs.mkdirSync(out,{recursive:true});
-  const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,
+  const browser=await chromium.launch({executablePath:process.env.CHROME_BIN || (fs.existsSync('/usr/bin/google-chrome')?'/usr/bin/google-chrome':'/usr/bin/chromium'),headless:true,
     args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-background-networking','--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE localhost, EXCLUDE 127.0.0.1']});
   try{
     await visual(browser,'candidate');await visual(browser,'base');
@@ -339,11 +387,57 @@ async function timed(browser,version,ordinal){
       const b=traces.candidate.rows[i];
       for(const key of ['key','stage','number','name','selected','uiLocation','uiClock','progress','done','visible','motion','history','time'])
         assert.deepEqual(a[key],b[key],'PCB-001 '+a.key+' '+key);
-      assert(a.position.every((v,j)=>Math.abs(v-b.position[j])<1e-7),'PCB-001 '+a.key+' changed world position');
+      assert.deepEqual(a.probe.snapshot,b.probe.snapshot,'all board and event records at '+a.key);
+      for(const board of a.probe.snapshot.boards){
+        const p=a.probe.boards[board.id].position,q=b.probe.boards[board.id].position;
+        if(board.stage<9||(board.stage===9&&board.progress<.9)){
+          assert(p.every((v,j)=>Math.abs(v-q[j])<1e-7),board.id+' upstream '+a.key);
+        }else if(board.aoi==='NG'||board.fault==='missing'){
+          assert.deepEqual([p[0],p[2]],[q[0],q[2]],board.id+' sorter tray XZ '+a.key);
+        }
+      }
     }
-    save('pcb-001-trace-comparison.json',{width,sameStageStateAndWorldPosition:true,
-      samples:traces.base.rows.length,verifiedStages:traces.base.totalStations,
-      endpointObservations:{base:traces.base.endpointObservations,candidate:traces.candidate.endpointObservations},
+    const observations={};
+    const xzDistance=(p,q)=>Math.hypot(p[0]-q[0],p[2]-q[2]);
+    for(const version of ['base','candidate']){
+      const rows=traces[version].rows;
+      const at=k=>rows.find(r=>r.key===k).probe;
+      const point=(k,id)=>at(k).boards[id].position;
+      const terminal=at('lot-complete'),trays=terminal.trays;
+      const first=point('ok-pickup','PCB-001'),last=point('discharged','PCB-001');
+      assert(xzDistance(first,trays.ok)<1e-5);
+      const samples=['ok-pickup','ok-quarter','stage-11','ok-three-quarter','discharged'];
+      const distances=samples.map(k=>xzDistance(trays.ok,point(k,'PCB-001')));
+      if(version==='candidate'){
+        assert(distances.slice(1).every((v,i)=>v>distances[i]+.01),'forward handoff positions');
+        assert(Math.abs(last[0]-(terminal.station11[0]-.38))<1e-5&&Math.abs(last[2]-terminal.station11[2])<1e-5,'normal board in first recovery slot');
+        const path=rows.flatMap(r=>r.recoveryPath);
+        assert(path.length>=29,'stage 11 at most 0.1s between observations');
+        assert(path.some(({xyz})=>Math.abs(xyz[2]-1.91)<1e-5 && xyz[0]>first[0]+.1 && xyz[0]<last[0]-.1),'crossing front corridor');
+        for(const [i,r] of path.entries())if(i){
+          const prev=path[i-1];assert(r.t-prev.t<=.100001);
+          assert(Math.hypot(...r.xyz.map((v,j)=>v-prev.xyz[j]))<.6,'unexpected teleport during handoff');
+        }
+      }else assert(distances.every(n=>n<1e-5),'previous draft keeps OK on sorter');
+      for(const [id,route,keys] of [['PCB-002','ng',['ng-sort','ng-mid','ng-discharged','lot-complete']],['PCB-003','review',['hold-discharged','lot-complete']]]){
+        assert(keys.every(k=>xzDistance(point(k,id),trays[route])<1e-6),id+' missed actual tray');
+        assert(keys.every(k=>JSON.stringify(point(k,id))===JSON.stringify(point(keys[0],id))),id+' moved after deposit');
+      }
+      const boards=terminal.snapshot.boards;
+      assert.equal(boards[1].aoi,'NG');assert.equal(boards[1].fault,'paste');assert(boards[1].volume<80);
+      assert.equal(boards[2].aoi,'OK');assert.equal(boards[2].fault,'missing');assert.equal(boards[2].volume,null);
+      const normal=boards.filter(b=>b.aoi==='OK'&&!b.fault).map(b=>terminal.boards[b.id]);
+      assert.equal(normal.length,10);
+      if(version==='candidate')for(const [i,m] of normal.entries()){
+        const expected=[terminal.station11[0]+(i%2?.38:-.38),1.11+Math.floor(i/2)*.15,terminal.station11[2]];
+        assert(m.visible&&m.count===1&&m.position.every((v,j)=>Math.abs(v-expected[j])<1e-5),'completed board in recovery slot '+i);
+      }
+      if(version==='candidate')for(const [i,m] of normal.entries())for(const n of normal.slice(i+1)){
+        assert(Math.abs(m.position[0]-n.position[0])>=.67||Math.abs(m.position[2]-n.position[2])>=.79||Math.abs(m.position[1]-n.position[1])>=.07,'overlapping board substrates');
+      }
+      observations[version]={trays,completedMeshVisibility:Object.fromEntries(Object.entries(terminal.boards).map(([id,m])=>[id,m.visible])),station11:terminal.station11,normalHandoff:samples.map((k,i)=>({key:k,xyz:point(k,'PCB-001'),distanceFromTray:distances[i]})),ng:point('ng-discharged','PCB-002'),hold:point('hold-discharged','PCB-003'),normalStack:normal.map(n=>n.position)};
+    }
+    save('terminal-route-comparison.json',{width,identicalSnapshots:true,observations,
       files:['base-pcb-001-trace.json','candidate-pcb-001-trace.json']});
     assert.notDeepEqual(shots.base['flow-22p25'].boards,shots.base['flow-23p5'].boards);
     save('captures.json',{width,initial,canonical,shots,teaching,modules,

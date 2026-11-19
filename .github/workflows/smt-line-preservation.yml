@@ -1,7 +1,7 @@
 name: Preserve placement interactions in line draft
 on:
   push:
-    branches: [draft-smt-line-20261119]
+    branches: [draft-smt-handoff-20261119]
     paths: ['.github/workflows/smt-line-preservation.yml', 'web/smt/**']
 permissions:
   contents: read

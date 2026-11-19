@@ -1,7 +1,7 @@
-name: SMT line draft comparison
+name: SMT handoff and equipment draft comparison
 on:
   push:
-    branches: [draft-smt-line-20261119]
+    branches: [draft-smt-handoff-20261119]
     paths: ['.github/workflows/smt-line-draft.yml', 'web/smt/**', 'verification/compare_line_draft.cjs','tests/web/**']
 permissions:
   contents: read
@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@v4
         with:
-          ref: 74309653e3740080f133ca4ed4c443ec1648529e
+          ref: 11443099ea8f3747f6cb8586fec00bef8a1794f7
           path: baseline
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -32,6 +32,7 @@ jobs:
       - name: Verify local build and capture matched views
         env:
           WIDTH: ${{ matrix.width }}
+          QA_OUT: handoff-qa-${{ matrix.width }}
         run: |
           node --test tests/web/*.test.mjs > "$RUNNER_TEMP/tests.log" || { tail -100 "$RUNNER_TEMP/tests.log"; exit 1; }
           tail -9 "$RUNNER_TEMP/tests.log"
@@ -50,6 +51,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: line-qa-${{ matrix.width }}
-          path: line-qa-${{ matrix.width }}/
+          name: handoff-qa-${{ matrix.width }}
+          path: handoff-qa-${{ matrix.width }}/
           retention-days: 14
