@@ -37,16 +37,12 @@ export function buildProcessNote(row, input) {
       (source.unit && notes.comparison_unit && source.unit !== notes.comparison_unit) ||
       (notes.measurement_conditions && notes.comparison_conditions &&
        notes.measurement_conditions !== notes.comparison_conditions);
-    if (unlike) {
-      comparisonState = 'DECLARED_FIELDS_DIFFER';
-      gaps.push('comparison_fields_differ');
-    } else if (comparisonKeys.some(k => !notes[k]) || !source.lot_id || !source.unit_id ||
-               !source.measurement || !source.unit || !notes.measurement_conditions || row.value == null) {
-      comparisonState = 'INSUFFICIENT_DETAILS';
-      gaps.push('comparison_details_missing');
-    } else {
-      comparisonState = 'DECLARED_FIELDS_MATCH_ONLY';
-    }
+    const incomplete = comparisonKeys.some(k => !notes[k]) || !source.lot_id || !source.unit_id ||
+      !source.measurement || !source.unit || !notes.measurement_conditions || row.value == null;
+    if (unlike) gaps.push('comparison_fields_differ');
+    if (incomplete) gaps.push('comparison_details_missing');
+    comparisonState = unlike ? 'DECLARED_FIELDS_DIFFER' :
+      incomplete ? 'INSUFFICIENT_DETAILS' : 'DECLARED_FIELDS_MATCH_ONLY';
   }
   return {
     note: {

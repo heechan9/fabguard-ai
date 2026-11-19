@@ -66,3 +66,14 @@ test('rejects malformed added fields; no caller overrides comparison or review s
     await assert.rejects(card(raw, entry.review_id, extra));
   }
 });
+
+test('known mismatch and missing details are reported together without changing comparison precedence', async () => {
+  const c = await card(raw, entry.review_id, {comparison_lot_id:'SYNTH-OTHER'});
+  assert.equal(c.process_review_note.comparison_state, 'DECLARED_FIELDS_DIFFER');
+  assert.equal(c.process_review_note.comparison_performed, false);
+  assert.ok(c.blockers.includes('comparison_fields_differ'));
+  assert.ok(c.blockers.includes('comparison_details_missing'));
+  const complete = await card(raw, entry.review_id, {...facts, ...paired(entry), comparison_unit:'mm'});
+  assert.equal(complete.process_review_note.comparison_state, 'DECLARED_FIELDS_DIFFER');
+  assert.equal(complete.blockers.includes('comparison_details_missing'), false);
+});
