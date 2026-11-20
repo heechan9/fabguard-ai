@@ -9,6 +9,7 @@
   <title>FabGuard AI · Collaborate</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./replay.mjs"></script>
+  <script type="module" src="./frame-audit.mjs"></script>
 </head>
 <body class="collaboration">
   <a class="skip" href="#content">Skip to content</a>
@@ -45,9 +46,29 @@
       <p id="receipt-help">Select and copy the text yourself if it helps explain a finding. The page does not post it.</p>
       <textarea id="receipt" readonly rows="8" aria-describedby="receipt-help"></textarea>
     </section>
+    <section class="panel" aria-labelledby="frame-title">
+      <h2 id="frame-title">Follow-on: check which frames reached the archive</h2>
+      <p id="frame-help">Compare two fixed synthetic captures from the same stream. Two archive entries do not guarantee two distinct frames. This local exercise matches the stream, frame ID, original capture time and payload digest. Arrival time is recorded separately.</p>
+      <div class="controls">
+        <div><label for="frame-scenario">Synthetic archive scenario</label><select id="frame-scenario" aria-describedby="frame-help">
+          <option value="complete">Two distinct captures (same arrival time)</option>
+          <option value="substitution">Two entries, one capture replaced</option>
+          <option value="restamped">One capture time replaced by arrival</option>
+          <option value="digest">One frame payload changed</option>
+        </select></div>
+        <button id="frame-run" type="button">Check archive</button>
+      </div>
+      <noscript><p>JavaScript is needed to run this follow-on exercise.</p></noscript>
+      <p id="frame-status" class="status" role="status" aria-atomic="true">No archive check run yet.</p>
+      <dl class="evidence">
+        <div><dt>Declared frames</dt><dd id="frame-expected">—</dd></div>
+        <div><dt>Archive finding</dt><dd id="frame-observed">—</dd></div>
+      </dl>
+      <p>Fixture only. No connection to a camera or factory archive, and no production assurance. Adapted independently from the capture identity principle in <a href="https://github.com/autowarefoundation/autoware_universe/pull/13408">wj’s Autoware change #13408</a>; no upstream code is used.</p>
+    </section>
     <section class="panel" aria-labelledby="review-title">
       <h2 id="review-title">From replay to a useful review</h2>
-      <p>Pick one of these lanes and leave a short, asynchronous note. There is no meeting or patch requirement. The <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTING.md#one-question-replay">command-line replay</a> uses these same fixed cases.</p>
+      <p>Pick one of these lanes and leave a short, asynchronous note. There is no meeting or patch requirement. The <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTING.md#one-question-replay">command-line replay</a> uses the three roster cases above. Use the <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTING.md#leave-a-reproducible-review-receipt">review receipt template</a> for either exercise.</p>
       <div class="review-grid">
         <div><h3>What can I review?</h3><ol>
           <li>Is the comparison question clear?</li>
