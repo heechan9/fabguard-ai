@@ -1,13 +1,13 @@
 name: Interactive SMT browser verification
 on:
   pull_request:
-    paths: ['web/smt/**', 'tests/web/interactive-mission.test.mjs', 'verification/check_interactive_mission.cjs', '.github/workflows/interactive-smt-ui.yml']
+    paths: ['web/smt/**', 'tests/web/interactive-mission.test.mjs', 'verification/check_interactive_mission.cjs', 'verification/compare_placement_teaching.cjs', 'tests/web/placement-teaching.test.mjs', '.github/workflows/interactive-smt-ui.yml']
 permissions:
   contents: read
 jobs:
   interactive-smt:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
         with:
@@ -42,7 +42,7 @@ jobs:
             if curl --fail --silent http://127.0.0.1:8775/ > /dev/null; then break; fi
             sleep 0.25
           done
-          NODE_PATH="$RUNNER_TEMP/interactive-driver/node_modules" timeout 600s node verification/check_interactive_mission.cjs
+          NODE_PATH="$RUNNER_TEMP/interactive-driver/node_modules" timeout 900s node verification/check_interactive_mission.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -88,13 +88,16 @@
 
 ### 프로젝트 상태
 
-**2026-11-10 소스 확인:** 아래 기능 설명은 [#210 병합 커밋 `9c6de6b`](https://github.com/heechan9/fabguard-ai/commit/9c6de6bcf01a1e21f19e0739eff0d58641fb51a0)을 기준으로 갱신했습니다. 문서에 기록한 소스 상태와 실제 배포 검증은 구분합니다. 공개 배포의 일치·브라우저 검증은 [Sitewide UI 실행 기록](https://github.com/heechan9/fabguard-ai/actions/workflows/sitewide-command-ui.yml)에서 대상 커밋별로 확인하세요. 화면 확장은 모델 성능이나 현장 효과 개선을 뜻하지 않습니다.
+**2026-11-19 확인한 고정 소스 스냅샷 [`ff56e8d`](https://github.com/heechan9/fabguard-ai/commit/ff56e8d3623e661ca8b7373c55924267c18c506a) 기준:** [#236](https://github.com/heechan9/fabguard-ai/pull/236)·[#239](https://github.com/heechan9/fabguard-ai/pull/239)의 폰트 CI 보완과 [#237](https://github.com/heechan9/fabguard-ai/pull/237)의 SMT 구조 보기가 병합됐습니다. 이 상태 요약은 해당 SHA의 기록이며 이후 main 변경이나 최신 배포 상태를 자동으로 나타내지 않습니다. 아래에서 이 스냅샷의 구현, 웹 UI 연결, 오프라인 Python 기능과 운영 검증을 구분합니다. 기록·화면 기능 확장은 모델 성능이나 현장 효과 개선을 뜻하지 않습니다.
 
 - **소개와 탐색:** `/`는 프로젝트 소개, `/#overview`는 저장 결과 운영 개요입니다. [#209](https://github.com/heechan9/fabguard-ai/pull/209)·[#210](https://github.com/heechan9/fabguard-ai/pull/210)에 따라 소개·운영 개요·3D·우선점검·반도체 분석·검증과 한계를 상단에서 이동하고, 전문 설명은 펼쳐 봅니다. 모든 스크립트 화면은 저장 선택이 없으면 다크이며 실버 선택을 유지합니다. 무스크립트 연구 화면의 테마는 해당 화면에만 적용됩니다.
 - **저장 순위와 사람 검토:** `/#risks`의 저장된 상위 50건에서 20·40·50건을 표시합니다. `/review/`의 검토 메모·체크리스트·인계 JSON은 브라우저에서 사용자가 저장하는 기록입니다. 입력·저장 완료가 현장 승인이나 검토의 진위를 입증하지 않습니다.
 - **장비 CSV 오프라인 점검:** `/equipment/`는 CSV 열·단위를 연결하고 시간순 측정에 고정 SPC 기준을 적용해 `pending` 목록과 원본 바이트 SHA-256 JSON을 저장합니다. 입력을 바꾸면 이전 결과를 지웁니다. 서버 업로드·실장비 진위 확인·불량 확정·설비 제어 기능이 아닙니다.
-- **자료별 경계:** SMT·AGV·OHT는 합성 설명용 시연입니다. UR3 화면은 공개 실험실 센서 기록 **7,409행·19채널**을 결측·시간 공백과 함께 탐색·재생합니다. SECOM은 별도 오프라인 평가이며 이 자료들을 하나의 현장 성능으로 합산하지 않습니다. 기존 [#190](https://github.com/heechan9/fabguard-ai/pull/190)의 선별 통합은 원본 Draft 전체의 병합을 뜻하지 않습니다.
-- **별도 검증 작업:** [#211](https://github.com/heechan9/fabguard-ai/pull/211)은 확인 당시 폰트 설치 대기 상한만 조정하는 open Draft입니다. 앱·데이터·모델 변경이나 배포 완료로 해석하지 않습니다. 아래 연구 PR 상태는 별도로 날짜를 붙인 과거 확인 기록입니다.
+- **SMT 웹 UI와 자료별 경계:** `/smt/`에 [#237](https://github.com/heechan9/fabguard-ai/pull/237)의 노즐·레일·피더·기판 선택/강조와 설명이 연결됐습니다. 실제 장비 CAD·물리 검증이나 측정값이 아니며, 기존 합성 시뮬레이션·판정·내보내기 계약은 유지합니다. SMT·AGV·OHT는 합성 설명용 시연입니다. UR3 화면은 공개 실험실 센서 기록 **7,409행·19채널**을 결측·시간 공백과 함께 탐색·재생합니다. SECOM은 별도 오프라인 평가이며 이 자료들을 하나의 현장 성능으로 합산하지 않습니다. 기존 [#190](https://github.com/heechan9/fabguard-ai/pull/190)의 선별 통합은 원본 Draft 전체의 병합을 뜻하지 않습니다.
+- **main의 오프라인 Python 기능:** [판단근거·품질](docs/research/MANUFACTURING_AGENTIC_DECISION_BASIS.md), [두 원천 매핑 진단](docs/SEMANTIC_MAPPING_PROTOTYPE.md), [점수 경고](docs/SCORE_DIAGNOSTICS.md), [점검 선택 요약](docs/INSPECTION_SELECTION_SUMMARY.md)은 읽기 전용 검토 도구입니다. [선택형 CLI](docs/offline_review_diagnostics.md)는 기존 근거를 재검증해 판단근거·품질·선택형 매핑 결과를 함께 기록하며 HOLD·pending·unknown을 승인으로 바꾸지 않습니다. 점수 경고와 점검 선택 요약은 별도 API입니다. 실제 관측 행 연결·권한/시각 인증·AAS/설비 제어는 제공하지 않습니다. 이 Python 기능들이 모두 웹 UI에 연결됐다는 뜻은 아닙니다.
+- **배포와 검증 근거:** [일반 CI](https://github.com/heechan9/fabguard-ai/actions/runs/44328402373), [UR3 검사](https://github.com/heechan9/fabguard-ai/actions/runs/44328402438), [Sitewide 실행](https://github.com/heechan9/fabguard-ai/actions/runs/44328402448), [로봇·맥락 브라우저 검사](https://github.com/heechan9/fabguard-ai/actions/runs/44328402375)는 위 main SHA의 실행 기록입니다. 각 링크에서 대상 SHA·시도 번호·종료 상태와 실제 검사 범위를 확인하세요. 진행 중인 실행을 성공으로 합산하지 않습니다. GitHub 병합, CI 결과, 운영 배포 일치와 실제 화면 검증은 각각 별도 근거가 필요합니다. 배포 메타데이터의 READY만으로 실제 운영 WebGL 렌더·물리 휴대전화 GPU/터치/프레임 성능을 입증하지 않습니다.
+- **Bosch 식각 후향 연구 ([#219](https://github.com/heechan9/fabguard-ai/pull/219), 2026-11-19 확인):** 커밋 `9b607b9` 기준 [GitHub Actions 5개 워크플로](https://github.com/heechan9/fabguard-ai/pull/219/checks)가 성공했고 [CodeRabbit의 수정 요청은 0건](https://github.com/heechan9/fabguard-ai/pull/219#issuecomment-6921647258)입니다. 2026-11-19 확인 당시 연구 요약은 Draft였으며, 이 기록은 운영 배포나 실제 운영 화면 검증의 근거가 아닙니다. 식각 깊이 예측은 34개 웨이퍼·4개 LOT의 저장 결과를 집계한 후향 실험입니다. 89점 계측은 공정 다음 해에 이뤄졌으며, 새 LOT 독립 평가나 당시 계측 전 예측 성능을 입증하지 않습니다.
+- **과거 확인 이력:** 아래 연구 PR 상태는 날짜를 붙인 과거 스냅샷입니다. 기존 #211의 2026-11-10 Draft 확인 기록은 이번 #236 병합과 별개이며, 원본 Draft 전체가 병합됐다는 뜻이 아닙니다.
 
 
 | 구분 | 현재 상태 |
@@ -183,7 +186,6 @@
 
 | 국가 | 우선 검토 후보군 | 독립적 검토 목적 | 현재 판정 |
 |---|---|---|---|
-| 🇺🇸 미국 | **공개 로봇 운영·이상 데이터 후보군** | 로봇 telemetry·고장/이상 탐지 계약 검토 | 공식 데이터셋·원출처·라이선스 확정 전 조사 후보 |
 | 🇫🇷 프랑스 | **RTE éCO2mix · Enedis Open Data · Météo-France** | 값의 수정 이력, 배전·기상 맥락을 분리해 감사 | Enedis·Météo-France E2E 완료; RTE 연간 E2E 완료·결측 2개/통합 상태 2개·품질 경고 유지 |
 | 🇩🇪 독일 | **SMARD · 전력/산업 · 공개 로봇 운영 데이터 후보군** | 계통 투명성과 제조·로봇 운영 비교 | 로봇 데이터 원출처·신호·라이선스 확인 전 조사 후보 |
 | 🇪🇸 스페인 | **REE/ESIOS · 자가소비 통계 후보군** | 고태양광 계통운영과 분산형 자가소비 비교 | 시계열 해상도·라이선스 확인 전 조사 후보 |
@@ -191,8 +193,7 @@
 | 🇨🇦 캐나다 | **NRCan/CanmetENERGY · 적설 환경 PV 후보군** | 저온·적설 조건의 품질 경계 스트레스 테스트 | 실제 시계열과 라이선스 확인 전 조사 후보 |
 | 🇫🇮 핀란드 | **FMI Open Data** | 고위도·적설·저일사 환경의 기상 결합 검증 | 데이터 열·PV 관측 결합 가능성 확인 필요 |
 | 🇰🇷 한국 | **공공 제조·전력·태양광 데이터 후보군** | FabGuard의 국내 제조 맥락과 전력 데이터 역할 탐색 | 공개성·현장성·비식별 조건 확인 전 조사 후보 |
-| 🇯🇵 일본 | **AIST/JRL 로봇 · NEDO · 규슈전력 후보군** | 로봇 텔레메트리와 출력제어라는 별도 연구축 검토 | AIST/JRL 문의 회신 및 라이선스 확인 대기 |
-| 🇹🇼 대만 | **WM-811K · 전력/태양광 · 로봇 연구 후보군** | 웨이퍼맵·전력·로봇 중 공개 검증 가능한 축 선별 | 일본 검토 뒤 재심사하는 보류 후보 |
+| 🇹🇼 대만 | **WM-811K · 전력/태양광 · 로봇 연구 후보군** | 웨이퍼맵·전력·로봇 중 공개 검증 가능한 축 선별 | 원출처·이용 조건 확인 전 보류 후보 |
 
 후보는 국가 수를 늘리기 위한 목록이 아닙니다. 각 데이터는 기존 `observed / estimated / reference / synthetic` 역할과 겹치지 않는 연구질문이 있고, 원 출처·조회일·라이선스·단위·시간대·SHA-256을 기록할 수 있을 때만 구현 단계로 승격합니다. 로봇·웨이퍼맵 데이터는 PV 시계열이나 SECOM V1과 동일 모델로 합치지 않고 별도 계약으로 다룹니다.
 

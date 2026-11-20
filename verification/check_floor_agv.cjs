@@ -70,6 +70,11 @@ function framed(s){assert.ok([...s.corners,s.center].every(p=>Math.abs(p[0])<1&&
   if(await page.locator('html').getAttribute('data-theme')!==theme)await page.locator('#theme-toggle').press('Enter');
   assert.equal(await page.locator('html').getAttribute('data-theme'),theme);
   await page.locator('#reset').press('Enter');await advance(200);assert.match(await page.locator('#run-status').innerText(),/일시정지/);
+  // The landing camera now introduces the placement machine. Explicitly enter
+  // the public whole-line view before checking overview route coverage.
+  const beforeOverview=await snapshot('before-overview');
+  await page.locator('#camera-reset').press('Enter');await advance(200);
+  assert.deepEqual(await snapshot('after-overview'),beforeOverview,'Overview changes camera only');
   const initial=await sample(page);assert.equal(initial.count,1);assert.ok(initial.meshes>=8);assert.ok(initial.cylinders>=4,'Actual wheel primitives');assert.ok(initial.size[1]<2,'Floor chassis, not overhead robot');
   framed(initial);await capture('overview');
   await page.locator('#floor-agv-select').press('Enter');await advance(200);assert.equal(await page.locator('#station-strip [aria-pressed=true]').count(),0);assert.equal(await page.locator('#equipment-reference').isVisible(),false);assert.equal(await page.locator('#inside-view').isDisabled(),true);assert.match(await page.locator('#station-info').innerText(),/합성 바닥형 AGV/);framed(await sample(page));await capture('route');

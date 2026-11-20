@@ -150,14 +150,18 @@ def walk_forward_slices(timestamps: Sequence[pd.Timestamp], *, initial_train_fra
     if not 0 < initial_train_fraction < 1 or folds < 1:
         raise ValueError("Invalid walk-forward configuration")
     time = pd.Series(pd.to_datetime(timestamps))
+    if time.empty or time.isna().any():
+        raise ValueError("Non-empty finite timestamps required")
     order = np.lexsort((np.arange(len(time)), time.astype("int64")))
     ordered = time.iloc[order].reset_index(drop=True)
     boundaries = np.linspace(int(len(time) * initial_train_fraction), len(time), folds + 1).astype(int)
-    result = []
-    for left, right in zip(boundaries[:-1], boundaries[1:]):
-        boundary_time = ordered.iloc[left]
-        while left > 0 and ordered.iloc[left - 1] == boundary_time:
+    # Adjust shared boundaries once, so a tied group belongs to one validation block.
+    for i in range(len(boundaries) - 1):
+        left = boundaries[i]
+        while left > 0 and ordered.iloc[left - 1] == ordered.iloc[left]:
             left -= 1
-        if right > left:
-            result.append((order[:left], order[left:right]))
-    return result
+        boundaries[i] = left
+    if boundaries[0] == 0 or np.any(np.diff(boundaries) <= 0):
+        raise ValueError("Insufficient distinct timestamp groups for walk-forward folds")
+    return [(order[:left], order[left:right])
+            for left, right in zip(boundaries[:-1], boundaries[1:])]

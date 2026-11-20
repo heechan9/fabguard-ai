@@ -151,6 +151,41 @@ class MaintenanceReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ManufacturingReviewError,'predates'):
             self.record(package,self.encode(envelope))
 
+    def test_fractional_digits_are_checked_before_audit_normalization(self):
+        package = self.encode(self.build())
+        envelope = json.loads(self.envelope(package))
+        recorded_at = '2026-09-01T00:21:00.000001Z'
+        envelope['decisions'][0]['decided_at'] = '2026-09-01T09:21:00.000001+09:00'
+        history = self.encode(self.history)
+        audit = record_context_review(self.events, history, package, self.encode(envelope),
+                                      recorded_at=recorded_at)
+        self.assertIn('2026-09-01T00:21:00.000001+00:00', json.dumps(audit))
+        for field in ('decided_at', 'recorded_at'):
+            with self.subTest(field=field):
+                decision = copy.deepcopy(envelope)
+                audit_at = recorded_at
+                if field == 'decided_at':
+                    decision['decisions'][0][field] = '2026-09-01T00:21:00.0000019Z'
+                else:
+                    audit_at = '2026-09-01T00:21:00.0000019Z'
+                with self.assertRaisesRegex(ManufacturingReviewError, field):
+                    record_context_review(self.events, history, package, self.encode(decision),
+                                          recorded_at=audit_at)
+
+    def test_context_inputs_do_not_truncate_submicrosecond_timestamps(self):
+        late = '2026-09-01T00:20:00.0000009Z'
+        with self.assertRaisesRegex(ManufacturingReviewError, 'as_of'):
+            self.build(cutoff=late)
+        for field, history in (
+                ('history.available_at', self.history | {'available_at': late}),
+                ('change.available_at', self.history | {'changes': [self.history['changes'][0] | {'available_at': late}] })):
+            with self.subTest(field=field), self.assertRaisesRegex(ManufacturingReviewError, field):
+                self.build(history)
+        source = json.loads(self.events)
+        source['readings'][-1]['user_ts'] = late
+        with self.assertRaisesRegex(ManufacturingReviewError, 'reading'):
+            self.build(events=self.encode(source))
+
 
 if __name__ == '__main__':
     unittest.main()

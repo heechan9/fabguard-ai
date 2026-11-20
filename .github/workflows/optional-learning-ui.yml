@@ -1,10 +1,10 @@
 name: Optional learning browser verification
 on:
   pull_request:
-    paths: ['web/index.html', 'web/learn/**', 'tests/web/learning*.test.mjs', 'verification/check_learning_mode.cjs', '.github/workflows/optional-learning-ui.yml']
+    paths: ['web/index.html', 'web/learn/**', 'tests/web/learning*.test.mjs', 'tests/web/review-note.test.mjs', 'verification/check_learning_mode.cjs', '.github/workflows/optional-learning-ui.yml']
   push:
     branches: [main]
-    paths: ['web/index.html', 'web/learn/**', 'tests/web/learning*.test.mjs', 'verification/check_learning_mode.cjs', '.github/workflows/optional-learning-ui.yml']
+    paths: ['web/index.html', 'web/learn/**', 'tests/web/learning*.test.mjs', 'tests/web/review-note.test.mjs', 'verification/check_learning_mode.cjs', '.github/workflows/optional-learning-ui.yml']
 permissions:
   contents: read
 jobs:

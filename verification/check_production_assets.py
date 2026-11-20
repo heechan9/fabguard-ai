@@ -29,6 +29,7 @@ FILES = [
     'equipment/index.html', 'equipment/context-review.html',
     'equipment/context-review.css', 'equipment/context-review.mjs',
     'equipment/context-review-model.mjs', 'equipment/data/maintenance-synthetic.json',
+    'equipment/context-evidence-card.mjs', 'equipment/context-evidence-ui.mjs',
     'robot/ur3/index.html', 'robot/ur3/style.css', 'robot/ur3/app.mjs',
     'robot/ur3/core.mjs', 'robot/ur3/data-hash.mjs', 'robot/ur3/data.json',
     'robot/offline-evidence.mjs', 'robot/offline-report-data.mjs',
