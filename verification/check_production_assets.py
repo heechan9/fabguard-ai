@@ -27,6 +27,8 @@ FILES = [
     'smt/transfer-robot-model.mjs', 'smt/transfer-robot-view.mjs',
     'smt/floor-agv-model.mjs', 'smt/floor-agv-view.mjs',
     'equipment/index.html', 'equipment/context-review.html',
+    'equipment/synthetic-receipt-panel.css', 'equipment/synthetic-receipt-panel.mjs',
+    'equipment/synthetic-receipt-audit.mjs',
     'equipment/context-review.css', 'equipment/context-review.mjs',
     'equipment/context-review-model.mjs', 'equipment/data/maintenance-synthetic.json',
     'equipment/context-evidence-card.mjs', 'equipment/context-evidence-ui.mjs',
