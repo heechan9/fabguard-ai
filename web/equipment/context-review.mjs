@@ -33,8 +33,8 @@ function chart(p){
  svg('text',{x:75,y:263,fill:'#c7d7df','font-size':13},rows[0].event_time);svg('text',{x:825,y:263,'text-anchor':'end',fill:'#c7d7df','font-size':13},rows.at(-1).event_time);
 }
 function syncTarget(){
- evidence.reset(true);
  const row=current.observations.find(r=>r.review_id===$('review-target').value),saved=drafts.get(row.review_id),held=row.context_state==='withheld';
+ evidence.reset(true, row);
  for(const o of $('review-outcome').options)o.disabled=held&&o.value!=='insufficient_evidence';
  for(const o of $('review-action').options)o.disabled=held&&['release','no_action'].includes(o.value);
  $('review-outcome').value=saved?.outcome||'insufficient_evidence';$('review-action').value=saved?.action||'hold';$('review-reason').value=saved?.rationale||'';$('review-time').value=saved?.decided_at||new Date().toISOString();$('review-role').value=saved?.reviewer_role||'';

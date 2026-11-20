@@ -1,6 +1,13 @@
 import {buildContextEvidenceCard, followupFields} from './context-evidence-card.mjs';
 
+import {processFields} from './process-evidence-note.mjs';
+
 const gapLabels = {
+  observation_or_reference_missing: '관측 사실 또는 근거 참조가 비어 있음',
+  measurement_conditions_missing: '측정 방법·조건 미기재',
+  process_history_missing: 'LOT·시료 식별자 또는 공정 이력 미기재',
+  comparison_fields_differ: '비교 기록의 LOT·시료·측정 항목·단위·조건 중 차이가 있음. 같은 조건으로 간주하지 않음',
+  comparison_details_missing: '동일 시료 비교에 필요한 값·식별자·측정 조건·보고서 참조가 부족함',
   signal_class_not_declared: '신호 종류 미확인', measurement_time_not_declared: '계측 시각 미확인',
   measurement_after_review_cutoff: '추가 근거의 계측 시각이 판단 정보 시점보다 늦어 당시 근거로 사용할 수 없음',
   availability_time_not_declared: '조회 가능 시각 미확인', availability_before_measurement: '조회 가능 시각이 계측보다 앞섬 · 기록 확인 필요',
@@ -14,15 +21,18 @@ const gapLabels = {
 // Optional annotation UI. Never writes into the original decision package.
 export function createEvidencePanel(getSource, doc = document) {
   const $ = id => doc.getElementById(id);
-  const fields = ['signal', 'measured', 'available', 'sites', 'claim', 'hypotheses', ...followupFields];
+  const fields = ['signal', 'measured', 'available', 'sites', 'claim', 'hypotheses', ...followupFields, ...processFields];
   let token = 0, card = null;
   function invalidate() {
     token++; card = null; $('evidence-export').disabled = true;
     $('evidence-gaps').replaceChildren();
+    $('evidence-process-result').textContent = '';
     $('evidence-status').textContent = '미확인 · 조치 판단 안 함. 입력 내용을 정리하려면 버튼을 누르세요.';
   }
-  function reset(visible) {
+  function reset(visible, row) {
     invalidate(); $('evidence-panel').hidden = !visible;
+    $('evidence-process-source').textContent = row ?
+      `선택한 기록: LOT ${row.trace?.lot_id || '미확인'} · 시료 ${row.trace?.unit_id || '미확인'} · ${row.measurement} (${row.unit})` : '';
     for (const field of fields) $(`evidence-${field}`).value = field === 'signal' ? 'unknown' : field === 'claim' ? 'observation' : '';
   }
   for (const field of fields) {
@@ -48,7 +58,7 @@ export function createEvidencePanel(getSource, doc = document) {
         throw Error('측정 위치 수는 1 이상의 정수를 숫자(0–9)만 사용해 입력하세요.');
       }
       if (siteCount !== '') annotation.measurement_sites = Number(siteCount);
-      for (const field of followupFields) {
+      for (const field of [...followupFields, ...processFields]) {
         const value = $(`evidence-${field}`).value.trim();
         if (value) annotation[field] = value;
       }
@@ -56,6 +66,10 @@ export function createEvidencePanel(getSource, doc = document) {
       if (started !== token) return;
       card = result; $('evidence-export').disabled = false;
       $('evidence-status').textContent = `자기기재 정리 완료 · 근거 검증 안 함 · 조치 판단 안 함 · 원본 상태 ${result.source_context_state}`;
+      const comparisonState = result.process_review_note?.comparison_state;
+      if (comparisonState === 'DECLARED_FIELDS_MATCH_ONLY') {
+        $('evidence-process-result').textContent = '기재된 식별자·항목·단위·조건만 일치합니다. 실제 동일 시료인지, 비교 결과가 맞는지는 확인하지 않았습니다.';
+      }
       for (const reason of result.blockers) {
         const item = doc.createElement('li'); item.textContent = gapLabels[reason] || reason; $('evidence-gaps').append(item);
       }
