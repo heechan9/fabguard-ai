@@ -116,3 +116,31 @@ unavailable = false;
 recovery.offer({run:'A',revision:2,preview:[{id:'kept'}]});
 await recoveredQueue.shift()();
 assert.deepEqual(recovered,['kept']);
+
+// Asynchronous publication must be part of the guarded preview job.
+const publisherTasks = [], publisherAccepted = [];
+let rejectFirst, startedFirst;
+const firstStarted = new Promise(resolve => { startedFirst = resolve; });
+const publication = latestPreview({
+  defer: callback => publisherTasks.push(callback),
+  derive: items => items,
+  publish: async (items, stamp) => {
+    if (stamp.revision === 1) {
+      await new Promise((_, reject) => { rejectFirst = reject; startedFirst(); });
+    }
+    publisherAccepted.push(items[0].id);
+  },
+});
+publication.reset('publish-run');
+publication.offer({run:'publish-run',revision:1,preview:[{id:'failing'}]});
+const publishing = publisherTasks.shift()();
+await firstStarted;
+publication.offer({run:'publish-run',revision:2,preview:[{id:'kept'}]});
+assert.deepEqual(publication.stats(),{pending:1,inFlight:true,dropped:0});
+assert.equal(publisherTasks.length,0);
+rejectFirst(new Error('asynchronous publication failed'));
+await publishing;
+assert.deepEqual(publication.stats(),{pending:1,inFlight:true,dropped:1});
+await publisherTasks.shift()();
+assert.deepEqual(publisherAccepted,['kept']);
+assert.deepEqual(publication.stats(),{pending:0,inFlight:false,dropped:1});

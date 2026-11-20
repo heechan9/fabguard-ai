@@ -14,7 +14,7 @@ export function latestPreview({defer, derive, publish}) {
       if (job) {
         try {
           const value = await derive(job.preview);
-          if (job.epoch === epoch && job.revision === revision) publish(value, job);
+          if (job.epoch === epoch && job.revision === revision) await publish(value, job);
           else dropped++;
         } catch {
           dropped++; // Preview failure cannot mutate authoritative simulation or stop scheduling.
