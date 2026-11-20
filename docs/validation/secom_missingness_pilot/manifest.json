@@ -1,0 +1,73 @@
+{
+  "status": "exploratory_train_only_no_promotion",
+  "seed": 20260822,
+  "official_train_samples": 1175,
+  "official_test_scored": false,
+  "split": "4 expanding windows on unique training timestamps; initial 55%",
+  "raw_hashes": {
+    "secom.data": "20f0e7ee434f7dcbae0eea9ffff009a2b57f42d6b0dc9a5bd4f00782c0a3374c",
+    "secom.names": "6d91b0b46cdee03064ee3e3112f937c1b3f7fcd9933575794ec07974e6f1ea59",
+    "secom_labels.data": "126884cf453705c9e61a903fe906f0665a3b45ce3639e621edc5c93c89627e03"
+  },
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "sklearn": "1.8.0",
+  "source_sha256": "56f59973ef544903708baf0b112b636f38aa00720056ac56d33994142f2c0af8",
+  "contract_sha256": "2ad3fd13ef3534af04db48803e9999b4be7ef4bddbc4b63c287c4c41206825fb",
+  "variants": [
+    "dummy",
+    "v1_l1",
+    "v1_rf",
+    "rf_no_indicator",
+    "rf_row_missing_count",
+    "hist_gradient_boosting"
+  ],
+  "config": {
+    "data_dir": "data/raw",
+    "output_dir": "results/v1",
+    "random_seed": 20260822,
+    "train_size": 1175,
+    "test_size": 392,
+    "missing_threshold": 0.5,
+    "cv_splits": 5,
+    "cv_repeats": 5,
+    "top_k_fractions": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "logistic_c_values": [
+      0.01,
+      0.1,
+      1.0
+    ],
+    "rf_candidates": [
+      [
+        8,
+        4,
+        "sqrt"
+      ],
+      [
+        null,
+        8,
+        "sqrt"
+      ]
+    ],
+    "rf_estimators": 120
+  },
+  "git_revision": "cd7bf490a1d7ad3e53c77ea198e323b9d95c7ff3",
+  "dependency_source_hashes": {
+    "modeling.py": "c8e6be4e12b3ef4819884b3145520566aaa5af3a6f96727c9c5ee75ce0f6d0d9",
+    "preprocessing.py": "4b83be93cc669b8df532b140774569e20f97f8040b6b0f5b70f7947136c165bd",
+    "data.py": "9c4e018039872506ba310b0d041b2ed130d44d1676463e25989e0d3b7c8f324a",
+    "evaluation.py": "847cf3a994307ca45b1009e65801dad35aae834d5184c012c2783975286bc1f6",
+    "config.py": "807567c873e07a60c44503a46185225a095f838bf87f9326bb9bf51b546861a8"
+  },
+  "artifact_sha256": {
+    "fold_metrics.csv": "44647fae55680a6df6a5b24ea7958f59f93bff731ae2355f29abc1d3fa7eab2f",
+    "summary.csv": "f377acec7e2f71d1d95e58b8ab6f9d92789fcd622d03596f43425079372f1a32",
+    "splits.csv": "5260bbc2f62706ed3e3bebe27811b30067c69b447cf2df405a856c301ab6578e"
+  },
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONPATH=src python -m fabguard.missingness_pilot --output-dir docs/validation/secom_missingness_pilot"
+}
