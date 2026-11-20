@@ -1,0 +1,30 @@
+* { box-sizing: border-box; }
+:root { color-scheme: light; --cc-bg:#f3f6f4; --cc-panel:#ffffff; --cc-raised:#f1f7f3; --cc-ink:#172f25; --cc-muted:#39554a; --cc-line:#59806e; --cc-accent:#155b38; --cc-warm:#784800; }
+body.collaboration { margin: 0; min-width: 0; background: var(--cc-bg); color: var(--cc-ink); font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+.collaboration a { color: var(--cc-accent); text-underline-offset: .2em; overflow-wrap: anywhere; }
+.collaboration :is(a, button, select, textarea):focus-visible { outline: 3px solid var(--cc-warm); outline-offset: 3px; }
+.collaboration .skip { position: absolute; z-index: 1; inset: .75rem auto auto .75rem; transform: translateY(-150%); background: var(--cc-panel); padding: .55rem; }
+.collaboration .skip:focus { transform: none; }
+.collab-header { padding: 1rem clamp(1rem, 5vw, 3.5rem); border-bottom: 1px solid var(--cc-line); display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; align-items: center; }
+.collab-header a { font-weight: 800; }
+.collab-header span, .eyebrow { font-size: .8rem; letter-spacing: .08em; font-weight: 700; color: var(--cc-accent); }
+body.collaboration main { margin: 0 auto; padding: 1.5rem 1rem 3rem; max-width: 62rem; }
+.collaboration h1 { font-size: clamp(1.9rem, 5.8vw, 3.3rem); line-height: 1.12; margin: .4rem 0 1rem; }
+.collaboration h2 { font-size: clamp(1.25rem, 4.5vw, 1.75rem); line-height: 1.3; margin: 0 0 .65rem; }
+.collaboration h3 { margin: 0; font-size: 1.1rem; }
+.collaboration .lede { font-size: 1.16rem; color: var(--cc-ink); }
+.collaboration p { max-width: 65ch; }
+.panel { margin-top: 1.5rem; padding: clamp(1rem, 3vw, 1.75rem); background: var(--cc-panel); border: 1px solid var(--cc-line); border-radius: .7rem; }
+.controls { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
+.controls > div { min-width: 0; }
+.collaboration label { display: block; font-weight: 750; margin-bottom: .35rem; }
+.collaboration :is(select, button, textarea) { font: inherit; max-width: 100%; color: var(--cc-ink); background: var(--cc-raised); border: 1px solid var(--cc-line); border-radius: .4rem; padding: .55rem .7rem; }
+.collaboration :is(select, button) { min-height: 44px; }
+.collaboration button { cursor: pointer; font-weight: 750; border-color: var(--cc-accent); }
+.collaboration textarea { width: 100%; resize: vertical; }
+.collaboration .status { font-weight: 750; color: var(--cc-warm); }
+.evidence { margin: 0 0 1.5rem; padding: .5rem .8rem; border-left: 3px solid var(--cc-line); }
+.evidence dt { font-weight: 750; }
+.evidence dd { margin: 0 0 .5rem; color: var(--cc-muted); overflow-wrap: anywhere; }
+.review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
+.links { padding-inline-start: 1.3rem; }

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Review one synthetic FabGuard inspection comparison in your browser.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="theme-color" content="#f3f6f4">
+  <title>FabGuard AI · Collaborate</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./replay.mjs"></script>
+</head>
+<body class="collaboration">
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="collab-header">
+    <a href="../index.html">FabGuard AI</a>
+    <span>COLLABORATION · SYNTHETIC EXERCISE</span>
+  </header>
+  <main id="content" tabindex="-1">
+    <section aria-labelledby="page-title">
+      <p class="eyebrow">PUBLIC REVIEW STARTER</p>
+      <h1 id="page-title">Collaborate</h1>
+      <p class="lede">Run a tiny paired replay. See why a result with the right row count can still be unsuitable for comparison.</p>
+      <p>All records on this page are fixed, fictional examples. Nothing is uploaded or sent. This exercise does not demonstrate model performance, factory suitability, or operational approval.</p>
+    </section>
+    <section class="panel" aria-labelledby="replay-title">
+      <h2 id="replay-title">15-minute starter: same records, same review budget</h2>
+      <p id="case-help">Choose a scenario, then run the comparison. Check whether both workflows have the same three eligible records before comparing any ranking. The review budget is fixed at two records for each workflow; this starter does not choose them.</p>
+      <div class="controls">
+        <div><label for="scenario">Synthetic scenario</label><select id="scenario" aria-describedby="case-help">
+          <option value="complete">Complete paired comparison</option>
+          <option value="missing">One missing candidate record</option>
+          <option value="replacement">Same count, foreign replacement</option>
+        </select></div>
+        <button id="run" type="button">Run replay</button>
+      </div>
+      <noscript><p>JavaScript is needed to run the local replay. You can still read the review guide and links below.</p></noscript>
+      <p id="status" class="status" role="status" aria-atomic="true">No replay run yet.</p>
+      <dl id="evidence" class="evidence">
+        <div><dt>Expected</dt><dd id="expected">—</dd></div>
+        <div><dt>Observed</dt><dd id="observed">—</dd></div>
+        <div><dt>Provenance</dt><dd id="provenance">—</dd></div>
+      </dl>
+      <label for="receipt">Manual review receipt</label>
+      <p id="receipt-help">Select and copy the text yourself if it helps explain a finding. The page does not post it.</p>
+      <textarea id="receipt" readonly rows="8" aria-describedby="receipt-help"></textarea>
+    </section>
+    <section class="panel" aria-labelledby="review-title">
+      <h2 id="review-title">From replay to a useful review</h2>
+      <p>Pick one of these lanes and leave a short, asynchronous note. There is no meeting or patch requirement. The <a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTING.md#one-question-replay">command-line replay</a> uses these same fixed cases.</p>
+      <div class="review-grid">
+        <div><h3>What can I review?</h3><ol>
+          <li>Is the comparison question clear?</li>
+          <li>Do both workflows use the same eligible records?</li>
+          <li>Do both stay within the same review budget?</li>
+          <li>Are missing records or replacements visible?</li>
+          <li>Does the conclusion stay within the evidence?</li>
+        </ol></div>
+        <div><h3>What should I share?</h3><ol>
+          <li>Scenario and fixture version.</li>
+          <li>Exact expected result.</li>
+          <li>Exact observed result.</li>
+          <li>Evidence link or steps to reproduce.</li>
+          <li>Why it matters and one useful next check.</li>
+        </ol></div>
+      </div>
+      <p>For public feedback, use one finding per issue. Do not attach factory data, credentials, personal information, or confidential details. No sign-in is needed to use this page; GitHub may ask you to sign in if you choose to post.</p>
+      <ul class="links">
+        <li><a href="https://github.com/heechan9/fabguard-ai/blob/main/CONTRIBUTING.md">Read the contribution guide</a></li>
+        <li><a href="https://github.com/heechan9/fabguard-ai/issues/new?template=collaboration-question.yml">Ask a focused workflow or evaluation question</a></li>
+        <li><a href="https://github.com/heechan9/fabguard-ai/issues/new?template=collaboration-question.yml">Suggest one bounded improvement or check</a></li>
+        <li><a href="https://github.com/heechan9/fabguard-ai/issues/new?template=review-feedback.yml">Report one reproduced issue and its steps</a></li>
+        <li><a href="../research/index.html">Read the public research evidence</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

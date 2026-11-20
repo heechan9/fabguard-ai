@@ -7,6 +7,8 @@ body:
       value: |
         Thank you for reviewing FabGuard AI. Please keep this issue focused on one finding and cite the relevant file, test, artifact, or operational assumption.
 
+        Use this form for one confirmed finding. For questions, ideas, or unconfirmed symptoms, use the separate Collaboration question or idea form from the issue chooser.
+
         This is a public repository. Do not include private production data, credentials, personal information, or confidential site details.
 
   - type: dropdown
@@ -29,6 +31,15 @@ body:
       label: Evidence reference
       description: Link to or name the relevant file, test, artifact, section, or operational assumption.
       placeholder: "Example: docs/MINIMUM_PILOT.md — rollback criteria"
+    validations:
+      required: true
+
+  - type: input
+    id: version-environment
+    attributes:
+      label: Revision and environment
+      description: Include the commit SHA and relevant browser or Python version. For a replay, add the synthetic fixture version and digest. Do not share private logs.
+      placeholder: "Example: commit 123abcd, Python 3.11, Windows"
     validations:
       required: true
 

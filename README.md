@@ -290,6 +290,8 @@ FabGuard is a reviewable industrial-AI prototype rather than a black-box demo. E
 
 Focused issues and reviewable pull requests are welcome, especially for validation design, data-contract tests, drift diagnostics, calibration, documentation, and contract-preserving adapters.
 
+**Start here:** [English collaboration demo](https://fabguard-ai.vercel.app/collaborate/) · [Contribution and review guide](CONTRIBUTING.md#start-here-english). Try three synthetic cases in the browser or replay them from the repository. No login, uploads, model inference, or partner data.
+
 </details>
 
 ## 빠른 시작

@@ -1,0 +1,33 @@
+name: Collaboration question or idea
+description: Ask one bounded question or propose one investigation.
+title: "[Collaboration] "
+body:
+  - type: dropdown
+    id: lane
+    attributes:
+      label: What would you like to discuss?
+      options:
+        - Question
+        - Idea or possible improvement
+        - Symptom not yet reproduced
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: One question or proposal
+      description: What are you trying to learn or change? For a larger proposal, describe what would count as success before suggesting implementation.
+    validations:
+      required: true
+  - type: input
+    id: entry
+    attributes:
+      label: Public evidence or route
+      description: Link to the public commit, demo page, or synthetic replay if applicable. If the issue is already reproducible, use Focused review feedback instead.
+  - type: checkboxes
+    id: public-only
+    attributes:
+      label: Public information only
+      options:
+        - label: This contains no customer data, credentials, personal information, or confidential materials.
+          required: true

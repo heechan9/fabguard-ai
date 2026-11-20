@@ -1,6 +1,32 @@
-# FabGuard 작업 참여 안내
+# Contribute to FabGuard AI
 
 [프로젝트 소개](README.md) · [문서 지도](docs/README.md) · [기여 기록](docs/governance/CONTRIBUTIONS.md)
+
+## Start here (English)
+
+[Collaboration page](https://fabguard-ai.vercel.app/collaborate/) · [English technical handoff](docs/TECHNICAL_HANDOFF_EN.md) · [Japanese technical handoff](docs/TECHNICAL_HANDOFF_JA.md)
+
+- **Question, idea, or unconfirmed symptom:** use the [Collaboration question or idea form](https://github.com/heechan9/fabguard-ai/issues/new?template=collaboration-question.yml). Do not file an unconfirmed symptom as a bug.
+- **Confirmed, reproducible finding:** use [Focused review feedback](https://github.com/heechan9/fabguard-ai/issues/new?template=review-feedback.yml) for one finding. Include the commit SHA, environment, minimal steps, expected result, and actual result. A patch is optional.
+- **Larger change:** propose the problem, interface or evaluation impact, acceptance checks, and scope first. Open an issue once the approach is agreed, then link one focused PR. Small corrections can go directly to a PR.
+- **Private material:** do not post production data, keys, identifiers, confidential screenshots, or raw site logs. Use a synthetic example; do not move real data into a public thread. If redaction is not possible, stop and arrange an authorized private route separately.
+
+### One-question replay
+
+**Can the synthetic receipt distinguish matching, missing, and substituted roster IDs?** From the repository root, run `python examples/collaboration_replay.py`. No package, network, or measurement data is needed. The fixed roster is SYN-01/02/03; the second case omits SYN-02 and the third replaces it with SYN-99. Expected: `MATCH`, `MISSING`, `SUBSTITUTED` in that order. Report only the fixture version/digest, commit SHA, OS and Python version, and `PASS`, `FAIL`, or `NOT_RUN` (and reason if applicable). This tests the demonstration receipt, not a production verifier or a model.
+
+### Review routing and decisions
+
+| Area | Reviewer role, not an assignment |
+| --- | --- |
+| SMT / web | Interaction, accessible fallback, and demo boundaries |
+| Evaluation | Splits, metric definitions, and reproducibility |
+| Intake / data contracts | Source identity, eligibility, missingness, and visibility |
+| Docs / English | Clarity, links, terminology, and claim boundaries |
+
+Name a human decision owner for each significant change once the person has agreed. Review the exact PR head; AI reviews are advisory. Keep the asynchronous decision in the issue/PR: **decision · why · owner/role · head/evidence · next check**. If the supporting material is private, record only a sanitized decision publicly. Credit actual contributions by role and only with permission for public attribution; cite source inspiration separately from implementation, review, or partnership. The workflow is informed by [Autoware’s public contribution guidelines](https://docs.autoware.org/main/contributing/) and [review guidelines](https://docs.autoware.org/main/contributing/pull-request-guidelines/review-guidelines/); this is not an affiliation or endorsement.
+
+## 한국어 작업 안내
 
 이 문서는 변경 방법을 안내한다. 누가 무엇을 구현했는지는 [CONTRIBUTIONS.md](docs/governance/CONTRIBUTIONS.md), AI 활용 내역은 [AI_USAGE.md](docs/governance/AI_USAGE.md)에 기록한다. 구현 규칙은 [AGENTS.md](AGENTS.md)가 기준이다.
 

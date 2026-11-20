@@ -7,7 +7,7 @@ import * as robotCore from '../../web/robot/window-core.mjs';
 import {parseCSV} from '../../web/equipment/contract.mjs';
 import {normalizePagePath,navigationKey,navigationHref} from '../../web/site-shell.mjs';
 const require=createRequire(import.meta.url);
-const {documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,navigationState}=require('../../verification/check_sitewide_command.cjs');
+const {documents,standalonePages,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,navigationState}=require('../../verification/check_sitewide_command.cjs');
 const root=new URL('../../web/',import.meta.url);
 const read=name=>readFileSync(new URL(name,root),'utf8');
 function htmlFiles(directory=root,prefix=''){
@@ -15,7 +15,8 @@ function htmlFiles(directory=root,prefix=''){
 }
 test('all-page audit inventories every HTML document and every retained root view',()=>{
  assert.equal(documents.length,12);
- assert.deepEqual(documents.map(d=>d.file).sort(),htmlFiles());
+ assert.deepEqual(standalonePages,['collaborate/index.html']);
+ assert.deepEqual([...documents.map(d=>d.file),...standalonePages].sort(),htmlFiles());
  assert.deepEqual(hashViews.map(d=>d.name),['summary','global','risks','limitations','detail']);
  assert.deepEqual(documents.filter(d=>d.english).map(d=>d.name).sort(),['oht','overview','review']);
  assert.deepEqual(documents.filter(d=>d.nativeTheme).map(d=>d.file),['research/index.html']);

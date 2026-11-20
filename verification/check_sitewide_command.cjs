@@ -8,6 +8,7 @@ const assert = require('node:assert/strict');
 const {execFileSync} = require('node:child_process');
 
 // An exact inventory is independently compared with every web/**/*.html by node:test.
+const standalonePages = ['collaborate/index.html'];
 const documents = [
   {file:'index.html', name:'overview', route:'/#overview', ready:'.cc-queue a', english:true},
   {file:'secom/index.html', name:'secom', route:'/secom/', ready:'#distribution-evidence select'},
@@ -456,5 +457,5 @@ async function main() {
   }catch(error){report.status='failed';report.fatal=error.stack;save();throw error;}
   finally{await browser?.close();}
 }
-module.exports={documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,semanticStyles,navigationState,assertDelayedReviewReady};
+module.exports={standalonePages,documents,hashViews,canonicalPath,renderedAudit,semanticWindowCSV,semanticStyles,navigationState,assertDelayedReviewReady};
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
