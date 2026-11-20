@@ -1,6 +1,8 @@
 // Optional evidence display adapter. It does not release equipment or infer causality.
 import {parsePackage, digest, stamp, compareTimes} from './context-review-model.mjs';
 
+import {buildProcessNote, processFields} from './process-evidence-note.mjs';
+
 const classes = new Set(['FDC', 'SPC', 'unknown']);
 const claims = new Set(['observation', 'causal_effect', 'wafer_uniformity']);
 export const followupFields = ['verification_plan', 'side_effect_check', 'verification_evidence_ref'];
@@ -12,7 +14,7 @@ export async function buildContextEvidenceCard(raw, reviewId, annotation = {}) {
   const row = p.observations.find(r => r.review_id === reviewId);
   if (!row) throw new Error('Unknown review ID');
   if (!annotation || typeof annotation !== 'object' || Array.isArray(annotation)) throw new Error('Annotation must be an object');
-  const allowed = new Set(['context_package_sha256', 'signal_class', 'measured_at', 'available_at', 'claim', 'measurement_sites', 'hypotheses', ...followupFields]);
+  const allowed = new Set(['context_package_sha256', 'signal_class', 'measured_at', 'available_at', 'claim', 'measurement_sites', 'hypotheses', ...followupFields, ...processFields]);
   if (Object.keys(annotation).some(k => !allowed.has(k))) throw new Error('Unsupported annotation field');
   const hash = await digest(raw);
   if (annotation.context_package_sha256 !== undefined && annotation.context_package_sha256 !== hash) throw new Error('Stale annotation: exact package hash differs');
@@ -29,7 +31,8 @@ export async function buildContextEvidenceCard(raw, reviewId, annotation = {}) {
     if (!text(annotation[field]) || annotation[field].length > 500) throw new Error('Invalid follow-up note');
     followup[field] = annotation[field];
   }
-  const blockers = [...row.reasons];
+  const process = buildProcessNote(row, annotation);
+  const blockers = [...row.reasons, ...(process?.gaps ?? [])];
   if (signalClass === 'unknown') blockers.push('signal_class_not_declared');
   let measured = null, available = null;
   if (annotation.measured_at != null) measured = stamp(annotation.measured_at);
@@ -49,6 +52,7 @@ export async function buildContextEvidenceCard(raw, reviewId, annotation = {}) {
     observation: {event_time: row.event_time, value: row.value, unit: row.unit, measurement: row.measurement},
     source_context_state: row.context_state, source_reference_status: row.reference_status,
     declared_annotation: {source: 'user_annotation', signal_class: signalClass, measured_at: annotation.measured_at ?? null, available_at: annotation.available_at ?? null, measurement_sites: sites, claim, hypotheses: [...hypotheses], ...followup},
+    ...(process ? {process_review_note: process.note} : {}),
     related_changes: p.timeline.filter(e => row.related_changes.includes(e.change_id)).map(e => ({change_id: e.change_id, kind: e.kind, effective_at: e.effective_at, available_at: e.available_at})),
     blockers: [...new Set(blockers)],
     evidence_verification: 'NOT_PERFORMED',

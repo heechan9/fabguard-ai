@@ -99,6 +99,35 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  assert.equal(await page.locator('#review-export').isDisabled(),true);
  await plan.fill('변경한 합성 메모');
  assert.equal(await memoExport.isDisabled(),true);
+ const processDetails=page.getByText('공정 이상·동일 시료 검토 메모 (선택 사항)',{exact:true});
+ await processDetails.press('Enter');
+ const selected=p.observations[1];
+ assert.match(await page.locator('#evidence-process-source').innerText(),new RegExp(selected.trace.unit_id));
+ const fields={observed_fact:'합성 SPI 측정 기록',observation_ref:'SYNTH-ROW-2',
+   measurement_conditions:'같은 계측기·측정 위치', comparison_conditions:'같은 계측기·측정 위치',
+   comparison_lot_id:selected.trace.lot_id,comparison_unit_id:selected.trace.unit_id,
+   comparison_measurement:selected.measurement,comparison_unit:selected.unit,inspection_selection_ref:'SYNTH-COMPARE'};
+ for(const [name,value] of Object.entries(fields)) await page.locator('#evidence-'+name).fill(value);
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'document overflow with process section open');
+ await page.locator('#evidence-build').press('Enter');
+ await page.waitForFunction(()=>document.querySelector('#evidence-process-result').textContent.includes('확인하지 않았습니다'));
+ const processDownloadPromise=page.waitForEvent('download');
+ await memoExport.press('Enter');
+ const processPath=path.join(output,width+'-process-note.json');
+ await (await processDownloadPromise).saveAs(processPath);
+ const processNote=JSON.parse(fs.readFileSync(processPath,'utf8'));
+ assert.equal(processNote.process_review_note.comparison_state,'DECLARED_FIELDS_MATCH_ONLY');
+ assert.equal(processNote.process_review_note.comparison_performed,false);
+ assert.equal(processNote.source_context_state,'withheld');
+ assert.equal(processNote.operational_decision,'NOT_MADE');
+ await page.locator('#evidence-comparison_unit_id').fill(p.observations[0].trace.unit_id);
+ assert.equal(await memoExport.isDisabled(),true);
+ await page.locator('#evidence-build').press('Enter');
+ await page.getByText('비교 기록의 LOT·시료·측정 항목·단위·조건 중 차이가 있음. 같은 조건으로 간주하지 않음',{exact:true}).waitFor();
+ await page.locator('#review-target').selectOption(p.observations[0].review_id);
+ assert.equal(await memoExport.isDisabled(),true);
+ assert.equal(await page.locator('#evidence-observed_fact').inputValue(),'');
+ await page.locator('#review-target').selectOption(selected.review_id);
  await summary.press('Enter');
  assert.equal(await guide.isVisible(),false);
 
@@ -130,7 +159,7 @@ fs.mkdirSync(output,{recursive:true});let browser,page;const errors=[];
  await page.locator('#context-clear').press('Enter');assert.equal(await page.locator('#context-form').isVisible(),false);assert.equal(await page.locator('#review-export').isDisabled(),true);
  await page.emulateMedia({reducedMotion:'no-preference'});await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>getComputedStyle(document.querySelector('#context-example')).transitionDuration==='0s');
  assert.equal(errors.length,0,JSON.stringify(errors));
- fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({base_url:base,...sourceProvenance(),width,height:900,browser:browser.version(),status:'pass',errors,checks:['actual page and chart','no document overflow','Enter/Tab and narrow-chart ArrowRight','reduced-motion preference and CSS change','held controls and validator','three outcome options, confirmed issue download on clear row, and rejection on held row','optional evidence guide opens by keyboard and links to plan input','separate annotation download bound to input bytes and held row','editing invalidates annotation download without creating a decision','blank and invalid measurement site count','empty reason/error focus','draft count and unsaved decision export guard','download -> source-recomputed Python audit 1 decided / 2 pending','mismatched evidence invalidates old drafts','invalid JSON','oversized file','file replacement and reset'],scope:'synthetic local context review only; no field or detection performance'},null,2));
+ fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({base_url:base,...sourceProvenance(),width,height:900,browser:browser.version(),status:'pass',errors,checks:['actual page and chart','no document overflow','Enter/Tab and narrow-chart ArrowRight','reduced-motion preference and CSS change','held controls and validator','three outcome options, confirmed issue download on clear row, and rejection on held row','optional evidence guide opens by keyboard and links to plan input','separate annotation download bound to input bytes and held row','editing invalidates annotation download without creating a decision','blank and invalid measurement site count','empty reason/error focus','draft count and unsaved decision export guard','download -> source-recomputed Python audit 1 decided / 2 pending','mismatched evidence invalidates old drafts','process note keyboard, match/mismatch, export and reset','invalid JSON','oversized file','file replacement and reset'],scope:'synthetic local context review only; no field or detection performance'},null,2));
  await browser.close();
 })().catch(async e=>{fs.writeFileSync(path.join(output,'failure.json'),JSON.stringify({error:e.stack,width,errors},null,2));if(page)await page.screenshot({path:path.join(output,'failure.png'),timeout:10000,fullPage:true}).catch(()=>{});if(browser)await browser.close().catch(()=>{});console.error(e);process.exit(1);});
 }

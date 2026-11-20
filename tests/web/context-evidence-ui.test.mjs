@@ -80,3 +80,29 @@ test('site count rejects badInput and nondecimal syntax while blank remains null
 test('HTML-like hypothesis is data and not an executable DOM insertion',async()=>{
  const f=fixture();f.$('hypotheses').value='<img src=x onerror=alert(1)>';await f.$('build').listeners.click();assert.equal(f.$('export').disabled,false);assert.equal(f.$('gaps').children.some(n=>'innerHTML' in n),false);
 });
+
+test('paired process note is exported, clearly unverified, and invalidated on edit or target change',async t=>{
+ const f=fixture(), row=parsed.observations[0];
+ f.panel.reset(true,row);
+ assert.match(f.$('process-source').textContent,/SMT-DEMO-L001.*PCB-011/);
+ const fields={measurement_conditions:'fixture method',comparison_conditions:'fixture method',
+   comparison_lot_id:row.trace.lot_id,comparison_unit_id:row.trace.unit_id,
+   comparison_measurement:row.measurement,comparison_unit:row.unit,inspection_selection_ref:'SYNTH-1'};
+ for(const [name,value] of Object.entries(fields)) f.$(name).value=value;
+ await f.$('build').listeners.click();
+ assert.match(f.$('process-result').textContent,/실제 동일 시료인지.*확인하지 않았습니다/);
+ let output;
+ t.mock.method(URL,'createObjectURL',blob=>{output=blob;return 'blob:synthetic';});
+ f.$('export').listeners.click();
+ assert.equal(JSON.parse(await output.text()).process_review_note.comparison_performed,false);
+ f.$('comparison_unit').value='mm';
+ f.$('comparison_unit').listeners.input();
+ assert.equal(f.$('export').disabled,true);
+ assert.equal(f.$('process-result').textContent,'');
+ await f.$('build').listeners.click();
+ assert.ok(f.$('gaps').children.some(n=>n.textContent.includes('같은 조건으로 간주하지 않음')));
+ f.panel.reset(false);
+ assert.equal(f.$('export').disabled,true);
+ assert.equal(f.$('comparison_unit').value,'');
+ assert.equal(f.$('process-source').textContent,'');
+});
