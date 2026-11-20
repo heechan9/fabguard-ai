@@ -256,3 +256,12 @@ node verification/check_equipment_screening.cjs
 
 기본 검사는 1366·390·360px와 다크/실버에서 수행합니다. 이 검사는 로컬 동작 검증이며
 생산 배포 일치·실물 모바일·화면낭독기 검증을 대신하지 않습니다.
+
+
+## SMT 좌표 회귀와 미리보기 실험
+
+- `node --test tests/web/smt-shared-geometry-followup.test.mjs`: 합성 작업대의 간격과 기준 위치를 세 조건에서 바꿔, 기판·카메라·컨베이어·로봇 좌표가 같이 움직이고 독립된 AGV 경로는 유지되는지 검사한다. 렌더링 화면이나 실제 설비를 검증하는 테스트가 아니다.
+- `node --test tests/web/preview-experiment.test.mjs`: 가상의 느린 미리보기 계산이 쌓일 때, 아직 그리지 않은 스냅숏을 하나만 보관한다. 시뮬레이션 상태, 정지 동작과 내보낸 이벤트는 비교 기준과 같아야 한다. 연속 부하에서 화면 갱신이 크게 줄 수 있으므로 기본 3D 화면에는 연결하지 않는다.
+- 실제 3D 연결 전: 같은 브라우저와 조건에서 모바일·데스크톱의 프레임 간격, 조작 반응, 표시 갱신량을 같이 비교한다. 오래된 화면이 다시 표시되지 않고 정지·경보·기록이 그대로인지 확인한다. Node 수치만으로 FPS 향상을 주장하지 않는다.
+
+참조한 공개 원리는 [Autoware의 최신 프레임 우선 처리](https://github.com/autowarefoundation/autoware_universe/pull/12748)와 [좌표 기준 일원화](https://github.com/autowarefoundation/autoware_universe/pull/13303)다. 차량 또는 실제 설비 제어 코드는 가져오지 않았다.

@@ -15,6 +15,22 @@
 
 **Can the synthetic receipt distinguish matching, missing, and substituted roster IDs?** From the repository root, run `python examples/collaboration_replay.py`. No package, network, or measurement data is needed. The fixed roster is SYN-01/02/03; the second case omits SYN-02 and the third replaces it with SYN-99. Expected: `MATCH`, `MISSING`, `SUBSTITUTED` in that order. Report only the fixture version/digest, commit SHA, OS and Python version, and `PASS`, `FAIL`, or `NOT_RUN` (and reason if applicable). This tests the demonstration receipt, not a production verifier or a model.
 
+### Leave a reproducible review receipt
+
+A review can be useful without a patch. Try a single synthetic case in the public collaboration page and keep the original expected result separate from what your browser actually displayed. A concise note is enough:
+
+```text
+Question:
+Public URL and commit SHA (or unknown):
+Fixture and case:
+Expected:
+Observed:
+Result: CONFIRMED / DIFFERENT / NOT_RUN
+Environment and one next check:
+```
+
+If you could not run the case, say why. Share synthetic outputs only, and do not claim maintainer approval, a partnership, or factory performance from this exercise.
+
 ### Review routing and decisions
 
 | Area | Reviewer role, not an assignment |

@@ -21,6 +21,8 @@ FILES = [
     'review/index.html', 'review/app.mjs', 'review/model.mjs', 'review/style.css',
     'review/handoff-model.mjs', 'review/handoff-ui.mjs', 'review/handoff-summary.mjs',
     'index.html', 'silver.css', 'theme.js', 'secom/index.html',
+    'collaborate/index.html', 'collaborate/style.css', 'collaborate/replay.mjs',
+    'collaborate/frame-audit.mjs',
     'smt/context-review-model.mjs', 'smt/context-review.mjs',
     'smt/index.html', 'smt/app.mjs', 'smt/style.css', 'smt/simulation.mjs',
     'smt/robot-cell-model.mjs', 'smt/robot-cell-view.mjs', 'smt/terms.mjs',
