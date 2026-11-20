@@ -12,7 +12,6 @@ async function experiment(queued) {
   const preview = latestPreview({
     defer: fn => setTimeout(fn, 0),
     derive: async items => { await sleep(delay); return items.map(placementPose); },
-    publish: (_value, frame) => applied.push([frame.run, frame.revision]),
   });
   preview.reset(run);
   for (let i = 0; i < revisions; i++) {
@@ -36,7 +35,8 @@ async function experiment(queued) {
   assert.equal(preview.stats().inFlight,false);
   const p95 = latencies.sort((a,b) => a-b)[Math.ceil(latencies.length*.95)-1];
   sim.advance(1000);
-  return {stopSnapshot, p95, applied, pendingMax, dropped:preview.stats().dropped,
+  return {stopSnapshot, p95, pendingMax, dropped:preview.stats().dropped,
+          count:queued ? preview.committedCount() : applied.length, current:preview.current(),
           snapshot:sim.snapshot(), events:manufacturingEvents(sim.snapshot())};
 }
 
@@ -47,23 +47,22 @@ assert.deepEqual(test.stopSnapshot,baseline.stopSnapshot);
 assert.equal(test.stopSnapshot.emergency_stopped,true);
 assert.deepEqual(test.events,baseline.events);
 assert.equal(test.pendingMax,1);
-assert.deepEqual(test.applied.at(-1), ['run-2',99]);
-assert(!test.applied.some(([run, revision]) => run === 'run-1' && revision >= 60));
-assert.equal(test.dropped + test.applied.length,revisions);
+assert.equal(test.current.run,'run-2');
+assert.equal(test.current.revision,99);
+assert.equal(test.dropped + test.count,revisions);
 console.log(JSON.stringify({injectedAsyncDelayMs:delay,revisions,scope:'Node wall-clock simulation-loop proxy; not browser/renderer',
- baseline:{p95TickGapMs:baseline.p95,published:baseline.applied.length},
- candidate:{p95TickGapMs:test.p95,published:test.applied.length,pendingMax:test.pendingMax,discarded:test.dropped},
+ baseline:{p95TickGapMs:baseline.p95,published:baseline.count},
+ candidate:{p95TickGapMs:test.p95,published:test.count,pendingMax:test.pendingMax,discarded:test.dropped},
  sameAuthoritativeSnapshotAndEvents:true}));
 
 // Controlled race: run-1 revision is definitely in flight, unlike timing-dependent benchmark.
-const tasks = [], published = [];
+const tasks = [];
 let finishOld;
 const queue = latestPreview({
   defer: task => tasks.push(task),
   derive: items => items[0].id === 'old'
     ? new Promise(resolve => { finishOld = resolve; })
     : Promise.resolve(items),
-  publish: (value, stamp) => published.push([stamp.run,stamp.revision,value[0]]),
 });
 queue.reset('one');
 queue.offer({run:'one',revision:0,preview:[{id:'old',stage:3,progress:.4}]});
@@ -78,18 +77,17 @@ source.progress = .9;
 assert.equal(queue.offer({run:'two',revision:0,preview:[]}),false);
 finishOld([{id:'old'}]);
 await runningOld;
-assert.deepEqual(published,[]);
+assert.equal(queue.current(),null);
 await tasks.shift()();
-assert.deepEqual(published,[['two',0,{id:'new',stage:4,progress:.2}]]);
+assert.deepEqual(queue.current(),{run:'two',revision:0,value:[{id:'new',stage:4,progress:.2}]});
 assert.deepEqual(queue.stats(),{pending:0,inFlight:false,dropped:2});
 
 // A -> B -> A with the exact same revision is still a different internal epoch.
-const abaQueue = [], abaPublished = [];
+const abaQueue = [];
 let finishA;
 const aba = latestPreview({
   defer: callback => abaQueue.push(callback),
   derive: items => items[0].id==='old' ? new Promise(resolve => {finishA=resolve;}) : items,
-  publish: items => abaPublished.push(items[0].id),
 });
 aba.reset('A');
 aba.offer({run:'A',revision:1,preview:[{id:'old'}]});
@@ -98,16 +96,15 @@ aba.reset('B'); aba.reset('A');
 aba.offer({run:'A',revision:1,preview:[{id:'new'}]});
 finishA([{id:'old'}]);
 await firstA;
-assert.deepEqual(abaPublished,[]);
+assert.equal(aba.current(),null);
 await abaQueue.shift()();
-assert.deepEqual(abaPublished,['new']);
+assert.equal(aba.current().value[0].id,'new');
 
-const recoveredQueue = [], recovered = [];
+const recoveredQueue = [];
 let unavailable = true;
 const recovery = latestPreview({
   defer: callback => {if (unavailable) throw new Error('defer unavailable'); recoveredQueue.push(callback);},
   derive: items => items,
-  publish: items => recovered.push(items[0].id),
 });
 recovery.reset('A');
 recovery.offer({run:'A',revision:1,preview:[{id:'discarded'}]});
@@ -115,20 +112,20 @@ assert.deepEqual(recovery.stats(),{pending:0,inFlight:false,dropped:1});
 unavailable = false;
 recovery.offer({run:'A',revision:2,preview:[{id:'kept'}]});
 await recoveredQueue.shift()();
-assert.deepEqual(recovered,['kept']);
+assert.equal(recovery.current().value[0].id,'kept');
 
-// Asynchronous publication must be part of the guarded preview job.
-const publisherTasks = [], publisherAccepted = [];
+// A failing asynchronous publication preparation must stay isolated.
+const publisherTasks = [];
 let rejectFirst, startedFirst;
 const firstStarted = new Promise(resolve => { startedFirst = resolve; });
 const publication = latestPreview({
   defer: callback => publisherTasks.push(callback),
   derive: items => items,
-  publish: async (items, stamp) => {
-    if (stamp.revision === 1) {
+  prepare: async items => {
+    if (items[0].id === 'failing') {
       await new Promise((_, reject) => { rejectFirst = reject; startedFirst(); });
     }
-    publisherAccepted.push(items[0].id);
+    return items;
   },
 });
 publication.reset('publish-run');
@@ -142,5 +139,42 @@ rejectFirst(new Error('asynchronous publication failed'));
 await publishing;
 assert.deepEqual(publication.stats(),{pending:1,inFlight:true,dropped:1});
 await publisherTasks.shift()();
-assert.deepEqual(publisherAccepted,['kept']);
+assert.equal(publication.current().value[0].id,'kept');
+assert.equal(publication.committedCount(),1);
 assert.deepEqual(publication.stats(),{pending:0,inFlight:false,dropped:1});
+
+// Successful stale preparation after reset, or even within the same epoch, never commits.
+for (const change of ['reset','new-revision','reset-aba']) {
+  const callbacks = [];
+  let completeOld, markStarted;
+  const oldStarted = new Promise(resolve => { markStarted = resolve; });
+  const preview = latestPreview({
+    defer: task => callbacks.push(task),
+    derive: items => items,
+    prepare: async items => {
+      if (items[0].id === 'old') {
+        await new Promise(resolve => { completeOld = resolve; markStarted(); });
+      }
+      return items[0].id;
+    },
+  });
+  preview.reset('old-run');
+  preview.offer({run:'old-run', revision:1, preview:[{id:'old'}]});
+  const oldTask = callbacks.shift()();
+  await oldStarted;
+  if (change === 'reset') preview.reset('new-run');
+  if (change === 'reset-aba') {preview.reset('mid-run'); preview.reset('old-run');}
+  const run = change === 'reset' ? 'new-run' : 'old-run';
+  const revision = change === 'new-revision' ? 2 : 1;
+  preview.offer({run, revision, preview:[{id:'new'}]});
+  assert.equal(preview.current(),null);
+  completeOld(); // Resolve, not reject. Invalidity comes only from reset/new sequence.
+  await oldTask;
+  assert.equal(preview.current(),null);
+  assert.equal(preview.committedCount(),0);
+  assert.deepEqual(preview.stats(),{pending:1,inFlight:true,dropped:1});
+  await callbacks.shift()();
+  assert.deepEqual(preview.current(),{run,revision,value:'new'});
+  assert.equal(preview.committedCount(),1);
+  assert.deepEqual(preview.stats(),{pending:0,inFlight:false,dropped:1});
+}
