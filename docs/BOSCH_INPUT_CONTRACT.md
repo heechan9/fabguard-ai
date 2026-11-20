@@ -2,6 +2,8 @@
 
 **상태: 입력 계약 제안. 모델 실험 착수·운영 승인 아님.** #182를 병합하거나 원본을 다시 받아 새 분석한 기록이 아니다. 기존 감사 head `b10b684e9e5094311a32055bde26c22fe99e46e6`를 재사용한다.
 
+후속 후향 비교의 방법·집계·한계는 [웹 연구 화면의 Bosch 식각 요약](https://fabguard-ai.vercel.app/research/#bosch-etch)에 정리합니다. 아래 입력 계약은 작성 당시의 기록입니다.
+
 - [공식 자료](https://zenodo.org/records/17122442)
 - [고정 원본 감사 JSON](https://github.com/heechan9/fabguard-ai/blob/b10b684e9e5094311a32055bde26c22fe99e46e6/docs/review/BOSCH_SOURCE_AUDIT_20261027.json)
 - [기계가 읽는 입력 계약](BOSCH_INPUT_CONTRACT.json)
