@@ -78,7 +78,7 @@ body.command-shell .home-review-hero .hero-actions .home-review-primary.button {
   box-shadow: none;
 }
 body.command-shell .home-review-hero .hero-actions .home-review-primary.button:hover { background: #d4f9e5; border-color: transparent; }
-body.command-shell .home-review-hero .hero-actions .home-review-primary.button span { color: inherit; }
+body.command-shell .home-review-hero .hero-actions .home-review-primary.button :is(span, .language-note) { color: inherit; }
 body.command-shell main .home-review-hero .text-link { color: var(--entry-ink); }
 body.command-shell .home-review-hero .intro-boundary { color: var(--entry-muted); margin: 15px 0 0; }
 body.command-shell .home-review-hero a:focus-visible { outline: 2px solid var(--entry-accent); outline-offset: 3px; }
