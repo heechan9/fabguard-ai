@@ -22,6 +22,8 @@
 
 **파일 찾기:** [전체 문서 지도](docs/README.md) · [웹 코드 안내](web/README.md) · [결과 자료 목록](results/README.md)
 
+**경보를 읽는 법:** [FDC 강의 적용·출처→경보→검토→후속 확인](docs/FDC_LECTURE_APPLICATION.md). 로봇 SPC 정상 개발자료 1,043창의 경보 9/0/3은 탐색 결과이며 탐지 성능은 미평가다. 저장 보고서 웹 연결 #179·UR3 기록 재생 #180은 2026-10-26 기준 Draft로, main 배포 기능과 구분한다.
+
 <div align="center">
 
 <img src="docs/assets/fabguard-dusk-hero-v3.jpg" alt="FabGuard의 목표 운영상과 엔지니어 중심 의사결정을 표현한 독자 제작 콘셉트 이미지" width="820">
