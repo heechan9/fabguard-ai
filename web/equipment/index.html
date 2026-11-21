@@ -29,7 +29,7 @@
       </div></details>
     </nav>
   </header>
-<main id="main" tabindex="-1"><p class="eyebrow">LOCAL FILE SCREENING · SPI v1</p><h1>장비 CSV 오프라인 점검</h1><p>파일 선택 → 열 매핑 → 입력 검증 → 조건을 갖춘 CSV의 오프라인 SPC 점검. 파일 내용은 이 브라우저 메모리에서만 처리하며 서버로 보내거나 저장하지 않습니다.</p><p class="notice">사용자가 선언한 출처의 SPI 측정 CSV를 통계적으로 선별합니다. 실장비 진위·제품 불량·현장 효과는 검증하지 않습니다. SECOM 모델이나 아래 합성 SPC 체험과 연결되지 않습니다. AOI 영상·XLSX는 지원하지 않습니다.</p>
+<main id="main" tabindex="-1"><p id="csv-screening" tabindex="-1" class="eyebrow">LOCAL FILE SCREENING · SPI v1</p><h1>장비 CSV 오프라인 점검</h1><p>파일 선택 → 열 매핑 → 입력 검증 → 조건을 갖춘 CSV의 오프라인 SPC 점검. 파일 내용은 이 브라우저 메모리에서만 처리하며 서버로 보내거나 저장하지 않습니다.</p><p class="notice">사용자가 선언한 출처의 SPI 측정 CSV를 통계적으로 선별합니다. 실장비 진위·제품 불량·현장 효과는 검증하지 않습니다. SECOM 모델이나 아래 합성 SPC 체험과 연결되지 않습니다. AOI 영상·XLSX는 지원하지 않습니다.</p>
 <p><a href="./context-review.html">정비·변경 이력과 기준선 검토 → 사람 검토 초안</a> · <a href="#synthetic-receipt">합성 접수 대조 체험으로</a></p><section><h2>1. CSV 파일 선택</h2><p>UTF-8, 쉼표 구분, 최대 5MB·20,000행·200열. 압축·바이너리 파일은 지원하지 않습니다. 파일 하나에 같은 장비·Recipe·실행의 측정 항목 한 종류만 넣으세요. 반복측정은 실행별 파일로 분리하세요.</p><label>측정 파일 <input id="file" type="file" accept=".csv,text/csv"></label><button id="example" type="button">입력 검증 합성 예제</button><button id="clear" type="button">입력 지우기</button><a href="./data/spc-synthetic.csv" download>SPC 연결 합성 CSV 내려받기</a><p id="file-status" role="status"></p><div id="preview"></div></section>
 <section id="mapping-panel" hidden><h2>2. 열 이름과 단위 연결</h2><div id="mapping"></div><label>장비 식별자 <input id="equipment" maxlength="120" placeholder="예: SPI-01"></label><label>데이터 출처 <select id="role"><option value="">선택하세요</option><option value="observed">실장비 측정 (사용자 지정·진위 미확인)</option><option value="synthetic">합성 데이터</option><option value="public">공개 데이터</option></select></label><label>측정 항목·원본 단위 <select id="metric"><option value="paste_height_um">납 높이 · µm</option><option value="paste_volume_pct">납 도포량 · %</option><option value="paste_area_pct">납 면적 · %</option></select></label><p>단위는 자동 변환하지 않습니다. 장비 판정값을 측정값에 연결하지 마세요. 시각·LOT·Recipe 열은 아래 SPC 분석에 필수이며 입력 검증만 할 때는 선택하지 않아도 됩니다.</p><button id="validate" type="button">입력 검증 실행</button><label>SPC 기준 행 수 (파일 앞부분, 최소 10) <input id="baseline-count" type="number" min="10" step="1" value="10"></label><button id="screen" type="button">CSV → SPC 점검 목록</button><p>동일 장비·Recipe·패드 위치의 시간순 측정만 분석합니다. 오류 행이 있으면 전체 분석을 보류하고, 앞부분으로 고정한 관리한계를 이후 값에 적용합니다.</p></section>
 <section id="result" aria-live="polite"></section><section id="spc-demo" aria-labelledby="spc-title">
@@ -39,30 +39,43 @@
 <p id="spc-summary" role="status">버튼을 누르면 그래프와 결과가 표시됩니다.</p>
 <div id="spc-output" hidden><div class="spc-chart"><svg viewBox="0 0 730 300" role="img" aria-label="합성 측정값 관리도"></svg></div><p>가로축: 측정 순서 · 세로축: 무단위 합성값 · 음영: 기준 구간 · 금색 점선: 관리한계와 중심선 · ?: 결측</p><table><caption>이후 측정값의 판정</caption><thead><tr><th scope="col">순서</th><th scope="col">측정값</th><th scope="col">결과</th></tr></thead><tbody></tbody></table></div>
 <p class="notice">통계적 이탈 ≠ 불량 확정. 관리한계는 제품 규격이 아니며, 범위 안이어도 품질을 보증하지 않습니다. 현장 검증·설비 제어는 수행하지 않습니다.</p><a href="https://github.com/heechan9/fabguard-ai/blob/main/docs/SPC_SCREENING.md">계산 방법과 Python 실행 안내 →</a></section>
-<section id="synthetic-receipt" aria-labelledby="synthetic-receipt-title">
-  <p class="eyebrow" lang="en">SYNTHETIC RECEIPT AUDIT</p>
-  <h2 id="synthetic-receipt-title">4. 늦게 온 입력과 LOT·장비별 건수 대조</h2>
-  <p>기준 시각 이후 도착한 기록은 반영하지 않습니다. 공개 합성 예제로 원본 → 접수 → 점수 기록에 남은 건수를 대조해 보세요.</p>
-  <p class="notice">합성 예제 전용. 업로드한 CSV, 기존 SPC 점검, 모델 점수와 연결하지 않습니다. 장비·공정에 연결하거나 운영 판정을 내리지 않습니다.</p>
-  <div class="receipt-scenario-buttons" role="group" aria-label="합성 예제 선택">
-    <button type="button" data-receipt-case="clean" aria-pressed="false" disabled>지연 없음</button>
-    <button type="button" data-receipt-case="late-but-complete" aria-pressed="false" disabled>지연 있지만 접수 완료</button>
+<section id="synthetic-receipt" tabindex="-1" aria-labelledby="synthetic-receipt-title">
+  <div class="receipt-topline">
+    <p class="receipt-eyebrow">합성 예제</p>
+    <a href="#csv-screening">내 CSV 점검 <span aria-hidden="true">→</span></a>
+  </div>
+  <h2 id="synthetic-receipt-title">LOT 기록, 어디서 빠졌을까?</h2>
+  <div class="receipt-result">
+    <p id="receipt-scenario-status" role="status" aria-atomic="true">예제를 선택하면 대조 결과가 표시됩니다.</p>
+    <div id="receipt-scenario-output" hidden>
+      <p id="receipt-scenario-reason"></p>
+      <dl class="receipt-stage-summary" aria-label="전체 단계 건수">
+        <div><dt>기대 기록</dt><dd id="receipt-raw-count"></dd></div>
+        <div><dt>마감 내 접수</dt><dd id="receipt-admitted-count"></dd></div>
+        <div><dt>점수 기록</dt><dd id="receipt-scored-count"></dd></div>
+      </dl>
+    </div>
+  </div>
+  <div class="receipt-scenario-buttons" role="group" aria-label="다른 합성 예제 선택">
     <button type="button" data-receipt-case="late-only" aria-pressed="false" disabled>늦게만 도착해 보류</button>
     <button type="button" data-receipt-case="scoring-record-missing" aria-pressed="false" disabled>점수 기록 일부 누락</button>
+    <button type="button" data-receipt-case="clean" aria-pressed="false" disabled>지연 없음</button>
+    <button type="button" data-receipt-case="late-but-complete" aria-pressed="false" disabled>지연 있지만 접수 완료</button>
   </div>
   <noscript><p>합성 예제를 실행하려면 자바스크립트가 필요합니다.</p></noscript>
-  <p id="receipt-scenario-status" role="status">예제를 선택하면 합성 대조 결과가 표시됩니다.</p>
-  <div id="receipt-scenario-output" hidden>
+  <p class="receipt-boundary">내 CSV·SPC 점검·모델과 분리된 합성 예제입니다. 실제 장비 제어·운영 판정은 하지 않습니다.</p>
+  <details id="receipt-detail" class="receipt-detail" hidden>
+    <summary>LOT·장비별 건수와 기록 보기</summary>
     <p id="receipt-scenario-meta"></p>
     <ul id="receipt-scenario-events"></ul>
-    <p id="receipt-table-help">원본은 미리 정해 둔 대상 수, 접수는 마감까지 기록을 받은 대상 수입니다. 점수 기록은 예제에 미리 담아 둔 기록 수로, 이 화면에서 점수를 계산하지 않습니다. ‘미실행’은 0건과 다릅니다.</p>
+    <p id="receipt-table-help">기대 기록은 미리 정한 대상의 수, 마감 내 접수는 마감 시각까지 기록을 받은 대상의 수입니다. 점수 기록은 예제에 미리 담아 둔 기록으로 여기서 점수를 계산하지 않습니다. ‘미실행’은 0건과 다릅니다.</p>
     <div class="receipt-table-scroll" role="region" aria-labelledby="receipt-count-caption" tabindex="0">
       <table aria-describedby="receipt-table-help"><caption id="receipt-count-caption">합성 LOT·장비별 단계 건수</caption>
-        <thead><tr><th scope="col">LOT · 장비</th><th scope="col">원본</th><th scope="col">접수</th><th scope="col">점수 기록</th></tr></thead>
+        <thead><tr><th scope="col">LOT · 장비</th><th scope="col">기대 기록</th><th scope="col">마감 내 접수</th><th scope="col">점수 기록</th></tr></thead>
         <tbody id="receipt-count-rows"></tbody><tfoot id="receipt-count-total"></tfoot>
       </table>
     </div>
-  </div>
+  </details>
 </section>
 <p><a href="/smt/">← 기존 SMT 3D 실험실로</a></p></main><script type="module" src="./app.mjs"></script><script type="module" src="./spc-demo.mjs"></script><script type="module" src="./synthetic-receipt-panel.mjs"></script><script type="module" src="/site-shell.mjs"></script>
 </body></html>

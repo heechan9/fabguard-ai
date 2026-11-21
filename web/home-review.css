@@ -1,0 +1,150 @@
+/* Summary route only. The evidence below and the other site routes keep their layouts. */
+body.command-shell .home-review-hero.project-intro.hero {
+  --entry-fill: #0b241a;
+  --entry-ink: #f5f5ee;
+  --entry-muted: #c7dacd;
+  --entry-line: #456d56;
+  --entry-mint: #a5efc8;
+  --entry-accent: var(--entry-mint);
+  isolation: isolate;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+  grid-template-areas: "copy image" "foot foot";
+  gap: 0;
+  padding: 0;
+  margin: 0 auto 24px;
+  min-height: 0;
+  max-width: 1440px;
+  overflow: hidden;
+  border: 1px solid var(--entry-line);
+  border-radius: 14px;
+  background: var(--entry-fill);
+}
+/* The hero is a dark surface in either reader theme.
+   Scope the shared reader tokens here as well so its normalized text remains
+   light; Silver still applies to the surrounding page and research evidence. */
+html[data-theme="silver"] body.command-shell .home-review-hero.project-intro.hero {
+  --cc-ink: var(--entry-ink);
+  --cc-muted: var(--entry-muted);
+  --cc-accent: var(--entry-accent);
+  --cc-line: var(--entry-line);
+  --cc-warm: #efc268;
+  --cc-panel: var(--entry-fill);
+  --cc-raised: #143427;
+  --text: var(--entry-ink);
+  --muted: var(--entry-muted);
+  color-scheme: dark;
+}
+body.command-shell .home-review-hero.hero::before,
+body.command-shell .home-review-hero.hero::after,
+body.command-shell .home-review-hero .hero-copy::before { display: none; }
+body.command-shell .home-review-hero .hero-copy {
+  grid-area: copy;
+  position: relative;
+  z-index: 1;
+  max-width: none;
+  padding: clamp(24px, 5vw, 76px);
+}
+body.command-shell .home-review-hero .status-chip {
+  color: var(--entry-accent);
+  border: 1px solid var(--entry-line);
+  background: var(--entry-fill);
+  border-radius: 999px;
+  padding: 5px 11px;
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+body.command-shell .home-review-hero .status-chip i { display: none; }
+body.command-shell .home-review-hero h1,
+body.command-shell .home-review-hero h1 span { color: var(--entry-ink); -webkit-text-stroke: 0; text-shadow: none; background: none; }
+body.command-shell main .home-review-hero.project-intro h1 {
+  font-size: clamp(34px, 4.5vw, 72px);
+  line-height: 1.17;
+  margin: 0 0 17px;
+  letter-spacing: -.047em;
+}
+body.command-shell .home-review-hero .lead { color: var(--entry-muted); max-width: 38ch; margin-bottom: 22px; }
+body.command-shell .home-review-hero .hero-copy .hero-actions { align-items: center; flex-direction: row; gap: 4px 20px; margin: 0; }
+body.command-shell .home-review-hero .hero-actions .home-review-primary.button {
+  min-height: 52px;
+  padding: 12px 17px;
+  color: #062116;
+  background: var(--entry-mint);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 800;
+  box-shadow: none;
+}
+body.command-shell .home-review-hero .hero-actions .home-review-primary.button:hover { background: #d4f9e5; border-color: transparent; }
+body.command-shell .home-review-hero .hero-actions .home-review-primary.button :is(span, .language-note) { color: inherit; }
+body.command-shell main .home-review-hero .text-link { color: var(--entry-ink); }
+body.command-shell .home-review-hero .intro-boundary { color: var(--entry-muted); margin: 15px 0 0; }
+body.command-shell .home-review-hero a:focus-visible { outline: 2px solid var(--entry-accent); outline-offset: 3px; }
+body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual {
+  grid-area: image;
+  align-self: stretch;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+body.command-shell .home-review-hero .home-fab-visual .visual-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--entry-fill), transparent 32%), linear-gradient(0deg, #091912 4%, transparent 43%);
+}
+body.command-shell .home-review-hero .home-fab-visual figcaption {
+  left: auto;
+  max-width: calc(100% - 44px);
+  padding: 4px 7px;
+  color: #edf3ee;
+  background: #091912;
+  border-radius: 4px;
+  text-align: right;
+}
+body.command-shell .home-review-foot {
+  grid-area: foot;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 20px;
+  padding: 10px clamp(18px, 5vw, 76px);
+  border-top: 1px solid var(--entry-line);
+}
+body.command-shell .home-review-foot ol { display: flex; flex-wrap: wrap; gap: 5px 22px; padding: 0; margin: 0; list-style: none; color: var(--entry-muted); }
+body.command-shell .home-review-foot li { display: flex; align-items: center; gap: 6px; font-size: .9rem; }
+body.command-shell .home-review-foot li span { color: var(--entry-accent); font-size: 12px; font-variant-numeric: tabular-nums; }
+body.command-shell .home-review-foot a { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
+body.command-shell .home-review-evidence {
+  display: grid;
+  grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr);
+  gap: 15px 28px;
+  max-width: 1440px;
+  margin: 0 auto 24px;
+  padding: 18px clamp(16px, 3vw, 40px);
+  border: 1px solid var(--cc-line);
+  border-radius: 10px;
+  background: var(--cc-panel);
+}
+body.command-shell .home-review-evidence :is(.absolute-beginner,.lead) { margin: 0; }
+body.command-shell .home-review-evidence :is(.intro-boundary,.intro-failure,.portfolio-result small) { font-size: 15px; line-height: 1.7; }
+body.command-shell .home-evidence-links { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+body.command-shell .home-evidence-links a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 760px) {
+  body.command-shell .home-review-hero.project-intro.hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "image" "foot"; }
+  body.command-shell main .home-review-hero.project-intro h1 { font-size: clamp(28px, 8vw, 42px); }
+  body.command-shell .home-review-hero .hero-copy { padding: 23px 18px 15px; }
+  body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual { min-height: 130px; }
+  body.command-shell .home-review-hero .home-fab-visual img { object-position: center 57%; }
+  body.command-shell .home-review-hero .home-fab-visual .visual-shade { background: linear-gradient(0deg, #091912, transparent 56%); }
+  body.command-shell .home-review-hero .home-fab-visual figcaption { bottom: 8px; }
+  body.command-shell .home-review-foot { flex-wrap: wrap; }
+  body.command-shell .home-review-foot ol { gap: 4px 10px; }
+  body.command-shell .home-review-foot li { font-size: .8rem; }
+  body.command-shell .home-review-evidence { grid-template-columns: minmax(0, 1fr); }
+}

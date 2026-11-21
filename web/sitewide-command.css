@@ -327,7 +327,7 @@ body.command-shell .project-intro .absolute-beginner h2{font-size:18px;line-heig
 body.command-shell .project-intro .absolute-beginner ol{font-size:16px;line-height:1.7}
 body.command-shell .project-intro :is(.intro-boundary,.intro-failure){font-size:15px;line-height:1.7}
 /* Matches the specificity of the earlier reader palette normalization. */
-body.command-shell:not(.cc-overview-page) main .project-intro p.intro-failure{color:var(--cc-warm)}
+body.command-shell:not(.cc-overview-page) main :is(.project-intro,.home-review-evidence) p.intro-failure{color:var(--cc-warm)}
 body.command-shell .project-intro :is(.portfolio-result small,figcaption){font-size:14px;line-height:1.6}
 body.command-shell .project-intro .visual-status{font-size:12px;line-height:1.5}
 body.command-shell .project-intro .visual-stat :is(span,small){font-size:13px;line-height:1.5}

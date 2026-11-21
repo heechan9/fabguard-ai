@@ -17,7 +17,7 @@ FILES = [
     'assets/command-center/inspection.svg', 'assets/command-center/test.svg',
     'oht/index.html', 'oht/style.css', 'oht/app.mjs', 'oht/model.mjs', 'oht/view.mjs',
     'app.js', 'home-copy.mjs', 'english-copy.mjs', 'review-budget.mjs', 'review-budget-core.mjs',
-    'style.css', 'readability.css', 'smt/evidence.mjs', 'data/priority_top50.json',
+    'style.css', 'readability.css', 'home-review.css', 'assets/fabguard-dusk-hero-v3.jpg', 'smt/evidence.mjs', 'data/priority_top50.json',
     'review/index.html', 'review/app.mjs', 'review/model.mjs', 'review/style.css',
     'review/handoff-model.mjs', 'review/handoff-ui.mjs', 'review/handoff-summary.mjs',
     'index.html', 'silver.css', 'theme.js', 'secom/index.html',

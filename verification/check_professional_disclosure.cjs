@@ -18,7 +18,7 @@ async function assertProfessionalDisclosure(page){
  assert.equal(await summary.isVisible(),true);
  assert.equal(await page.locator('.project-intro .hero-actions').isVisible(),true);
  assert.equal(await page.locator('.project-intro .intro-boundary').isVisible(),true);
- assert.equal(await page.locator('.project-intro .portfolio-result').isVisible(),true);
+ assert.equal(await page.locator('.home-review-evidence .portfolio-result').isVisible(),true);
  const guide=page.locator('#app > details.public-guide');
  assert.equal(await guide.count(),1,'one public easy guide outside expert evidence');
  assert.equal(await guide.evaluate(e=>e.open),false,'easy guide starts collapsed');
@@ -33,7 +33,7 @@ async function assertProfessionalDisclosure(page){
   await guideSummary.press('Space');assert.equal(await guide.evaluate(e=>e.open),false);
   assert.equal(await guide.locator('article').first().isVisible(),false);
  }
- const critical=await page.locator('.project-intro').innerText();
+ const critical=await page.locator('.home-review-evidence').innerText();
  assert.match(critical,/잠정|provisional/i);assert.match(critical,/홀드아웃|holdout/i);assert.match(critical,/현장|field/i);
  const evidence=await panel.textContent();
  for(const term of ['40','5','35','19','2.04'])assert.ok(evidence.includes(term),`retained saved evaluation ${term}`);

@@ -25,3 +25,16 @@ test('Optional learning entry translates visible copy and accessible label witho
  assert.match(englishText(strings[1]),/three synthetic cases/);
  assert.match(englishText(strings[1]),/Not real safety decisions, operating instructions or an assessment of your ability/);
 });
+
+test('The collaboration entry follows page language and keeps its English demo link and data boundary', async()=>{
+ const {readFile}=await import('node:fs/promises');
+ const html=await readFile(new URL('../../web/index.html',import.meta.url),'utf8');
+ const entry=html.match(/<aside aria-label="공개 협업"[\s\S]*?<\/aside>/)[0];
+ const label=entry.match(/aria-label="([^"]+)"/)[1];
+ const link=entry.match(/<a href="(\/collaborate\/index\.html)"[^>]*>([^<]+)<\/a>/);
+ const description=entry.match(/<p[^>]*>([^<]+)<\/p>/)[1];
+ assert.match(link[2],/영어/);
+ assert.equal(englishText(label),'Open collaboration');
+ assert.equal(englishText(link[2]),'Open collaboration exercise →');
+ assert.equal(englishText(description),'Review missing and replacement records with synthetic data. No uploads.');
+});
