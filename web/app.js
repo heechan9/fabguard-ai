@@ -166,8 +166,8 @@ async function load() {
 const selectedTest = () => state.summary.test.find(row => row.candidate === state.summary.selected_model);
 const top10 = () => state.summary.top_k.find(row => Math.abs(row.k_fraction - 0.1) < 0.001);
 
-function waferVisual(featCount) {
-  return `<figure class="hero-visual"><img src="/assets/fabguard-dusk-hero-v3.jpg" alt="${isEnglish ? "FabGuard concept image of an engineer reviewing manufacturing data near a semiconductor fab" : "노을에서 야간으로 이어지는 대형 반도체 팹과 엔지니어의 데이터 기반 위험 검토를 표현한 FabGuard 콘셉트 이미지"}"><div class="visual-shade"></div><figcaption>${isEnglish ? "Original concept artwork · not a real fab or deployment photo." : "독자 제작 콘셉트 이미지 · 실제 공장 또는 현장 배포 사진이 아닙니다."}</figcaption><div class="visual-stat"><span>${isEnglish ? "INPUT" : "분석 입력"}</span><strong>${featCount}</strong><small>${isEnglish ? "anonymous measurements" : "익명 측정변수"}</small></div><div class="visual-status"><i></i> HUMAN REVIEW REQUIRED</div></figure>`;
+function waferVisual() {
+  return `<figure class="hero-visual home-fab-visual"><img src="/assets/fabguard-dusk-hero-v3.jpg" alt="" fetchpriority="high"><div class="visual-shade"></div><figcaption>${isEnglish ? "Concept artwork · not a real fab or field deployment." : "콘셉트 이미지 · 실제 공장·현장 배포 사진이 아닙니다."}</figcaption></figure>`;
 }
 
 function beginnerEntry() {
@@ -187,7 +187,35 @@ function summaryView() {
   const enedis = state.globalE2E.sources.enedis_france_2024;
   const meteo = state.globalE2E.sources.meteo_france_paris_2024;
   app.innerHTML = `
-    <section class="hero project-intro"><div class="hero-copy"><div class="status-chip"><i></i> ${isEnglish ? "RESEARCH PROTOTYPE · SAVED DATA" : "연구용 프로토타입 · 저장 데이터"}</div><p class="kicker">${isEnglish ? "FABGUARD AI · PROJECT" : "FABGUARD AI · 프로젝트 소개"}</p><h1>${isEnglish ? "Production records.<br><span>What should we review first?</span>" : "반도체 생산 기록,<br><span>무엇부터 확인할까?</span>"}</h1><p class="lead">${isEnglish ? "A research project that shows review priorities and evidence using public SECOM data." : "SECOM 공개 데이터로 점검 순서와 판단 근거를 보여주는 연구 프로젝트입니다."}</p>${beginnerEntry()}<p class="intro-boundary">${isEnglish ? "No automatic defect decisions or process control. The 3D lab is a separate synthetic demonstration." : "자동 불량 판정·공정 제어는 하지 않습니다. 3D는 별도 합성 체험입니다."}</p><div class="hero-actions"><a class="button" href="#risks">${isEnglish ? "Open review queue" : "우선점검 시작"} <span>→</span></a><a class="button" href="/smt/">${isEnglish ? "Explore 3D models" : "3D 모델링 보기"} <span>→</span></a><a class="text-link" href="#overview">${isEnglish ? "Operations overview" : "운영 개요"} →</a></div>${renderHeroEvidence(state.summary, language)}<p class="intro-failure">${isEnglish ? `Fixed threshold ${test.threshold}: Fail recall ${pct(test.fail_recall)}. Automatic defect detection is not established.` : `분류 기준 ${test.threshold}에서 Fail 재현율 ${pct(test.fail_recall)}. 자동 불량 탐지 성능은 입증되지 않았습니다.`}</p></div>${waferVisual(ds.measurement_features)}</section>
+    <section class="hero project-intro home-review-hero">
+      <div class="hero-copy">
+        <div class="status-chip"><i></i> ${isEnglish ? "RESEARCH PROTOTYPE" : "연구용 프로토타입"}</div>
+        <h1>${isEnglish ? "Production records.<br><span>What should we review first?</span>" : "반도체 생산 기록,<br><span>무엇부터 확인할까?</span>"}</h1>
+        <p class="lead">${isEnglish ? "Use synthetic records to see what was received and what needs human review." : "합성 기록으로 무엇이 접수됐고, 어떤 근거를 검토해야 하는지 확인하세요."}</p>
+        <div class="hero-actions">
+          <a class="button home-review-primary" href="/equipment/#synthetic-receipt">${isEnglish ? "Start with a synthetic example" : "합성 예제로 검토 시작"} <span aria-hidden="true">→</span></a>
+          <a class="text-link home-review-secondary" href="/smt/">${isEnglish ? "Explore the 3D process" : "3D 공정 보기"} <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="intro-boundary">${isEnglish ? "Reviewers make the final decision. No operational verdict or equipment control." : "최종 판단은 검토자가 합니다. 운영 판정이나 장비 제어는 하지 않습니다."}</p>
+      </div>
+      ${waferVisual()}
+      <div class="home-review-foot">
+        <ol aria-label="${isEnglish ? "Synthetic example stages" : "합성 예제 흐름"}">
+          <li><span aria-hidden="true">01</span> ${isEnglish ? "Expected records" : "기대 기록"}</li>
+          <li><span aria-hidden="true">02</span> ${isEnglish ? "Receipt check" : "마감 내 접수"}</li>
+          <li><span aria-hidden="true">03</span> ${isEnglish ? "Scoring records" : "점수 기록 대조"}</li>
+        </ol>
+        <a class="text-link" href="/equipment/#csv-screening">${isEnglish ? "Check my CSV separately" : "내 CSV 점검"} <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+    <section class="home-review-evidence" aria-label="${isEnglish ? "Public SECOM study" : "SECOM 공개 데이터 연구"}">
+      ${beginnerEntry()}
+      <div><p class="lead">${isEnglish ? "A separate research project that shows review priorities and evidence using public SECOM data." : "SECOM 공개 데이터로 점검 순서와 판단 근거를 보여주는 연구 프로젝트입니다."}</p>
+      ${renderHeroEvidence(state.summary, language)}
+      <p class="intro-failure">${isEnglish ? `Fixed threshold ${test.threshold}: Fail recall ${pct(test.fail_recall)}. Automatic defect detection is not established.` : `분류 기준 ${test.threshold}에서 Fail 재현율 ${pct(test.fail_recall)}. 자동 불량 탐지 성능은 입증되지 않았습니다.`}</p>
+      <p class="intro-boundary">${isEnglish ? "No automatic defect decisions or process control. The 3D lab is a separate synthetic demonstration." : "자동 불량 판정·공정 제어는 하지 않습니다. 3D는 별도 합성 체험입니다."}</p>
+      <div class="home-evidence-links"><a class="text-link" href="#risks">${isEnglish ? "Open saved review queue" : "저장된 우선점검 목록"} →</a><a class="text-link" href="#overview">${isEnglish ? "Operations overview" : "운영 개요"} →</a></div></div>
+    </section>
     <section class="answer-strip" id="answer-overview" aria-label="${isEnglish ? "FabGuard summary" : "FabGuard 핵심 요약"}">${isEnglish ? `<article><span>PROBLEM</span><strong>Not every production record<br>can be inspected at once</strong></article><article class="active"><span>FABGUARD</span><strong>Ranks records for review<br>and shows evidence limits</strong></article><article><span>HUMAN ROLE</span><strong>Engineers inspect<br>and decide the action</strong></article><article class="boundary"><span>CURRENT BOUNDARY</span><strong>Public-data experiment<br>not field validated</strong></article>` : `<article><span>문제</span><strong>모든 생산 건을<br>동시에 볼 수 없음</strong></article><article class="active"><span>FabGuard</span><strong>위험도 순으로 추천하고<br>근거의 한계까지 표시</strong></article><article><span>사람의 역할</span><strong>엔지니어가 확인하고<br>최종 조치를 결정</strong></article><article class="boundary"><span>현재 경계</span><strong>공개데이터 실험<br>현장 효과는 미검증</strong></article>`}</section>
     <section class="global-section" id="global" aria-labelledby="global-title">
       <div class="global-heading">
@@ -247,7 +275,7 @@ function summaryView() {
     professional.id = "professional-details";
     professional.innerHTML = `<summary><span>${isEnglish ? "Expert explanation and evidence" : "전문 설명과 근거 보기"}</span><small>${isEnglish ? "Evaluation · methods · limits · source records" : "평가 수치 · 검증 방법 · 한계 · 원자료"}</small></summary><div class="professional-body"></div>`;
     const body = professional.querySelector('.professional-body');
-    [...app.children].filter(section => !section.matches('.hero')).forEach(section => body.append(section));
+    [...app.children].filter(section => !section.matches('.hero, .home-review-evidence')).forEach(section => body.append(section));
     app.append(professional);
     app.querySelector('.hero')?.insertAdjacentHTML('afterend', renderPublicGuide(language));
   }
