@@ -139,8 +139,8 @@ body.command-shell .home-evidence-links a { display: inline-flex; align-items: c
   body.command-shell .home-review-hero.project-intro.hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "image" "foot"; }
   body.command-shell main .home-review-hero.project-intro h1 { font-size: clamp(28px, 8vw, 42px); }
   body.command-shell .home-review-hero .hero-copy { padding: 23px 18px 15px; }
-  body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual { min-height: 130px; }
-  body.command-shell .home-review-hero .home-fab-visual img { object-position: center 57%; }
+  body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual { height: clamp(230px, 62vw, 270px); }
+  body.command-shell .home-review-hero .home-fab-visual img { object-position: 88% 57%; }
   body.command-shell .home-review-hero .home-fab-visual .visual-shade { background: linear-gradient(0deg, #091912, transparent 56%); }
   body.command-shell .home-review-hero .home-fab-visual figcaption { bottom: 8px; }
   body.command-shell .home-review-foot { flex-wrap: wrap; }
