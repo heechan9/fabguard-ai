@@ -5,6 +5,7 @@ body.command-shell .home-review-hero.project-intro.hero {
   --entry-muted: #c7dacd;
   --entry-line: #456d56;
   --entry-mint: #a5efc8;
+  --entry-accent: var(--entry-mint);
   isolation: isolate;
   position: relative;
   display: grid;
@@ -20,6 +21,21 @@ body.command-shell .home-review-hero.project-intro.hero {
   border-radius: 14px;
   background: var(--entry-fill);
 }
+/* The hero is a dark surface in either reader theme.
+   Scope the shared reader tokens here as well so its normalized text remains
+   light; Silver still applies to the surrounding page and research evidence. */
+html[data-theme="silver"] body.command-shell .home-review-hero.project-intro.hero {
+  --cc-ink: var(--entry-ink);
+  --cc-muted: var(--entry-muted);
+  --cc-accent: var(--entry-accent);
+  --cc-line: var(--entry-line);
+  --cc-warm: #efc268;
+  --cc-panel: var(--entry-fill);
+  --cc-raised: #143427;
+  --text: var(--entry-ink);
+  --muted: var(--entry-muted);
+  color-scheme: dark;
+}
 body.command-shell .home-review-hero.hero::before,
 body.command-shell .home-review-hero.hero::after,
 body.command-shell .home-review-hero .hero-copy::before { display: none; }
@@ -31,7 +47,7 @@ body.command-shell .home-review-hero .hero-copy {
   padding: clamp(24px, 5vw, 76px);
 }
 body.command-shell .home-review-hero .status-chip {
-  color: var(--entry-mint);
+  color: var(--entry-accent);
   border: 1px solid var(--entry-line);
   background: var(--entry-fill);
   border-radius: 999px;
@@ -65,7 +81,7 @@ body.command-shell .home-review-hero .hero-actions .home-review-primary.button:h
 body.command-shell .home-review-hero .hero-actions .home-review-primary.button span { color: inherit; }
 body.command-shell main .home-review-hero .text-link { color: var(--entry-ink); }
 body.command-shell .home-review-hero .intro-boundary { color: var(--entry-muted); margin: 15px 0 0; }
-body.command-shell .home-review-hero a:focus-visible { outline: 2px solid var(--entry-mint); outline-offset: 3px; }
+body.command-shell .home-review-hero a:focus-visible { outline: 2px solid var(--entry-accent); outline-offset: 3px; }
 body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual {
   grid-area: image;
   align-self: stretch;
@@ -82,7 +98,15 @@ body.command-shell .home-review-hero .home-fab-visual .visual-shade {
   inset: 0;
   background: linear-gradient(90deg, var(--entry-fill), transparent 32%), linear-gradient(0deg, #091912 4%, transparent 43%);
 }
-body.command-shell .home-review-hero .home-fab-visual figcaption { color: var(--entry-muted); text-align: right; }
+body.command-shell .home-review-hero .home-fab-visual figcaption {
+  left: auto;
+  max-width: calc(100% - 44px);
+  padding: 4px 7px;
+  color: #edf3ee;
+  background: #091912;
+  border-radius: 4px;
+  text-align: right;
+}
 body.command-shell .home-review-foot {
   grid-area: foot;
   display: flex;
@@ -94,7 +118,7 @@ body.command-shell .home-review-foot {
 }
 body.command-shell .home-review-foot ol { display: flex; flex-wrap: wrap; gap: 5px 22px; padding: 0; margin: 0; list-style: none; color: var(--entry-muted); }
 body.command-shell .home-review-foot li { display: flex; align-items: center; gap: 6px; font-size: .9rem; }
-body.command-shell .home-review-foot li span { color: var(--entry-mint); font-size: 12px; font-variant-numeric: tabular-nums; }
+body.command-shell .home-review-foot li span { color: var(--entry-accent); font-size: 12px; font-variant-numeric: tabular-nums; }
 body.command-shell .home-review-foot a { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; }
 body.command-shell .home-review-evidence {
   display: grid;
@@ -109,7 +133,7 @@ body.command-shell .home-review-evidence {
 }
 body.command-shell .home-review-evidence :is(.absolute-beginner,.lead) { margin: 0; }
 body.command-shell .home-review-evidence :is(.intro-boundary,.intro-failure,.portfolio-result small) { font-size: 15px; line-height: 1.7; }
-body.command-shell .home-review-evidence .intro-failure { color: var(--cc-warm); }
+body.command-shell main .home-review-evidence p.intro-failure { color: var(--cc-warm); }
 body.command-shell .home-evidence-links { display: flex; flex-wrap: wrap; gap: 4px 12px; }
 body.command-shell .home-evidence-links a { display: inline-flex; align-items: center; min-height: 44px; }
 @media (max-width: 760px) {

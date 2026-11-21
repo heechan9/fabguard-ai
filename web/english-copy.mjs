@@ -177,3 +177,8 @@ patterns.push([/^저장 목록 전체 (\d+)건$/,(_,n)=>`${n} records in the sav
 englishCopy.set('선택형 학습 / Optional learning', 'Optional learning');
 englishCopy.set('선택형 학습 · 근거부터 확인하기 / Optional learning →', 'Optional learning · Review the evidence first →');
 englishCopy.set('합성 사례 3개로 정상·이상, 데이터 품질, 상관과 인과를 살펴봐요. 실제 안전 판정·운영 지시·능력 평가가 아닙니다. Synthetic practice, not safety advice or ability assessment.', 'Explore normal and anomalous records, data quality, correlation and causation in three synthetic cases. Not real safety decisions, operating instructions or an assessment of your ability.');
+
+// The standalone collaboration exercise uses English; the homepage entry follows the selected language.
+englishCopy.set('공개 협업', 'Open collaboration');
+englishCopy.set('공개 협업 실습 (영어) →', 'Open collaboration exercise →');
+englishCopy.set('합성 데이터로 누락과 대체 기록을 검토합니다. 파일을 업로드하지 않습니다.', 'Review missing and replacement records with synthetic data. No uploads.');
