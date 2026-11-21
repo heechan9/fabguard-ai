@@ -1,0 +1,51 @@
+name: Installed wheel candidate
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/package-wheel.yml'
+      - 'verification/check_installed_wheel.py'
+      - 'pyproject.toml'
+      - 'src/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/package-wheel.yml'
+      - 'verification/check_installed_wheel.py'
+      - 'pyproject.toml'
+      - 'src/**'
+
+permissions:
+  contents: read
+
+jobs:
+  wheel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build only the candidate wheel
+        run: |
+          python -m pip install setuptools==75.8.0 wheel==0.45.1
+          python -m pip wheel --no-deps --no-build-isolation --wheel-dir "$RUNNER_TEMP/wheel" .
+      - name: Test genuine wheel and synthetic missing-file control
+        env:
+          PYTHONPATH: ""
+        run: |
+          shopt -s nullglob
+          files=("$RUNNER_TEMP"/wheel/*.whl)
+          test "${#files[@]}" -eq 1
+          python -I verification/check_installed_wheel.py "${files[0]}" --output "$RUNNER_TEMP/wheel/verification.json"
+      - name: Preserve only the verified wheel and its receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: fabguard-wheel-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/wheel/*.whl
+            ${{ runner.temp }}/wheel/verification.json
+          if-no-files-found: error
