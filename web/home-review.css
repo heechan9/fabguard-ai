@@ -133,7 +133,6 @@ body.command-shell .home-review-evidence {
 }
 body.command-shell .home-review-evidence :is(.absolute-beginner,.lead) { margin: 0; }
 body.command-shell .home-review-evidence :is(.intro-boundary,.intro-failure,.portfolio-result small) { font-size: 15px; line-height: 1.7; }
-body.command-shell main .home-review-evidence p.intro-failure { color: var(--cc-warm); }
 body.command-shell .home-evidence-links { display: flex; flex-wrap: wrap; gap: 4px 12px; }
 body.command-shell .home-evidence-links a { display: inline-flex; align-items: center; min-height: 44px; }
 @media (max-width: 760px) {
