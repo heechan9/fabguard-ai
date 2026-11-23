@@ -63,6 +63,13 @@ function reveal(){
  if(!records.some(x=>x.concept===l.id))records.push(blankRecord(l));
  renderStage(false);$('explanation-title').focus();
 }
+// After the map's focused button is replaced by a case, Chromium can start
+// forward Tab after the first native radio group despite focusing its heading.
+$('stage').addEventListener('keydown',event=>{
+ if(event.defaultPrevented||screen!=='lesson'||event.target.id!=='stage-title'||event.key!=='Tab'||event.shiftKey||event.altKey||event.ctrlKey||event.metaKey)return;
+ const firstChoice=$('stage').querySelector('input[name="choice"]:checked')||$('stage').querySelector('input[name="choice"]');
+ if(firstChoice){event.preventDefault();firstChoice.focus();}
+});
 $('stage').addEventListener('change',e=>{
  const {name,value}=e.target;if(!name)return;
  if(name.startsWith('probe-'))answers[name.slice(6)]=Number(value);

@@ -97,7 +97,15 @@ let browser;
    assert.fail(`${tag}: Tab could not reach ${label}. Focus path: ${JSON.stringify(visited)}`);
   };
   const chooseWrongByKeyboard=async name=>{
-   const active=await tabTo(name,item=>item?.tag==='INPUT'&&item.name===name,12);
+   const matches=item=>item?.tag==='INPUT'&&item.name===name;
+   let active;
+   if(name==='choice'){
+    await page.keyboard.press('Tab');
+    active=await activeControl();
+    assert.ok(matches(active),`${tag}: first forward Tab from case heading missed the first group: ${JSON.stringify(active)}`);
+   }else{
+    active=await tabTo(name,matches,6);
+   }
    const wrong=page.locator(`input[name="${name}"][value="1"]`);
    await page.keyboard.press(active.value==='1'?'Space':'ArrowRight');
    assert.equal(await wrong.isChecked(),true,`${tag}: wrong ${name} radio not selected`);
@@ -124,6 +132,13 @@ let browser;
   await page.locator('[data-action="skip-case"]').click();
   assert.equal(await page.locator('[data-action="lesson-3"]').isVisible(),true);
   assert.equal(await focused(page.locator('#stage-title')),true);
+  // Exercise reverse navigation separately from the genuine forward path.
+  await page.locator('[data-action="lesson-3"]').click();
+  assert.equal(await focused(page.locator('#stage-title')),true);
+  await page.keyboard.press('Shift+Tab');
+  assert.equal(await focused(page.locator('#stage-title')),false,`${tag}: reverse Tab remained stuck on lesson heading`);
+  assert.equal(await focused(page.locator('input[name="choice"]').first()),false,`${tag}: reverse Tab was sent forward to choice`);
+  await page.locator('[data-action="back-map"]').click();
   assert.equal(await page.evaluate(()=>localStorage.getItem('fabguard-learning-v1')),null);
   await page.locator('#save').click();const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('fabguard-learning-v1')));
   assert.equal(saved.records.length,4);assert.ok(saved.records.every(row=>row.checked));

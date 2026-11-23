@@ -43,6 +43,7 @@ function controller(){
  const nodes=new Map(),s=storage();let focused='';
  const node=id=>{if(!nodes.has(id))nodes.set(id,{id,textContent:'',innerHTML:'',listeners:{},dataset:{},setAttribute(){},focus(){focused=id},addEventListener(type,fn){this.listeners[type]=fn},showModal(){this.open=true},close(){this.open=false;this.listeners.close?.()}});return nodes.get(id)};
  const doc={host:{lang:'ko'},getElementById:node,querySelector:query=>node(query)};
+ node('stage').querySelector=query=>query.endsWith(':checked')?null:node(query);
  const ctx={root:doc,URLSearchParams,lessons,pick,suggestedOrder,blankRecord,saveRecords,loadRecords,clearRecords,mergeRecords,localStorage:s};
  vm.runInNewContext(read('web/learn/app.mjs').replace(/^import .*;\n/gm,'').replace('export function mountLearning','function mountLearning')+';mountLearning(root);',ctx);
  return {node,s,ctx,focus:()=>focused,click:id=>node(id).listeners.click(),act:action=>node('stage').listeners.click({target:{closest:()=>({dataset:{action}})}}),choose:(name,value)=>node('stage').listeners.change({target:{name,value:String(value)}})};
@@ -101,4 +102,28 @@ test('Robot exercise distinguishes a foreign MES record from the PLC receipt and
  c.click('language');assert.match(c.node('stage').innerHTML,/verified mapping links cycle C21 to part R-21/);
  assert.match(c.node('stage').innerHTML,/does not establish completed physical transfer or safety/);
  assert.equal(c.s.data.size,0);
+});
+
+test('lesson heading hands unmodified forward Tab to a native choice without touching lesson state',()=>{
+ const c=controller(),stage=c.node('stage'),selector='input[name="choice"]';
+ const fire=(target={},modifiers={})=>{let count=0;stage.listeners.keydown({target,key:'Tab',preventDefault(){count++},...modifiers});return count;};
+ assert.equal(fire({id:'stage-title'}),0,'probe heading retains native handling');
+ c.act('skip-probe');assert.equal(fire({id:'stage-title'}),0,'map heading retains native handling');
+ c.act('lesson-3');
+ const unchanged=()=>{assert.doesNotMatch(stage.innerHTML,/name="choice" value="\d+" checked/);assert.match(c.node('records').innerHTML,/아직 기록이 없어요/);assert.equal(c.s.data.size,0);};
+ for(const modifier of ['shiftKey','ctrlKey','altKey','metaKey']){
+  assert.equal(fire({id:'stage-title'},{[modifier]:true}),0,modifier);
+  assert.equal(c.focus(),'stage-title');
+ }
+ assert.equal(fire({id:'stage-title'},{key:'Enter'}),0);
+ assert.equal(fire({id:'stage-title'},{defaultPrevented:true}),0);
+ assert.equal(fire({id:'stage-title'}),1);assert.equal(c.focus(),selector);unchanged();
+ assert.equal(fire({id:'',name:'choice'}),0,'choice onward is native');
+ assert.equal(fire({id:'',name:'reason'}),0,'reason onward is native');
+ assert.equal(fire({id:'explanation-title'}),0,'another heading is unaffected');
+ const checked=c.node('already-checked-choice');
+ stage.querySelector=query=>query===selector+':checked'?checked:c.node(query);
+ assert.equal(fire({id:'stage-title'}),1);assert.equal(c.focus(),checked.id);unchanged();
+ stage.querySelector=()=>null;
+ assert.equal(fire({id:'stage-title'}),0,'never block Tab if no choice can be focused');
 });
