@@ -56,5 +56,24 @@ export const lessons = [
     transfer:text('새 합성 사례: 정비 직후 불량률이 줄었지만 생산 품목도 바뀌었습니다. 무엇을 말할 수 있나요?','New synthetic case: defects fall after maintenance, but product type also changes. What can be said?'),
     transferOptions:[text('정비의 효과라고 확정','Maintenance caused the improvement'),text('동반 변화는 관측됐지만 정비 효과는 분리되지 않음','A change was observed, but the maintenance effect is not isolated')],transferCorrect:1,
     link:'/#limitations',source:'fabguard-limitations', sourceUrl:'https://github.com/heechan9/fabguard-ai/blob/9c6de6bcf01a1e21f19e0739eff0d58641fb51a0/web/app.js'
+  },
+  {
+    id:'robot-handoff', title:text('로봇 신호는 어디까지 왔을까요?','How far did the robot signal travel?'),
+    prerequisite:text('센서 감지 → PLC 입력·송신 → MES 쪽 수신 → 앱 기록','Sensor detection → PLC input and send → MES-side receipt → application record'),
+    probe:text('MES에 알람이 있으면 센서 고장이 확인된 건가요?','Does an MES alarm confirm a sensor fault?'),
+    probeOptions:[text('아니요. 같은 부품의 센서·PLC 기록과 맞춰 봐야 해요.','No. Compare sensor and PLC records for the same part.'),text('네. 알람만으로 고장 원인을 알 수 있어요.','Yes. The alarm alone identifies the cause.')],
+    correct:0,
+    scene:text('합성 사례 D: 센서는 부품이 있다는 신호만 냅니다. 이 가상 기록의 검증된 대응표는 작업 C17을 부품 R-17에 연결합니다. C17의 감지는 09:10:00, PLC 수신은 09:10:01에 기록됐습니다. PLC는 C17의 2차 시도를 09:10:02에 보냈습니다. 09:10:06까지 MES 쪽 수신 로그에는 C17의 1차 시도만, 앱 화면에는 다른 부품 R-18의 기록만 보입니다.','Synthetic case D: the sensor only detects whether a part is present. A verified mapping in this fictional log links cycle C17 to part R-17. The log records C17 detection at 09:10:00 and PLC receipt at 09:10:01. The PLC logged sending C17 attempt 2 at 09:10:02. Through 09:10:06 the MES-side receipt log shows only C17 attempt 1, and the application shows only a record for another part, R-18.'),
+    question:text('R-17의 2차 시도는 어디까지 확인됐나요?','What is the last confirmed step for R-17’s second attempt?'),
+    options:[text('PLC 송신 기록까지. 같은 시도의 수신과 앱 기록은 미확인','Through the PLC send log; receipt and the application record are unconfirmed for this attempt'),text('MES 수신까지. 같은 작업이면 다른 시도의 수신 기록도 충분함','Through MES receipt; a receipt for a different attempt of the same cycle is enough')],
+    reasons:[text('검증된 작업·부품 대응과 동일한 시도 ID가 필요하고, 시각은 기록 순서를 확인하는 보조 근거이기 때문','The verified cycle-to-part mapping and matching attempt ID link records; timestamps only help check event order'),text('기록 시각이 가깝다면 부품 ID가 달라도 같은 건이기 때문','Timestamps close together make the records equivalent even if part IDs differ')],
+    hints:[text('같은 작업의 1차와 2차 시도도 서로 다른 기록입니다.','Attempts 1 and 2 of the same cycle are different records.'),text('송신, 상대 쪽 수신, 앱 기록은 각각 확인합니다.','Check sending, receiver receipt and the application record separately.')],
+    observation:text('C17의 2차 시도는 송신 기록까지 확인됐습니다. 09:10:06까지 같은 시도의 수신과 앱 기록은 미확인입니다. 1차 시도나 R-18 기록은 대신 쓸 수 없습니다.','The send log is confirmed for C17 attempt 2. Receipt and the application record for that attempt remain unconfirmed through 09:10:06. Neither attempt 1 nor R-18 can substitute.'),
+    limit:text('기록이 보이지 않는 것만으로 통신 고장, 센서 고장, 실제 이송 완료 여부를 단정할 수 없습니다.','A missing record alone does not establish a communication fault, a sensor fault, or completed physical transfer.'),
+    next:text('같은 작업·시도 ID·시간 범위로 기존 송신·수신 로그를 대조합니다. 같은 시도의 수신이 확인되면 그다음에 앱의 기록 처리 상태를 확인합니다. 이 예시는 실제 장비에 접속하거나 명령을 보내지 않습니다.','Compare existing send and receipt logs for the same cycle, attempt ID and time window. If receipt is confirmed for that attempt, check how the application processed the record next. This example never connects to or commands equipment.'),
+    misconception:text('다른 부품의 기록으로 같은 부품의 처리를 확인할 수 있다','A different part’s record confirms processing of this part'),
+    transfer:text('새 합성 사례: 검증된 대응표에서 작업 C21은 부품 R-21에 연결됩니다. C21의 1차 시도에 PLC 송신(10:10:02)과 MES 쪽 수신(10:10:03)은 있지만, 10:10:06까지 앱 기록이 보이지 않습니다. 무엇을 먼저 확인할까요?','New synthetic case: a verified mapping links cycle C21 to part R-21. For C21 attempt 1, logs show PLC send (10:10:02) and MES-side receipt (10:10:03), but no application record is visible through 10:10:06. What should you check first?'),
+    transferOptions:[text('같은 시도의 앱 기록 처리 상태. 수신 기록만으로 실제 이송 완료나 안전은 확정할 수 없음','Check application processing for the same attempt. Receipt alone does not establish completed physical transfer or safety'),text('수신이 확인됐으니 앱 기록과 실물 이송도 완료로 처리','Treat the application record and physical transfer as complete because receipt was confirmed')],
+    transferCorrect:0, link:'/equipment/index.html', source:'fabguard-review-workflow', sourceUrl:'https://github.com/heechan9/fabguard-ai/blob/dbc683141fc56b178c1a79c17e45cdc56dfb6752/docs/SEMICONDUCTOR_REVIEW_WORKFLOW.md'
   }
 ];

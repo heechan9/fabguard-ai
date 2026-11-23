@@ -22,7 +22,7 @@ test('Optional learning entry translates visible copy and accessible label witho
  const strings=[...entry.matchAll(/>([^<>]+)</g)].map(match=>match[1].trim()).filter(Boolean);
  assert.equal(strings.length,2);
  for(const text of strings)assert.equal(/[가-힣]/.test(englishText(text)),false);
- assert.match(englishText(strings[1]),/three synthetic cases/);
+ assert.match(englishText(strings[1]),/robot signal records in synthetic cases/);
  assert.match(englishText(strings[1]),/Not real safety decisions, operating instructions or an assessment of your ability/);
 });
 

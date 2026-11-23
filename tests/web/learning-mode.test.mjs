@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {lessons} from '../../web/learn/content.mjs';
 import {blankRecord,validateRecords,mergeRecords,saveRecords,loadRecords,clearRecords,STORAGE_KEY} from '../../web/learn/core.mjs';
-test('three probes, bounded hints and distinct new cases retain the original learning scope',()=>{
- assert.equal(lessons.length,3);assert.equal(new Set(lessons.map(c=>c.id)).size,3);
+test('four probes, bounded hints and distinct new cases retain the original learning scope',()=>{
+ assert.equal(lessons.length,4);assert.equal(new Set(lessons.map(c=>c.id)).size,4);
  for(const c of lessons){assert.equal(c.hints.length,2);assert.notEqual(c.scene.ko,c.transfer.ko);assert.ok(c.probeOptions[c.correct]);assert.ok(c.options[c.correct]);assert.ok(c.reasons[c.correct]);}
 });
 test('records remain five fields and self-confirmation is not inferred from a correct answer',()=>{
