@@ -9,8 +9,8 @@ body.command-shell .home-review-hero.project-intro.hero {
   isolation: isolate;
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
-  grid-template-areas: "copy image" "foot foot";
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "copy" "image" "foot";
   gap: 0;
   padding: 0;
   margin: 0 auto 24px;
@@ -44,7 +44,7 @@ body.command-shell .home-review-hero .hero-copy {
   position: relative;
   z-index: 1;
   max-width: none;
-  padding: clamp(24px, 5vw, 76px);
+  padding: clamp(24px, 3vw, 42px) clamp(18px, 2.2vw, 36px) 22px;
 }
 body.command-shell .home-review-hero .status-chip {
   color: var(--entry-accent);
@@ -66,7 +66,7 @@ body.command-shell main .home-review-hero.project-intro h1 {
   letter-spacing: -.047em;
 }
 body.command-shell .home-review-hero .lead { color: var(--entry-muted); max-width: 38ch; margin-bottom: 22px; }
-body.command-shell .home-review-hero .hero-copy .hero-actions { align-items: center; flex-direction: row; gap: 4px 20px; margin: 0; }
+body.command-shell .home-review-hero .hero-copy .hero-actions { align-items: center; flex-direction: row; flex-wrap: wrap; gap: 4px 20px; margin: 0; }
 body.command-shell .home-review-hero .hero-actions .home-review-primary.button {
   min-height: 52px;
   padding: 12px 17px;
@@ -92,20 +92,25 @@ body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual 
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  background: #091912;
 }
-body.command-shell .home-review-hero .home-fab-visual .visual-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--entry-fill), transparent 32%), linear-gradient(0deg, #091912 4%, transparent 43%);
+body.command-shell .home-review-hero .home-fab-visual img {
+  position: static;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(58svh, 560px);
+  margin: 0 auto;
+  object-fit: contain;
 }
+body.command-shell .home-review-hero .home-fab-visual .visual-shade { display: none; }
 body.command-shell .home-review-hero .home-fab-visual figcaption {
-  left: auto;
-  max-width: calc(100% - 44px);
-  padding: 4px 7px;
+  position: static;
+  padding: 6px clamp(18px, 2.2vw, 36px);
   color: #edf3ee;
   background: #091912;
-  border-radius: 4px;
-  text-align: right;
+  text-align: left;
 }
 body.command-shell .home-review-foot {
   grid-area: foot;
@@ -136,13 +141,9 @@ body.command-shell .home-review-evidence :is(.intro-boundary,.intro-failure,.por
 body.command-shell .home-evidence-links { display: flex; flex-wrap: wrap; gap: 4px 12px; }
 body.command-shell .home-evidence-links a { display: inline-flex; align-items: center; min-height: 44px; }
 @media (max-width: 760px) {
-  body.command-shell .home-review-hero.project-intro.hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "copy" "image" "foot"; }
   body.command-shell main .home-review-hero.project-intro h1 { font-size: clamp(28px, 8vw, 42px); }
   body.command-shell .home-review-hero .hero-copy { padding: 23px 18px 15px; }
-  body.command-shell .home-review-hero.project-intro .home-fab-visual.hero-visual { height: clamp(230px, 62vw, 270px); }
-  body.command-shell .home-review-hero .home-fab-visual img { object-position: 88% 57%; }
-  body.command-shell .home-review-hero .home-fab-visual .visual-shade { background: linear-gradient(0deg, #091912, transparent 56%); }
-  body.command-shell .home-review-hero .home-fab-visual figcaption { bottom: 8px; }
+  body.command-shell .home-review-hero .home-fab-visual img { max-height: none; }
   body.command-shell .home-review-foot { flex-wrap: wrap; }
   body.command-shell .home-review-foot ol { gap: 4px 10px; }
   body.command-shell .home-review-foot li { font-size: .8rem; }
