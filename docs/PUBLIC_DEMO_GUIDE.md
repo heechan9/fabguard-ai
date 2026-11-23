@@ -10,7 +10,9 @@
 2. **장비 CSV·정비 이력 점검**: 브라우저에서 파일을 읽고 참고 관리선·변경 이력·보류 이유를 확인합니다. 원본 대조와 감사 기록에는 별도 Python 재계산이 필요합니다. 정비 전후 모델 성능 평가 기능은 아닙니다. [화면](https://fabguard-ai.vercel.app/equipment/context-review.html) · [원본·이력 계약](MAINTENANCE_CONTEXT_REVIEW.md)
 3. **UR3 실제 센서 기록**: 공개된 과거 측정 기록을 탐색·재생합니다. 실시간 연결·고장 예측·로봇 제어는 하지 않습니다. [화면](https://fabguard-ai.vercel.app/robot/ur3/)
 4. **SMT·OHT 합성 체험**: 가상 기판 흐름과 검사·보류, 온도 가정·가상 정지, 천장 이송을 보여 줍니다. 실제 설비 물리 해석·제어·안전 인증이나 SECOM 예측 결과가 아닙니다. [SMT](https://fabguard-ai.vercel.app/smt/) · [OHT](https://fabguard-ai.vercel.app/oht/)
-5. **선택형 학습**: 합성 사례 3개로 데이터 품질과 판단 근거를 연습합니다. 실제 안전 판정이나 학습자 능력 평가가 아닙니다. [소개 화면](https://fabguard-ai.vercel.app/#summary) 하단에서 시작합니다.
+5. **선택형 학습**: 합성 사례로 데이터 품질과 판단 근거를 연습합니다. 실제 안전 판정이나 학습자 능력 평가가 아닙니다. [소개 화면](https://fabguard-ai.vercel.app/#summary) 하단에서 시작합니다.
+
+**후속 소스 변경 ([PR #257](https://github.com/heechan9/fabguard-ai/pull/257), 2026-11-23)**: 선택형 학습에 네 번째 합성 사례를 추가했습니다. 같은 작업·시도의 센서 감지, PLC 입력·송신, MES 쪽 수신과 앱 기록을 구분합니다. 이 사례는 위 11월 12일 공개 화면 점검 범위에 포함되지 않습니다. 실제 웹 배포 여부는 별도로 확인합니다.
 
 ## 검사 통과와 현장 성능은 어떻게 다른가요?
 
