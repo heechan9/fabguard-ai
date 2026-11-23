@@ -17,6 +17,7 @@ document.documentElement.lang = language;
 if (isEnglish) document.querySelector('meta[name="description"]')?.setAttribute("content", "Offline semiconductor manufacturing risk prioritisation and human review on public data");
 let state = { summary: null, risks: null, phase1: null, dkasc: null, globalE2E: null, globalCandidates: null };
 let professionalEvidenceHtml = "";
+let dataStatus = "loading";
 
 const languageToggle = document.querySelector("#language-toggle");
 if (languageToggle) {
@@ -141,6 +142,8 @@ function candidateRegistry(registry) {
 }
 
 async function load() {
+  dataStatus = "loading";
+  route();
   try {
     const [summaryResponse, riskResponse, phase1Response, dkascResponse, globalE2EResponse, candidatesResponse] = await Promise.all([fetch("/data/summary.json"), fetch("/data/priority_top50.json"), fetch("/data/phase1_summary.json"), fetch("/data/dkasc_summary.json"), fetch("/data/global_e2e_summary.json"), fetch("/data/global_candidates.json")]);
     if (!summaryResponse.ok || !riskResponse.ok || !phase1Response.ok || !dkascResponse.ok || !globalE2EResponse.ok || !candidatesResponse.ok) throw new Error("결과 파일 응답이 올바르지 않습니다.");
@@ -156,11 +159,11 @@ async function load() {
     validateDKASC(state.dkasc);
     validateGlobalE2E(state.globalE2E);
     validateGlobalCandidates(state.globalCandidates);
+    dataStatus = "ready";
     route();
-  } catch (error) {
-    app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" id="retry-load">다시 시도</button></section>`;
-    app.querySelector('#retry-load').addEventListener('click', () => location.reload());
-    if (isEnglish) { translateEnglish(); app.querySelector(".state>p:not(.kicker)").textContent = "Result data could not be verified. Check the source files and retry."; }
+  } catch {
+    dataStatus = "error";
+    route();
   }
 }
 
@@ -176,18 +179,8 @@ function beginnerEntry() {
   return `<section class="absolute-beginner" aria-labelledby="beginner-title"><h2 id="beginner-title">${isEnglish ? "At a glance" : "한눈에 보기"}</h2><ol>${lines.map(line => `<li>${line}</li>`).join("")}</ol></section>`;
 }
 
-function summaryView() {
-  const test = selectedTest();
-  const ten = top10();
-  const baseline = state.summary.test.find(row => row.family === "dummy");
-  const ds = state.summary.dataset;
-  const queueSize = state.risks.length;
-  const dkasc = state.dkasc;
-  const pvlive = state.globalE2E.sources.pvlive_gb_2025;
-  const pvgis = state.globalE2E.sources.pvgis_brussels_2020;
-  const enedis = state.globalE2E.sources.enedis_france_2024;
-  const meteo = state.globalE2E.sources.meteo_france_paris_2024;
-  app.innerHTML = `
+function homeIntro() {
+  return `
     <section class="hero project-intro home-review-hero">
       <div class="hero-copy">
         <div class="status-chip"><i></i> ${isEnglish ? "RESEARCH PROTOTYPE" : "연구용 프로토타입"}</div>
@@ -209,6 +202,34 @@ function summaryView() {
         <a class="text-link" href="/equipment/#csv-screening">${isEnglish ? "Check my CSV separately" : "내 CSV 점검"} <span aria-hidden="true">→</span></a>
       </div>
     </section>
+  `;
+}
+
+const isSummaryRoute = hash => hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process";
+
+function renderDataState(hash) {
+  const isHome = isSummaryRoute(hash);
+  if (dataStatus === "loading") {
+    app.innerHTML = `${isHome ? homeIntro() : ""}<section class="state" role="status"><p>${isEnglish ? "Loading saved results…" : "저장된 결과를 불러오는 중입니다…"}</p></section>`;
+    return;
+  }
+  app.innerHTML = `${isHome ? homeIntro() : ""}<section class="state" role="status"><h2>${isEnglish ? "Saved results unavailable" : "저장된 결과를 불러오지 못했습니다."}</h2><p>${isEnglish ? "No results are shown until the files can be verified." : "파일을 확인할 수 있을 때까지 결과는 표시하지 않습니다."}</p><button type="button" class="button" id="retry-load">${isEnglish ? "Retry" : "다시 시도"}</button></section>`;
+  app.querySelector('#retry-load').addEventListener('click', () => void load(), {once: true});
+}
+
+function summaryView() {
+  const test = selectedTest();
+  const ten = top10();
+  const baseline = state.summary.test.find(row => row.family === "dummy");
+  const ds = state.summary.dataset;
+  const queueSize = state.risks.length;
+  const dkasc = state.dkasc;
+  const pvlive = state.globalE2E.sources.pvlive_gb_2025;
+  const pvgis = state.globalE2E.sources.pvgis_brussels_2020;
+  const enedis = state.globalE2E.sources.enedis_france_2024;
+  const meteo = state.globalE2E.sources.meteo_france_paris_2024;
+  app.innerHTML = `
+    ${homeIntro()}
     <section class="home-review-evidence" aria-label="${isEnglish ? "Public SECOM study" : "SECOM 공개 데이터 연구"}">
       ${beginnerEntry()}
       <div><p class="lead">${isEnglish ? "A separate research project that shows review priorities and evidence using public SECOM data." : "SECOM 공개 데이터로 점검 순서와 판단 근거를 보여주는 연구 프로젝트입니다."}</p>
@@ -367,9 +388,13 @@ function finishRoute(hash) {
 }
 
 function route() {
-  if (!state.summary) return;
   const hash = location.hash.replace(/^#/, "") || "summary";
   document.body.classList.toggle('cc-overview-page', hash === 'overview');
+  if (dataStatus !== "ready") {
+    renderDataState(hash);
+    syncNavigation(hash);
+    return;
+  }
   if (hash === "overview") {
     app.innerHTML = `<section class="state"><p>${isEnglish ? 'Loading saved records…' : '저장된 기록을 불러오는 중…'}</p></section>`;
     import('./command-center.mjs').then(({mountCommandCenter}) => {
@@ -379,7 +404,7 @@ function route() {
       if ((location.hash.replace(/^#/, '') || 'summary') !== 'overview') return;
       app.innerHTML = `<section class="state"><h1>${isEnglish ? 'Overview unavailable' : '운영 개요를 표시할 수 없습니다'}</h1><p>${isEnglish ? 'No equipment status has been inferred.' : '장비 상태를 정상으로 추정하지 않습니다.'}</p><a class="button" href="#risks">${isEnglish ? 'Open the saved queue' : '기존 점검 목록 열기'}</a></section>`;
     });
-  } else if (hash === "summary" || hash === "result" || hash === "answer-overview" || hash === "global" || hash === "process") summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
+  } else if (isSummaryRoute(hash)) summaryView(); else if (hash === "risks") risksView(); else if (hash === "limitations") { if (!professionalEvidenceHtml) summaryView(); limitationsView(); } else if (hash.startsWith("detail/")) detailView(decodeURIComponent(hash.slice(7))); else app.innerHTML = `<section class="state"><h2>화면을 찾을 수 없습니다.</h2><a class="button" href="#summary">처음으로</a></section>`;
   if (isEnglish) translateEnglish();
   finishRoute(hash);
 }
