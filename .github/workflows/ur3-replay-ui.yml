@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11'
       - name: Rebuild from pinned UCI original without new dependencies
@@ -28,7 +28,7 @@ jobs:
           python scripts/build_ur3_replay.py --archive /tmp/ur3-source.zip --output "$RUNNER_TEMP/ur3-derived/data.json" > "$RUNNER_TEMP/ur3-audit.json"
           cmp web/robot/ur3/data.json "$RUNNER_TEMP/ur3-derived/data.json"
           cmp web/robot/ur3/data-hash.mjs "$RUNNER_TEMP/ur3-derived/data-hash.mjs"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: ur3-source-${{ github.sha }}
@@ -41,13 +41,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11'
       - name: Existing Chrome, project, Korean fonts
@@ -83,7 +83,7 @@ jobs:
           FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/context" timeout 180s node verification/check_context_review.cjs
           FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/theme" timeout 360s node verification/check_theme_ui.cjs
           FABGUARD_UI_OUTPUT="$RUNNER_TEMP/ur3-evidence/transfer" timeout 360s node verification/check_transfer_robot.cjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: ur3-ui-${{ matrix.width }}-${{ github.sha }}
