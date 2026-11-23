@@ -182,7 +182,7 @@ esac
         # This guards configuration drift, not arbitrary shell execution or approval.
         canonical = json.dumps(workflow, sort_keys=True, separators=(',', ':')).encode()
         self.assertEqual(hashlib.sha256(canonical).hexdigest(),
-                         'a6b346ec4bbf1da7e1bc9d7aeff7205ae8e00472d7a80ea23369f862b1147605')
+                         '848ebd686525744acdf37e59c6e9a1c2415d637842453d324145a9be0893aac7')
         for job in workflow['jobs'].values():
             defaults = dict(workflow.get('defaults', {}).get('run', {}))
             defaults.update(job.get('defaults', {}).get('run', {}))
@@ -227,7 +227,8 @@ esac
                         f'timeout {seconds}s node verification/check_{name}.cjs')
             self.assertIn(expected, active)
         self.assertFalse(any('sudo apt-get' in step.get('run', '') for step in steps))
-        checkout = [step for step in steps if step.get('uses') == 'actions/checkout@v4']
+        checkout = [step for step in steps if step.get('uses') ==
+                    'actions/checkout@11d5960a326750d5838078e36cf38b85af677262']
         self.assertEqual(len(checkout), 1)
         self.assertEqual(checkout[0]['with']['persist-credentials'], False)
         source = workflow['jobs']['source']
@@ -308,4 +309,4 @@ class SitewideFontWorkflowTests(unittest.TestCase):
             self.assertEqual(len(audit), 1)
             self.assertEqual(audit[0]['timeout-minutes'], 11)
             self.assertEqual(audit[0]['env']['FABGUARD_WEB_FONTS'], '1')
-        self.assertEqual(digest, '4cab21b728d936943e48014fab854a5b915e6662ebf5da6da6331cec5d607a89')
+        self.assertEqual(digest, 'ececc67712c2a4dfb242c35834c659e79e5752bc7f6eae226e7c72af0196c6c2')

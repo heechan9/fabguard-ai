@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
           ref: refs/pull/${{ github.event.issue.number }}/head
@@ -56,7 +56,7 @@ jobs:
           fi
 
       - name: Review PR with Claude
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@5342e104274fd0a0f168e0fe9eb2cbb1a781f447 # v1
         with:
           # Repository admin: install the Claude GitHub App and add this secret
           # under Settings > Secrets and variables > Actions.

@@ -158,7 +158,8 @@ async function load() {
     validateGlobalCandidates(state.globalCandidates);
     route();
   } catch (error) {
-    app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" onclick="location.reload()">다시 시도</button></section>`;
+    app.innerHTML = `<section class="state"><p class="kicker">SYSTEM ERROR</p><h2>결과를 불러오지 못했습니다.</h2><p>${esc(error.message)}</p><button class="button" id="retry-load">다시 시도</button></section>`;
+    app.querySelector('#retry-load').addEventListener('click', () => location.reload());
     if (isEnglish) { translateEnglish(); app.querySelector(".state>p:not(.kicker)").textContent = "Result data could not be verified. Check the source files and retry."; }
   }
 }
