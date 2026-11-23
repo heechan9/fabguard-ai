@@ -17,7 +17,7 @@ dependencies = [
 test = ["PyYAML>=6.0.2,<7", "tomli>=2.2.1; python_version < '3.11'"]
 pv = [
   "solar-data-tools==2.1.5",
-  "frictionless==5.19.0",
+  "frictionless==5.21.0",
 ]
 robot = [
   "pyarrow>=15",
