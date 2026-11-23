@@ -47,15 +47,26 @@ test('Korean and English views retain sample links, history, human-review limits
   for (const route of ['summary','global','risks','limitations','overview']) assert.ok(app.includes(`hash === "${route}"`));
 });
 test('six original illustrations are self-contained and have no fake status indicators', () => {
-  const forbidden = /<script|<foreignObject|<image|href=|https?:\/\/(?!www\.w3\.org(?:\/|["'\s>]|$))/;
-  assert.doesNotMatch('<svg xmlns="http://www.w3.org/2000/svg">', forbidden);
+  const assertSelfContained = svg => {
+    const lower = svg.toLowerCase();
+    for (const token of ['<script', '<foreignobject', '<image', 'href=']) {
+      assert.ok(!lower.includes(token), `unexpected SVG content: ${token}`);
+    }
+    for (const value of svg.match(/https?:\/\/[^\s"'<>]+/gi) || []) {
+      assert.equal(new URL(value).hostname, 'www.w3.org');
+    }
+  };
+  assertSelfContained('<svg xmlns="http://www.w3.org/2000/svg">');
   for (const host of ['wwwXw3Yorg', 'www.w3.org.evil.example', 'www.w3.org@evil.example']) {
-    assert.match(`<svg xmlns="https://${host}/svg">`, forbidden);
+    assert.throws(() => assertSelfContained(`<svg xmlns="https://${host}/svg">`));
+  }
+  for (const tag of ['script', 'ScRiPt', 'foreignObject', 'IMAGE']) {
+    assert.throws(() => assertSelfContained(`<svg><${tag}></${tag}></svg>`));
   }
   for (const stage of stages) {
     const svg=read(`web/assets/command-center/${stage.id}.svg`);
     assert.match(svg,/viewBox="0 0 160 120"/);assert.match(svg,/<title/);
-    assert.doesNotMatch(svg,forbidden);
+    assertSelfContained(svg);
   }
 });
 test('silver command-room accent and selection text maintain 4.5:1 contrast',()=>{
