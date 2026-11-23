@@ -31,7 +31,8 @@ class ClaudeAuditSecurityTest(unittest.TestCase):
         self.assertEqual(args[args.index('--tools') + 1], '')
         self.assertEqual(args[args.index('--permission-mode') + 1], 'plan')
         self.assertEqual(set(args[args.index('--allowedTools') + 1].split(',')), {
-            'mcp__github__pull_request_read', 'mcp__github__add_issue_comment',
+            'mcp__github__get_pull_request', 'mcp__github__get_pull_request_diff',
+            'mcp__github__get_pull_request_files', 'mcp__github__add_issue_comment',
         })
         self.assertEqual(inputs['restrict_untrusted_prs'], 'true')
 
