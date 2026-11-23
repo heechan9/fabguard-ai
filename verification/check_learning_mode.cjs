@@ -81,16 +81,31 @@ let browser;
   await page.locator('#stage-title').waitFor({state:'visible'});
   assert.match(await page.locator('#stage-title').innerText(),language==='ko'?/로봇 신호/:/How far did the robot signal travel/);
   assert.equal(await focused(page.locator('#stage-title')),true);
-  await page.keyboard.press('Tab');
-  assert.equal(await focused(page.locator('input[name="choice"]').first()),true);
-  await page.keyboard.press('ArrowRight');
-  assert.equal(await page.locator('input[name="choice"]').nth(1).isChecked(),true);
-  await page.keyboard.press('Tab');
-  assert.equal(await focused(page.locator('input[name="reason"]').first()),true);
-  await page.keyboard.press('ArrowRight');
-  assert.equal(await page.locator('input[name="reason"]').nth(1).isChecked(),true);
-  await page.keyboard.press('Tab');
-  assert.equal(await focused(page.locator('[data-action="check"]')),true);
+  // A native radio group's entry point is controlled by Chromium. Require
+  // actual Tab reachability, but don't pin an intermediate Tab stop or index.
+  const activeControl=()=>dialog.evaluate(el=>{
+   const a=el.getRootNode().activeElement;
+   return a?{tag:a.tagName,id:a.id,name:a.getAttribute('name'),value:a.getAttribute('value'),action:a.dataset.action}:null;
+  });
+  const tabTo=async(label,match,limit)=>{
+   const visited=[];
+   for(let step=0;step<limit;step++){
+    await page.keyboard.press('Tab');
+    const active=await activeControl();visited.push(active);
+    if(match(active))return active;
+   }
+   assert.fail(`${tag}: Tab could not reach ${label}. Focus path: ${JSON.stringify(visited)}`);
+  };
+  const chooseWrongByKeyboard=async name=>{
+   const active=await tabTo(name,item=>item?.tag==='INPUT'&&item.name===name,12);
+   const wrong=page.locator(`input[name="${name}"][value="1"]`);
+   await page.keyboard.press(active.value==='1'?'Space':'ArrowRight');
+   assert.equal(await wrong.isChecked(),true,`${tag}: wrong ${name} radio not selected`);
+   assert.equal(await focused(wrong),true,`${tag}: wrong ${name} radio not focused`);
+  };
+  await chooseWrongByKeyboard('choice');
+  await chooseWrongByKeyboard('reason');
+  await tabTo('compare button',item=>item?.action==='check',6);
   await page.keyboard.press('Enter');
   await page.locator('#explanation-title').waitFor({state:'visible'});
   assert.equal(await focused(page.locator('#explanation-title')),true);
