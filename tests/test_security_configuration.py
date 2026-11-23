@@ -21,6 +21,8 @@ class SecurityConfigurationTests(unittest.TestCase):
         self.assertEqual(directives['object-src'], ["'none'"])
         self.assertEqual(directives['base-uri'], ["'none'"])
         self.assertEqual(directives['connect-src'], ["'self'"])
+        # SMT records a local canvas stream and previews its generated Blob URL.
+        self.assertEqual(directives['media-src'], ['blob:'])
         self.assertEqual(headers['x-frame-options'], 'DENY')
         self.assertEqual(headers['x-content-type-options'], 'nosniff')
         # A self-only script policy also blocks inline error-handler attributes.

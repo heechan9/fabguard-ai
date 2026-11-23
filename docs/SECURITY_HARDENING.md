@@ -13,6 +13,7 @@ origin. Google Fonts remain permitted. Inline styles are allowed for existing
 3D/UI style updates; inline scripts and eval are not allowed. Existing stricter
 per-page meta policies still apply alongside the response policy. The homepage
 retry button uses an event listener so it also works with this policy.
+Media is limited to Blob URLs for the existing local SMT recording preview.
 
 Validate configuration changes with:
 
