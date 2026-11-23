@@ -15,6 +15,11 @@ per-page meta policies still apply alongside the response policy. The homepage
 retry button uses an event listener so it also works with this policy.
 Media is limited to Blob URLs for the existing local SMT recording preview.
 
+The test extra includes `tomli` only on Python 3.10 so the security contract
+parses the actual TOML configuration on every supported Python version. Python
+3.11 and newer use the standard-library `tomllib`; runtime dependencies do not
+change. Action pins are commit SHAs, dereferencing annotated tags where needed.
+
 Validate configuration changes with:
 
 ```sh

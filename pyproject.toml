@@ -14,7 +14,7 @@ dependencies = [
 [project.optional-dependencies]
 # Workflow contract tests parse YAML structure; not a runtime/model dependency.
 # Run the full test suite after: python -m pip install ".[test]"
-test = ["PyYAML>=6.0.2,<7"]
+test = ["PyYAML>=6.0.2,<7", "tomli>=2.2.1; python_version < '3.11'"]
 pv = [
   "solar-data-tools==2.1.5",
   "frictionless==5.19.0",

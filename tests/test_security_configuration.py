@@ -41,7 +41,10 @@ class SecurityConfigurationTests(unittest.TestCase):
                         self.assertRegex(uses, r'^[\w./-]+@[0-9a-f]{40}$', str(path))
 
     def test_robot_extra_excludes_known_vulnerable_archive_versions(self):
-        import tomllib
+        try:
+            import tomllib
+        except ModuleNotFoundError:  # Python 3.10; included in the test extra.
+            import tomli as tomllib
         project = tomllib.loads((ROOT / 'pyproject.toml').read_text(encoding='utf-8'))
         robot = project['project']['optional-dependencies']['robot']
         self.assertIn('py7zr>=1.1.3,<2', robot)
