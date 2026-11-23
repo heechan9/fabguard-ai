@@ -47,10 +47,15 @@ test('Korean and English views retain sample links, history, human-review limits
   for (const route of ['summary','global','risks','limitations','overview']) assert.ok(app.includes(`hash === "${route}"`));
 });
 test('six original illustrations are self-contained and have no fake status indicators', () => {
+  const forbidden = /<script|<foreignObject|<image|href=|https?:\/\/(?!www\.w3\.org(?:\/|["'\s>]|$))/;
+  assert.doesNotMatch('<svg xmlns="http://www.w3.org/2000/svg">', forbidden);
+  for (const host of ['wwwXw3Yorg', 'www.w3.org.evil.example', 'www.w3.org@evil.example']) {
+    assert.match(`<svg xmlns="https://${host}/svg">`, forbidden);
+  }
   for (const stage of stages) {
     const svg=read(`web/assets/command-center/${stage.id}.svg`);
     assert.match(svg,/viewBox="0 0 160 120"/);assert.match(svg,/<title/);
-    assert.doesNotMatch(svg,/<script|<foreignObject|<image|href=|https?:\/\/(?!www.w3.org)/);
+    assert.doesNotMatch(svg,forbidden);
   }
 });
 test('silver command-room accent and selection text maintain 4.5:1 contrast',()=>{
