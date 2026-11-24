@@ -1,0 +1,15 @@
+commit b9411a4ff34cde7b2a4e5c151c538e076ee99f47
+Author:     Codex <codex@openai.com>
+AuthorDate: Sat Sep 26 01:50:59 2026 +0900
+Commit:     Codex <codex@openai.com>
+CommitDate: Sat Sep 26 01:50:59 2026 +0900
+
+    experiment: freeze KAMP molding temporal protocol before fitting
+
+commit d0c38456f6917d0e917e64744262d4c732935773
+Author:     Codex <codex@openai.com>
+AuthorDate: Sat Sep 26 01:52:27 2026 +0900
+Commit:     Codex <codex@openai.com>
+CommitDate: Sat Sep 26 01:52:27 2026 +0900
+
+    experiment: implement isolated group-safe molding baselines

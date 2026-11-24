@@ -1,0 +1,15 @@
+commit 74f62a46c6e5a58b26c843ad3a4816d4d98743cf
+Author:     Codex <codex@openai.com>
+AuthorDate: Sat Sep 26 02:07:34 2026 +0900
+Commit:     Codex <codex@openai.com>
+CommitDate: Sat Sep 26 02:07:34 2026 +0900
+
+    experiment: freeze stronger baselines and saturation hypotheses for molding
+
+commit f66b0e3ac18b1cfc6700d9cc9fd7c66a1bf9a85b
+Author:     Codex <codex@openai.com>
+AuthorDate: Sat Sep 26 02:09:06 2026 +0900
+Commit:     Codex <codex@openai.com>
+CommitDate: Sat Sep 26 02:09:06 2026 +0900
+
+    experiment: implement product-only baseline, clipping and budget diagnostics
